@@ -1,1 +1,7 @@
-/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+#wrapper {
+    -fx-background-color: #FFFFFF;
+}
+
+#menubar {
+    -fx-background-color: #0B77B5;
+}
