@@ -19,7 +19,7 @@ import javafx.scene.input.KeyEvent;
  */
 public class MenuController implements Initializable {
 	/**
-	 * The menu control.
+	 * The menu element.
 	 */
 	@FXML
 	private MenuBar menuBar;
@@ -60,7 +60,7 @@ public class MenuController implements Initializable {
 	}
 
 	@Override
-	public void initialize(final URL arg0, final ResourceBundle arg1) {
+	public void initialize(final URL location, final ResourceBundle resources) {
 		// menuBar.setFocusTraversable(true);
 	}
 }
