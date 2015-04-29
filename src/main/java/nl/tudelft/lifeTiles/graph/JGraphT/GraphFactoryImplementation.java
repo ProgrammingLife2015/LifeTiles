@@ -1,9 +1,8 @@
 package nl.tudelft.lifeTiles.graph.JGraphT;
 
-import nl.tudelft.lifeTiles.graph.AbstractGraphFactory;
 import nl.tudelft.lifeTiles.graph.DirectedEdge;
 import nl.tudelft.lifeTiles.graph.Graph;
-import nl.tudelft.lifeTiles.graph.GraphParser;
+import nl.tudelft.lifeTiles.graph.GraphFactory;
 
 /**
  * @author Rutger van den Berg
@@ -11,7 +10,7 @@ import nl.tudelft.lifeTiles.graph.GraphParser;
  * @param <V>
  *            The type of Vertex to use.
  */
-public class JGraphTGraphFactory<V> implements AbstractGraphFactory<V> {
+public class GraphFactoryImplementation<V> implements GraphFactory<V> {
 
     /**
      * @return a new empty Graph.
@@ -30,13 +29,4 @@ public class JGraphTGraphFactory<V> implements AbstractGraphFactory<V> {
         // TODO Auto-generated method stub
         return null;
     }
-
-    /**
-     * @return A new GraphParser.
-     */
-    public final GraphParser<V> getGraphParser() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
 }

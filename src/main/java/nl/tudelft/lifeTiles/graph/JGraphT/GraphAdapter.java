@@ -10,7 +10,7 @@ import nl.tudelft.lifeTiles.graph.Graph;
  *
  * @param <V> The type of vertex to use.
  */
-public class JGraphTGraphAdapter<V> implements Graph<V> {
+public class GraphAdapter<V> implements Graph<V> {
 
     /**
      * @param vertex
