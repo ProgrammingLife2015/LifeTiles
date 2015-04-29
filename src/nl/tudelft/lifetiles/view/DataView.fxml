@@ -11,7 +11,7 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" minHeight="0.0"
 	minWidth="0.0" prefHeight="160.0" prefWidth="100.0"
-	fx:controller="nl.tudelft.lifetiles.controller.DataController">
+	fx:controller="nl.tudelft.lifetiles.controller.DataController" id="dataPane">
 	<children>
 		<Label text="Data Viewer">
 			<padding>
