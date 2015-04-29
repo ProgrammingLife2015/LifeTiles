@@ -1,5 +1,6 @@
-package nl.tudelft.lifetiles;
+package nl.tudelft.lifetiles.controller;
 
+import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -10,7 +11,16 @@ import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+/**
+ * The controller of the menu bar.
+ * 
+ * @author Joren Hammudoglu
+ *
+ */
 public class MenuController implements Initializable {
+	/**
+	 * The menu control.
+	 */
 	@FXML
 	private MenuBar menuBar;
 
@@ -50,8 +60,7 @@ public class MenuController implements Initializable {
 	}
 
 	@Override
-	public void initialize(java.net.URL arg0, ResourceBundle arg1) {
-		menuBar.setFocusTraversable(true);
-
+	public void initialize(final URL arg0, final ResourceBundle arg1) {
+		// menuBar.setFocusTraversable(true);
 	}
 }

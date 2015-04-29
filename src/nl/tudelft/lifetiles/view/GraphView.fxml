@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Label?>
+
+<ScrollPane xmlns:fx="http://javafx.com/fxml/1" fitToWidth="true"
+	prefHeight="200.0" prefWidth="200.0">
+	<content>
+		<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0"
+			prefWidth="200.0">
+			<children>
+				<Label text="Graph Viewer">
+					<padding>
+						<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+					</padding>
+				</Label>
+			</children>
+		</AnchorPane>
+	</content>
+	
+	<stylesheets>
+        <URL value="@GraphStyle.css" />
+    </stylesheets>
+</ScrollPane>
+
