@@ -7,8 +7,8 @@ package nl.tudelft.lifeTiles.graph;
  */
 public interface GraphParser<V> {
     /**
-     * @param filename The filename for the graph to parse.
-     * @param graph The Graph in which to store the parsed graph.
+     * @param filename The basename for the graph to parse.
+     * @param gfact The graph factory to use to produce the graph.
      */
-    void parseFile(final String filename, Graph<V> graph);
+    void parseFile(final String filename, GraphFactory<V> gfact);
 }
