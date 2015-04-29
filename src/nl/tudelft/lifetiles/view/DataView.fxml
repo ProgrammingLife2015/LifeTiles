@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Label?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml/1" minHeight="0.0"
+	minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+	<children>
+		<Label text="Data Viewer">
+			<padding>
+				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+			</padding>
+		</Label>
+	</children>
+	
+	<stylesheets>
+        <URL value="@DataStyle.css" />
+    </stylesheets>
+</AnchorPane>
+

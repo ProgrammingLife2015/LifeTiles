@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Label?>
+
+<VBox id="wrapper" prefHeight="600" prefWidth="800"
+	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+
+	<fx:include source="MenuView.fxml" fx:id="menuContent" />
+
+	<fx:include source="GraphView.fxml" fx:id="graphContent" />
+
+	<SplitPane dividerPositions="0.2" prefHeight="160.0"
+		prefWidth="200.0">
+		<items>
+			
+			<fx:include source="DataView.fxml" fx:id="dataContent" />
+			
+			<fx:include source="TreeView.fxml" fx:id="treeContent" />
+		</items>
+	</SplitPane>
+
+	<stylesheets>
+		<URL value="@MainStyle.css" />
+	</stylesheets>
+</VBox>
