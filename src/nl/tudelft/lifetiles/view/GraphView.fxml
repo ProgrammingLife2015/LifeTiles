@@ -9,11 +9,12 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.Label?>
 
-<ScrollPane xmlns:fx="http://javafx.com/fxml/1" fitToWidth="true"
-	prefHeight="200.0" prefWidth="200.0" fx:controller="nl.tudelft.lifetiles.controller.GraphController">
+<ScrollPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="342"
+	prefWidth="200.0" fx:controller="nl.tudelft.lifetiles.controller.GraphController"
+	id="graphPane">
 	<content>
-		<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0"
-			prefWidth="200.0">
+		<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="342"
+			prefWidth="2000" id="graphPaneInner">
 			<children>
 				<Label text="Graph Viewer">
 					<padding>
@@ -23,9 +24,9 @@
 			</children>
 		</AnchorPane>
 	</content>
-	
+
 	<stylesheets>
-        <URL value="@GraphStyle.css" />
-    </stylesheets>
+		<URL value="@GraphStyle.css" />
+	</stylesheets>
 </ScrollPane>
 
