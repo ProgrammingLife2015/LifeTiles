@@ -12,5 +12,5 @@ public interface ParserFactory {
      *            A <code>AbstractGraphLibrary</code> to generate the graph.
      * @return A new graph using the specified graph library.
      */
-    Graph<SequenceSegment> parseGraph(AbstractGraphFactory<SequenceSegment> fa);
+    Graph<SequenceSegment> parseGraph(GraphFactory<SequenceSegment> fa);
 }
