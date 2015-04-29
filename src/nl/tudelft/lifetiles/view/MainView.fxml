@@ -9,8 +9,8 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.Label?>
 
-<VBox id="wrapper" prefHeight="600" prefWidth="800"
-	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+<VBox id="wrapper" xmlns="http://javafx.com/javafx/8.0.40"
+	xmlns:fx="http://javafx.com/fxml/1" fx:controller="nl.tudelft.lifetiles.controller.MainController">
 
 	<fx:include source="MenuView.fxml" fx:id="menuContent" />
 
@@ -19,9 +19,9 @@
 	<SplitPane dividerPositions="0.2" prefHeight="160.0"
 		prefWidth="200.0">
 		<items>
-			
+
 			<fx:include source="DataView.fxml" fx:id="dataContent" />
-			
+
 			<fx:include source="TreeView.fxml" fx:id="treeContent" />
 		</items>
 	</SplitPane>
