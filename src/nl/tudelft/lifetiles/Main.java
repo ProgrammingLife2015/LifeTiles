@@ -1,30 +1,54 @@
 package nl.tudelft.lifetiles;
 
+import java.net.URL;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
+/**
+ * The main class / launcher.
+ * 
+ * @author Joren Hammudoglu
+ *
+ */
 public class Main extends Application {
+
+	/**
+	 * The minimal width of the window, in pixels.
+	 */
+	private static final int WINDOW_WIDTH = 1280;
+
+	/**
+	 * The minimal height of the window, in pixels.
+	 */
+	private static final int WINDOW_HEIGHT = 720;
+
 	@Override
-	public void start(Stage stage) {
+	public final void start(final Stage stage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource(
-					"Main.fxml"));
-			Scene scene = new Scene(root, 1280, 720);
-			scene.getStylesheets().add(
-					getClass().getResource("application.css").toExternalForm());
-			
+			final URL mainView = getClass().getResource("view/MainView.fxml");
+			Parent root = FXMLLoader.load(mainView);
+
+			Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
+
 			stage.setTitle("LifeTiles");
-	        stage.setScene(scene);
-	        stage.show();
+			stage.setScene(scene);
+			stage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static void main(String[] args) {
+	/**
+	 * Launch LifeTiles.
+	 * 
+	 * @param args
+	 *            The program arguments
+	 */
+	public static void main(final String[] args) {
 		launch(args);
 	}
 }
