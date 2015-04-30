@@ -1,4 +1,4 @@
-package nl.tudelft.lifeTiles.graph.JGraphT;
+package nl.tudelft.lifeTiles.graph.jgrapht;
 
 import nl.tudelft.lifeTiles.graph.DirectedEdge;
 import nl.tudelft.lifeTiles.graph.Graph;
