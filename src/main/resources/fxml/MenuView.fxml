@@ -2,10 +2,14 @@
 
 <?import java.net.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
 
 <MenuBar xmlns:fx="http://javafx.com/fxml/1" id="menubar" fx:id="menuBar"
 	onKeyPressed="#handleKeyInput" fx:controller="nl.tudelft.lifetiles.controller.MenuController">
+
 	<menus>
+		<Menu text="" id="logo" />
 		<Menu text="File">
 			<items>
 				<MenuItem text="Open" />
