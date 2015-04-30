@@ -3,3 +3,12 @@
 #menubar {
     -fx-background-color: #0B77B5;
 }
+
+#logo {
+    -fx-background-image: url("/images/logo.png"); 
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 32;
+    -fx-min-width: 32;
+    -fx-min-height: 32;
+}
