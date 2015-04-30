@@ -34,7 +34,7 @@
 	</menus>
 
 	<stylesheets>
-		<URL value="@MenuStyle.css" />
+		<URL value="@../styles/MenuStyle.css" />
 	</stylesheets>
 </MenuBar>
 
