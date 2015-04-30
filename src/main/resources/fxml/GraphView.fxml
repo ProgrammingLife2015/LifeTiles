@@ -26,7 +26,7 @@
 	</content>
 
 	<stylesheets>
-		<URL value="@GraphStyle.css" />
+		<URL value="@../styles/GraphStyle.css" />
 	</stylesheets>
 </ScrollPane>
 

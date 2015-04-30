@@ -29,7 +29,8 @@ public class Main extends Application {
 	@Override
 	public final void start(final Stage stage) {
 		try {
-			final URL mainView = getClass().getResource("view/MainView.fxml");
+			URL mainView = getClass().getClassLoader().getResource(
+					"fxml/MainView.fxml");
 			Parent root = FXMLLoader.load(mainView);
 
 			Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
