@@ -1,6 +1,6 @@
 package nl.tudelft.lifeTiles.graph;
 
-import nl.tudelft.lifeTiles.graph.JGraphT.GraphFactoryImplementation;
+import nl.tudelft.lifeTiles.graph.jgrapht.GraphFactoryImplementation;
 
 /**
  * @author Rutger van den Berg Produces the various factories used.
