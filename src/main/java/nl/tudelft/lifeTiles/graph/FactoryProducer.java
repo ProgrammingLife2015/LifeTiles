@@ -1,6 +1,6 @@
 package nl.tudelft.lifeTiles.graph;
 
-import nl.tudelft.lifeTiles.graph.jgrapht.GraphFactoryImplementation;
+import nl.tudelft.lifeTiles.graph.jgrapht.JGraphTGraphFactoryImplementation;
 
 /**
  * @author Rutger van den Berg Produces the various factories used.
@@ -20,7 +20,7 @@ public class FactoryProducer<V> {
      */
     public final GraphFactory<V> getFactory(final String graphLibrary) {
         if (graphLibrary.equalsIgnoreCase("JGraphT")) {
-            return new GraphFactoryImplementation<V>();
+            return new JGraphTGraphFactoryImplementation<V>();
         }
         // Specified an invalid Graph library.
         return null;
