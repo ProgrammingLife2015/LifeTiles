@@ -5,12 +5,11 @@ import java.util.StringTokenizer;
 public class NewickParser {
 	private PhylogeneticTreeItem root;
 	private String treeFile;
-	private int nodeID = 0;
-	
+		
 	public NewickParser(String tree){
 		treeFile = tree;
-		root = new PhylogeneticTreeItem(nodeID);
-		nodeID++;
+		root = new PhylogeneticTreeItem();
+		
 		parse();
 		
 	}
@@ -24,10 +23,9 @@ public class NewickParser {
 			
 			// list of children
 			if(currentToken.equals("(")){
-				PhylogeneticTreeItem newChild = new PhylogeneticTreeItem(nodeID);
+				PhylogeneticTreeItem newChild = new PhylogeneticTreeItem();
 				newChild.setParent(currentNode);
 				currentNode = newChild;
-				nodeID++;
 			}
 			// next token is a distance
 			else if(currentToken.equals(":")){
@@ -38,11 +36,10 @@ public class NewickParser {
 			// next token is another child
 			else if(currentToken.equals(",")){
 				currentNode = currentNode.getParent();
-				PhylogeneticTreeItem newChild = new PhylogeneticTreeItem(nodeID);
+				PhylogeneticTreeItem newChild = new PhylogeneticTreeItem();
 				newChild.setParent(currentNode);
 				currentNode = newChild;
-				nodeID++;
-				
+					
 				
 				
 			}// list of children ends
