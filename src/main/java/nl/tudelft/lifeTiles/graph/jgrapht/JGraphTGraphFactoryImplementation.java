@@ -10,7 +10,7 @@ import nl.tudelft.lifeTiles.graph.GraphFactory;
  * @param <V>
  *            The type of Vertex to use.
  */
-public class GraphFactoryImplementation<V> implements GraphFactory<V> {
+public class JGraphTGraphFactoryImplementation<V> implements GraphFactory<V> {
 
     /**
      * @return a new empty Graph.

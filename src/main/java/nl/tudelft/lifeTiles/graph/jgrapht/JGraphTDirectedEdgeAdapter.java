@@ -7,6 +7,6 @@ import nl.tudelft.lifeTiles.graph.DirectedEdge;
  * Implementation of a directed edge.
  * @param <V> The type of vertex to use.
  */
-public class DirectedEdgeAdapter<V> implements DirectedEdge<V> {
+public class JGraphTDirectedEdgeAdapter<V> implements DirectedEdge<V> {
 
 }
