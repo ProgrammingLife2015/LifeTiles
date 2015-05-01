@@ -2,4 +2,6 @@
 
 #wrapper {
     -fx-background-color: #FFFFFF;
+    -fx-font-family: 'Open Sans Light';
+    -fx-font-size: 11pt;
 }
