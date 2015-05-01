@@ -1,0 +1,18 @@
+/* Stylesheet for the menu view. */
+
+#menubar {
+    -fx-background-color: #0B77B5;
+}
+
+#logo {
+    -fx-background-image: url("/images/logo.png"); 
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 29;
+    -fx-min-width: 29;
+    -fx-min-height: 29;
+}
+
+.menu .label {
+    -fx-text-fill: #D8F1FF;
+}
