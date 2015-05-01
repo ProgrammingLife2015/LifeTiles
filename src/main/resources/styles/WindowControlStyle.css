@@ -13,3 +13,15 @@
 .control_button:hover {
     -fx-background-color: #FFFFFF;
 }
+
+#window_close {
+    -fx-background-image: url("/images/window_close.png");
+}
+
+#window_minimize {
+    -fx-background-image: url("/images/window_minimize.png");
+}
+
+#window_resize {
+    -fx-background-image: url("/images/window_resize.png");
+}

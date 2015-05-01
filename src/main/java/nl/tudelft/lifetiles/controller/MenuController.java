@@ -36,12 +36,12 @@ public class MenuController implements Initializable {
 
 	/**
 	 * Make a node draggable so that when draggin that node, the window moves.
+	 * Code from http://stackoverflow.com/a/12961943/1627479
 	 * 
 	 * @param node
 	 *            the node
 	 */
 	private void addDraggableNode(final Node node) {
-
 		node.setOnMousePressed(new EventHandler<MouseEvent>() {
 
 			@Override
