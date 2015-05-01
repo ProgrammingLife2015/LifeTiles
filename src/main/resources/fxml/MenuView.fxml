@@ -6,7 +6,9 @@
 <?import javafx.scene.layout.*?>
 
 <MenuBar xmlns:fx="http://javafx.com/fxml/1" id="menubar" fx:id="menuBar"
-	onKeyPressed="#handleKeyInput" fx:controller="nl.tudelft.lifetiles.controller.MenuController">
+	onKeyPressed="#handleKeyInput" fx:controller="nl.tudelft.lifetiles.controller.MenuController"
+	AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+	AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 
 	<menus>
 		<Menu text="" id="logo" />
