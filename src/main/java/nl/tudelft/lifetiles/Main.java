@@ -5,6 +5,7 @@ import java.net.URL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
@@ -29,6 +30,8 @@ public class Main extends Application {
 	@Override
 	public final void start(final Stage stage) {
 		try {
+			stage.initStyle(StageStyle.UNDECORATED);
+			
 			URL mainView = getClass().getClassLoader().getResource(
 					"fxml/MainView.fxml");
 			Parent root = FXMLLoader.load(mainView);

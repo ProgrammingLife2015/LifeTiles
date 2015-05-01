@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Label?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="29"
+	prefWidth="64" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+	AnchorPane.rightAnchor="0.0">
+	<Button text="X" id="window_close" />
+	<Button text="-" id="window_minimize" />
+	<Button text="[]" id="window_resize" />
+</StackPane>
+
