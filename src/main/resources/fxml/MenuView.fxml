@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<MenuBar xmlns:fx="http://javafx.com/fxml/1" id="menubar" fx:id="menuBar"
+	fx:controller="nl.tudelft.lifetiles.controller.MenuController"
+	AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+	AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+
+	<menus>
+		<Menu text="" id="logo" />
+		<Menu text="File">
+			<items>
+				<MenuItem text="Open" />
+				<MenuItem text="Import" />
+				<SeparatorMenuItem />
+				<MenuItem text="Exit" />
+			</items>
+		</Menu>
+		<Menu text="View">
+			<items>
+				<MenuItem text="Foo" />
+				<MenuItem text="Bar" />
+			</items>
+		</Menu>
+		<Menu text="Configuration">
+			<items>
+				<MenuItem text="Foo" />
+				<MenuItem text="Bar" />
+			</items>
+		</Menu>
+		<Menu text="Help">
+			<items>
+				<MenuItem text="About" />
+			</items>
+		</Menu>
+	</menus>
+
+	<stylesheets>
+		<URL value="@../styles/MenuStyle.css" />
+	</stylesheets>
+</MenuBar>

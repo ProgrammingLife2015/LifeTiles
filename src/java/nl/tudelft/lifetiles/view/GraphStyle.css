@@ -1,0 +1,12 @@
+/* Stylesheet for the graph view. */
+#graphPane {
+    -fx-border-color: #CCCCCC;
+    -fx-border-width: 0 0 1 0;
+    -fx-border-style: solid;
+    -fx-fit-to-height: true;
+    -fx-fit-to-width: true;
+}
+
+#graphPaneInner {
+    -fx-background-color: #FFFFFF;
+}
