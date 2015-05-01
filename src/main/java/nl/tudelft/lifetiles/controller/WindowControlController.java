@@ -49,7 +49,7 @@ public class WindowControlController implements Initializable {
 	@FXML
 	private void minimizeWindowAction() {
 		Stage stage = (Stage) windowMinimize.getScene().getWindow();
-		stage.setIconified(true);
+		stage.toBack();
 	}
 
 	/**
