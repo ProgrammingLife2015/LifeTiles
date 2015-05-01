@@ -1,0 +1,15 @@
+/* Stylesheet for the menu view. */
+
+.control_button {
+    -fx-background-color: #0B77B5;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-min-width: 29;
+    -fx-min-height: 29;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+}
+
+.control_button:hover {
+    -fx-background-color: #FFFFFF;
+}

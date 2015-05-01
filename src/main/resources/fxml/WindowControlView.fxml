@@ -9,11 +9,28 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.Label?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="29"
-	prefWidth="64" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
-	AnchorPane.rightAnchor="0.0">
-	<Button text="X" id="window_close" />
-	<Button text="-" id="window_minimize" />
-	<Button text="[]" id="window_resize" />
-</StackPane>
+<BorderPane id="BorderPane" maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="29.0"
+	xmlns:fx="http://javafx.com/fxml" AnchorPane.topAnchor="0.0"
+	AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0"
+	fx:controller="nl.tudelft.lifetiles.controller.WindowControlController">
+	<top>
+		<AnchorPane prefHeight="29.0">
+			<children>
+				<Button text="X" id="window_close" styleClass="control_button"
+					mnemonicParsing="false" AnchorPane.rightAnchor="0.0" fx:id="windowClose"
+					onAction="#closeWindowAction" />
+				<Button text="-" id="window_minimize" styleClass="control_button"
+					mnemonicParsing="false" AnchorPane.rightAnchor="29.0" fx:id="windowMinimize"
+					onAction="#minimizeWindowAction" />
+				<Button text="O" id="window_resize" styleClass="control_button"
+					mnemonicParsing="false" AnchorPane.rightAnchor="58.0" fx:id="windowResize"
+					onAction="#resizeWindowAction" />
+			</children>
+		</AnchorPane>
+	</top>
 
+	<stylesheets>
+		<URL value="@../styles/WindowControlStyle.css" />
+	</stylesheets>
+</BorderPane>
