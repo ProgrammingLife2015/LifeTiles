@@ -109,6 +109,77 @@ public class PhylogeneticTreeItem {
     }
 
     /**
+     * Calculates a hash for the tree.
+     */
+    @Override
+    public final int hashCode() {
+        final int prime = 31;
+        int result = 1;
+
+        result = prime * result + children.hashCode();
+        long temp;
+        temp = Double.doubleToLongBits(distance);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        if (name != null) {
+            result = prime * result + name.hashCode();
+        } else {
+            result = prime * result;
+        }
+        return result;
+    }
+
+    /**
+     * compares this with another Object. returns true when both are the same.
+     * two PhylogeneticTreeItems are considered the same when:
+     *
+     * 1. both have the same name or both have no name
+     * 2. both have the same distance
+     * 3. both have the same children, order does not matter
+     *
+     * @param other
+     *            the object to compare with
+     *
+     * @return true if both are the same, otherwise false
+     */
+
+    @Override
+    public final boolean equals(final Object other) {
+        if (other == null) {
+            return false;
+        } else if (other == this) {
+            return true;
+        } else if (other instanceof PhylogeneticTreeItem) {
+            PhylogeneticTreeItem that = (PhylogeneticTreeItem) other;
+            boolean result;
+            // compare name
+            if (name == null && that.getName() == null) {
+                // both are empty and thus the same
+                result = true;
+            } else if (name == null) {
+                // the names are not both empty so not the same
+                result = false;
+            } else {
+                // name is not null check if it is the same
+                result = name.equals(that.getName());
+            }
+
+            // compare distance
+            result = result && (distance == that.getDistance());
+
+            // compare children
+            for (PhylogeneticTreeItem child : children) {
+                result = result && that.getChildren().contains(child);
+            }
+
+            return result;
+        } else {
+            return false;
+        }
+    }
+
+ 
+
+    /**
      * Returns the name stored in this node. name is an optional property, so
      * this method can return null.
      *
