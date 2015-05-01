@@ -12,3 +12,7 @@
     -fx-min-width: 29;
     -fx-min-height: 29;
 }
+
+.menu .label {
+    -fx-text-fill: #D8F1FF;
+}
