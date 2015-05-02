@@ -1,7 +1,9 @@
 package nl.tudelft.lifeTiles.graph.jgrapht;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import nl.tudelft.lifeTiles.graph.Edge;
@@ -29,6 +31,10 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      * The edgefactory to use to create the edges for this graph.
      */
     private JGraphTEdgeFactory<V> edgeFact;
+    /**
+     * List of vertices. Used to be able to identify nodes by ids.
+     */
+    private List<V> vertexIdentifiers;
 
     /**
      * Creates a new Graph.
@@ -41,6 +47,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
                 DefaultEdge.class);
         edgeFact = ef;
         sources = new HashSet<>();
+        vertexIdentifiers = new ArrayList<>();
     }
 
     /**
@@ -50,6 +57,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
     @Override
     public final void addVertex(final V vertex) {
         internalGraph.addVertex(vertex);
+        vertexIdentifiers.add(vertex);
         sources.add(vertex);
     }
 
@@ -165,6 +173,13 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
         }
         JGraphTEdgeAdapter<V> ed = (JGraphTEdgeAdapter<V>) input;
         return ed.getInternalEdge();
+    }
+
+    @Override
+    public final void addEdge(final int source, final int destination) {
+        addEdge(vertexIdentifiers.get(source),
+                vertexIdentifiers.get(destination));
+
     }
 
 }
