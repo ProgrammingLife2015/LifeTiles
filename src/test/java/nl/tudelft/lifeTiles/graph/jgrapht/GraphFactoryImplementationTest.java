@@ -1,6 +1,5 @@
 package nl.tudelft.lifeTiles.graph.jgrapht;
 
-import nl.tudelft.lifeTiles.graph.DirectedEdge;
 import nl.tudelft.lifeTiles.graph.FactoryProducer;
 import nl.tudelft.lifeTiles.graph.Graph;
 import nl.tudelft.lifeTiles.graph.GraphFactory;
@@ -12,13 +11,14 @@ import org.junit.Test;
 
 public class GraphFactoryImplementationTest {
     GraphFactory<SequenceSegment> gf;
-    FactoryProducer<SequenceSegment> fp;
+    static FactoryProducer<SequenceSegment> fp;
     SequenceSegment v1, v2;
 
     @BeforeClass
-    public void runOnce() {
+    public static void runOnce() {
         fp = new FactoryProducer<SequenceSegment>();
     }
+
     @Before
     public void setUp() throws Exception {
         gf = fp.getFactory("JGraphT");
@@ -29,12 +29,6 @@ public class GraphFactoryImplementationTest {
     @Test
     public void testGetGraph() {
         Graph<SequenceSegment> g = gf.getGraph();
-        assert(g instanceof JGraphTGraphAdapter);
-    }
-
-    @Test
-    public void testGetEdge() {
-        DirectedEdge<SequenceSegment> edge = gf.getEdge(v1, v2);
-        assert(edge instanceof JGraphTDirectedEdgeAdapter);
+        assert (g instanceof JGraphTGraphAdapter);
     }
 }

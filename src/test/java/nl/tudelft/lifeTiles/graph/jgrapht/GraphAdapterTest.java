@@ -5,7 +5,7 @@ import static org.junit.Assert.assertFalse;
 
 import java.util.Set;
 
-import nl.tudelft.lifeTiles.graph.DirectedEdge;
+import nl.tudelft.lifeTiles.graph.Edge;
 import nl.tudelft.lifeTiles.graph.FactoryProducer;
 import nl.tudelft.lifeTiles.graph.Graph;
 import nl.tudelft.lifeTiles.graph.GraphFactory;
@@ -21,14 +21,15 @@ import org.junit.Test;
  */
 public class GraphAdapterTest {
     GraphFactory<SequenceSegment> gf;
-    FactoryProducer<SequenceSegment> fp;
+    static FactoryProducer<SequenceSegment> fp;
     SequenceSegment v1, v2;
     Graph<SequenceSegment> gr;
 
     @BeforeClass
-    public void runOnce() {
+    public static void runOnce() {
         fp = new FactoryProducer<SequenceSegment>();
     }
+
     @Before
     public void setUp() throws Exception {
         gf = fp.getFactory("JGraphT");
@@ -51,7 +52,7 @@ public class GraphAdapterTest {
         gr.addVertex(v1);
         gr.addVertex(v2);
         assertEquals(0, gr.getAllEdges().size());
-        gr.addEdge(v1,  v2);
+        gr.addEdge(v1, v2);
         assertEquals(1, gr.getAllEdges().size());
     }
 
@@ -59,7 +60,7 @@ public class GraphAdapterTest {
     public void testAddWrongEdge() {
         gr.addVertex(v1);
         assertEquals(0, gr.getAllEdges().size());
-        assertFalse(gr.addEdge(v1,  v2));
+        assertFalse(gr.addEdge(v1, v2));
         assertEquals(0, gr.getAllEdges().size());
     }
 
@@ -67,26 +68,38 @@ public class GraphAdapterTest {
     public void testGetSource() {
         gr.addVertex(v1);
         gr.addVertex(v2);
-        gr.addEdge(v1,  v2);
-        assertEquals(v1, gr.getSource());
+        gr.addEdge(v1, v2);
+        Set<SequenceSegment> s = gr.getSource();
+        assert (s.contains(v1));
+        assertEquals(1, s.size());
     }
-
 
     @Test
     public void testGetIncoming() {
         gr.addVertex(v1);
         gr.addVertex(v2);
-        gr.addEdge(v1,  v2);
-        Set<DirectedEdge<SequenceSegment>> inc = gr.getIncoming(v2);
+        gr.addEdge(v1, v2);
+        Set<Edge<SequenceSegment>> inc = gr.getIncoming(v2);
         assertEquals(1, inc.size());
+        assert (inc.contains(v1));
+    }
+
+    @Test
+    public void testGetOutgoing() {
+        gr.addVertex(v1);
+        gr.addVertex(v2);
+        gr.addEdge(v1, v2);
+        Set<Edge<SequenceSegment>> inc = gr.getOutgoing(v1);
+        assertEquals(1, inc.size());
+        assert (inc.contains(v2));
     }
 
     @Test
     public void testGetWrongIncoming() {
         gr.addVertex(v1);
         gr.addVertex(v2);
-        gr.addEdge(v1,  v2);
-        Set<DirectedEdge<SequenceSegment>> inc = gr.getIncoming(v1);
+        gr.addEdge(v1, v2);
+        Set<Edge<SequenceSegment>> inc = gr.getIncoming(v1);
         assertEquals(0, inc.size());
     }
 
@@ -94,8 +107,8 @@ public class GraphAdapterTest {
     public void testGetEdgeSource() {
         gr.addVertex(v1);
         gr.addVertex(v2);
-        gr.addEdge(v1,  v2);
-        Set<DirectedEdge<SequenceSegment>> inc = gr.getIncoming(v2);
+        gr.addEdge(v1, v2);
+        Set<Edge<SequenceSegment>> inc = gr.getIncoming(v2);
         assertEquals(v1, gr.getSource(inc.iterator().next()));
     }
 
@@ -103,8 +116,8 @@ public class GraphAdapterTest {
     public void testGetEdgeDestination() {
         gr.addVertex(v1);
         gr.addVertex(v2);
-        gr.addEdge(v1,  v2);
-        Set<DirectedEdge<SequenceSegment>> inc = gr.getIncoming(v2);
+        gr.addEdge(v1, v2);
+        Set<Edge<SequenceSegment>> inc = gr.getIncoming(v2);
         assertEquals(v2, gr.getDestination(inc.iterator().next()));
     }
 
