@@ -60,13 +60,24 @@ public interface Graph<V> {
     Set<V> getAllVertices();
 
     /**
-     * @param e THe edge for which the source is to be retrieved.
+     * @param e
+     *            THe edge for which the source is to be retrieved.
      * @return The source vertex.
      */
     V getSource(Edge<V> e);
+
     /**
-     * @param e The edge for which the destination is to be retrieved.
+     * @param e
+     *            The edge for which the destination is to be retrieved.
      * @return The destination vertex.
      */
     V getDestination(Edge<V> e);
+
+    /**
+     * @param source
+     *            Id of the source vertex.
+     * @param destination
+     *            Id of the destination vertex.
+     */
+    void addEdge(int source, int destination);
 }
