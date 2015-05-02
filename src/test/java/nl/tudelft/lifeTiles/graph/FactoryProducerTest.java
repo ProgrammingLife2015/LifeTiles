@@ -1,5 +1,6 @@
 package nl.tudelft.lifeTiles.graph;
 
+import static org.junit.Assert.assertNull;
 import nl.tudelft.lifeTiles.graph.jgrapht.JGraphTGraphFactory;
 
 import org.junit.Before;
@@ -22,7 +23,7 @@ public class FactoryProducerTest {
     @Test
     public void testGetWrongParam() {
         GraphFactory<String> gf = fp.getFactory("libfoo");
-        assert (gf instanceof JGraphTGraphFactory<?>);
+        assertNull(gf);
     }
 
     @Test
