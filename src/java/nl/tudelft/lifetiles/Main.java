@@ -5,10 +5,8 @@ import java.net.URL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.text.Font;
 
 /**
  * The main class / launcher.
@@ -31,19 +29,10 @@ public class Main extends Application {
 	@Override
 	public final void start(final Stage stage) {
 		try {
-			stage.initStyle(StageStyle.UNDECORATED);
-
-			URL mainView = getClass().getClassLoader().getResource(
-					"fxml/MainView.fxml");
-			URL fontFile = getClass().getClassLoader().getResource(
-					"fonts/Open_Sans/OpenSans-Light.ttf");
-
+			final URL mainView = getClass().getResource("view/MainView.fxml");
 			Parent root = FXMLLoader.load(mainView);
 
 			Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-			final int fontSize = 12;
-			Font.loadFont(fontFile.toExternalForm(), fontSize);
 
 			stage.setTitle("LifeTiles");
 			stage.setScene(scene);
