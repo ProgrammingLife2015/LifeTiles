@@ -81,7 +81,7 @@ public class GraphAdapterTest {
         gr.addEdge(v1, v2);
         Set<Edge<SequenceSegment>> inc = gr.getIncoming(v2);
         assertEquals(1, inc.size());
-        assert (inc.contains(v1));
+        assertEquals(v1, gr.getSource(inc.iterator().next()));
     }
 
     @Test
@@ -91,7 +91,7 @@ public class GraphAdapterTest {
         gr.addEdge(v1, v2);
         Set<Edge<SequenceSegment>> inc = gr.getOutgoing(v1);
         assertEquals(1, inc.size());
-        assert (inc.contains(v2));
+        assertEquals(v2, gr.getDestination(inc.iterator().next()));
     }
 
     @Test
