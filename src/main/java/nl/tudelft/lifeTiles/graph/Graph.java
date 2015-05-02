@@ -34,14 +34,14 @@ public interface Graph<V> {
      *            The vertex for which the incoming edges will be retrieved.
      * @return A Set of incoming edges.
      */
-    Set<DirectedEdge<V>> getIncoming(V vertex);
+    Set<Edge<V>> getIncoming(V vertex);
 
     /**
      * @param vertex
      *            The vertex for which the outgoing edges will be retrieved.
      * @return A Set of outgoing edges.
      */
-    Set<DirectedEdge<V>> getOutgoing(V vertex);
+    Set<Edge<V>> getOutgoing(V vertex);
 
     /**
      * @return A Set of source nodes. Source being a node that has no incoming
@@ -52,7 +52,7 @@ public interface Graph<V> {
     /**
      * @return A Set containing all edges in the graph.
      */
-    Set<DirectedEdge<V>> getAllEdges();
+    Set<Edge<V>> getAllEdges();
 
     /**
      * @return A Set containing all vertices in the graph.
@@ -63,10 +63,10 @@ public interface Graph<V> {
      * @param e THe edge for which the source is to be retrieved.
      * @return The source vertex.
      */
-    V getSource(DirectedEdge<V> e);
+    V getSource(Edge<V> e);
     /**
      * @param e The edge for which the destination is to be retrieved.
      * @return The destination vertex.
      */
-    V getDestination(DirectedEdge<V> e);
+    V getDestination(Edge<V> e);
 }
