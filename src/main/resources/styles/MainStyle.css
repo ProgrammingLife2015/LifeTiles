@@ -5,3 +5,8 @@
     -fx-font-family: 'Open Sans Light';
     -fx-font-size: 11pt;
 }
+
+#window_controls {
+    -fx-background-color: #0B77B5;
+    -fx-padding: 5 5 5 5;
+}
