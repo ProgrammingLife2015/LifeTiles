@@ -1,8 +1,0 @@
-/* Stylesheet for the data view. */
-
-#dataPane {
-    -fx-border-color: #CCCCCC;
-    -fx-border-width: 0 1 0 0;
-    -fx-border-style: solid;
-    -fx-background-color: #FFFFFF;
-}
