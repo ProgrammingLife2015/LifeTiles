@@ -224,4 +224,128 @@ public class testPhylogeneticTreeItem {
         
         assertFalse("a node should not be equal to null",node.equals(null));
     }
+    
+    @Test
+    public void testHashCodeNoDataNoChildren() {
+        // set up
+        PhylogeneticTreeItem node1 = new PhylogeneticTreeItem();
+        PhylogeneticTreeItem node2 = new PhylogeneticTreeItem();
+              
+        // test equal nodes
+        assertEquals("two empty nodes should be the same",node1.hashCode(),node2.hashCode());
+        
+        
+               
+    }
+    
+    @Test
+    public void testHashCodeNameOnlyNoChildren() {
+        // set up
+        PhylogeneticTreeItem node1 = new PhylogeneticTreeItem();
+        node1.setName("DuplicateNode");
+        PhylogeneticTreeItem node2 = new PhylogeneticTreeItem();
+        node2.setName("DuplicateNode");
+        
+        // test equal nodes
+        assertEquals("two equal nodes should be the same",node1.hashCode(),node2.hashCode());
+       
+                
+    }
+    
+    @Test
+    public void testHashCodeDistanceOnlyNoChildren() {
+        // set up
+        PhylogeneticTreeItem node1 = new PhylogeneticTreeItem();
+        node1.setDistance(0.2);
+        PhylogeneticTreeItem node2 = new PhylogeneticTreeItem();
+        node2.setDistance(0.2);
+        
+        
+        // test equal nodes
+        assertEquals("two equal nodes should be the same",node1.hashCode(),node2.hashCode());
+    }
+    
+    @Test
+    public void testHashCodeNameAndDistanceNoChildren() {
+        // set up
+        PhylogeneticTreeItem node1 = new PhylogeneticTreeItem();
+        node1.setDistance(0.2);
+        node1.setName("DuplicateNode");
+        PhylogeneticTreeItem node2 = new PhylogeneticTreeItem();
+        node2.setDistance(0.2);
+        node2.setName("DuplicateNode");
+        
+        // test equal nodes
+        assertEquals("two equal nodes should be the same",node1.hashCode(),node2.hashCode());
+   }
+    
+    @Test
+    public void testHashCodeNoDataWithChildren() {
+        // set up
+        PhylogeneticTreeItem node1 = new PhylogeneticTreeItem();
+        PhylogeneticTreeItem node2 = new PhylogeneticTreeItem();
+     
+        PhylogeneticTreeItem node11 = new PhylogeneticTreeItem();
+        node11.setParent(node1);
+        PhylogeneticTreeItem node21 = new PhylogeneticTreeItem();
+        node21.setParent(node2);
+        
+        // test equal nodes
+        assertEquals("two empty nodes should be the same",node1.hashCode(),node2.hashCode());
+                       
+    }
+    
+    @Test
+    public void testHashCodeNameOnlyWithChildren() {
+        // set up
+        PhylogeneticTreeItem node1 = new PhylogeneticTreeItem();
+        node1.setName("DuplicateNode");
+        PhylogeneticTreeItem node2 = new PhylogeneticTreeItem();
+        node2.setName("DuplicateNode");
+                
+        PhylogeneticTreeItem node11 = new PhylogeneticTreeItem();
+        node11.setParent(node1);
+        PhylogeneticTreeItem node21 = new PhylogeneticTreeItem();
+        node21.setParent(node2);
+        
+        // test equal nodes
+        assertEquals("two equal nodes should be the same",node1.hashCode(),node2.hashCode());
+       
+    }
+    
+    @Test
+    public void testHashCodeDistanceOnlyWithChildren() {
+        // set up
+        PhylogeneticTreeItem node1 = new PhylogeneticTreeItem();
+        node1.setDistance(0.2);
+        PhylogeneticTreeItem node2 = new PhylogeneticTreeItem();
+        node2.setDistance(0.2);
+              
+        PhylogeneticTreeItem node11 = new PhylogeneticTreeItem();
+        node11.setParent(node1);
+        PhylogeneticTreeItem node21 = new PhylogeneticTreeItem();
+        node21.setParent(node2);
+        // test equal nodes
+        assertEquals("two equal nodes should be the same",node1.hashCode(),node2.hashCode());
+    }
+    
+    @Test
+    public void testHashCodeNameAndDistanceWithChildren() {
+        // set up
+        PhylogeneticTreeItem node1 = new PhylogeneticTreeItem();
+        node1.setDistance(0.2);
+        node1.setName("DuplicateNode");
+        PhylogeneticTreeItem node2 = new PhylogeneticTreeItem();
+        node2.setDistance(0.2);
+        node2.setName("DuplicateNode");
+                
+        PhylogeneticTreeItem node11 = new PhylogeneticTreeItem();
+        node11.setParent(node1);
+        PhylogeneticTreeItem node21 = new PhylogeneticTreeItem();
+        node21.setParent(node2);
+        
+        // test equal nodes
+        assertEquals("two equal nodes should be the same",node1.hashCode(),node2.hashCode());
+    }
+
 }
