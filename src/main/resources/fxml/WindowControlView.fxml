@@ -20,12 +20,12 @@
 				<Button id="window_close" styleClass="control_button"
 					mnemonicParsing="false" AnchorPane.rightAnchor="0.0" fx:id="windowClose"
 					onAction="#closeWindowAction" />
-				<Button id="window_minimize" styleClass="control_button"
-					mnemonicParsing="false" AnchorPane.rightAnchor="29.0" fx:id="windowMinimize"
-					onAction="#minimizeWindowAction" />
 				<Button id="window_resize" styleClass="control_button"
-					mnemonicParsing="false" AnchorPane.rightAnchor="58.0" fx:id="windowResize"
+					mnemonicParsing="false" AnchorPane.rightAnchor="29.0" fx:id="windowResize"
 					onAction="#resizeWindowAction" />
+				<Button id="window_minimize" styleClass="control_button"
+					mnemonicParsing="false" AnchorPane.rightAnchor="58.0" fx:id="windowMinimize"
+					onAction="#minimizeWindowAction" />
 			</children>
 		</AnchorPane>
 	</top>
