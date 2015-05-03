@@ -7,12 +7,41 @@
 #logo {
     -fx-background-image: url("/images/logo.png"); 
     -fx-background-repeat: no-repeat;
-    -fx-background-position: center;
     -fx-background-size: 29;
     -fx-min-width: 29;
     -fx-min-height: 29;
+    -fx-padding: 0 0 0 40;
+}
+
+.menu {
+    -fx-background-color: #0B77B5;
+}
+
+.menu:showing {
+    -fx-background-color: #0B77B5;
 }
 
 .menu .label {
-    -fx-text-fill: #D8F1FF;
+	-fx-text-fill: #9CC0F0;
+}
+
+.menu:showing .label, .menu:hover .label {
+	-fx-text-fill: #EEF3FA;
+}
+
+.context-menu {
+    -fx-skin: "com.sun.javafx.scene.control.skin.ContextMenuSkin";
+}
+
+.context-menu .menu-item .label {
+	-fx-text-fill: #919191;
+}
+
+.context-menu .menu-item:focused {
+    -fx-text-fill: #919191;
+    -fx-background-color: #FFFFFF;
+}
+
+.context-menu .menu-item:focused .label {
+    -fx-text-fill: #3F3F3F;
 }
