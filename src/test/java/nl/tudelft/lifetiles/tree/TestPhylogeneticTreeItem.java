@@ -4,9 +4,16 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class testPhylogeneticTreeItem {
+/**
+ * Test class for PhylogeneticTreeItem.
+ * tests setParent, equals and hashCode
+ */
+public class TestPhylogeneticTreeItem {
 
 
+    /**
+     * Test for setParent.
+     */
 	@Test
 	public void testSetParent(){
 	    // set up
@@ -24,6 +31,10 @@ public class testPhylogeneticTreeItem {
 	    assertTrue("Child was not properly added", parent.getChildren().contains(child));
 	}
 	
+	/**
+	 * Test for equals.
+	 * tests equals between 2 empty nodes
+	 */
     @Test
     public void testEqualsNoDataNoChildren() {
         // set up
@@ -42,6 +53,10 @@ public class testPhylogeneticTreeItem {
                
     }
     
+    /**
+     * Test for equals.
+     * tests equals between named nodes
+     */
     @Test
     public void testEqualsNameOnlyNoChildren() {
         // set up
@@ -62,6 +77,10 @@ public class testPhylogeneticTreeItem {
                 
     }
     
+    /**
+     * Test for equals.
+     * tests equals between nodes with only distance
+     */
     @Test
     public void testEqualsDistanceOnlyNoChildren() {
         // set up
@@ -82,6 +101,10 @@ public class testPhylogeneticTreeItem {
         assertFalse("two different nodes should not match",node3.equals(node1));
     }
     
+    /**
+     * Test for equals.
+     * tests equals between nodes with both distance and name
+     */
     @Test
     public void testEqualsNameAndDistanceNoChildren() {
         // set up
@@ -104,6 +127,10 @@ public class testPhylogeneticTreeItem {
         assertFalse("two different nodes should not match",node3.equals(node1));
     }
     
+    /**
+     * Test for equals.
+     * tests equals with two empty nodes with children
+     */
     @Test
     public void testEqualsNoDataWithChildren() {
         // set up
@@ -127,6 +154,10 @@ public class testPhylogeneticTreeItem {
                
     }
     
+    /**
+     * Test for equals.
+     * tests equals with two named nodes with children
+     */
     @Test
     public void testEqualsNameOnlyWithChildren() {
         // set up
@@ -152,6 +183,10 @@ public class testPhylogeneticTreeItem {
                 
     }
     
+    /**
+     * Test for equals.
+     * tests equals with two nodes with distance and children
+     */
     @Test
     public void testEqualsDistanceOnlyWithChildren() {
         // set up
@@ -175,7 +210,10 @@ public class testPhylogeneticTreeItem {
         assertFalse("two different nodes should not match",node1.equals(node3));
         assertFalse("two different nodes should not match",node3.equals(node1));
     }
-    
+    /**
+     * Test for equals.
+     * tests equals with two nodes with names, distance and children
+     */
     @Test
     public void testEqualsNameAndDistanceWithChildren() {
         // set up
@@ -202,6 +240,11 @@ public class testPhylogeneticTreeItem {
         assertFalse("two different nodes should not match",node1.equals(node3));
         assertFalse("two different nodes should not match",node3.equals(node1));
     }
+    
+    /**
+     * Test for equals.
+     * tests equals with itself
+     */
     @Test
     public void testEqualsItself(){
         // set up
@@ -217,6 +260,10 @@ public class testPhylogeneticTreeItem {
         assertTrue("a node should be equal to itself",node.equals(node));
     }
     
+    /**
+     * Test for equals.
+     * tests equals with null
+     */
     @Test
     public void testEqualsNull(){
      // set up
@@ -225,6 +272,10 @@ public class testPhylogeneticTreeItem {
         assertFalse("a node should not be equal to null",node.equals(null));
     }
     
+    /**
+     * Test for hashCode.
+     * tests hashCode with 2 empty nodes
+     */
     @Test
     public void testHashCodeNoDataNoChildren() {
         // set up
@@ -232,12 +283,14 @@ public class testPhylogeneticTreeItem {
         PhylogeneticTreeItem node2 = new PhylogeneticTreeItem();
               
         // test equal nodes
-        assertEquals("two empty nodes should be the same",node1.hashCode(),node2.hashCode());
-        
-        
-               
+        assertEquals("two empty nodes should have the same haxh",node1.hashCode(),node2.hashCode());
+      
     }
     
+    /**
+     * Test for hashCode.
+     * tests hashCode with 2 named nodes
+     */
     @Test
     public void testHashCodeNameOnlyNoChildren() {
         // set up
@@ -247,11 +300,14 @@ public class testPhylogeneticTreeItem {
         node2.setName("DuplicateNode");
         
         // test equal nodes
-        assertEquals("two equal nodes should be the same",node1.hashCode(),node2.hashCode());
+        assertEquals("two equal nodes should hace the same hash",node1.hashCode(),node2.hashCode());
        
                 
     }
-    
+    /**
+     * Test for hashCode.
+     * tests hashCode with 2 nodes with distance
+     */
     @Test
     public void testHashCodeDistanceOnlyNoChildren() {
         // set up
@@ -262,9 +318,13 @@ public class testPhylogeneticTreeItem {
         
         
         // test equal nodes
-        assertEquals("two equal nodes should be the same",node1.hashCode(),node2.hashCode());
+        assertEquals("two equal nodes should have the same hash",node1.hashCode(),node2.hashCode());
     }
     
+    /**
+     * Test for hashCode.
+     * tests hashCode with 2 nodes with distance and names
+     */
     @Test
     public void testHashCodeNameAndDistanceNoChildren() {
         // set up
@@ -276,9 +336,13 @@ public class testPhylogeneticTreeItem {
         node2.setName("DuplicateNode");
         
         // test equal nodes
-        assertEquals("two equal nodes should be the same",node1.hashCode(),node2.hashCode());
+        assertEquals("two equal nodes should have the same hash",node1.hashCode(),node2.hashCode());
    }
     
+    /**
+     * Test for hashCode.
+     * tests hashCode with 2 empty nodes with children
+     */
     @Test
     public void testHashCodeNoDataWithChildren() {
         // set up
@@ -291,10 +355,14 @@ public class testPhylogeneticTreeItem {
         node21.setParent(node2);
         
         // test equal nodes
-        assertEquals("two empty nodes should be the same",node1.hashCode(),node2.hashCode());
+        assertEquals("two empty nodes should have the same hash",node1.hashCode(),node2.hashCode());
                        
     }
     
+    /**
+     * Test for hashCode.
+     * tests hashCode with 2 named nodes with children
+     */
     @Test
     public void testHashCodeNameOnlyWithChildren() {
         // set up
@@ -309,10 +377,14 @@ public class testPhylogeneticTreeItem {
         node21.setParent(node2);
         
         // test equal nodes
-        assertEquals("two equal nodes should be the same",node1.hashCode(),node2.hashCode());
+        assertEquals("two equal nodes should have the same hash",node1.hashCode(),node2.hashCode());
        
     }
     
+    /**
+     * Test for hashCode.
+     * tests hashCode with 2 nodes with children and distance
+     */
     @Test
     public void testHashCodeDistanceOnlyWithChildren() {
         // set up
@@ -326,9 +398,13 @@ public class testPhylogeneticTreeItem {
         PhylogeneticTreeItem node21 = new PhylogeneticTreeItem();
         node21.setParent(node2);
         // test equal nodes
-        assertEquals("two equal nodes should be the same",node1.hashCode(),node2.hashCode());
+        assertEquals("two equal nodes should have the same hash",node1.hashCode(),node2.hashCode());
     }
     
+    /**
+     * Test for hashCode.
+     * tests hashCode with 2 named nodes with children and distance
+     */
     @Test
     public void testHashCodeNameAndDistanceWithChildren() {
         // set up
@@ -345,7 +421,7 @@ public class testPhylogeneticTreeItem {
         node21.setParent(node2);
         
         // test equal nodes
-        assertEquals("two equal nodes should be the same",node1.hashCode(),node2.hashCode());
+        assertEquals("two equal nodes should have the same hash",node1.hashCode(),node2.hashCode());
     }
 
 }
