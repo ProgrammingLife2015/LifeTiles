@@ -105,6 +105,104 @@ public class testPhylogeneticTreeItem {
     }
     
     @Test
+    public void testEqualsNoDataWithChildren() {
+        // set up
+        PhylogeneticTreeItem node1 = new PhylogeneticTreeItem();
+        PhylogeneticTreeItem node2 = new PhylogeneticTreeItem();
+        PhylogeneticTreeItem node3 = new PhylogeneticTreeItem();
+        node3.setName("AnotherNode");
+        
+        
+        PhylogeneticTreeItem node11 = new PhylogeneticTreeItem();
+        node11.setParent(node1);
+        PhylogeneticTreeItem node21 = new PhylogeneticTreeItem();
+        node21.setParent(node2);
+        // test equal nodes
+        assertTrue("two empty nodes should be the same",node1.equals(node2));
+        assertTrue("two empty nodes should be the same",node2.equals(node1));
+        
+        // test different nodes
+        assertFalse("two different nodes should not match",node1.equals(node3));
+        assertFalse("two different nodes should not match",node3.equals(node1));
+               
+    }
+    
+    @Test
+    public void testEqualsNameOnlyWithChildren() {
+        // set up
+        PhylogeneticTreeItem node1 = new PhylogeneticTreeItem();
+        node1.setName("DuplicateNode");
+        PhylogeneticTreeItem node2 = new PhylogeneticTreeItem();
+        node2.setName("DuplicateNode");
+        PhylogeneticTreeItem node3 = new PhylogeneticTreeItem();
+        node3.setName("AnotherNode");
+        
+        PhylogeneticTreeItem node11 = new PhylogeneticTreeItem();
+        node11.setParent(node1);
+        PhylogeneticTreeItem node21 = new PhylogeneticTreeItem();
+        node21.setParent(node2);
+        
+        // test equal nodes
+        assertTrue("two equal nodes should be the same",node1.equals(node2));
+        assertTrue("two equal nodes should be the same",node2.equals(node1));
+        
+        // test different nodes
+        assertFalse("two different nodes should not match",node1.equals(node3));
+        assertFalse("two different nodes should not match",node3.equals(node1));
+                
+    }
+    
+    @Test
+    public void testEqualsDistanceOnlyWithChildren() {
+        // set up
+        PhylogeneticTreeItem node1 = new PhylogeneticTreeItem();
+        node1.setDistance(0.2);
+        PhylogeneticTreeItem node2 = new PhylogeneticTreeItem();
+        node2.setDistance(0.2);
+        PhylogeneticTreeItem node3 = new PhylogeneticTreeItem();
+        node3.setName("AnotherNode");
+        node3.setDistance(0.3);
+        
+        PhylogeneticTreeItem node11 = new PhylogeneticTreeItem();
+        node11.setParent(node1);
+        PhylogeneticTreeItem node21 = new PhylogeneticTreeItem();
+        node21.setParent(node2);
+        // test equal nodes
+        assertTrue("two equal nodes should be the same",node1.equals(node2));
+        assertTrue("two equal nodes should be the same",node2.equals(node1));
+        
+        // test different nodes
+        assertFalse("two different nodes should not match",node1.equals(node3));
+        assertFalse("two different nodes should not match",node3.equals(node1));
+    }
+    
+    @Test
+    public void testEqualsNameAndDistanceWithChildren() {
+        // set up
+        PhylogeneticTreeItem node1 = new PhylogeneticTreeItem();
+        node1.setDistance(0.2);
+        node1.setName("DuplicateNode");
+        PhylogeneticTreeItem node2 = new PhylogeneticTreeItem();
+        node2.setDistance(0.2);
+        node2.setName("DuplicateNode");
+        PhylogeneticTreeItem node3 = new PhylogeneticTreeItem();
+        node3.setName("AnotherNode");
+        node3.setDistance(0.3);
+        
+        PhylogeneticTreeItem node11 = new PhylogeneticTreeItem();
+        node11.setParent(node1);
+        PhylogeneticTreeItem node21 = new PhylogeneticTreeItem();
+        node21.setParent(node2);
+        
+        // test equal nodes
+        assertTrue("two equal nodes should be the same",node1.equals(node2));
+        assertTrue("two equal nodes should be the same",node2.equals(node1));
+        
+        // test different nodes
+        assertFalse("two different nodes should not match",node1.equals(node3));
+        assertFalse("two different nodes should not match",node3.equals(node1));
+    }
+    @Test
     public void testEqualsItself(){
         // set up
         PhylogeneticTreeItem node = new PhylogeneticTreeItem();
