@@ -72,10 +72,10 @@ public class TestNewickParser {
         // add 2 child nodes to the third node
         PhylogeneticTreeItem current2 = new PhylogeneticTreeItem();
         current2.setParent(current);
-        current.setName("C");
+        current2.setName("C");
         current2 = new PhylogeneticTreeItem();
         current2.setParent(current);
-        current.setName("D");
+        current2.setName("D");
 
         // compare the trees
         assertEquals("both trees do not match",rootExpected,rootActual);
