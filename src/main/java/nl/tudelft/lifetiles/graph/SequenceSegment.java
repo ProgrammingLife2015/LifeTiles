@@ -45,28 +45,28 @@ public class SequenceSegment {
     /**
      * @return the sources
      */
-    public final Set<String> getSourcesVar() {
+    public final Set<String> getSources() {
         return sourcesVar;
     }
 
     /**
      * @return the start position
      */
-    public final long getStartVar() {
+    public final long getStart() {
         return startVar;
     }
 
     /**
      * @return the end position
      */
-    public final long getEndVar() {
+    public final long getEnd() {
         return endVar;
     }
 
     /**
      * @return the content
      */
-    public final String getContentVar() {
+    public final String getContent() {
         return contentVar;
     }
 }
