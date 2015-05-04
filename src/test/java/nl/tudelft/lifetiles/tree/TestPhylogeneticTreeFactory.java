@@ -1,6 +1,3 @@
-/**
- * 
- */
 package nl.tudelft.lifetiles.tree;
 
 import static org.junit.Assert.*;
@@ -11,16 +8,16 @@ import org.junit.Test;
  * @author Albert Smit
  *
  */
-public class TestNewickParser {
+public class TestPhylogeneticTreeFactory {
 
     /**
      * test the parser without any data in the tree.
      */
     @Test
-    public void testNewickParserNoNamesNoDistance() {
+    public void testPhylogeneticTreeFactoryNoNamesNoDistance() {
         // create the actual tree
         String tree = "(,,(,));";
-        NewickParser np = new NewickParser(tree);
+        PhylogeneticTreeFactory np = new PhylogeneticTreeFactory(tree);
         assertTrue("Parser constructor failed, np is NULL", np != null);
         PhylogeneticTreeItem rootActual = np.getRoot();
 
@@ -49,10 +46,10 @@ public class TestNewickParser {
      * test the parser with named leaf nodes.
      */
     @Test
-    public void testNewickParserNamedLeafsNoDistance() {
+    public void testPhylogeneticTreeFactoryNamedLeafsNoDistance() {
         // create the actual tree
         String tree = "(A,B,(C,D));";
-        NewickParser np = new NewickParser(tree);
+        PhylogeneticTreeFactory np = new PhylogeneticTreeFactory(tree);
         assertTrue("Parser constructor failed, np is NULL", np != null);
         PhylogeneticTreeItem rootActual = np.getRoot();
 
@@ -85,10 +82,10 @@ public class TestNewickParser {
      * test the parser with named nodes.
      */
     @Test
-    public void testNewickParserNamednodesNoDistance() {
+    public void testPhylogeneticTreeFactoryNamednodesNoDistance() {
         // create the actual tree
         String tree = "(A,B,(C,D)E)F;";
-        NewickParser np = new NewickParser(tree);
+        PhylogeneticTreeFactory np = new PhylogeneticTreeFactory(tree);
         assertTrue("Parser constructor failed, np is NULL", np != null);
         PhylogeneticTreeItem rootActual = np.getRoot();
 
@@ -123,10 +120,10 @@ public class TestNewickParser {
      * test the parser with unnamed nodes and distances.
      */
     @Test
-    public void testNewickParserUnnamednodesAndDistance() {
+    public void testPhylogeneticTreeFactoryUnnamednodesAndDistance() {
         // create the actual tree
         String tree = "(:0.1,:0.2,(:0.3,:0.4):0.5);";
-        NewickParser np = new NewickParser(tree);
+        PhylogeneticTreeFactory np = new PhylogeneticTreeFactory(tree);
         assertTrue("Parser constructor failed, np is NULL", np != null);
         PhylogeneticTreeItem rootActual = np.getRoot();
 
@@ -160,10 +157,10 @@ public class TestNewickParser {
      * test the parser with named nodes and distance.
      */
     @Test
-    public void testNewickParserNamednodesAndDistance() {
+    public void testPhylogeneticTreeFactoryNamednodesAndDistance() {
         // create the actual tree
         String tree = "(A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5)F;";
-        NewickParser np = new NewickParser(tree);
+        PhylogeneticTreeFactory np = new PhylogeneticTreeFactory(tree);
         assertTrue("Parser constructor failed, np is NULL", np != null);
         PhylogeneticTreeItem rootActual = np.getRoot();
 
