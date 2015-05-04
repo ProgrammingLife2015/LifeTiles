@@ -3,7 +3,8 @@ package nl.tudelft.lifetiles.graph;
 import nl.tudelft.lifetiles.graph.jgrapht.JGraphTGraphFactory;
 
 /**
- * @author Rutger van den Berg Produces the various factories used.
+ * @author Rutger van den Berg
+ * Produces the various factories used.
  * @param <V>
  *            The type of vertex to use.
  */
@@ -23,7 +24,7 @@ public class FactoryProducer<V> {
             return new JGraphTGraphFactory<V>();
         }
         // Specified an invalid Graph library.
-        return null;
+        throw new IllegalArgumentException();
     }
 
     /**
