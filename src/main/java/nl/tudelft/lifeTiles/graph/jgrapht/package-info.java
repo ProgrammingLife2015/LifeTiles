@@ -1,4 +1,4 @@
 /**
  * This package contains all adapters required for the JGraphT library.
  */
-package nl.tudelft.lifeTiles.graph.jgrapht;
+package nl.tudelft.lifetiles.graph.jgrapht;

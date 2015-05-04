@@ -1,7 +1,7 @@
-package nl.tudelft.lifeTiles.graph;
+package nl.tudelft.lifetiles.graph;
 
 import static org.junit.Assert.assertNull;
-import nl.tudelft.lifeTiles.graph.jgrapht.JGraphTGraphFactory;
+import nl.tudelft.lifetiles.graph.jgrapht.JGraphTGraphFactory;
 
 import org.junit.Before;
 import org.junit.Test;
