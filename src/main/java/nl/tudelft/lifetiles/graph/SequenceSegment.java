@@ -41,6 +41,18 @@ public class SequenceSegment {
         endVar = endPosition;
         contentVar = content;
     }
+    
+    /**
+     * Returns the distance between this sequence segment and another.
+     * (non-euclidian distance)
+     * @param other
+     *            Sequence segment which needs to be compared.
+     * @return
+     *            Distance between this sequence and other sequence.
+     */
+    public long distanceTo(SequenceSegment other) {
+		return other.getStart() - getEnd() - 1;
+    }
 
     /**
      * @return the sources
