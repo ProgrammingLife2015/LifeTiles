@@ -1,4 +1,4 @@
-package nl.tudelft.lifeTiles.graph;
+package nl.tudelft.lifetiles.graph;
 
 /**
  * @author Rutger van den Berg Interface for Graph Parser.

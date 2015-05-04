@@ -1,12 +1,12 @@
-package nl.tudelft.lifeTiles.graph.jgrapht;
+package nl.tudelft.lifetiles.graph.jgrapht;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import nl.tudelft.lifeTiles.graph.Edge;
-import nl.tudelft.lifeTiles.graph.FactoryProducer;
-import nl.tudelft.lifeTiles.graph.Graph;
-import nl.tudelft.lifeTiles.graph.GraphFactory;
-import nl.tudelft.lifeTiles.graph.SequenceSegment;
+import nl.tudelft.lifetiles.graph.Edge;
+import nl.tudelft.lifetiles.graph.FactoryProducer;
+import nl.tudelft.lifetiles.graph.Graph;
+import nl.tudelft.lifetiles.graph.GraphFactory;
+import nl.tudelft.lifetiles.graph.SequenceSegment;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
