@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
  *
  */
 
-public class NewickParser {
+public class PhylogeneticTreeFactory {
     /**
      * The root node of the created tree.
      */
@@ -20,13 +20,13 @@ public class NewickParser {
     private String treeFile;
 
     /**
-     * Creates a new NewickParser that parses the String containing a single.
-     * tree and creates a tree of PhylogeneticTreeItems
+     * Creates a new PhylogeneticTreeFactory that parses the String containing
+     * a single tree and creates a tree of PhylogeneticTreeItems.
      *
      * @param tree
      *            a String specifying a single tree in newick format.
      */
-    public NewickParser(final String tree) {
+    public PhylogeneticTreeFactory(final String tree) {
         treeFile = tree;
         root = new PhylogeneticTreeItem();
 
