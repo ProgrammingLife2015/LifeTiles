@@ -26,7 +26,7 @@ public class FactoryProducerTest {
     @Test
     public void testGetWrongParam() {
         thrown.expect(IllegalArgumentException.class);
-        GraphFactory<String> gf = fp.getFactory("libfoo");
+        fp.getFactory("libfoo");
     }
 
     @Test
