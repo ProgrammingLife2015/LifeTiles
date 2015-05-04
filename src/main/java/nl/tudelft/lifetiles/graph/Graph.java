@@ -80,4 +80,14 @@ public interface Graph<V> {
      *            Id of the destination vertex.
      */
     void addEdge(int source, int destination);
+
+    /**
+     * Divides an edge into two edges with an inserted vertex in the middle.
+     * 
+     * @param edge
+     *            Edge to be divided.
+     * @param vertex
+     *            Vertex to be inserted.
+     */
+	void divideEdge(Edge<V> edge, V vertex);
 }
