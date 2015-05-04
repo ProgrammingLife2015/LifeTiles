@@ -19,6 +19,14 @@ public class JGraphTEdgeFactory<V> implements EdgeFactory<V> {
     private ClassBasedEdgeFactory<V, DefaultEdge> internalFactory;
 
     /**
+     * Creates a new edge factory.
+     */
+    public JGraphTEdgeFactory() {
+        internalFactory = new ClassBasedEdgeFactory<V, DefaultEdge>(
+                DefaultEdge.class);
+    }
+
+    /**
      * @return A new edge from <code>v1</code> to <code>v2</code>
      * @param v1
      *            The source vertex.
