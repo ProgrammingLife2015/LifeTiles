@@ -13,7 +13,7 @@
 	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
 	fx:controller="nl.tudelft.lifetiles.controller.MainController">
 
-	<AnchorPane prefHeight="29.0" id="window_controls">
+	<AnchorPane prefHeight="39.0" id="window_controls">
 		<children>
 			<fx:include fx:id="menuContent" source="MenuView.fxml" />
 			<fx:include fx:id="windowControlContent" source="WindowControlView.fxml" />
