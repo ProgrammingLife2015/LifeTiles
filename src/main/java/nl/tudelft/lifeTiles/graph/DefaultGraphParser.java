@@ -102,7 +102,7 @@ public class DefaultGraphParser implements GraphParser {
         String[] desc = descriptor.split("\\|");
         String[] sources = desc[2].split(",");
         for (String s : sources) {
-            s.trim();
+            s = s.trim();
         }
         Set<String> s = new HashSet<String>();
         Collections.addAll(s, sources);
