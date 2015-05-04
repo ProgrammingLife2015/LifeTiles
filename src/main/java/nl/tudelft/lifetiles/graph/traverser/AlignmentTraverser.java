@@ -27,8 +27,7 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
 	 *			The vertex that is being traversed.
 	 * @return aligned vertex.
 	 */
-	@Override
-	public SequenceSegment traverseVertex(Graph<SequenceSegment> graph, SequenceSegment vertex) {
+	private SequenceSegment traverseVertex(Graph<SequenceSegment> graph, SequenceSegment vertex) {
 		return vertex;
 	}
 }

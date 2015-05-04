@@ -17,13 +17,4 @@ public interface GraphTraverser<V> {
 	 * @return (modified) graph.
 	 */
 	Graph<V> traverseGraph(Graph<V> graph);
-	
-	/**
-	 * Traverse a vertex in the graph.
-	 * @param graph
-	 * @param vertex
-	 *			The vertex that is being traversed.
-	 * @return (modified) vertex.
-	 */
-	V traverseVertex(Graph<V> graph, V vertex);
 }
