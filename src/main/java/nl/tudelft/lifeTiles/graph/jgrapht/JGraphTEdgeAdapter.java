@@ -1,13 +1,13 @@
-package nl.tudelft.lifeTiles.graph.jgrapht;
+package nl.tudelft.lifetiles.graph.jgrapht;
 
-import nl.tudelft.lifeTiles.graph.Edge;
+import nl.tudelft.lifetiles.graph.Edge;
 
 import org.jgrapht.graph.DefaultEdge;
 
 /**
- * @author Rutger van den Berg
- * Implementation of a directed edge.
- * @param <V> The type of vertex to use.
+ * @author Rutger van den Berg Implementation of a directed edge.
+ * @param <V>
+ *            The type of vertex to use.
  */
 public class JGraphTEdgeAdapter<V> implements Edge<V> {
     /**
@@ -16,12 +16,12 @@ public class JGraphTEdgeAdapter<V> implements Edge<V> {
     private DefaultEdge internalEdge;
 
     /**
-     * @param e The internal edge to use.
+     * @param e
+     *            The internal edge to use.
      */
     JGraphTEdgeAdapter(final DefaultEdge e) {
         internalEdge = e;
     }
-
 
     /**
      * @return the internalEdge
@@ -30,16 +30,17 @@ public class JGraphTEdgeAdapter<V> implements Edge<V> {
         return internalEdge;
     }
 
-
     /**
-     * @param newInternalEdge the internalEdge to set
+     * @param newInternalEdge
+     *            the internalEdge to set
      */
     protected final void setInternalEdge(final DefaultEdge newInternalEdge) {
         this.internalEdge = newInternalEdge;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#hashCode()
      */
     @Override
@@ -53,8 +54,9 @@ public class JGraphTEdgeAdapter<V> implements Edge<V> {
         return result;
     }
 
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override

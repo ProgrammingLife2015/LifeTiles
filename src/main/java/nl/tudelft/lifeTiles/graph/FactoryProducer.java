@@ -1,6 +1,6 @@
-package nl.tudelft.lifeTiles.graph;
+package nl.tudelft.lifetiles.graph;
 
-import nl.tudelft.lifeTiles.graph.jgrapht.JGraphTGraphFactory;
+import nl.tudelft.lifetiles.graph.jgrapht.JGraphTGraphFactory;
 
 /**
  * @author Rutger van den Berg Produces the various factories used.
@@ -29,6 +29,7 @@ public class FactoryProducer<V> {
     /**
      * Produce a new GraphFactory using the
      * {@value FactoryProducer#DEFAULT_LIBRARY} library.
+     * 
      * @return A new factory using {@value FactoryProducer#DEFAULT_LIBRARY}.
      */
     public final GraphFactory<V> getFactory() {
