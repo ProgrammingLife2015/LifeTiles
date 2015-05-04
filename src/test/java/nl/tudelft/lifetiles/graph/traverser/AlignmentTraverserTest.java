@@ -1,7 +1,6 @@
 package nl.tudelft.lifetiles.graph.traverser;
 
 import static org.junit.Assert.assertEquals;
-
 import nl.tudelft.lifetiles.graph.FactoryProducer;
 import nl.tudelft.lifetiles.graph.Graph;
 import nl.tudelft.lifetiles.graph.GraphFactory;
@@ -27,9 +26,9 @@ public class AlignmentTraverserTest {
     @Before
     public void setUp() throws Exception {
         gf = fp.getFactory("JGraphT");
-        v1 = new SequenceSegment(null, 1, 10, "AAAAAAAAAA");
-        v2 = new SequenceSegment(null, 11, 20, "AAAAAAAAAA");
-        v3 = new SequenceSegment(null, 21, 30, "AAAAAAAAAA");
+        v1 = new SequenceSegment(null, 1, 10, "__________");
+        v2 = new SequenceSegment(null, 11, 20, "__________");
+        v3 = new SequenceSegment(null, 21, 30, "__________");
         gr = gf.getGraph();
     }
     
@@ -39,7 +38,7 @@ public class AlignmentTraverserTest {
         gr.addVertex(v3);
         gr.addEdge(v1, v3);
         at.traverseGraph(gr);
-        assertEquals(gr.getOutgoing(v1).iterator().next(), gr.getIncoming(v3).iterator().next());
+        assertEquals(gr.getDestination(gr.getOutgoing(v1).iterator().next()), gr.getSource(gr.getIncoming(v3).iterator().next()));
 	}
     
 	@Test
