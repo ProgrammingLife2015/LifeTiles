@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph;
+package nl.tudelft.lifetiles.graph.sequence;
 
 import java.util.Set;
 
@@ -22,7 +22,7 @@ public class SequenceSegment {
     /**
      * The content of this segment.
      */
-    private String contentVar;
+    private SegmentContent contentVar;
 
     /**
      * @param sources
@@ -35,11 +35,23 @@ public class SequenceSegment {
      *            The content for this segment.
      */
     public SequenceSegment(final Set<String> sources, final long startPosition,
-            final long endPosition, final String content) {
+            final long endPosition, final SegmentContent content) {
         sourcesVar = sources;
         startVar = startPosition;
         endVar = endPosition;
         contentVar = content;
+    }
+    
+    /**
+     * Returns the distance between this sequence segment and another.
+     * (non-euclidian distance)
+     * @param other
+     *            Sequence segment which needs to be compared.
+     * @return
+     *            Distance between this sequence and other sequence.
+     */
+    public long distanceTo(SequenceSegment other) {
+		return other.getStart() - getEnd() - 1;
     }
 
     /**
@@ -66,7 +78,7 @@ public class SequenceSegment {
     /**
      * @return the content
      */
-    public final String getContent() {
+    public final SegmentContent getContent() {
         return contentVar;
     }
 }
