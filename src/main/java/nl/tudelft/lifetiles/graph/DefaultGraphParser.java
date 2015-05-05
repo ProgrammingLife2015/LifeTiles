@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import nl.tudelft.lifetiles.graph.sequence.SequenceSegment;
+
 /**
  * @author Rutger van den Berg
  *

@@ -2,7 +2,7 @@ package nl.tudelft.lifetiles.graph.traverser;
 
 import nl.tudelft.lifetiles.graph.Edge;
 import nl.tudelft.lifetiles.graph.Graph;
-import nl.tudelft.lifetiles.graph.SequenceSegment;
+import nl.tudelft.lifetiles.graph.sequence.SequenceSegment;
 
 /**
  * Aligns sequences in a graph of sequences, by filling empty space with empty vertices.
