@@ -32,14 +32,13 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
 	 *			The vertex that is being traversed.
 	 * @return aligned vertex.
 	 */
-	private SequenceSegment traverseVertex(Graph<SequenceSegment> graph, SequenceSegment vertex) {
+	private void traverseVertex(Graph<SequenceSegment> graph, SequenceSegment vertex) {
 		for (Edge<SequenceSegment> edge : graph.getOutgoing(vertex)) {
 			SequenceSegment destination = graph.getDestination(edge);
 			if (vertex.distanceTo(destination) > 1) {
 				graph.divideEdge(edge, bridgeSequence(vertex, destination));
 			}
 		}
-		return vertex;
 	}
 	
 	/**
