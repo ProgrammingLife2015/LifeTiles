@@ -1,6 +1,9 @@
 package nl.tudelft.lifetiles.tree;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /***
@@ -22,7 +25,7 @@ public class PhylogeneticTreeItem {
     /**
      * The list of children of this node.
      */
-    private ArrayList<PhylogeneticTreeItem> children;
+    private List<PhylogeneticTreeItem> children;
 
     /**
      * The name of the sample. This is an optional field.
@@ -82,7 +85,7 @@ public class PhylogeneticTreeItem {
      *
      * @return the ArrayList containing all children of this node
      */
-    public final ArrayList<PhylogeneticTreeItem> getChildren() {
+    public final List<PhylogeneticTreeItem> getChildren() {
         return children;
     }
 
@@ -170,14 +173,13 @@ public class PhylogeneticTreeItem {
             for (PhylogeneticTreeItem child : children) {
                 result = result && that.getChildren().contains(child);
             }
-
             return result;
         } else {
             return false;
         }
     }
 
- 
+
 
     /**
      * Returns the name stored in this node. name is an optional property, so
