@@ -1,7 +1,6 @@
 package nl.tudelft.lifetiles.graph.traverser;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 
 import nl.tudelft.lifetiles.graph.Edge;
 import nl.tudelft.lifetiles.graph.Graph;
@@ -22,9 +21,7 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
 	 */
 	@Override
 	public Graph<SequenceSegment> traverseGraph(Graph<SequenceSegment> graph) {
-	    ArrayList<SequenceSegment> sources = new ArrayList<SequenceSegment>();
-	    sources.addAll((Collection<? extends SequenceSegment>) graph.getSource());
-		for (SequenceSegment source : sources) {
+		for (SequenceSegment source : new HashSet<SequenceSegment>(graph.getSource())) {
 			traverseVertex(graph, source);
 		}
 		return graph;
