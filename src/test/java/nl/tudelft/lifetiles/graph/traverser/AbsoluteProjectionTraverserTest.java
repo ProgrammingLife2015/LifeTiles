@@ -1,6 +1,9 @@
 package nl.tudelft.lifetiles.graph.traverser;
 
 import static org.junit.Assert.assertEquals;
+
+import java.util.HashSet;
+
 import nl.tudelft.lifetiles.graph.FactoryProducer;
 import nl.tudelft.lifetiles.graph.Graph;
 import nl.tudelft.lifetiles.graph.GraphFactory;
@@ -16,24 +19,33 @@ public class AbsoluteProjectionTraverserTest {
     GraphFactory<SequenceSegment> gf;
     static FactoryProducer<SequenceSegment> fp;
 	static AbsoluteProjectionTraverser apt;
+    static HashSet<String> s1, s2, s3;
     SequenceSegment v1, v2, v3, v4, v5, v6;
     Graph<SequenceSegment> gr;
 
     @BeforeClass
     public static void runOnce() {
         fp = new FactoryProducer<SequenceSegment>();
-        apt = new AbsoluteProjectionTraverser();
+        apt = new AbsoluteProjectionTraverser("reference");
+        
+        s1 = new HashSet<String>();
+        s1.add("reference");
+        s1.add("mutation");
+        s2 = new HashSet<String>();
+        s2.add("reference");
+        s3 = new HashSet<String>();
+        s3.add("mutation");
     }
 
     @Before
     public void setUp() throws Exception {
         gf = fp.getFactory("JGraphT");
-        v1 = new SequenceSegment(null, 1, 10, new SegmentString("AAAAAAAAAA"));
-        v2 = new SequenceSegment(null, 11, 20, new SegmentString("AAAAAAAAAA"));
-        v3 = new SequenceSegment(null, 11, 20, new SegmentEmpty(10));
-        v4 = new SequenceSegment(null, 21, 30, new SegmentString("AAAAAAAAAA"));
-        v5 = new SequenceSegment(null, 11, 20, new SegmentEmpty(10));
-        v6 = new SequenceSegment(null, 11, 20, new SegmentString("AAAAAAAAAA"));
+        v1 = new SequenceSegment(s1, 1, 10, new SegmentString("AAAAAAAAAA"));
+        v2 = new SequenceSegment(s2, 11, 20, new SegmentString("AAAAAAAAAA"));
+        v3 = new SequenceSegment(s3, 11, 20, new SegmentEmpty(10));
+        v4 = new SequenceSegment(s1, 21, 30, new SegmentString("AAAAAAAAAA"));
+        v5 = new SequenceSegment(s2, 11, 20, new SegmentEmpty(10));
+        v6 = new SequenceSegment(s3, 11, 20, new SegmentString("AAAAAAAAAA"));
         gr = gf.getGraph();
     }
     
@@ -51,12 +63,12 @@ public class AbsoluteProjectionTraverserTest {
 
         assertEquals(1, v1.getAbsStart());
         assertEquals(10, v1.getAbsEnd());
-        assertEquals(10, v3.getAbsStart());
-        assertEquals(11, v3.getAbsEnd());
+        assertEquals(11, v3.getAbsStart());
+        assertEquals(10, v3.getAbsEnd());
         assertEquals(11, v4.getAbsStart());
         assertEquals(20, v4.getAbsEnd());
-        assertEquals(10, v6.getAbsStart());
-        assertEquals(11, v6.getAbsEnd());
+        assertEquals(11, v6.getAbsStart());
+        assertEquals(10, v6.getAbsEnd());
 	}
     
 	@Test
