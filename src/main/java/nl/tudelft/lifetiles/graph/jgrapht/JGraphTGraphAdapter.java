@@ -28,6 +28,10 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      */
     private Set<V> sources;
     /**
+     * Keep track of all vertices that have no outgoing edges.
+     */
+    private Set<V> sinks;
+    /**
      * The edgefactory to use to create the edges for this graph.
      */
     private JGraphTEdgeFactory<V> edgeFact;
@@ -47,6 +51,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
                 DefaultEdge.class);
         edgeFact = ef;
         sources = new HashSet<>();
+        sinks = new HashSet<>();
         vertexIdentifiers = new ArrayList<>();
     }
 
@@ -59,6 +64,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
         internalGraph.addVertex(vertex);
         vertexIdentifiers.add(vertex);
         sources.add(vertex);
+        sinks.add(vertex);
     }
 
     /**
@@ -73,6 +79,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
         try {
             internalGraph.addEdge(source, destination);
             sources.remove(destination);
+            sinks.remove(source);
             return true;
         } catch (IllegalArgumentException e) {
             return false;
@@ -122,6 +129,14 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
     public final Set<V> getSource() {
         return sources;
     }
+
+    /**
+     * @return All vertices that have no outgoing edges.
+     */
+	@Override
+	public Set<V> getSink() {
+		return sinks;
+	}
 
     /**
      * @return All edges.

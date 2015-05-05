@@ -50,6 +50,12 @@ public interface Graph<V> {
     Set<V> getSource();
 
     /**
+     * @return A Set of sink nodes. Sink being a node that has no outgoing
+     *         edges.
+     */
+    Set<V> getSink();
+
+    /**
      * @return A Set containing all edges in the graph.
      */
     Set<Edge<V>> getAllEdges();

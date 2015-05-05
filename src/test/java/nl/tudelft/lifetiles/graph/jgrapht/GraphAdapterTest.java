@@ -75,6 +75,16 @@ public class GraphAdapterTest {
     }
 
     @Test
+    public void testGetSink() {
+        gr.addVertex(v1);
+        gr.addVertex(v2);
+        gr.addEdge(v1, v2);
+        Set<SequenceSegment> s = gr.getSink();
+        assert (s.contains(v2));
+        assertEquals(1, s.size());
+    }
+
+    @Test
     public void testGetIncoming() {
         gr.addVertex(v1);
         gr.addVertex(v2);
