@@ -2,6 +2,8 @@ package nl.tudelft.lifetiles.graph.sequence;
 
 import java.util.Set;
 
+import nl.tudelft.lifetiles.graph.sequence.mutation.Mutation;
+
 /**
  * @author Rutger van den Berg Contains a partial sequence.
  */
@@ -23,6 +25,10 @@ public class SequenceSegment {
      * The content of this segment.
      */
     private SegmentContent contentVar;
+    /**
+     * The mutation annotation of this segment.
+     */
+    private Mutation mutationVar;
 
     /**
      * @param sources
@@ -81,4 +87,19 @@ public class SequenceSegment {
     public final SegmentContent getContent() {
         return contentVar;
     }
+
+    /**
+     * @return mutation annotation of sequence segment.
+     */
+	public Mutation getMutation() {
+		return mutationVar;
+	}
+
+	/**
+	 * @param mutationVar
+	 *            Mutation which is annotated onto the sequence segment.
+	 */
+	public void setMutation(Mutation mutation) {
+		mutationVar = mutation;
+	}
 }

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import nl.tudelft.lifetiles.graph.sequence.SegmentEmpty;
 import nl.tudelft.lifetiles.graph.sequence.SegmentString;
 import nl.tudelft.lifetiles.graph.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.graph.sequence.mutation.InsertionMutation;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,8 +39,16 @@ public class SequenceSegmentTest {
     public void testLengthEmpty() {
     	assertEquals(10, v2.getContent().length());
     }
+    
     @Test
     public void testLengthString() {
     	assertEquals(10, v1.getContent().length());
+    }
+    
+    @Test
+    public void testMutation() {
+    	InsertionMutation insertion = new InsertionMutation();
+    	v1.setMutation(insertion);
+    	assertEquals(insertion, v1.getMutation());
     }
 }
