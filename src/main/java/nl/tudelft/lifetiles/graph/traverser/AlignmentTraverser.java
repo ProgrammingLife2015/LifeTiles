@@ -26,7 +26,7 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
 	}
 
 	/**
-	 * Traverse a vertex in the graph and return the aligned vertex.
+	 * Traverse a vertex in the graph.
 	 * @param graph
 	 *			The graph that can be modified on.
 	 * @param vertex
