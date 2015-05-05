@@ -31,7 +31,6 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
 	 *			The graph that can be modified on.
 	 * @param vertex
 	 *			The vertex that is being traversed.
-	 * @return aligned vertex.
 	 */
 	private void traverseVertex(Graph<SequenceSegment> graph, SequenceSegment vertex) {
 		for (Edge<SequenceSegment> edge : graph.getOutgoing(vertex)) {
