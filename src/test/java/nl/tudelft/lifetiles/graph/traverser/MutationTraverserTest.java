@@ -53,49 +53,45 @@ public class MutationTraverserTest {
         v5 = new SequenceSegment(s2, 11, 20, new SegmentEmpty(10));
         v6 = new SequenceSegment(s3, 11, 20, new SegmentString("AAAAAAAAAA"));
         gr = gf.getGraph();
+        gr.addVertex(v1);
+        gr.addVertex(v4);
     }
     
     @Test
     public void testTraverseInsertionGraph() {
-        gr.addVertex(v1);
-        gr.addVertex(v3);
-        gr.addVertex(v4);
+        gr.addVertex(v5);
         gr.addVertex(v6);
-        gr.addEdge(v1, v3);
+        gr.addEdge(v1, v5);
         gr.addEdge(v1, v6);
-        gr.addEdge(v3, v4);
+        gr.addEdge(v5, v4);
         gr.addEdge(v6, v4);
         apt.traverseGraph(gr);
         mt.traverseGraph(gr);
         assertNull(v1.getMutation());
-        assertNull(v3.getMutation());
+        assertNull(v5.getMutation());
         assertNull(v4.getMutation());
         assertTrue(v6.getMutation() instanceof InsertionMutation);
     }
     
     @Test
     public void testTraverseDeletionGraph() {
-        gr.addVertex(v1);
         gr.addVertex(v2);
-        gr.addVertex(v4);
-        gr.addVertex(v5);
+        gr.addVertex(v3);
         gr.addEdge(v1, v2);
-        gr.addEdge(v1, v5);
+        gr.addEdge(v1, v3);
         gr.addEdge(v2, v4);
-        gr.addEdge(v5, v4);
+        gr.addEdge(v3, v4);
         apt.traverseGraph(gr);
         mt.traverseGraph(gr);
         assertNull(v1.getMutation());
         assertNull(v2.getMutation());
         assertNull(v4.getMutation());
-        assertTrue(v5.getMutation() instanceof DeletionMutation);
+        assertTrue(v3.getMutation() instanceof DeletionMutation);
     }
     
     @Test
     public void testTraversePolymorphismGraph() {
-        gr.addVertex(v1);
         gr.addVertex(v2);
-        gr.addVertex(v4);
         gr.addVertex(v6);
         gr.addEdge(v1, v2);
         gr.addEdge(v1, v6);
