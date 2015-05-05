@@ -24,11 +24,11 @@ public class SequenceSegment {
     /**
      * The absolute start position for this segment.
      */
-    private long absStartVar;
+    private long absStartVar = 0;
     /**
      * The absolute end position for this segment.
      */
-    private long absEndVar;
+    private long absEndVar = Long.MAX_VALUE;
     /**
      * The content of this segment.
      */
