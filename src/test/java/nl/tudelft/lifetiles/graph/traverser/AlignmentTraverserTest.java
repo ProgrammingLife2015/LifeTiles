@@ -5,6 +5,7 @@ import nl.tudelft.lifetiles.graph.FactoryProducer;
 import nl.tudelft.lifetiles.graph.Graph;
 import nl.tudelft.lifetiles.graph.GraphFactory;
 import nl.tudelft.lifetiles.graph.sequence.SegmentEmpty;
+import nl.tudelft.lifetiles.graph.sequence.SegmentString;
 import nl.tudelft.lifetiles.graph.sequence.SequenceSegment;
 
 import org.junit.Before;
@@ -27,9 +28,9 @@ public class AlignmentTraverserTest {
     @Before
     public void setUp() throws Exception {
         gf = fp.getFactory("JGraphT");
-        v1 = new SequenceSegment(null, 1, 10, new SegmentEmpty(10));
+        v1 = new SequenceSegment(null, 1, 10, new SegmentString("AAAAAAAAAA"));
         v2 = new SequenceSegment(null, 11, 20, new SegmentEmpty(10));
-        v3 = new SequenceSegment(null, 21, 30, new SegmentEmpty(10));
+        v3 = new SequenceSegment(null, 21, 30, new SegmentString("AAAAAAAAAA"));
         gr = gf.getGraph();
     }
     
