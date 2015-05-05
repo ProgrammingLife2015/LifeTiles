@@ -22,6 +22,14 @@ public class SequenceSegment {
      */
     private long endVar;
     /**
+     * The absolute start position for this segment.
+     */
+    private long absStartVar;
+    /**
+     * The absolute end position for this segment.
+     */
+    private long absEndVar;
+    /**
      * The content of this segment.
      */
     private SegmentContent contentVar;
@@ -79,6 +87,36 @@ public class SequenceSegment {
      */
     public final long getEnd() {
         return endVar;
+    }
+
+    /**
+     * @return the absolute start position
+     */
+    public final long getAbsStart() {
+        return absStartVar;
+    }
+    
+    /**
+     * @param absStart
+     *            absolute start position of this sequence segment.
+     */
+    public final void setAbsStart(long absStart) {
+    	absStartVar = absStart;
+    }
+
+    /**
+     * @return the absolute end position
+     */
+    public final long getAbsEnd() {
+        return absEndVar;
+    }
+
+    /**
+     * @param absEnd
+     *            absolute end position of this sequence segment.
+     */
+    public final void setAbsEnd(long absEnd) {
+    	absEndVar = absEnd;
     }
 
     /**
