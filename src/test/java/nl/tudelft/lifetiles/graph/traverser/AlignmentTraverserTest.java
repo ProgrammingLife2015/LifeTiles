@@ -4,7 +4,8 @@ import static org.junit.Assert.assertEquals;
 import nl.tudelft.lifetiles.graph.FactoryProducer;
 import nl.tudelft.lifetiles.graph.Graph;
 import nl.tudelft.lifetiles.graph.GraphFactory;
-import nl.tudelft.lifetiles.graph.SequenceSegment;
+import nl.tudelft.lifetiles.graph.sequence.SegmentEmpty;
+import nl.tudelft.lifetiles.graph.sequence.SequenceSegment;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -26,9 +27,9 @@ public class AlignmentTraverserTest {
     @Before
     public void setUp() throws Exception {
         gf = fp.getFactory("JGraphT");
-        v1 = new SequenceSegment(null, 1, 10, "__________");
-        v2 = new SequenceSegment(null, 11, 20, "__________");
-        v3 = new SequenceSegment(null, 21, 30, "__________");
+        v1 = new SequenceSegment(null, 1, 10, new SegmentEmpty(10));
+        v2 = new SequenceSegment(null, 11, 20, new SegmentEmpty(10));
+        v3 = new SequenceSegment(null, 21, 30, new SegmentEmpty(10));
         gr = gf.getGraph();
     }
     

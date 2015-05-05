@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import nl.tudelft.lifetiles.graph.sequence.SegmentString;
 import nl.tudelft.lifetiles.graph.sequence.SequenceSegment;
 
 /**
@@ -110,7 +111,7 @@ public class DefaultGraphParser implements GraphParser {
         Collections.addAll(s, sources);
 
         return new SequenceSegment(s, Integer.parseInt(desc[START_POS].trim()),
-                Integer.parseInt(desc[END_POS].trim()), content.trim());
+                Integer.parseInt(desc[END_POS].trim()), new SegmentString(content.trim()));
 
     }
 

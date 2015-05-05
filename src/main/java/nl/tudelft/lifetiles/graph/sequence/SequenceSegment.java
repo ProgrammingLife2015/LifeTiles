@@ -22,7 +22,7 @@ public class SequenceSegment {
     /**
      * The content of this segment.
      */
-    private String contentVar;
+    private SegmentContent contentVar;
 
     /**
      * @param sources
@@ -35,7 +35,7 @@ public class SequenceSegment {
      *            The content for this segment.
      */
     public SequenceSegment(final Set<String> sources, final long startPosition,
-            final long endPosition, final String content) {
+            final long endPosition, final SegmentContent content) {
         sourcesVar = sources;
         startVar = startPosition;
         endVar = endPosition;
@@ -78,7 +78,7 @@ public class SequenceSegment {
     /**
      * @return the content
      */
-    public final String getContent() {
+    public final SegmentContent getContent() {
         return contentVar;
     }
 }

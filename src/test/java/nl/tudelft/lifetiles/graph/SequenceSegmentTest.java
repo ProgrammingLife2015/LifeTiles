@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.graph;
 
 import static org.junit.Assert.assertEquals;
+import nl.tudelft.lifetiles.graph.sequence.SequenceSegment;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -2,6 +2,7 @@ package nl.tudelft.lifetiles.graph.traverser;
 
 import nl.tudelft.lifetiles.graph.Edge;
 import nl.tudelft.lifetiles.graph.Graph;
+import nl.tudelft.lifetiles.graph.sequence.SegmentEmpty;
 import nl.tudelft.lifetiles.graph.sequence.SequenceSegment;
 
 /**
@@ -54,7 +55,7 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
 			destination.getSources(),
 			source.getEnd() + 1,
 			destination.getStart() - 1,
-			new String(new char[(int) source.distanceTo(destination)]).replace("\0", "_")
+			new SegmentEmpty(source.distanceTo(destination))
 		);
 	}
 }
