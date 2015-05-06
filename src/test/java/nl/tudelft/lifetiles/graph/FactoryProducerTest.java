@@ -1,6 +1,8 @@
 package nl.tudelft.lifetiles.graph;
 
-import nl.tudelft.lifetiles.graph.jgrapht.JGraphTGraphFactory;
+import nl.tudelft.lifetiles.graph.model.FactoryProducer;
+import nl.tudelft.lifetiles.graph.model.GraphFactory;
+import nl.tudelft.lifetiles.graph.model.JGraphTGraphFactory;
 
 import org.junit.Before;
 import org.junit.Rule;

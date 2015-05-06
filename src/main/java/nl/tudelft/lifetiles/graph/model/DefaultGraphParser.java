@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph;
+package nl.tudelft.lifetiles.graph.model;
 
 import java.io.File;
 import java.io.IOException;

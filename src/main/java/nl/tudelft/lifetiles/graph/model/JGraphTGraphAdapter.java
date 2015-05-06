@@ -1,13 +1,10 @@
-package nl.tudelft.lifetiles.graph.jgrapht;
+package nl.tudelft.lifetiles.graph.model;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import nl.tudelft.lifetiles.graph.Edge;
-import nl.tudelft.lifetiles.graph.Graph;
 
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.graph.DefaultEdge;

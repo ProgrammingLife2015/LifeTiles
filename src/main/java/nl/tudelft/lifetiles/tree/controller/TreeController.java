@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.controller;
+package nl.tudelft.lifetiles.tree.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -8,12 +8,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 
 /**
- * The controller of the data view.
+ * The controller of the tree view.
  *
  * @author Joren Hammudoglu
  *
  */
-public class DataController implements Initializable {
+public class TreeController implements Initializable {
 
     /**
      * The wrapper element.

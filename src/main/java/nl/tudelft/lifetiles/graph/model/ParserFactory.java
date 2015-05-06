@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph;
+package nl.tudelft.lifetiles.graph.model;
 
 /**
  * Interface for ParserFactory. Implementations will parse various files into a

@@ -1,5 +1,5 @@
 /**
- * LifeTiles, the DNA visualizer. Main package.
+ * LifeTiles, the DNA visualizer.
  *
  * @author Joren Hammudoglu
  *

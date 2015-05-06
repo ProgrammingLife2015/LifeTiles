@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.controller;
+package nl.tudelft.lifetiles.lifetiles.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;

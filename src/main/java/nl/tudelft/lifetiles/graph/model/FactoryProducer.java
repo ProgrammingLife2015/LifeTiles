@@ -1,6 +1,5 @@
-package nl.tudelft.lifetiles.graph;
+package nl.tudelft.lifetiles.graph.model;
 
-import nl.tudelft.lifetiles.graph.jgrapht.JGraphTGraphFactory;
 
 /**
  * @author Rutger van den Berg

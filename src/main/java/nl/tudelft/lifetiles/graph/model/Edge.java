@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph;
+package nl.tudelft.lifetiles.graph.model;
 
 /**
  * @author Rutger van den Berg Interface for generic edge.

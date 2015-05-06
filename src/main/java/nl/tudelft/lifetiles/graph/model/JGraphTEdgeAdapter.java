@@ -1,6 +1,4 @@
-package nl.tudelft.lifetiles.graph.jgrapht;
-
-import nl.tudelft.lifetiles.graph.Edge;
+package nl.tudelft.lifetiles.graph.model;
 
 import org.jgrapht.graph.DefaultEdge;
 

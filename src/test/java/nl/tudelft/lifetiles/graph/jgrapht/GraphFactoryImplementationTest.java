@@ -1,9 +1,10 @@
 package nl.tudelft.lifetiles.graph.jgrapht;
 
-import nl.tudelft.lifetiles.graph.FactoryProducer;
-import nl.tudelft.lifetiles.graph.Graph;
-import nl.tudelft.lifetiles.graph.GraphFactory;
-import nl.tudelft.lifetiles.graph.SequenceSegment;
+import nl.tudelft.lifetiles.graph.model.FactoryProducer;
+import nl.tudelft.lifetiles.graph.model.Graph;
+import nl.tudelft.lifetiles.graph.model.GraphFactory;
+import nl.tudelft.lifetiles.graph.model.JGraphTGraphAdapter;
+import nl.tudelft.lifetiles.graph.model.SequenceSegment;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
