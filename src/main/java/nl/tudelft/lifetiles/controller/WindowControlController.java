@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 
 /**
  * The controller of the window controls.
- * 
+ *
  * @author Joren Hammudoglu
  *
  */
@@ -43,6 +43,11 @@ public class WindowControlController implements Initializable {
         stage.close();
     }
 
+    @Override
+    public void initialize(final URL location, final ResourceBundle resources) {
+        // nothing to do here
+    }
+
     /**
      * Minimize the window.
      */
@@ -59,10 +64,5 @@ public class WindowControlController implements Initializable {
     private void resizeWindowAction() {
         Stage stage = (Stage) windowResize.getScene().getWindow();
         stage.setMaximized(!stage.isMaximized());
-    }
-
-    @Override
-    public void initialize(final URL location, final ResourceBundle resources) {
-        // nothing to do here
     }
 }

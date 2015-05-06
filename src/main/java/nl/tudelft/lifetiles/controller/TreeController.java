@@ -9,7 +9,7 @@ import javafx.scene.layout.AnchorPane;
 
 /**
  * The controller of the tree view.
- * 
+ *
  * @author Joren Hammudoglu
  *
  */
