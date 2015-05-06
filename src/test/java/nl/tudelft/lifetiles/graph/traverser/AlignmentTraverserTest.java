@@ -32,13 +32,13 @@ public class AlignmentTraverserTest {
         v2 = new SequenceSegment(null, 11, 20, new SegmentEmpty(10));
         v3 = new SequenceSegment(null, 21, 30, new SegmentString("AAAAAAAAAA"));
         gr = gf.getGraph();
+        gr.addVertex(v1);
+        gr.addVertex(v3);
     }
     
     @Test
     public void testTraverseForkGraph() {
         SequenceSegment v4 = new SequenceSegment(null, 1, 10, new SegmentString("AAAAAAAAAA"));
-        gr.addVertex(v1);
-        gr.addVertex(v3);
         gr.addVertex(v4);
         gr.addEdge(v1, v3);
         gr.addEdge(v4, v3);
@@ -49,8 +49,6 @@ public class AlignmentTraverserTest {
     @Test
     public void testTraverseBranchGraph() {
         SequenceSegment v4 = new SequenceSegment(null, 21, 30, new SegmentString("AAAAAAAAAA"));
-        gr.addVertex(v1);
-        gr.addVertex(v3);
         gr.addVertex(v4);
         gr.addEdge(v1, v3);
         gr.addEdge(v1, v4);
@@ -60,8 +58,6 @@ public class AlignmentTraverserTest {
     
     @Test
     public void testTraverseGapGraph() {
-        gr.addVertex(v1);
-        gr.addVertex(v3);
         gr.addEdge(v1, v3);
         at.traverseGraph(gr);
         assertEquals(gr.getDestination(gr.getOutgoing(v1).iterator().next()), gr.getSource(gr.getIncoming(v3).iterator().next()));
@@ -69,9 +65,7 @@ public class AlignmentTraverserTest {
     
 	@Test
 	public void testTraverseBridgeGraph() {
-        gr.addVertex(v1);
         gr.addVertex(v2);
-        gr.addVertex(v3);
         gr.addEdge(v1, v2);
         gr.addEdge(v2, v3);
         at.traverseGraph(gr);

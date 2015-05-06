@@ -20,7 +20,7 @@ public class AbsoluteProjectionTraverserTest {
     static FactoryProducer<SequenceSegment> fp;
 	static AbsoluteProjectionTraverser apt;
     static HashSet<String> s1, s2, s3;
-    SequenceSegment v1, v2, v3, v4, v5, v6;
+    SequenceSegment v1, v4;
     Graph<SequenceSegment> gr;
 
     @BeforeClass
@@ -41,19 +41,17 @@ public class AbsoluteProjectionTraverserTest {
     public void setUp() throws Exception {
         gf = fp.getFactory("JGraphT");
         v1 = new SequenceSegment(s1, 1, 10, new SegmentString("AAAAAAAAAA"));
-        v2 = new SequenceSegment(s2, 11, 20, new SegmentString("AAAAAAAAAA"));
-        v3 = new SequenceSegment(s3, 11, 20, new SegmentEmpty(10));
         v4 = new SequenceSegment(s1, 21, 30, new SegmentString("AAAAAAAAAA"));
-        v5 = new SequenceSegment(s2, 11, 20, new SegmentEmpty(10));
-        v6 = new SequenceSegment(s3, 11, 20, new SegmentString("AAAAAAAAAA"));
         gr = gf.getGraph();
+        gr.addVertex(v1);
+        gr.addVertex(v4);
     }
     
 	@Test
 	public void testTraverseReferenceGapGraph() {
-        gr.addVertex(v1);
+	    SequenceSegment v3 = new SequenceSegment(s3, 11, 20, new SegmentEmpty(10));
+	    SequenceSegment v6 = new SequenceSegment(s3, 11, 20, new SegmentString("AAAAAAAAAA"));
         gr.addVertex(v3);
-        gr.addVertex(v4);
         gr.addVertex(v6);
         gr.addEdge(v1, v3);
         gr.addEdge(v1, v6);
@@ -73,9 +71,9 @@ public class AbsoluteProjectionTraverserTest {
     
 	@Test
 	public void testTraverseGapGraph() {
-        gr.addVertex(v1);
+	    SequenceSegment v2 = new SequenceSegment(s2, 11, 20, new SegmentString("AAAAAAAAAA"));
+	    SequenceSegment v5 = new SequenceSegment(s2, 11, 20, new SegmentEmpty(10));
         gr.addVertex(v2);
-        gr.addVertex(v4);
         gr.addVertex(v5);
         gr.addEdge(v1, v2);
         gr.addEdge(v1, v5);
@@ -95,9 +93,9 @@ public class AbsoluteProjectionTraverserTest {
     
 	@Test
 	public void testTraverseParallelGraph() {
-        gr.addVertex(v1);
+	    SequenceSegment v2 = new SequenceSegment(s2, 11, 20, new SegmentString("AAAAAAAAAA"));
+	    SequenceSegment v6 = new SequenceSegment(s3, 11, 20, new SegmentString("AAAAAAAAAA"));
         gr.addVertex(v2);
-        gr.addVertex(v4);
         gr.addVertex(v6);
         gr.addEdge(v1, v2);
         gr.addEdge(v1, v6);
