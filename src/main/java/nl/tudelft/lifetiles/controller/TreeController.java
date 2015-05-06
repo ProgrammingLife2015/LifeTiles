@@ -15,15 +15,15 @@ import javafx.scene.layout.AnchorPane;
  */
 public class TreeController implements Initializable {
 
-	/**
-	 * The wrapper element.
-	 */
-	@FXML
-	private AnchorPane wrapper;
-	
-	@Override
-	public void initialize(final URL location, final ResourceBundle resources) {
-		// Initialize.
-	}
+    /**
+     * The wrapper element.
+     */
+    @FXML
+    private AnchorPane wrapper;
+
+    @Override
+    public void initialize(final URL location, final ResourceBundle resources) {
+        // Initialize.
+    }
 
 }
