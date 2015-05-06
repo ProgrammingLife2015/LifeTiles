@@ -4,5 +4,5 @@
  * @author Joren Hammudoglu
  *
  */
-package nl.tudelft.lifetiles.data;
+package nl.tudelft.lifetiles.strand;
 

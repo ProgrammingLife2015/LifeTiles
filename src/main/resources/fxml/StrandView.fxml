@@ -11,9 +11,9 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" minHeight="0.0"
 	minWidth="0.0" prefHeight="160.0" prefWidth="100.0"
-	fx:controller="nl.tudelft.lifetiles.data.controller.DataController" id="dataPane">
+	fx:controller="nl.tudelft.lifetiles.strand.controller.StrandController" id="strandPane">
 	<children>
-		<Label text="Data Viewer">
+		<Label text="Strand Viewer">
 			<padding>
 				<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
 			</padding>
@@ -21,6 +21,6 @@
 	</children>
 
 	<stylesheets>
-		<URL value="@../styles/DataStyle.css" />
+		<URL value="@../styles/StrandStyle.css" />
 	</stylesheets>
 </AnchorPane>

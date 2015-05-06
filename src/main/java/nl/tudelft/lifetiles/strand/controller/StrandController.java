@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.data.controller;
+package nl.tudelft.lifetiles.strand.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -8,12 +8,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 
 /**
- * The controller of the data view.
+ * The controller of the strand view.
  *
  * @author Joren Hammudoglu
  *
  */
-public class DataController implements Initializable {
+public class StrandController implements Initializable {
 
     /**
      * The wrapper element.

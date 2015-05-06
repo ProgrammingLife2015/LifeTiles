@@ -1,6 +1,6 @@
-/* Stylesheet for the data view. */
+/* Stylesheet for the strand view. */
 
-#dataPane {
+#strandPane {
     -fx-border-color: #CCCCCC;
     -fx-border-width: 0 1 0 0;
     -fx-border-style: solid;
