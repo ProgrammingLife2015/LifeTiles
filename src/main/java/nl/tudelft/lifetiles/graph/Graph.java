@@ -50,6 +50,12 @@ public interface Graph<V> {
     Set<V> getSource();
 
     /**
+     * @return A Set of sink nodes. Sink being a node that has no outgoing
+     *         edges.
+     */
+    Set<V> getSink();
+
+    /**
      * @return A Set containing all edges in the graph.
      */
     Set<Edge<V>> getAllEdges();
@@ -80,4 +86,14 @@ public interface Graph<V> {
      *            Id of the destination vertex.
      */
     void addEdge(int source, int destination);
+
+    /**
+     * Divides an edge into two edges with an inserted vertex in the middle.
+     * 
+     * @param edge
+     *            Edge to be divided.
+     * @param vertex
+     *            Vertex to be inserted.
+     */
+	void divideEdge(Edge<V> edge, V vertex);
 }
