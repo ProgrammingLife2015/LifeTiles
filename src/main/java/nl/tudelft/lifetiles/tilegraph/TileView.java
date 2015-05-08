@@ -54,6 +54,12 @@ public class TileView {
         controller = tvc;
     }
 
+    public TileView() {
+        root = new Group();
+        nodes = new Group();
+        edges = new Group();
+    }
+
     /**
      * Draw the given graph.
      *
@@ -62,9 +68,6 @@ public class TileView {
      * @return - the elements that must be displayed on the screen
      */
     public final Group drawGraph(final Graph<SequenceSegment> gr) {
-        root = new Group();
-        nodes = new Group();
-        edges = new Group();
 
         List<Long> lanes = new LinkedList<Long>();
 

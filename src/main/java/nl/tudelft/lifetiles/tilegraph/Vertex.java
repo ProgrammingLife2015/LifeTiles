@@ -113,7 +113,7 @@ public class Vertex extends Group {
     public final double getLetterWidth() {
         if (letterWidth == 0) {
             // All possible characters
-            String chars = new String("ATCG");
+            String chars = "ATCG";
 
             Text textmatch = new Text(String.valueOf(chars.charAt(0)));
             textmatch.setFont(text.getFont());
@@ -126,7 +126,6 @@ public class Vertex extends Group {
 
                 if (width2 > largestWidth) {
                     largestWidth = width2;
-                    textmatch = textmatch2;
                 }
 
             }

@@ -73,8 +73,8 @@ public class Main extends Application {
         gr.addVertex(v2);
         gr.addVertex(v3);
         gr.addVertex(v4);
-        // gr.addVertex(v5);
-        // gr.addVertex(v6);
+        gr.addVertex(v5);
+        gr.addVertex(v6);
 
         return gr;
     }
