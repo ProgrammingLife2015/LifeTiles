@@ -2,6 +2,7 @@ package nl.tudelft.lifetiles.tilegraph;
 
 import javafx.geometry.VPos;
 import javafx.scene.Group;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -46,6 +47,11 @@ public class Vertex extends Group {
     private final double fontSize = 12;
 
     /**
+     * Spacing between rectangles.
+     */
+    private final double spacingX = 3;
+
+    /**
      * Creates a new Block to be displayed on the screen. The width is already
      * computed by the length of the string after applying css styling. The
      * following data can be set:
@@ -76,17 +82,22 @@ public class Vertex extends Group {
 
         this.rectangle = new Rectangle(width, height);
         rectangle.setFill(color);
+        DropShadow dropShadow = new DropShadow();
+        dropShadow.setRadius(5.0);
+        dropShadow.setOffsetX(1.0);
+        dropShadow.setOffsetY(1.0);
+        dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
+        rectangle.setEffect(dropShadow);
 
-        // Mischien dropshadow nog aan rectangle toevoegen?
+        rectangle.setArcWidth(5);
+        rectangle.setArcHeight(5);
 
         this.clip = new Rectangle(width, height);
         text.setClip(clip);
 
-        double spacingX = 1;
         this.setLayoutX(initX * this.getLetterWidth() * 2);
         this.setLayoutY(initY);
 
-        // this.rectangle.setX(rectangle.getX() * this.getLetterWidth() * 2);
         this.setWidth(string.length() * this.getLetterWidth() * 2 - spacingX);
 
         this.getChildren().addAll(rectangle, text);
