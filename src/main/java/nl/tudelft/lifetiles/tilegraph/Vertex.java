@@ -174,6 +174,16 @@ public class Vertex extends Group {
         layoutChildren();
     }
 
+    /**
+     * Change the Colour of the Vertex.
+     *
+     * @param color
+     *            - the new color
+     */
+    public final void setColour(final Color color) {
+        this.rectangle.setFill(color);
+    }
+
     @Override
     protected final void layoutChildren() {
         final double w = rectangle.getWidth();
