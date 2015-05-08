@@ -9,7 +9,7 @@ public class SequenceSegment {
     /**
      * Contains the sources containing this segment.
      */
-    private Set<String> sourcesVar;
+    private Set<Sequence> sourcesVar;
 
     /**
      * The start position for this segment.
@@ -34,8 +34,9 @@ public class SequenceSegment {
      * @param content
      *            The content for this segment.
      */
-    public SequenceSegment(final Set<String> sources, final long startPosition,
-            final long endPosition, final String content) {
+    public SequenceSegment(final Set<Sequence> sources,
+            final long startPosition, final long endPosition,
+            final String content) {
         sourcesVar = sources;
         startVar = startPosition;
         endVar = endPosition;
@@ -45,7 +46,7 @@ public class SequenceSegment {
     /**
      * @return the sources
      */
-    public final Set<String> getSources() {
+    public final Set<Sequence> getSources() {
         return sourcesVar;
     }
 
