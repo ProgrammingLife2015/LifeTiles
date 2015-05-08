@@ -193,6 +193,20 @@ public class TileView {
     }
 
     /**
+     * Create an Edge from a Vertex to another.
+     *
+     * @param from
+     *            - Start Vertex
+     * @param to
+     *            - Destination Vertex
+     */
+    private void drawEdge(Vertex from, Vertex to) {
+        EdgeLine edge = new EdgeLine(from, to);
+
+        edges.getChildren().add(edge);
+    }
+
+    /**
      * Change Vertex colour.
      *
      * @param v
