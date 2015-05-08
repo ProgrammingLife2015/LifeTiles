@@ -4,9 +4,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.graph.Graph;
 import nl.tudelft.lifetiles.graph.SequenceSegment;
@@ -189,17 +187,9 @@ public class TileView {
 
         nodes.getChildren().add(v);
 
-        v.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(final MouseEvent t) {
-
-                controller.changeColour(Color.RED, v);
-
-            }
-
-        });
-
+        v.setOnMouseClicked(t -> controller.changeColour(Color.RED, v));
+        v.setOnMouseEntered(t -> controller.changeColour(Color.GREEN, v));
+        v.setOnMouseExited(t -> controller.changeColour(Color.GRAY, v));
     }
 
     /**
