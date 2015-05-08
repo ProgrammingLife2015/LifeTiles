@@ -4,9 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -73,12 +74,13 @@ public class DefaultGraphParser implements GraphParser {
      */
     private void parseVertices(final String filename,
             final Graph<SequenceSegment> graph) {
+        Map<String, Sequence> sequences = new HashMap<>();
         try {
             File file = new File(this.getClass()
                     .getResource("/" + filename + ".node.graph").toURI());
             Iterator<String> it = Files.lines(file.toPath()).iterator();
             while (it.hasNext()) {
-                graph.addVertex(createSegment(it.next(), it.next()));
+                graph.addVertex(createSegment(it.next(), it.next(), sequences));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -92,22 +94,28 @@ public class DefaultGraphParser implements GraphParser {
      *            Description line in the vertex file.
      * @param content
      *            Content line in the vertex file.
+     * @param sequences
+     *            A map containing sequences that have already been seen.
      * @return a new SequenceSegment
      */
     private SequenceSegment createSegment(final String descriptor,
-            final String content) {
+            final String content, final Map<String, Sequence> sequences) {
         if (!descriptor.startsWith(">")) {
             throw new IllegalArgumentException();
         }
         String[] desc = descriptor.split("\\|");
         String[] sources = desc[2].split(",");
-        for (String s : sources) {
-            s = s.trim();
+        Set<Sequence> currentSequences = new HashSet<>();
+        for (String sequencename : sources) {
+            if (!sequences.containsKey(sequencename.trim())) {
+                sequences.put(sequencename, new SequenceImplementation(
+                        sequencename));
+            }
+            currentSequences.add(sequences.get(sequencename));
         }
-        Set<String> s = new HashSet<String>();
-        Collections.addAll(s, sources);
 
-        return new SequenceSegment(s, Integer.parseInt(desc[START_POS].trim()),
+        return new SequenceSegment(currentSequences,
+                Integer.parseInt(desc[START_POS].trim()),
                 Integer.parseInt(desc[END_POS].trim()), content.trim());
 
     }
