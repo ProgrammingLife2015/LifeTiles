@@ -54,6 +54,10 @@ public class TileView {
         controller = tvc;
     }
 
+    /**
+     * Create the TileView by intilializing the groups where the to be drawn
+     * vertices and edges are stored.
+     */
     public TileView() {
         root = new Group();
         nodes = new Group();
@@ -193,20 +197,6 @@ public class TileView {
         v.setOnMouseClicked(t -> controller.changeColour(Color.RED, v));
         v.setOnMouseEntered(t -> controller.changeColour(Color.GREEN, v));
         v.setOnMouseExited(t -> controller.changeColour(Color.GRAY, v));
-    }
-
-    /**
-     * Create an Edge from a Vertex to another.
-     *
-     * @param from
-     *            - Start Vertex
-     * @param to
-     *            - Destination Vertex
-     */
-    private void drawEdge(Vertex from, Vertex to) {
-        EdgeLine edge = new EdgeLine(from, to);
-
-        edges.getChildren().add(edge);
     }
 
     /**
