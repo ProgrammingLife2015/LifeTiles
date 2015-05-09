@@ -8,6 +8,10 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.graph.Graph;
 import nl.tudelft.lifetiles.graph.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.graph.sequence.mutation.DeletionMutation;
+import nl.tudelft.lifetiles.graph.sequence.mutation.InsertionMutation;
+import nl.tudelft.lifetiles.graph.sequence.mutation.Mutation;
+import nl.tudelft.lifetiles.graph.sequence.mutation.PolymorphismMutation;
 
 /**
  * The TileView is responsible for displaying the graph given from
@@ -120,10 +124,21 @@ public class TileView {
                     && segmentFree(i, segment, lanes)) {
                 segmentInsert(i, segment, lanes);
                 drawVertex(segment.getContent().toString(), segment.getStart(), i, segment
-                        .getSources().size(), Color.GRAY);
+                        .getSources().size(), sequenceColor(segment.getMutation()));
                 break;
             }
         }
+    }
+    
+    private Color sequenceColor(final Mutation mutation) {
+    	if (mutation instanceof DeletionMutation) {
+    		return Color.web("f35959");
+    	} else if (mutation instanceof InsertionMutation) {
+    		return Color.web("8df08c");
+    	} else if (mutation instanceof PolymorphismMutation) {
+    		return Color.web("4091ff");
+    	}
+    	return Color.web("a1d3ff");
     }
 
     /**
@@ -140,14 +155,11 @@ public class TileView {
     private Boolean segmentFree(final int i, final SequenceSegment segment,
             final List<Long> lanes) {
         for (int w = 0; w < segment.getSources().size(); w++) {
-
             if ((i + w > lanes.size())
                     && (lanes.get(i + w) <= segment.getStart())) {
                 return false;
             }
-
         }
-
         return true;
     }
 
@@ -195,9 +207,9 @@ public class TileView {
 
         nodes.getChildren().add(v);
 
-        v.setOnMouseClicked(t -> controller.changeColour(Color.RED, v));
-        v.setOnMouseEntered(t -> controller.changeColour(Color.GREEN, v));
-        v.setOnMouseExited(t -> controller.changeColour(Color.GRAY, v));
+//        v.setOnMouseClicked(t -> controller.changeColour(Color.RED, v));
+//        v.setOnMouseEntered(t -> controller.changeColour(Color.GREEN, v));
+//        v.setOnMouseExited(t -> controller.changeColour(Color.GRAY, v));
     }
 
     /**
