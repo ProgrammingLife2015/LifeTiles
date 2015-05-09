@@ -103,8 +103,13 @@ public class AlignmentTraverserTest {
 		gr.addEdge(v4, v3);
 		at.traverseGraph(gr);
 		Iterator<Edge<SequenceSegment>> it = gr.getIncoming(v3).iterator();
-		assertEquals(v4, gr.getSource(it.next()));
-		assertEquals(s3, gr.getSource(it.next()).getSources());
+		
+		SequenceSegment vertex = gr.getSource(it.next());
+		if (v4.equals(vertex)) {
+			assertEquals(s3, gr.getSource(it.next()).getSources());
+		} else {
+			assertEquals(s3, vertex.getSources());
+		}
 	}
 
 }
