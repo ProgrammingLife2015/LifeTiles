@@ -49,10 +49,16 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
 				graph.divideEdge(edge.getEdge(), bridgeSequence(vertex, destination, sources));
 			}
 			buffer.removeAll(sources);
-	        
+			traverseVertex(graph, destination);
 		}
 	}
 	
+	/**
+	 * Temporary method. Obsolete with #56 Internal sorting of edges on destination starting position.
+	 * @param graph
+	 * @param edges
+	 * @return
+	 */
 	private PriorityQueue<SortedEdge> getSortedEdges(Graph<SequenceSegment> graph, Set<Edge<SequenceSegment>> edges) {
 	    PriorityQueue<SortedEdge> it = new PriorityQueue<SortedEdge>();
 	    for (Edge<SequenceSegment> edge : edges) {
@@ -88,15 +94,15 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
 	private SequenceSegment bridgeSequence(SequenceSegment source, SequenceSegment destination, HashSet<Sequence> sources) {
 		return new SequenceSegment(
 			sources,
-			source.getEnd() + 1,
+			source.getEnd(),
 			destination.getStart() - 1,
-			new SegmentEmpty(source.distanceTo(destination))
+			new SegmentEmpty(source.distanceTo(destination) + 1)
 		);
 	}
 }
 
 /**
- * Temporary class.
+ * Temporary class. Obsolete with #56 Internal sorting of edges on destination starting position.
  * @author Jos
  *
  */
