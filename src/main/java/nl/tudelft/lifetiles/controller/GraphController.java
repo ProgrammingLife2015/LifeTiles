@@ -13,6 +13,7 @@ import javafx.scene.control.ScrollPane;
  * @author Joren Hammudoglu
  *
  */
+@SuppressWarnings("restriction")
 public class GraphController implements Initializable {
 
 	/**

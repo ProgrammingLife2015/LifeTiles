@@ -13,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
  * @author Joren Hammudoglu
  *
  */
+@SuppressWarnings("restriction")
 public class DataController implements Initializable {
 
 	/**
