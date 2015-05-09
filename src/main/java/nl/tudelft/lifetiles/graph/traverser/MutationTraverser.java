@@ -1,9 +1,7 @@
 package nl.tudelft.lifetiles.graph.traverser;
 
-import nl.tudelft.lifetiles.graph.Edge;
 import nl.tudelft.lifetiles.graph.Graph;
 import nl.tudelft.lifetiles.graph.sequence.SegmentEmpty;
-import nl.tudelft.lifetiles.graph.sequence.SegmentString;
 import nl.tudelft.lifetiles.graph.sequence.SequenceSegment;
 import nl.tudelft.lifetiles.graph.sequence.mutation.DeletionMutation;
 import nl.tudelft.lifetiles.graph.sequence.mutation.InsertionMutation;
