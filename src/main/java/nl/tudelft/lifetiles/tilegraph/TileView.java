@@ -14,6 +14,7 @@ import nl.tudelft.lifetiles.graph.sequence.SequenceSegment;
  * the TileController.
  *
  */
+@SuppressWarnings("restriction")
 public class TileView {
     /**
      * The root contains all the to be displayed

@@ -16,6 +16,7 @@ import javafx.scene.text.Text;
  * @author AC Langerak
  *
  */
+@SuppressWarnings("restriction")
 public class Vertex extends Group {
     /**
      * this is the DNA strain the display on the vertex.
