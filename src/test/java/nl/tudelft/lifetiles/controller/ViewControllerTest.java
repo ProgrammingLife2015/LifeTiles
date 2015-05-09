@@ -8,8 +8,8 @@ import java.util.Observer;
 import java.util.Set;
 
 import nl.tudelft.lifetiles.controller.ViewController;
-import nl.tudelft.lifetiles.graph.Sequence;
-import nl.tudelft.lifetiles.graph.SequenceImplementation;
+import nl.tudelft.lifetiles.graph.sequence.Sequence;
+import nl.tudelft.lifetiles.graph.sequence.SequenceImplementation;
 
 import org.junit.Before;
 import org.junit.Rule;

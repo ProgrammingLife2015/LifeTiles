@@ -7,7 +7,7 @@ import java.util.List;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.graph.Graph;
-import nl.tudelft.lifetiles.graph.SequenceSegment;
+import nl.tudelft.lifetiles.graph.sequence.SequenceSegment;
 
 /**
  * The TileView is responsible for displaying the graph given from
@@ -118,7 +118,7 @@ public class TileView {
             if (i >= lanes.size() || lanes.get(i) <= segment.getStart()
                     && segmentFree(i, segment, lanes)) {
                 segmentInsert(i, segment, lanes);
-                drawVertex(segment.getContent(), segment.getStart(), i, segment
+                drawVertex(segment.getContent().toString(), segment.getStart(), i, segment
                         .getSources().size(), Color.GRAY);
                 break;
             }

@@ -10,6 +10,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import nl.tudelft.lifetiles.graph.sequence.SegmentString;
+import nl.tudelft.lifetiles.graph.sequence.Sequence;
+import nl.tudelft.lifetiles.graph.sequence.SequenceImplementation;
+import nl.tudelft.lifetiles.graph.sequence.SequenceSegment;
+
 /**
  * @author Rutger van den Berg
  *
@@ -116,7 +121,8 @@ public class DefaultGraphParser implements GraphParser {
 
         return new SequenceSegment(currentSequences,
                 Integer.parseInt(desc[START_POS].trim()),
-                Integer.parseInt(desc[END_POS].trim()), content.trim());
+                Integer.parseInt(desc[END_POS].trim()), 
+                new SegmentString(content.trim()));
 
     }
 

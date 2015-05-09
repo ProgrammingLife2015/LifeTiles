@@ -3,7 +3,7 @@ package nl.tudelft.lifetiles.graph.jgrapht;
 import nl.tudelft.lifetiles.graph.FactoryProducer;
 import nl.tudelft.lifetiles.graph.Graph;
 import nl.tudelft.lifetiles.graph.GraphFactory;
-import nl.tudelft.lifetiles.graph.SequenceSegment;
+import nl.tudelft.lifetiles.graph.sequence.SequenceSegment;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
