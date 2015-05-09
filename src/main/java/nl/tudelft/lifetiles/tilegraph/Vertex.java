@@ -83,15 +83,15 @@ public class Vertex extends Group {
 
         this.rectangle = new Rectangle(width, height);
         rectangle.setFill(color);
-        DropShadow dropShadow = new DropShadow();
-        dropShadow.setRadius(5.0);
-        dropShadow.setOffsetX(1.0);
-        dropShadow.setOffsetY(1.0);
-        dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
-        rectangle.setEffect(dropShadow);
+//        DropShadow dropShadow = new DropShadow();
+//        dropShadow.setRadius(5.0);
+//        dropShadow.setOffsetX(1.0);
+//        dropShadow.setOffsetY(1.0);
+//        dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
+//        rectangle.setEffect(dropShadow);
 
-        rectangle.setArcWidth(5);
-        rectangle.setArcHeight(5);
+//        rectangle.setArcWidth(5);
+//        rectangle.setArcHeight(5);
 
         this.clip = new Rectangle(width, height);
         text.setClip(clip);
@@ -99,7 +99,11 @@ public class Vertex extends Group {
         this.setLayoutX(initX * this.getLetterWidth() * 2);
         this.setLayoutY(initY);
 
-        this.setWidth(string.length() * this.getLetterWidth() * 2 - spacingX);
+        int x_spacing = 3;
+        int y_spacing = 2;
+        
+        this.setHeight(height - y_spacing);
+        this.setWidth(string.length() * this.getLetterWidth() * 2 - x_spacing);
 
         this.getChildren().addAll(rectangle, text);
 
