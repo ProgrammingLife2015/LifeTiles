@@ -106,9 +106,9 @@ public class AlignmentTraverserTest {
 		
 		SequenceSegment vertex = gr.getSource(it.next());
 		if (v4.equals(vertex)) {
-			assertEquals(s3, gr.getSource(it.next()).getSources());
+			assertEquals(s3.toString(), gr.getSource(it.next()).getSources().toString());
 		} else {
-			assertEquals(s3, vertex.getSources());
+			assertEquals(s3.toString(), vertex.getSources().toString());
 		}
 	}
 
