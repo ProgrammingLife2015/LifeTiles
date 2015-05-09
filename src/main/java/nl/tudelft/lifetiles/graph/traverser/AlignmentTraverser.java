@@ -1,12 +1,6 @@
 package nl.tudelft.lifetiles.graph.traverser;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Set;
 
 import nl.tudelft.lifetiles.graph.Edge;
 import nl.tudelft.lifetiles.graph.Graph;
@@ -41,42 +35,12 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
 	 *			The vertex that is being traversed.
 	 */
 	private void traverseVertex(Graph<SequenceSegment> graph, SequenceSegment vertex) {
-	    HashSet<String> buffer = setCopy(vertex.getSources());
-		PriorityQueue<SortedEdge> it = getSortedEdges(graph, graph.getOutgoing(vertex));
-		while(!it.isEmpty()) {
-		    SortedEdge edge = it.poll();
-			SequenceSegment destination = edge.getSegment();
-	        HashSet<String> sources = setCopy(destination.getSources());
-	        sources.retainAll(buffer);
+		for (Edge<SequenceSegment> edge : graph.getOutgoing(vertex)) {
+			SequenceSegment destination = graph.getDestination(edge);
 			if (vertex.distanceTo(destination) > 1) {
-				graph.divideEdge(edge.getEdge(), bridgeSequence(vertex, destination, sources));
+				graph.divideEdge(edge, bridgeSequence(vertex, destination));
 			}
-			buffer.removeAll(sources);
-	        
 		}
-	}
-	
-	private PriorityQueue<SortedEdge> getSortedEdges(Graph<SequenceSegment> graph, Set<Edge<SequenceSegment>> edges) {
-	    PriorityQueue<SortedEdge> it = new PriorityQueue<SortedEdge>();
-	    for (Edge<SequenceSegment> edge : edges) {
-	        it.add(new SortedEdge(edge, graph.getDestination(edge)));
-        }
-	    return it;
-    }
-
-    /**
-	 * Helper method which copies a Set into a HashSet.
-	 * Pass by value instead of pass by reference.
-	 * @param set
-     *          The set that must be copied.
-	 * @return
-     *          The copied set.
-	 */
-	private HashSet<String> setCopy(Set<String> set) {
-	    if (set == null) {
-	        return new HashSet<String>();
-	    }
-        return  new HashSet<String>(set);
 	}
 	
 	/**
@@ -85,49 +49,14 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
 	 *			The vertex that is the source segment.
 	 * @param destination
 	 *			The vertex that is the destination segment.
-	 * @param sources 
 	 * @return sequence segment between source and destination segment
 	 */
-	private SequenceSegment bridgeSequence(SequenceSegment source, SequenceSegment destination, HashSet<String> sources) {
+	private SequenceSegment bridgeSequence(SequenceSegment source, SequenceSegment destination) {
 		return new SequenceSegment(
-			sources,
+			destination.getSources(),
 			source.getEnd() + 1,
 			destination.getStart() - 1,
 			new SegmentEmpty(source.distanceTo(destination))
 		);
 	}
-}
-
-/**
- * Temporary class.
- * @author Jos
- *
- */
-class SortedEdge implements Comparable<SortedEdge> {
-
-    private Edge<SequenceSegment> edge;
-    private SequenceSegment segment;
-
-    public SortedEdge(Edge<SequenceSegment> edge, SequenceSegment segment) {
-        this.edge = edge;
-        this.segment = segment;
-    }
-    
-    public Edge<SequenceSegment> getEdge() {
-        return edge;
-    }
-
-    @Override
-    public int compareTo(SortedEdge other) {
-        return  ((Long) other.getSegment().getAbsStart()).compareTo((Long) this.segment.getAbsStart());
-    }
-
-    public SequenceSegment getSegment() {
-        return segment;
-    }
-    
-    public String toString() {
-        return segment.getSources().toString();
-    }
-    
 }
