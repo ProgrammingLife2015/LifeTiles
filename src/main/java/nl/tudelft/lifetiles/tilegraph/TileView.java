@@ -68,29 +68,26 @@ public class TileView {
 	 */
 	public final Group drawGraph(final Graph<SequenceSegment> gr) {
 		List<Long> lanes = new LinkedList<Long>();
-
 		PriorityQueue<SequenceSegment> it = sortStartVar(gr);
-
 		while (!it.isEmpty()) {
 			SequenceSegment segment = it.poll();
 			checkAvailable(segment, lanes);
 		}
-
 		root.getChildren().addAll(edges, nodes);
-
 		return root;
 	}
 
 	/**
 	 * This will sort the nodes based on the
 	 * starting position.
+	 * Beware: temporary code which will be obsolete with #56 Internal
+	 * sorting of edges on destination starting position
 	 *
 	 * @param gr
 	 *            - the graph that contains the to be sorted nodes
 	 * @return - Iterator of the sorted list
 	 */
-	private PriorityQueue<SequenceSegment> sortStartVar(
-			final Graph<SequenceSegment> gr) {
+	private PriorityQueue<SequenceSegment> sortStartVar(final Graph<SequenceSegment> gr) {
 		PriorityQueue<SequenceSegment> it = new PriorityQueue<SequenceSegment>();
 		for (SequenceSegment segment : gr.getAllVertices()) {
 			it.add(segment);
@@ -107,19 +104,23 @@ public class TileView {
 	 * @param lanes
 	 *            - already drawn segments
 	 */
-	private void checkAvailable(final SequenceSegment segment,
-			final List<Long> lanes) {
+	private void checkAvailable(final SequenceSegment segment, final List<Long> lanes) {
 		for (int i = 0; i <= lanes.size(); i++) {
 			if (i >= lanes.size() || lanes.get(i) <= segment.getStart() && segmentFree(i, segment, lanes)) {
 				segmentInsert(i, segment, lanes);
 				String text = segment.getContent().toString();
-				drawVertex(text, segment.getStart(), i, segment.getContent().length(), segment
-						.getSources().size(), sequenceColor(segment.getMutation()));
+				drawVertex(text, segment.getStart(), i, segment.getContent().length(), segment.getSources().size(), sequenceColor(segment.getMutation()));
 				break;
 			}
 		}
 	}
 
+	/**
+	 * Returns the mutation color of a given mutation. Default if no mutation.
+	 * @param mutation
+	 *            - mutation to return color from.
+	 * @return color of the mutation
+	 */
 	private Color sequenceColor(final Mutation mutation) {
 		if (mutation instanceof DeletionMutation) {
 			return Color.web("f35959");
@@ -142,11 +143,9 @@ public class TileView {
 	 *            - already drawn segments
 	 * @return - Boolean indicating if there is a free spot
 	 */
-	private Boolean segmentFree(final int i, final SequenceSegment segment,
-			final List<Long> lanes) {
+	private Boolean segmentFree(final int i, final SequenceSegment segment, final List<Long> lanes) {
 		for (int w = 0; w < segment.getSources().size(); w++) {
-			if ((i + w > lanes.size())
-					&& (lanes.get(i + w) <= segment.getStart())) {
+			if ((i + w > lanes.size()) && (lanes.get(i + w) <= segment.getStart())) {
 				return false;
 			}
 		}
@@ -171,7 +170,6 @@ public class TileView {
 				lanes.add(i + w, segment.getEnd());
 			}
 		}
-
 	}
 
 	/**
@@ -190,9 +188,7 @@ public class TileView {
 	 */
 	private void drawVertex(final String text, final double x, final double y,
 			final double width, final double height, final Color color) {
-
 		Vertex v = new Vertex(text, x, y, width, height, color);
-
 		nodes.getChildren().add(v);
 	}
 
