@@ -11,7 +11,7 @@
 
 <AnchorPane xmlns:fx="http://javafx.com/fxml/1" minHeight="0.0"
 	minWidth="0.0" prefHeight="160.0" prefWidth="100.0"
-	fx:controller="nl.tudelft.lifetiles.controller.TreeController">
+	fx:controller="nl.tudelft.lifetiles.tree.controller.TreeController">
 	<children>
 		<Label text="Tree Viewer">
 			<padding>
