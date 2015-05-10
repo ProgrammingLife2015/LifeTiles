@@ -50,9 +50,9 @@ public class AlignmentTraverserTest {
 	@Before
 	public void setUp() throws Exception {
 		gf = fp.getFactory("JGraphT");
-		v1 = new SequenceSegment(s1, 1, 10, new SegmentString("AAAAAAAAAA"));
-		v2 = new SequenceSegment(s3, 11, 20, new SegmentEmpty(10));
-		v3 = new SequenceSegment(s1, 21, 30, new SegmentString("AAAAAAAAAA"));
+		v1 = new SequenceSegment(s1, 1, 11, new SegmentString("AAAAAAAAAA"));
+		v2 = new SequenceSegment(s3, 11, 21, new SegmentEmpty(10));
+		v3 = new SequenceSegment(s1, 21, 31, new SegmentString("AAAAAAAAAA"));
 		gr = gf.getGraph();
 		gr.addVertex(v1);
 		gr.addVertex(v3);
@@ -60,7 +60,7 @@ public class AlignmentTraverserTest {
 
 	@Test
 	public void testTraverseForkGraph() {
-		SequenceSegment v4 = new SequenceSegment(null, 1, 10, new SegmentString("AAAAAAAAAA"));
+		SequenceSegment v4 = new SequenceSegment(null, 1, 11, new SegmentString("AAAAAAAAAA"));
 		gr.addVertex(v4);
 		gr.addEdge(v1, v3);
 		gr.addEdge(v4, v3);
@@ -70,7 +70,7 @@ public class AlignmentTraverserTest {
 
 	@Test
 	public void testTraverseBranchGraph() {
-		SequenceSegment v4 = new SequenceSegment(null, 21, 30, new SegmentString("AAAAAAAAAA"));
+		SequenceSegment v4 = new SequenceSegment(null, 21, 31, new SegmentString("AAAAAAAAAA"));
 		gr.addVertex(v4);
 		gr.addEdge(v1, v3);
 		gr.addEdge(v1, v4);
@@ -86,6 +86,14 @@ public class AlignmentTraverserTest {
 	}
 
 	@Test
+	public void testTraverseGapCoordinatesGraph() {
+		gr.addEdge(v1, v3);
+		at.traverseGraph(gr);
+		assertEquals(21, gr.getSource(gr.getIncoming(v3).iterator().next()).getEnd());
+		assertEquals(11, gr.getSource(gr.getIncoming(v3).iterator().next()).getStart());
+	}
+
+	@Test
 	public void testTraverseBridgeGraph() {
 		gr.addVertex(v2);
 		gr.addEdge(v1, v2);
@@ -96,7 +104,7 @@ public class AlignmentTraverserTest {
 
 	@Test
 	public void testTraverseInsertionGraph() {
-		SequenceSegment v4 = new SequenceSegment(s2, 11, 20, new SegmentString("AAAAAAAAAA"));
+		SequenceSegment v4 = new SequenceSegment(s2, 11, 21, new SegmentString("AAAAAAAAAA"));
 		gr.addVertex(v4);
 		gr.addEdge(v1, v3);
 		gr.addEdge(v1, v4);

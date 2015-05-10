@@ -95,7 +95,7 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
 		return new SequenceSegment(
 				sources,
 				source.getEnd(),
-				destination.getStart() - 1,
+				destination.getStart(),
 				new SegmentEmpty(source.distanceTo(destination) + 1)
 				);
 	}
