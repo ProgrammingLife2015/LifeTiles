@@ -41,14 +41,9 @@ public class Vertex extends Group {
     private final double fontSize = 12;
 
     /**
-     * Horizontal spacing between rectangles.
+     * Horizontal and vertical spacing between rectangles.
      */
-    private final double spacingX = 3;
-    
-    /**
-     * Vertical spacing between rectangles.
-     */
-    private final double spacingY = 2;
+    private final double spacing = 3;
 
     /**
      * Creates a new Block to be displayed on the screen. The width is already
@@ -87,8 +82,8 @@ public class Vertex extends Group {
 		this.setLayoutX(initX * scale );
         this.setLayoutY(initY * scale);
         
-        this.setHeight(height * scale);
-        this.setWidth(width * scale);
+        this.setHeight(height * scale - spacing);
+        this.setWidth(width * scale - spacing);
 
         this.getChildren().addAll(rectangle, text);
 
