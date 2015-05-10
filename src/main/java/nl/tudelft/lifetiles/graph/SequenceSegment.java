@@ -3,26 +3,28 @@ package nl.tudelft.lifetiles.graph;
 import java.util.Set;
 
 /**
- * @author Rutger van den Berg Contains a partial sequence.
+ * Contains a partial sequence.
+ *
+ * @author Rutger van den Berg
  */
 public class SequenceSegment {
     /**
-     * Contains the sources containing this segment.
+     * The content of this segment.
      */
-    private Set<Sequence> sourcesVar;
+    private String contentVar;
 
-    /**
-     * The start position for this segment.
-     */
-    private long startVar;
     /**
      * The end position for this segment.
      */
     private long endVar;
     /**
-     * The content of this segment.
+     * Contains the sources containing this segment.
      */
-    private String contentVar;
+    private Set<Sequence> sourcesVar;
+    /**
+     * The start position for this segment.
+     */
+    private long startVar;
 
     /**
      * @param sources
@@ -44,6 +46,20 @@ public class SequenceSegment {
     }
 
     /**
+     * @return the content
+     */
+    public final String getContent() {
+        return contentVar;
+    }
+
+    /**
+     * @return the end position
+     */
+    public final long getEnd() {
+        return endVar;
+    }
+
+    /**
      * @return the sources
      */
     public final Set<Sequence> getSources() {
@@ -55,19 +71,5 @@ public class SequenceSegment {
      */
     public final long getStart() {
         return startVar;
-    }
-
-    /**
-     * @return the end position
-     */
-    public final long getEnd() {
-        return endVar;
-    }
-
-    /**
-     * @return the content
-     */
-    public final String getContent() {
-        return contentVar;
     }
 }

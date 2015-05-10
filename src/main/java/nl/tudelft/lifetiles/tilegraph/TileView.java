@@ -16,23 +16,23 @@ import nl.tudelft.lifetiles.graph.SequenceSegment;
  */
 public class TileView {
     /**
-     * The root contains all the to be displayed
-     * elements.
+     * The Controller that controls this view.
      */
-    private Group root;
-    /**
-     * The nodes contains all Vertices to be displayed.
-     */
-    private Group nodes;
+    private TileController controller;
     /**
      * The edges contains all EdgeLines to be displayed.
      */
     private Group edges;
+    /**
+     * The nodes contains all Vertices to be displayed.
+     */
+    private Group nodes;
 
     /**
-     * Spacing between the height of the blocks.
+     * The root contains all the to be displayed
+     * elements.
      */
-    private final double spacingY = 1;
+    private Group root;
 
     /**
      * The scaling defines the eventually height of the vertex.
@@ -40,9 +40,19 @@ public class TileView {
     private final double scale = 20;
 
     /**
-     * The Controller that controls this view.
+     * Spacing between the height of the blocks.
      */
-    private TileController controller;
+    private final double spacingY = 1;
+
+    /**
+     * Create the TileView by intilializing the groups where the to be drawn
+     * vertices and edges are stored.
+     */
+    public TileView() {
+        root = new Group();
+        nodes = new Group();
+        edges = new Group();
+    }
 
     /**
      * Add the controller to this view.
@@ -55,13 +65,37 @@ public class TileView {
     }
 
     /**
-     * Create the TileView by intilializing the groups where the to be drawn
-     * vertices and edges are stored.
+     * Change Vertex colour.
+     *
+     * @param v
+     *            - vertex to be changed.
+     * @param color
+     *            - the new colour
      */
-    public TileView() {
-        root = new Group();
-        nodes = new Group();
-        edges = new Group();
+    public final void changeVertexColour(final Vertex v, final Color color) {
+        v.setColour(color);
+    }
+
+    /**
+     * Functions that will find if it can draw a segment
+     * at a certain position.
+     *
+     * @param segment
+     *            - segment to be drawn
+     * @param lanes
+     *            - already drawn segments
+     */
+    private void checkAvailable(final SequenceSegment segment,
+            final List<Long> lanes) {
+        for (int i = 0; i <= lanes.size(); i++) {
+            if (i >= lanes.size() || lanes.get(i) <= segment.getStart()
+                    && segmentFree(i, segment, lanes)) {
+                segmentInsert(i, segment, lanes);
+                drawVertex(segment.getContent(), segment.getStart(), i, segment
+                        .getSources().size(), Color.GRAY);
+                break;
+            }
+        }
     }
 
     /**
@@ -89,40 +123,30 @@ public class TileView {
     }
 
     /**
-     * This will sort the nodes based on the
-     * starting position.
+     * Create a Vertex that can be displayed on the screen.
      *
-     * @param gr
-     *            - the graph that contains the to be sorted nodes
-     * @return - Iterator of the sorted list
+     * @param text
+     *            - text of the dna segment
+     * @param x
+     *            - top left x coordinate
+     * @param y
+     *            - top left y coordinate
+     * @param height
+     *            - the height of the vertex
+     * @param color
+     *            - the colour of the vertex
      */
-    private Iterator<SequenceSegment> sortStartVar(
-            final Graph<SequenceSegment> gr) {
+    private void drawVertex(final String text, final double x, final double y,
+            final double height, final Color color) {
 
-        return gr.getAllVertices().iterator();
+        Vertex v = new Vertex(text, x, scale * y, scale * height - spacingY,
+                color);
 
-    }
+        nodes.getChildren().add(v);
 
-    /**
-     * Functions that will find if it can draw a segment
-     * at a certain position.
-     *
-     * @param segment
-     *            - segment to be drawn
-     * @param lanes
-     *            - already drawn segments
-     */
-    private void checkAvailable(final SequenceSegment segment,
-            final List<Long> lanes) {
-        for (int i = 0; i <= lanes.size(); i++) {
-            if (i >= lanes.size() || lanes.get(i) <= segment.getStart()
-                    && segmentFree(i, segment, lanes)) {
-                segmentInsert(i, segment, lanes);
-                drawVertex(segment.getContent(), segment.getStart(), i, segment
-                        .getSources().size(), Color.GRAY);
-                break;
-            }
-        }
+        v.setOnMouseClicked(t -> controller.changeColour(Color.RED, v));
+        v.setOnMouseEntered(t -> controller.changeColour(Color.GREEN, v));
+        v.setOnMouseExited(t -> controller.changeColour(Color.GRAY, v));
     }
 
     /**
@@ -173,42 +197,18 @@ public class TileView {
     }
 
     /**
-     * Create a Vertex that can be displayed on the screen.
+     * This will sort the nodes based on the
+     * starting position.
      *
-     * @param text
-     *            - text of the dna segment
-     * @param x
-     *            - top left x coordinate
-     * @param y
-     *            - top left y coordinate
-     * @param height
-     *            - the height of the vertex
-     * @param color
-     *            - the colour of the vertex
+     * @param gr
+     *            - the graph that contains the to be sorted nodes
+     * @return - Iterator of the sorted list
      */
-    private void drawVertex(final String text, final double x, final double y,
-            final double height, final Color color) {
+    private Iterator<SequenceSegment> sortStartVar(
+            final Graph<SequenceSegment> gr) {
 
-        Vertex v = new Vertex(text, x, scale * y, scale * height - spacingY,
-                color);
+        return gr.getAllVertices().iterator();
 
-        nodes.getChildren().add(v);
-
-        v.setOnMouseClicked(t -> controller.changeColour(Color.RED, v));
-        v.setOnMouseEntered(t -> controller.changeColour(Color.GREEN, v));
-        v.setOnMouseExited(t -> controller.changeColour(Color.GRAY, v));
-    }
-
-    /**
-     * Change Vertex colour.
-     *
-     * @param v
-     *            - vertex to be changed.
-     * @param color
-     *            - the new colour
-     */
-    public final void changeVertexColour(final Vertex v, final Color color) {
-        v.setColour(color);
     }
 
 }

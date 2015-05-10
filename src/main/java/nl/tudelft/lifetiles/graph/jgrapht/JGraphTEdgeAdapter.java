@@ -5,9 +5,11 @@ import nl.tudelft.lifetiles.graph.Edge;
 import org.jgrapht.graph.DefaultEdge;
 
 /**
- * @author Rutger van den Berg
  * Implementation of a directed edge.
- * @param <V> The type of vertex to use.
+ *
+ * @author Rutger van den Berg
+ * @param <V>
+ *            The type of vertex to use.
  */
 public class JGraphTEdgeAdapter<V> implements Edge<V> {
     /**
@@ -16,45 +18,15 @@ public class JGraphTEdgeAdapter<V> implements Edge<V> {
     private DefaultEdge internalEdge;
 
     /**
-     * @param e The internal edge to use.
+     * @param e
+     *            The internal edge to use.
      */
     JGraphTEdgeAdapter(final DefaultEdge e) {
         internalEdge = e;
     }
 
-
-    /**
-     * @return the internalEdge
-     */
-    protected final DefaultEdge getInternalEdge() {
-        return internalEdge;
-    }
-
-
-    /**
-     * @param newInternalEdge the internalEdge to set
-     */
-    protected final void setInternalEdge(final DefaultEdge newInternalEdge) {
-        this.internalEdge = newInternalEdge;
-    }
-
-
-    /* (non-Javadoc)
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public final int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result;
-        if (internalEdge != null) {
-            result += internalEdge.hashCode();
-        }
-        return result;
-    }
-
-
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -77,5 +49,35 @@ public class JGraphTEdgeAdapter<V> implements Edge<V> {
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return the internalEdge
+     */
+    protected final DefaultEdge getInternalEdge() {
+        return internalEdge;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public final int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result;
+        if (internalEdge != null) {
+            result += internalEdge.hashCode();
+        }
+        return result;
+    }
+
+    /**
+     * @param newInternalEdge
+     *            the internalEdge to set
+     */
+    protected final void setInternalEdge(final DefaultEdge newInternalEdge) {
+        this.internalEdge = newInternalEdge;
     }
 }

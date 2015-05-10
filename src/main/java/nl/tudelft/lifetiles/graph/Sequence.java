@@ -3,17 +3,11 @@ package nl.tudelft.lifetiles.graph;
 import java.util.List;
 
 /**
+ * Interface for complete sequences.
+ *
  * @author Rutger van den Berg
- *         Interface for complete sequences.
  */
 public interface Sequence {
-    /**
-     * Return the segments related to this sequence.
-     *
-     * @return A list of sequence segments.
-     */
-    List<SequenceSegment> getSegments();
-
     /**
      * Add a segment to the sequence.
      *
@@ -26,4 +20,11 @@ public interface Sequence {
      * @return The identifier for this sequence.
      */
     String getIdentifier();
+
+    /**
+     * Return the segments related to this sequence.
+     *
+     * @return A list of sequence segments.
+     */
+    List<SequenceSegment> getSegments();
 }
