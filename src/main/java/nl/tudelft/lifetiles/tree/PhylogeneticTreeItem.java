@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/***
- * a tree to store the relation between samples.
+/**
+ * A tree to store the relation between samples.
  *
  * @author Albert Smit
  *
@@ -17,26 +17,26 @@ public class PhylogeneticTreeItem {
     private static AtomicInteger nextID = new AtomicInteger();
 
     /**
-     * The parent node, null when this node is the root node.
-     */
-    private PhylogeneticTreeItem parent;
-    /**
      * The list of children of this node.
      */
     private List<PhylogeneticTreeItem> children;
+    /**
+     * The distance between samples. This is an optinal field.
+     */
+    private double distance;
 
+    /**
+     * A unique id for each node.
+     */
+    private int id;
     /**
      * The name of the sample. This is an optional field.
      */
     private String name;
     /**
-     * The distance between samples. This is an optinal field.
+     * The parent node, null when this node is the root node.
      */
-    private double distance;
-    /**
-     * A unique id for each node.
-     */
-    private int id;
+    private PhylogeneticTreeItem parent;
 
     /**
      * Creates a new PhylogeneticTreeItem. Will initialize the ArrayList storing
@@ -48,85 +48,15 @@ public class PhylogeneticTreeItem {
     }
 
     /**
-     * Returns a String representation of the PhylogeneticTreeItem. The String
-     * will have the following format: <Node: id, name: name, Distance:
-     * distance, parent: parentID> or when the PhylogeneticTreeItem has no
-     * parent: <Node: id, Name: name, Distance: distance, ROOT>
-     *
-     * @return the String version of the object.
-     */
-    public final String toString() {
-        String result = "<Node: " + id + ", Name: " + name + ", Distance: "
-                + distance;
-        if (parent != null) {
-            result += ", parent: " + parent.getId();
-        } else {
-            result += ", ROOT ";
-        }
-        return result + ">";
-    }
-
-    /**
      * Adds a child to the PhylogeneticTreeItem. This method will add the
      * PhylogeneticTreeItem child to the ArrayList storing the children of this
-     * node
+     * node.
      *
      * @param child
      *            the PhylogeneticTreeItem that needs to be added to the tree
      */
     public final void addChild(final PhylogeneticTreeItem child) {
         children.add(child);
-    }
-
-    /**
-     * Returns the ArrayList of children.
-     *
-     * @return the ArrayList containing all children of this node
-     */
-    public final List<PhylogeneticTreeItem> getChildren() {
-        return children;
-    }
-
-    /**
-     * Sets the parent to be the node passed to the method This method will set
-     * the parent and also add itself to the list of children in the parent
-     * node.
-     *
-     * @param parentNode
-     *            the node that will be this nodes parent
-     */
-    public final void setParent(final PhylogeneticTreeItem parentNode) {
-        this.parent = parentNode;
-        this.parent.addChild(this);
-    }
-
-    /**
-     * Returns this nodes parent node.
-     *
-     * @return the PhylogeneticTreeItem that is this nodes parent
-     */
-    public final PhylogeneticTreeItem getParent() {
-        return parent;
-    }
-
-    /**
-     * Calculates a hash for the tree.
-     */
-    @Override
-    public final int hashCode() {
-        final int prime = 31;
-        int result = 1;
-
-        result = prime * result + children.hashCode();
-        long temp;
-        temp = Double.doubleToLongBits(distance);
-        result = prime * result + (int) (temp ^ (temp >>> 32));
-        if (name != null) {
-            result = prime * result + name.hashCode();
-        } else {
-            result = prime * result;
-        }
-        return result;
     }
 
     /**
@@ -177,26 +107,13 @@ public class PhylogeneticTreeItem {
         }
     }
 
-
-
     /**
-     * Returns the name stored in this node. name is an optional property, so
-     * this method can return null.
+     * Returns the ArrayList of children.
      *
-     * @return the name of this node
+     * @return the ArrayList containing all children of this node
      */
-    public final String getName() {
-        return name;
-    }
-
-    /**
-     * Set this nodes name to the passed String.
-     *
-     * @param n
-     *            the name of this node
-     */
-    public final void setName(final String n) {
-        this.name = n;
+    public final List<PhylogeneticTreeItem> getChildren() {
+        return children;
     }
 
     /**
@@ -210,6 +127,55 @@ public class PhylogeneticTreeItem {
     }
 
     /**
+     * Returns the Id of this node. because name and distance are optional this
+     * provides an easy way of identifying nodes
+     *
+     * @return the unique id of this PhylogeneticTreeItem
+     */
+    public final int getId() {
+        return id;
+    }
+
+    /**
+     * Returns the name stored in this node. name is an optional property, so
+     * this method can return null.
+     *
+     * @return the name of this node
+     */
+    public final String getName() {
+        return name;
+    }
+
+    /**
+     * Returns this nodes parent node.
+     *
+     * @return the PhylogeneticTreeItem that is this nodes parent
+     */
+    public final PhylogeneticTreeItem getParent() {
+        return parent;
+    }
+
+    /**
+     * Calculates a hash for the tree.
+     */
+    @Override
+    public final int hashCode() {
+        final int prime = 31;
+        int result = 1;
+
+        result = prime * result + children.hashCode();
+        long temp;
+        temp = Double.doubleToLongBits(distance);
+        result = prime * result + (int) (temp ^ (temp >>> prime + 1));
+        if (name != null) {
+            result = prime * result + name.hashCode();
+        } else {
+            result = prime * result;
+        }
+        return result;
+    }
+
+    /**
      * Sets this nodes distance to the passed double.
      *
      * @param d
@@ -220,13 +186,46 @@ public class PhylogeneticTreeItem {
     }
 
     /**
-     * Returns the Id of this node. because name and distance are optional this
-     * provides an easy way of identifying nodes
+     * Set this nodes name to the passed String.
      *
-     * @return the unique id of this PhylogeneticTreeItem
+     * @param n
+     *            the name of this node
      */
-    public final int getId() {
-        return id;
+    public final void setName(final String n) {
+        this.name = n;
+    }
+
+    /**
+     * Sets the parent to be the node passed to the method This method will set
+     * the parent and also add itself to the list of children in the parent
+     * node.
+     *
+     * @param parentNode
+     *            the node that will be this nodes parent
+     */
+    public final void setParent(final PhylogeneticTreeItem parentNode) {
+        this.parent = parentNode;
+        this.parent.addChild(this);
+    }
+
+    /**
+     * Returns a String representation of the PhylogeneticTreeItem. The String
+     * will have the following format: <Node: id, name: name, Distance:
+     * distance, parent: parentID> or when the PhylogeneticTreeItem has no
+     * parent: <Node: id, Name: name, Distance: distance, ROOT>
+     *
+     * @return the String version of the object.
+     */
+    @Override
+    public final String toString() {
+        String result = "<Node: " + id + ", Name: " + name + ", Distance: "
+                + distance;
+        if (parent != null) {
+            result += ", parent: " + parent.getId();
+        } else {
+            result += ", ROOT ";
+        }
+        return result + ">";
     }
 
 }

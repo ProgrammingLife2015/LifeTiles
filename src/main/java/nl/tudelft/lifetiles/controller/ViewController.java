@@ -8,18 +8,19 @@ import java.util.Set;
 import nl.tudelft.lifetiles.graph.Sequence;
 
 /**
+ * Controls what the view modules display.
+ *
  * @author Rutger van den Berg
- *         Controls what the view modules display.
  */
 public class ViewController extends Observable {
-    /**
-     * Map of all sequences currently loaded.
-     */
-    private Map<String, Sequence> sequenceMap;
     /**
      * Set containing all sequences currently loaded.
      */
     private Set<Sequence> allSequences;
+    /**
+     * Map of all sequences currently loaded.
+     */
+    private Map<String, Sequence> sequenceMap;
     /**
      * Set containing the currently visible sequences.
      */
@@ -43,6 +44,13 @@ public class ViewController extends Observable {
     }
 
     /**
+     * @return A set containing all visible sequences.
+     */
+    public final Set<Sequence> getVisible() {
+        return visibleSequences;
+    }
+
+    /**
      * Sets the visible sequences in all views to the provided sequences.
      *
      * @param sequences
@@ -56,13 +64,6 @@ public class ViewController extends Observable {
         }
         setChanged();
         notifyObservers();
-    }
-
-    /**
-     * @return A set containing all visible sequences.
-     */
-    public final Set<Sequence> getVisible() {
-        return visibleSequences;
     }
 
 }

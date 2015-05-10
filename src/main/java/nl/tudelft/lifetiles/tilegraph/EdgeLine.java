@@ -47,47 +47,47 @@ public class EdgeLine extends Group {
     }
 
     /**
-     * Draw a straight between two vertices.
      *
-     * @param from
-     *            - Start Vertex
-     * @param to
-     *            - Destination Vertex
-     * @param boundFrom
-     *            - The Bounds of the start Vertex
-     * @param boundTo
-     *            - The Bounds of the end Vertex
+     Calculate the y intersection of two line 2 sections by using the cross
+     * product. See: http://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
+     * for more information.
+     *
+     * @param p0
+     *            - Point 0 of the first line
+     * @param t0
+     *            - Point 1 of the first line
+     * @param p1
+     *            - Point 0 of the second line
+     * @param t1
+     *            - Point 1 of the second line
+     * @return - y intersection point
      */
-    private void drawStraightLine(final Vertex from, final Vertex to,
-            final Bounds boundFrom, final Bounds boundTo) {
-        Circle head = new Circle();
-        head.setRadius(HEAD_RADIUS);
+    private double calculateYIntersection(final Pair p0, final Pair t0,
+            final Pair p1, final Pair t1) {
 
-        double startX = boundFrom.getMinX() + (boundFrom.getWidth() / 2);
+        double s10x = t0.getX() - p0.getX();
+        double s10y = t0.getY() - p0.getY();
+        double s32x = t1.getX() - p1.getX();
+        double s32y = t1.getY() - p1.getY();
 
-        // The line be drawn from the middle of the vertex to be drawn to
-        if (boundFrom.getMinY() <= boundTo.getMinY()
-                && boundFrom.getMaxY() >= boundTo.getMaxY()) {
+        double denom = s10x * s32y - s32x * s10y;
+        boolean denomPositive = denom > 0;
 
-            drawLine(startX, boundTo.getMinY() + boundTo.getHeight() / 2,
-                    boundTo.getMinX(), boundTo.getMinY() + boundTo.getHeight()
-                    / 2);
+        double s02x = p0.getX() - p1.getX();
+        double s02y = p0.getY() - p1.getY();
+        double snumer = s10x * s02y - s10y * s02x;
+        double tnumer = s32x * s02y - s32y * s02x;
 
-        } else {
-            Pair p0 = new Pair(boundFrom.getMaxX(), boundFrom.getMinY());
-            Pair t0 = new Pair(boundTo.getMinX(), boundTo.getMaxY());
-            Pair p1 = new Pair(boundFrom.getMaxX(), boundFrom.getMaxY());
-            Pair t1 = new Pair(boundTo.getMinX(), boundTo.getMinY());
-
-            double intersect = calculateYIntersection(p0, t0, p1, t1);
-
-            drawLine(startX, intersect, boundTo.getMinX()
-                    + (boundTo.getWidth() / 2), intersect);
+        // No collision
+        if ((denom == 0) || (snumer < 0) == denomPositive
+                || (tnumer < 0) == denomPositive
+                || ((snumer > denom) == denomPositive)
+                || ((tnumer > denom) == denomPositive)) {
+            return -1;
         }
-        head.setCenterX(line.getEndX() - head.getRadius());
-        head.setCenterY(line.getEndY());
 
-        this.getChildren().addAll(line, head);
+        // Collision detected
+        return p0.getY() + ((tnumer / denom) * s10y);
     }
 
     /**
@@ -151,6 +151,59 @@ public class EdgeLine extends Group {
     }
 
     /**
+     * Draw a straight between two vertices.
+     *
+     * @param from
+     *            - Start Vertex
+     * @param to
+     *            - Destination Vertex
+     * @param boundFrom
+     *            - The Bounds of the start Vertex
+     * @param boundTo
+     *            - The Bounds of the end Vertex
+     */
+    private void drawStraightLine(final Vertex from, final Vertex to,
+            final Bounds boundFrom, final Bounds boundTo) {
+        Circle head = new Circle();
+        head.setRadius(HEAD_RADIUS);
+
+        double startX = boundFrom.getMinX() + (boundFrom.getWidth() / 2);
+
+        // The line be drawn from the middle of the vertex to be drawn to
+        if (boundFrom.getMinY() <= boundTo.getMinY()
+                && boundFrom.getMaxY() >= boundTo.getMaxY()) {
+
+            drawLine(startX, boundTo.getMinY() + boundTo.getHeight() / 2,
+                    boundTo.getMinX(), boundTo.getMinY() + boundTo.getHeight()
+                            / 2);
+
+        } else {
+            Pair p0 = new Pair(boundFrom.getMaxX(), boundFrom.getMinY());
+            Pair t0 = new Pair(boundTo.getMinX(), boundTo.getMaxY());
+            Pair p1 = new Pair(boundFrom.getMaxX(), boundFrom.getMaxY());
+            Pair t1 = new Pair(boundTo.getMinX(), boundTo.getMinY());
+
+            double intersect = calculateYIntersection(p0, t0, p1, t1);
+
+            drawLine(startX, intersect, boundTo.getMinX()
+                    + (boundTo.getWidth() / 2), intersect);
+        }
+        head.setCenterX(line.getEndX() - head.getRadius());
+        head.setCenterY(line.getEndY());
+
+        this.getChildren().addAll(line, head);
+    }
+
+    /**
+     * Returns the line that this edge draws.
+     *
+     * @return drawn line
+     */
+    public final Line getLine() {
+        return line;
+    }
+
+    /**
      * Check if the y coordinates of 'to' lie outside the range of the y
      * coordinates of 'from'.
      *
@@ -174,66 +227,13 @@ public class EdgeLine extends Group {
         return false;
     }
 
-    /**
-     *
-     Calculate the y intersection of two line 2 sections by using the cross
-     * product. See: http://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
-     * for more information.
-     *
-     * @param p0
-     *            - Point 0 of the first line
-     * @param t0
-     *            - Point 1 of the first line
-     * @param p1
-     *            - Point 0 of the second line
-     * @param t1
-     *            - Point 1 of the second line
-     * @return - y intersection point
-     */
-    private double calculateYIntersection(final Pair p0, final Pair t0,
-            final Pair p1, final Pair t1) {
-
-        double s10x = t0.getX() - p0.getX();
-        double s10y = t0.getY() - p0.getY();
-        double s32x = t1.getX() - p1.getX();
-        double s32y = t1.getY() - p1.getY();
-
-        double denom = s10x * s32y - s32x * s10y;
-        Boolean denomPositive = denom > 0;
-
-        double s02x = p0.getX() - p1.getX();
-        double s02y = p0.getY() - p1.getY();
-        double snumer = s10x * s02y - s10y * s02x;
-        double tnumer = s32x * s02y - s32y * s02x;
-
-        // No collision
-        if ((denom == 0) || (snumer < 0) == denomPositive
-                || (tnumer < 0) == denomPositive
-                || ((snumer > denom) == denomPositive)
-                || ((tnumer > denom) == denomPositive)) {
-            return -1;
-        }
-
-        // Collision detected
-        return p0.getY() + ((tnumer / denom) * s10y);
-    }
-
-    /**
-     * Returns the line that this edge draws.
-     *
-     * @return drawn line
-     */
-    public final Line getLine() {
-        return line;
-    }
-
 }
 
 /**
  * A Pair (point) in 2D space.
  *
  */
-class Pair {
+final class Pair {
     /**
      * X Coordinate in 2D space.
      */

@@ -1,7 +1,9 @@
 package nl.tudelft.lifetiles.graph;
 
 /**
- * @author Rutger van den Berg Interface for Graph Parser.
+ * Interface for Graph Parser.
+ *
+ * @author Rutger van den Berg
  */
 public interface GraphParser {
     /**

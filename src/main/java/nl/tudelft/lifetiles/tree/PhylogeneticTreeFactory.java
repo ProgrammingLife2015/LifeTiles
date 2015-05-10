@@ -1,9 +1,11 @@
 package nl.tudelft.lifetiles.tree;
 
 import java.util.StringTokenizer;
+
 /**
  * A simple parser that will parse a single tree in newick format
  * to a simple tree.
+ *
  * @author Albert Smit
  *
  */
@@ -31,7 +33,15 @@ public class PhylogeneticTreeFactory {
         root = new PhylogeneticTreeItem();
 
         parse();
+    }
 
+    /**
+     * Returns the parsed tree.
+     *
+     * @return the root node of the tree.
+     */
+    public final PhylogeneticTreeItem getRoot() {
+        return root;
     }
 
     /**
@@ -83,16 +93,6 @@ public class PhylogeneticTreeFactory {
                 currentNode.setName(currentToken);
             }
         }
-
-    }
-
-    /**
-     * Returns the parsed tree.
-     *
-     * @return the root node of the tree.
-     */
-    public final PhylogeneticTreeItem getRoot() {
-        return root;
     }
 
 }
