@@ -142,8 +142,13 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
     	return other.getStart() - getEnd() - 1;
     }
 
+    /**
+     * Compares the the start position of this and another sequence segment.
+     * @param other
+     *            Sequence segment which needs to be compared.
+     */
 	@Override
 	public int compareTo(SequenceSegment other) {
-		return ((Long) absStartVar).compareTo((Long) other.getAbsStart());
+		return ((Long) startVar).compareTo((Long) other.getStart());
 	}
 }
