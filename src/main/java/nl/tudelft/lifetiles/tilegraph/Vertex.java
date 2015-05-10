@@ -2,7 +2,6 @@ package nl.tudelft.lifetiles.tilegraph;
 
 import javafx.geometry.VPos;
 import javafx.scene.Group;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -37,20 +36,19 @@ public class Vertex extends Group {
     private double resizeWidth = -1;
 
     /**
-     * This value is the width of the largest single character
-     * a string can have. This is used to calculate the width of the vertex.
-     */
-    private double letterWidth = 0;
-
-    /**
      * The fontsize of the string.
      */
     private final double fontSize = 12;
 
     /**
-     * Spacing between rectangles.
+     * Horizontal spacing between rectangles.
      */
     private final double spacingX = 3;
+    
+    /**
+     * Vertical spacing between rectangles.
+     */
+    private final double spacingY = 2;
 
     /**
      * Creates a new Block to be displayed on the screen. The width is already
@@ -65,81 +63,35 @@ public class Vertex extends Group {
      *            - top-left y coordinate
      * @param height
      *            - the height of the vertex
+     * @param d 
      * @param color
      *            - the color of the vertex
      */
     public Vertex(final String string, final double initX, final double initY,
-            final double height, final Color color) {
+            final double width, double height, final Color color) {
 
         this.text = new Text(string);
         text.setTextOrigin(VPos.CENTER);
         text.setFill(Color.WHITE);
         text.setFontSmoothingType(FontSmoothingType.LCD);
 
-        text.setFont(Font.font("Verdana", fontSize));
+        double scale = 20;
+        text.setFont(Font.font("Open Sans", fontSize));
 
-        // Is filled out later when the css is applied to it
-        double width = 0;
-
-        this.rectangle = new Rectangle(width, height);
+        this.rectangle = new Rectangle(width * scale , height * scale);
         rectangle.setFill(color);
-//        DropShadow dropShadow = new DropShadow();
-//        dropShadow.setRadius(5.0);
-//        dropShadow.setOffsetX(1.0);
-//        dropShadow.setOffsetY(1.0);
-//        dropShadow.setColor(Color.color(0.4, 0.5, 0.5));
-//        rectangle.setEffect(dropShadow);
 
-//        rectangle.setArcWidth(5);
-//        rectangle.setArcHeight(5);
-
-        this.clip = new Rectangle(width, height);
+        this.clip = new Rectangle(width * scale , height * scale );
         text.setClip(clip);
 
-        this.setLayoutX(initX * this.getLetterWidth() * 2);
-        this.setLayoutY(initY);
-
-        int x_spacing = 3;
-        int y_spacing = 2;
+		this.setLayoutX(initX * scale );
+        this.setLayoutY(initY * scale);
         
-        this.setHeight(height - y_spacing);
-        this.setWidth(string.length() * this.getLetterWidth() * 2 - x_spacing);
+        this.setHeight(height * scale);
+        this.setWidth(width * scale);
 
         this.getChildren().addAll(rectangle, text);
 
-    }
-
-    /**
-     * Get the width of displaying one letter using the current font
-     * and fontSize.
-     *
-     * @return returns the width of the largest letter.
-     */
-    public final double getLetterWidth() {
-        if (letterWidth == 0) {
-            // All possible characters
-            String chars = "ATCG";
-
-            Text textmatch = new Text(String.valueOf(chars.charAt(0)));
-            textmatch.setFont(text.getFont());
-            double largestWidth = textmatch.getLayoutBounds().getWidth();
-
-            for (int i = 1; i < chars.length(); i++) {
-                Text textmatch2 = new Text(String.valueOf(chars.charAt(i)));
-                textmatch2.setFont(text.getFont());
-                double width2 = textmatch2.getLayoutBounds().getWidth();
-
-                if (width2 > largestWidth) {
-                    largestWidth = width2;
-                }
-
-            }
-            letterWidth = largestWidth;
-            return largestWidth;
-
-        } else {
-            return letterWidth;
-        }
     }
 
     /**
@@ -148,7 +100,6 @@ public class Vertex extends Group {
      * @return width
      */
     public final double getWidth() {
-
         return rectangle.getLayoutBounds().getWidth();
     }
 

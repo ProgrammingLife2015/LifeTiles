@@ -1,8 +1,8 @@
 package nl.tudelft.lifetiles.tilegraph;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -77,20 +77,18 @@ public class TileView {
      * @return - the elements that must be displayed on the screen
      */
     public final Group drawGraph(final Graph<SequenceSegment> gr) {
-
         List<Long> lanes = new LinkedList<Long>();
 
-        Iterator<SequenceSegment> it = sortStartVar(gr);
+        PriorityQueue<SequenceSegment> it = sortStartVar(gr);
 
-        while (it.hasNext()) {
-            SequenceSegment segment = it.next();
+        while (!it.isEmpty()) {
+            SequenceSegment segment = it.poll();
             checkAvailable(segment, lanes);
         }
 
         root.getChildren().addAll(edges, nodes);
 
         return root;
-
     }
 
     /**
@@ -101,11 +99,13 @@ public class TileView {
      *            - the graph that contains the to be sorted nodes
      * @return - Iterator of the sorted list
      */
-    private Iterator<SequenceSegment> sortStartVar(
+    private PriorityQueue<SequenceSegment> sortStartVar(
             final Graph<SequenceSegment> gr) {
-
-        return gr.getAllVertices().iterator();
-
+	    PriorityQueue<SequenceSegment> it = new PriorityQueue<SequenceSegment>();
+	    for (SequenceSegment segment : gr.getAllVertices()) {
+	        it.add(segment);
+        }
+	    return it;
     }
 
     /**
@@ -123,7 +123,7 @@ public class TileView {
             if (i >= lanes.size() || lanes.get(i) <= segment.getStart()
                     && segmentFree(i, segment, lanes)) {
                 segmentInsert(i, segment, lanes);
-                drawVertex(segment.getContent().toString(), segment.getStart(), i, segment
+                drawVertex("(" + segment.getStart() + ", " + segment.getEnd() + ") [" + segment.getContent().length() + "]", segment.getStart(), i, segment.getContent().length(), segment
                         .getSources().size(), sequenceColor(segment.getMutation()));
                 break;
             }
@@ -176,7 +176,7 @@ public class TileView {
     private void segmentInsert(final int i, final SequenceSegment segment,
             final List<Long> lanes) {
         for (int w = 0; w < segment.getSources().size(); w++) {
-            if (i + w > lanes.size()) {
+            if (i + w < lanes.size()) {
                 lanes.set(i + w, segment.getEnd());
             } else {
                 lanes.add(i + w, segment.getEnd());
@@ -200,9 +200,9 @@ public class TileView {
      *            - the colour of the vertex
      */
     private void drawVertex(final String text, final double x, final double y,
-            final double height, final Color color) {
+    		final double width, final double height, final Color color) {
 
-        Vertex v = new Vertex(text, x, scale * y, scale * height - spacingY,
+        Vertex v = new Vertex(text, x, y, width, height,
                 color);
 
         nodes.getChildren().add(v);
