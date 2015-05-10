@@ -1,12 +1,13 @@
 package nl.tudelft.lifetiles.graph.sequence;
 
 import java.util.Set;
+
 import nl.tudelft.lifetiles.graph.sequence.mutation.Mutation;
 
 /**
  * @author Rutger van den Berg Contains a partial sequence.
  */
-public class SequenceSegment {
+public class SequenceSegment implements Comparable<SequenceSegment> {
     /**
      * Contains the sources containing this segment.
      */
@@ -140,4 +141,9 @@ public class SequenceSegment {
     public long distanceTo(SequenceSegment other) {
     	return other.getStart() - getEnd() - 1;
     }
+
+	@Override
+	public int compareTo(SequenceSegment other) {
+		return ((Long) absStartVar).compareTo((Long) other.getAbsStart());
+	}
 }
