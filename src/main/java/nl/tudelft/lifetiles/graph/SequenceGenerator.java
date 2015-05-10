@@ -6,14 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Class that derives seperate sequences from a sequencegraph.
+ *
  * @author Rutger van den Berg
- *         Class that derives seperate sequences from a sequencegraph.
  */
 public class SequenceGenerator {
-    /**
-     * The graph from which the sequences are derived.
-     */
-    private Graph<SequenceSegment> sourceGraph;
     /**
      * keep track of which segments have been processed.
      */
@@ -22,6 +19,10 @@ public class SequenceGenerator {
      * the generated sequences.
      */
     private List<Sequence> sequences;
+    /**
+     * The graph from which the sequences are derived.
+     */
+    private Graph<SequenceSegment> sourceGraph;
 
     /**
      * @param graph

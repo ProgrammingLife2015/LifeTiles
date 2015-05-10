@@ -1,9 +1,11 @@
 package nl.tudelft.lifetiles.graph;
 
 /**
+ * Factory interface for Graphs.
+ *
  * @author Rutger van den Berg
- * @param <V> the vertex type.
- * Factory interface for Graphs
+ * @param <V>
+ *            the vertex type.
  */
 public interface GraphFactory<V> {
     /**

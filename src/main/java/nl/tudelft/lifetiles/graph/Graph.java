@@ -3,18 +3,20 @@ package nl.tudelft.lifetiles.graph;
 import java.util.Set;
 
 /**
- * @author Rutger van den Berg Interface for a generic graph.
+ * Interface for a generic graph.
+ *
+ * @author Rutger van den Berg
  * @param <V>
  *            The Class to use as vertices.
  */
 public interface Graph<V> {
     /**
-     * Add the given vertex to the graph.
-     *
-     * @param vertex
-     *            The object to use as vertex.
+     * @param source
+     *            Id of the source vertex.
+     * @param destination
+     *            Id of the destination vertex.
      */
-    void addVertex(V vertex);
+    void addEdge(int source, int destination);
 
     /**
      * Add an edge from source to destination to the graph.
@@ -26,6 +28,31 @@ public interface Graph<V> {
      * @return true iff adding succeeded.
      */
     boolean addEdge(V source, V destination);
+
+    /**
+     * Add the given vertex to the graph.
+     *
+     * @param vertex
+     *            The object to use as vertex.
+     */
+    void addVertex(V vertex);
+
+    /**
+     * @return A Set containing all edges in the graph.
+     */
+    Set<Edge<V>> getAllEdges();
+
+    /**
+     * @return A Set containing all vertices in the graph.
+     */
+    Set<V> getAllVertices();
+
+    /**
+     * @param e
+     *            The edge for which the destination is to be retrieved.
+     * @return The destination vertex.
+     */
+    V getDestination(Edge<V> e);
 
     /**
      * Get all incoming edges connecting to the given vertex.
@@ -50,34 +77,9 @@ public interface Graph<V> {
     Set<V> getSource();
 
     /**
-     * @return A Set containing all edges in the graph.
-     */
-    Set<Edge<V>> getAllEdges();
-
-    /**
-     * @return A Set containing all vertices in the graph.
-     */
-    Set<V> getAllVertices();
-
-    /**
      * @param e
      *            THe edge for which the source is to be retrieved.
      * @return The source vertex.
      */
     V getSource(Edge<V> e);
-
-    /**
-     * @param e
-     *            The edge for which the destination is to be retrieved.
-     * @return The destination vertex.
-     */
-    V getDestination(Edge<V> e);
-
-    /**
-     * @param source
-     *            Id of the source vertex.
-     * @param destination
-     *            Id of the destination vertex.
-     */
-    void addEdge(int source, int destination);
 }
