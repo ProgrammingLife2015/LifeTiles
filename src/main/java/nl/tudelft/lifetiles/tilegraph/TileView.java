@@ -61,7 +61,6 @@ public class TileView {
 
 	/**
 	 * Draw the given graph.
-	 *
 	 * @param gr
 	 *            - Graph to be drawn
 	 * @return - the elements that must be displayed on the screen
@@ -82,7 +81,6 @@ public class TileView {
 	 * starting position.
 	 * Beware: temporary code which will be obsolete with #56 Internal
 	 * sorting of edges on destination starting position
-	 *
 	 * @param gr
 	 *            - the graph that contains the to be sorted nodes
 	 * @return - Iterator of the sorted list
@@ -98,7 +96,6 @@ public class TileView {
 	/**
 	 * Functions that will find if it can draw a segment
 	 * at a certain position.
-	 *
 	 * @param segment
 	 *            - segment to be drawn
 	 * @param lanes
@@ -134,7 +131,6 @@ public class TileView {
 
 	/**
 	 * Check if there is a free spot to draw the segment at this location.
-	 *
 	 * @param i
 	 *            - location in the linked list of already drawn segments
 	 * @param segment
@@ -145,7 +141,7 @@ public class TileView {
 	 */
 	private Boolean segmentFree(final int i, final SequenceSegment segment, final List<Long> lanes) {
 		for (int w = 0; w < segment.getSources().size(); w++) {
-			if ((i + w > lanes.size()) && (lanes.get(i + w) <= segment.getStart())) {
+			if ((i + w <= lanes.size()) && (lanes.get(i + w) > segment.getStart())) {
 				return false;
 			}
 		}
@@ -154,7 +150,6 @@ public class TileView {
 
 	/**
 	 * Insert a segment in the linked list.
-	 *
 	 * @param i
 	 *            - location in the linked list of already drawn segments
 	 * @param segment
@@ -174,7 +169,6 @@ public class TileView {
 
 	/**
 	 * Create a Vertex that can be displayed on the screen.
-	 *
 	 * @param text
 	 *            - text of the dna segment
 	 * @param x
@@ -194,7 +188,6 @@ public class TileView {
 
 	/**
 	 * Change Vertex colour.
-	 *
 	 * @param v
 	 *            - vertex to be changed.
 	 * @param color
