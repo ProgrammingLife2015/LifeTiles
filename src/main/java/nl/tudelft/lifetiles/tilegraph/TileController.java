@@ -7,20 +7,19 @@ import javafx.scene.Group;
 import javafx.scene.paint.Color;
 
 /**
- * The TileControllers controls what from
- * the model has to be displayed on the screen by
- * given only that info the view.
+ * The TileControllers controls what from the model has to be displayed on the
+ * screen by given only that info the view.
  *
  */
 public class TileController {
     /**
-     * The view.
-     */
-    private TileView viewVar;
-    /**
      * the model.
      */
     private TileModel modelVar;
+    /**
+     * The view.
+     */
+    private TileView viewVar;
 
     /**
      * Creates a TileController which controls the dataflow.
@@ -33,15 +32,6 @@ public class TileController {
     public TileController(final TileView view, final TileModel model) {
         this.viewVar = view;
         this.modelVar = model;
-    }
-
-    /**
-     * Creates a drawable object of the graph from the model.
-     *
-     * @return Group object to be drawn on the screen
-     */
-    public final Group drawGraph() {
-        return viewVar.drawGraph(modelVar.getGraph());
     }
 
     /**
@@ -60,6 +50,15 @@ public class TileController {
     }
 
     /**
+     * Creates a drawable object of the graph from the model.
+     *
+     * @return Group object to be drawn on the screen
+     */
+    public final Group drawGraph() {
+        return viewVar.drawGraph(modelVar.getGraph());
+    }
+
+    /**
      * set a certain changed property with the arguments.
      *
      * @param propertyName
@@ -71,8 +70,8 @@ public class TileController {
             final List<Object> args) {
 
         if (propertyName.equals("COLOR_CHANGED")) {
-            viewVar.changeVertexColour((Vertex) args.get(0), (Color) args
-                    .get(1));
+            viewVar.changeVertexColour((Vertex) args.get(0),
+                    (Color) args.get(1));
         }
     }
 

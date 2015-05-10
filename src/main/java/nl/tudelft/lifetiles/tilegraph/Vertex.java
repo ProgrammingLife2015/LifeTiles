@@ -18,17 +18,23 @@ import javafx.scene.text.Text;
  */
 public class Vertex extends Group {
     /**
-     * this is the DNA strain the display on the vertex.
+     * this will hold text in the right place.
      */
-    private Text text;
+    private Rectangle clip;
+    /**
+     * The fontsize of the string.
+     */
+    private final double fontSize = 12;
+    /**
+     * This value is the width of the largest single character
+     * a string can have. This is used to calculate the width of the vertex.
+     */
+    private double letterWidth = 0;
     /**
      * this is the region coloring the text.
      */
     private Rectangle rectangle;
-    /**
-     * this will hold text in the right place.
-     */
-    private Rectangle clip;
+
     /**
      * this value is to make sure that when this vertex has to be resized, it
      * will be the new resized width.
@@ -36,20 +42,14 @@ public class Vertex extends Group {
     private double resizeWidth = -1;
 
     /**
-     * This value is the width of the largest single character
-     * a string can have. This is used to calculate the width of the vertex.
-     */
-    private double letterWidth = 0;
-
-    /**
-     * The fontsize of the string.
-     */
-    private final double fontSize = 12;
-
-    /**
      * Spacing between rectangles.
      */
     private final double spacingX = 3;
+
+    /**
+     * this is the DNA strain the display on the vertex.
+     */
+    private Text text;
 
     /**
      * Creates a new Block to be displayed on the screen. The width is already
@@ -57,19 +57,19 @@ public class Vertex extends Group {
      * following data can be set:
      *
      * @param string
-     *            - Base-pair sequence
+     *            Base-pair sequence
      * @param initX
-     *            - top-left x coordinate
+     *            top-left x coordinate
      * @param initY
-     *            - top-left y coordinate
+     *            top-left y coordinate
      * @param height
-     *            - the height of the vertex
+     *            the height of the vertex
      * @param color
-     *            - the color of the vertex
+     *            the color of the vertex
      */
     public Vertex(final String string, final double initX, final double initY,
             final double height, final Color color) {
-
+        // TODO: move style related code to css
         this.text = new Text(string);
         text.setTextOrigin(VPos.CENTER);
         text.setFill(Color.WHITE);
@@ -101,7 +101,15 @@ public class Vertex extends Group {
         this.setWidth(string.length() * this.getLetterWidth() * 2 - spacingX);
 
         this.getChildren().addAll(rectangle, text);
+    }
 
+    /**
+     * Get the current height of the vertex.
+     *
+     * @return width
+     */
+    public final double getHeight() {
+        return rectangle.getLayoutBounds().getHeight();
     }
 
     /**
@@ -143,55 +151,7 @@ public class Vertex extends Group {
      * @return width
      */
     public final double getWidth() {
-
         return rectangle.getLayoutBounds().getWidth();
-    }
-
-    /**
-     * Resize the width of the Vertex.
-     *
-     * @param width
-     *            - new width of the vertex
-     */
-    public final void setWidth(final double width) {
-        rectangle.setWidth(width);
-        clip.setWidth(width);
-        // redraw
-        resizeWidth = width;
-        layoutChildren();
-    }
-
-    /**
-     * Get the current height of the vertex.
-     *
-     * @return width
-     */
-    public final double getHeight() {
-
-        return rectangle.getLayoutBounds().getHeight();
-    }
-
-    /**
-     * Resize the width of the Vertex.
-     *
-     * @param height
-     *            - new width of the vertex
-     */
-    public final void setHeight(final double height) {
-        rectangle.setHeight(height);
-        clip.setHeight(height);
-        // redraw
-        layoutChildren();
-    }
-
-    /**
-     * Change the Colour of the Vertex.
-     *
-     * @param color
-     *            - the new color
-     */
-    public final void setColour(final Color color) {
-        this.rectangle.setFill(color);
     }
 
     @Override
@@ -211,5 +171,42 @@ public class Vertex extends Group {
 
         text.setLayoutX(w / 2 - text.getLayoutBounds().getWidth() / 2);
         text.setLayoutY(h / 2);
+    }
+
+    /**
+     * Change the Colour of the Vertex.
+     *
+     * @param color
+     *            the new color
+     */
+    public final void setColour(final Color color) {
+        this.rectangle.setFill(color);
+    }
+
+    /**
+     * Resize the width of the Vertex.
+     *
+     * @param height
+     *            new width of the vertex
+     */
+    public final void setHeight(final double height) {
+        rectangle.setHeight(height);
+        clip.setHeight(height);
+        // redraw
+        layoutChildren();
+    }
+
+    /**
+     * Resize the width of the Vertex.
+     *
+     * @param width
+     *            new width of the vertex
+     */
+    public final void setWidth(final double width) {
+        rectangle.setWidth(width);
+        clip.setWidth(width);
+        // redraw
+        resizeWidth = width;
+        layoutChildren();
     }
 }

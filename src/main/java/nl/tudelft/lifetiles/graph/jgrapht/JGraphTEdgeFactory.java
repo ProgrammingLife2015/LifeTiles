@@ -27,24 +27,25 @@ public class JGraphTEdgeFactory<V> implements EdgeFactory<V> {
     }
 
     /**
-     * @return A new edge from <code>v1</code> to <code>v2</code>
-     * @param v1
-     *            The source vertex.
-     * @param v2
-     *            The destination vertex.
-     */
-    public final Edge<V> getEdge(final V v1, final V v2) {
-        return new JGraphTEdgeAdapter<V>(internalFactory.createEdge(v1, v2));
-
-    }
-
-    /**
      * @param e
      *            The internal edge to use.
      * @return a new edge.
      */
     public final Edge<V> getEdge(final DefaultEdge e) {
         return new JGraphTEdgeAdapter<V>(e);
+    }
+
+    /**
+     * @return A new edge from <code>v1</code> to <code>v2</code>
+     * @param v1
+     *            The source vertex.
+     * @param v2
+     *            The destination vertex.
+     */
+    @Override
+    public final Edge<V> getEdge(final V v1, final V v2) {
+        return new JGraphTEdgeAdapter<V>(internalFactory.createEdge(v1, v2));
+
     }
 
 }
