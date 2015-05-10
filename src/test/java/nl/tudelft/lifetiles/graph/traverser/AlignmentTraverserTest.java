@@ -94,6 +94,7 @@ public class AlignmentTraverserTest {
 		assertEquals(3, at.traverseGraph(gr).getAllVertices().size());
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testTraverseInsertionGraph() {
 		SequenceSegment v4 = new SequenceSegment(s2, 11, 20, new SegmentString("AAAAAAAAAA"));
@@ -106,9 +107,9 @@ public class AlignmentTraverserTest {
 		
 		SequenceSegment vertex = gr.getSource(it.next());
 		if (v4.equals(vertex)) {
-			assertEquals(s3.toString(), gr.getSource(it.next()).getSources().toString());
+			assertEquals(s3.toArray(), gr.getSource(it.next()).getSources().toArray());
 		} else {
-			assertEquals(s3.toString(), vertex.getSources().toString());
+			assertEquals(s3.toArray(), vertex.getSources().toArray());
 		}
 	}
 
