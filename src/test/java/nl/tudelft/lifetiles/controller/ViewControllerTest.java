@@ -7,9 +7,9 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
-import nl.tudelft.lifetiles.controller.ViewController;
-import nl.tudelft.lifetiles.graph.Sequence;
-import nl.tudelft.lifetiles.graph.SequenceImplementation;
+import nl.tudelft.lifetiles.core.controller.ViewController;
+import nl.tudelft.lifetiles.graph.models.sequence.DefaultSequence;
+import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -28,10 +28,10 @@ public class ViewControllerTest {
 
     @Before
     public void setUp() throws Exception {
-        s1 = new SequenceImplementation("s1");
-        s2 = new SequenceImplementation("s2");
-        s3 = new SequenceImplementation("s3");
-        s4 = new SequenceImplementation("s4");
+        s1 = new DefaultSequence("s1");
+        s2 = new DefaultSequence("s2");
+        s3 = new DefaultSequence("s3");
+        s4 = new DefaultSequence("s4");
         sequences = new HashMap<>();
         sequences.put("s1", s1);
         sequences.put("s2", s2);

@@ -13,7 +13,7 @@
 	minHeight="-Infinity" minWidth="-Infinity" prefHeight="29.0"
 	xmlns:fx="http://javafx.com/fxml" AnchorPane.topAnchor="0.0"
 	AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0"
-	fx:controller="nl.tudelft.lifetiles.controller.WindowControlController">
+	fx:controller="nl.tudelft.lifetiles.core.controller.WindowControlController">
 	<top>
 		<AnchorPane prefHeight="29.0">
 			<children>
