@@ -1,4 +1,6 @@
-package nl.tudelft.lifetiles.graph.models.edge;
+package nl.tudelft.lifetiles.graph.models.jgrapht;
+
+import nl.tudelft.lifetiles.graph.models.Edge;
 
 import org.jgrapht.graph.DefaultEdge;
 
@@ -9,7 +11,7 @@ import org.jgrapht.graph.DefaultEdge;
  * @param <V>
  *            The type of vertex to use.
  */
-public class JGraphTEdge<V> implements Edge<V> {
+public class JGraphTEdgeAdapter<V> implements Edge<V> {
     /**
      * The internal edge.
      */
@@ -19,7 +21,7 @@ public class JGraphTEdge<V> implements Edge<V> {
      * @param e
      *            The internal edge to use.
      */
-    public JGraphTEdge(final DefaultEdge e) {
+    public JGraphTEdgeAdapter(final DefaultEdge e) {
         internalEdge = e;
     }
 
@@ -35,10 +37,10 @@ public class JGraphTEdge<V> implements Edge<V> {
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof JGraphTEdge)) {
+        if (!(obj instanceof JGraphTEdgeAdapter)) {
             return false;
         }
-        JGraphTEdge<?> other = (JGraphTEdge<?>) obj;
+        JGraphTEdgeAdapter<?> other = (JGraphTEdgeAdapter<?>) obj;
         if (internalEdge == null) {
             if (other.internalEdge != null) {
                 return false;
