@@ -11,7 +11,7 @@
 
 <VBox id="wrapper" prefHeight="720" prefWidth="1280"
 	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="nl.tudelft.lifetiles.controller.MainController">
+	fx:controller="nl.tudelft.lifetiles.core.controller.MainController">
 
 	<AnchorPane prefHeight="39.0" id="window_controls">
 		<children>
