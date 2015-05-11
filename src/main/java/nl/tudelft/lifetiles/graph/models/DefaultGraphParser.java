@@ -34,7 +34,6 @@ public class DefaultGraphParser implements GraphParser {
     private Map<String, Sequence> sequences;
 
     /**
-     * /**
      * Creates a new graph parser.
      */
     public DefaultGraphParser() {
@@ -58,7 +57,7 @@ public class DefaultGraphParser implements GraphParser {
         Set<Sequence> currentSequences = new HashSet<>();
         for (String sequencename : sources) {
             sequencename = sequencename.trim();
-            if (!sequences.containsKey(sequencename.trim())) {
+            if (!sequences.containsKey(sequencename)) {
                 sequences.put(sequencename, new DefaultSequence(sequencename));
             }
             currentSequences.add(sequences.get(sequencename));
