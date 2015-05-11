@@ -1,4 +1,7 @@
-package nl.tudelft.lifetiles.graph.models.edge;
+package nl.tudelft.lifetiles.graph.models.jgrapht;
+
+import nl.tudelft.lifetiles.graph.models.Edge;
+import nl.tudelft.lifetiles.graph.models.EdgeFactory;
 
 import org.jgrapht.graph.ClassBasedEdgeFactory;
 import org.jgrapht.graph.DefaultEdge;
@@ -29,7 +32,7 @@ public class JGraphTEdgeFactory<V> implements EdgeFactory<V> {
      * @return a new edge.
      */
     public final Edge<V> getEdge(final DefaultEdge e) {
-        return new JGraphTEdge<V>(e);
+        return new JGraphTEdgeAdapter<V>(e);
     }
 
     /**
@@ -41,7 +44,7 @@ public class JGraphTEdgeFactory<V> implements EdgeFactory<V> {
      */
     @Override
     public final Edge<V> getEdge(final V v1, final V v2) {
-        return new JGraphTEdge<V>(internalFactory.createEdge(v1, v2));
+        return new JGraphTEdgeAdapter<V>(internalFactory.createEdge(v1, v2));
 
     }
 

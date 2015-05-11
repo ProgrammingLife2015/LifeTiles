@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph.models.edge;
+package nl.tudelft.lifetiles.graph.models;
 
 
 /**
