@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph;
+package nl.tudelft.lifetiles.graph.sequence;
 
 import java.util.List;
 

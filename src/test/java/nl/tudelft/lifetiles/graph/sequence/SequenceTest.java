@@ -1,9 +1,13 @@
-package nl.tudelft.lifetiles.graph;
+package nl.tudelft.lifetiles.graph.sequence;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+
+import nl.tudelft.lifetiles.graph.sequence.Sequence;
+import nl.tudelft.lifetiles.graph.sequence.SequenceImplementation;
+import nl.tudelft.lifetiles.graph.sequence.SequenceSegment;
 
 import org.junit.Before;
 import org.junit.Test;

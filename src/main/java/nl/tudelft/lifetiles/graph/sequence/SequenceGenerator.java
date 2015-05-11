@@ -1,9 +1,12 @@
-package nl.tudelft.lifetiles.graph;
+package nl.tudelft.lifetiles.graph.sequence;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import nl.tudelft.lifetiles.graph.Edge;
+import nl.tudelft.lifetiles.graph.Graph;
 
 /**
  * @author Rutger van den Berg

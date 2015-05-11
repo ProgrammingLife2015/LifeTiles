@@ -1,7 +1,7 @@
 package nl.tudelft.lifetiles.tilegraph;
 
 import nl.tudelft.lifetiles.graph.Graph;
-import nl.tudelft.lifetiles.graph.SequenceSegment;
+import nl.tudelft.lifetiles.graph.sequence.SequenceSegment;
 
 /**
  * The TileModel holds the graph and will be transformed to this modelgraph so

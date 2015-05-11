@@ -16,6 +16,7 @@ import javafx.scene.text.Font;
  * @author Joren Hammudoglu
  *
  */
+@SuppressWarnings("restriction")
 public class Main extends Application {
 
 	/**

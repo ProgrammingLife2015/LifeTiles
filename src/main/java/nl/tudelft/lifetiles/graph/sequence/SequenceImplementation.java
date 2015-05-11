@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph;
+package nl.tudelft.lifetiles.graph.sequence;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,5 +42,13 @@ public class SequenceImplementation implements Sequence {
     public final String getIdentifier() {
         return ident;
     }
+
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof Sequence) {
+			return ident.equals(((Sequence) other).getIdentifier());
+		}
+		return false;
+	}
 
 }

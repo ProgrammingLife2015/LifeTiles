@@ -1,5 +1,7 @@
 package nl.tudelft.lifetiles.graph;
 
+import nl.tudelft.lifetiles.graph.sequence.SequenceSegment;
+
 /**
  * @author Rutger van den Berg Interface for Graph Parser.
  */

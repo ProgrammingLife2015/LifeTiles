@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
 
-import nl.tudelft.lifetiles.graph.Sequence;
+import nl.tudelft.lifetiles.graph.sequence.Sequence;
 
 /**
  * @author Rutger van den Berg
