@@ -1,8 +1,6 @@
 package nl.tudelft.lifetiles.graph.models.sequence;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import nl.tudelft.lifetiles.graph.models.Graph;
@@ -21,7 +19,7 @@ public class SequenceGenerator {
     /**
      * The generated sequences.
      */
-    private List<Sequence> sequences;
+    private Map<String, Sequence> sequences;
     /**
      * The graph from which the sequences are derived.
      */
@@ -33,14 +31,15 @@ public class SequenceGenerator {
      */
     public SequenceGenerator(final Graph<SequenceSegment> graph) {
         sourceGraph = graph;
+        processed = new HashMap<>();
+        sequences = new HashMap<>();
     }
 
     /**
      * @return A list of sequences
      */
-    public final List<Sequence> generateSequences() {
-        processed = new HashMap<>();
-        sequences = new ArrayList<>();
+    public final Map<String, Sequence> generateSequences() {
+
         for (SequenceSegment segment : sourceGraph.getSource()) {
             generateSequences(segment);
         }
@@ -55,12 +54,15 @@ public class SequenceGenerator {
      */
     private void generateSequences(final SequenceSegment vertex) {
         for (Sequence seq : vertex.getSources()) {
+            if (!sequences.containsValue(seq)) {
+                sequences.put(seq.getIdentifier(), seq);
+            }
             seq.appendSegment(vertex);
         }
         for (Edge<SequenceSegment> edge : sourceGraph.getOutgoing(vertex)) {
             SequenceSegment candidate = sourceGraph.getDestination(edge);
             if (!processed.containsKey(candidate)) {
-                processed.put(candidate, new Boolean(true));
+                processed.put(candidate, Boolean.valueOf(true));
                 generateSequences(candidate);
             }
         }
