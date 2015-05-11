@@ -21,6 +21,10 @@ import nl.tudelft.lifetiles.graph.sequence.mutation.PolymorphismMutation;
 @SuppressWarnings("restriction")
 public class TileView {
 	/**
+	 * Default color of a tile element.
+	 */
+	private static final Color defaultColor = Color.web("a1d3ff");;
+	/**
 	 * The root contains all the to be displayed
 	 * elements.
 	 */
@@ -120,14 +124,11 @@ public class TileView {
 	 * @return color of the mutation
 	 */
 	private Color sequenceColor(final Mutation mutation) {
-		if (mutation instanceof DeletionMutation) {
-			return Color.web("f35959");
-		} else if (mutation instanceof InsertionMutation) {
-			return Color.web("8df08c");
-		} else if (mutation instanceof PolymorphismMutation) {
-			return Color.web("4091ff");
+		if (mutation == null) {
+			return defaultColor;
+		} else {
+			return mutation.getColor();
 		}
-		return Color.web("a1d3ff");
 	}
 
 	/**
