@@ -14,7 +14,6 @@ import javafx.scene.paint.Color;
  * screen by given only that info the view.
  *
  */
-@SuppressWarnings("restriction")
 public class TileController {
     /**
      * the model.

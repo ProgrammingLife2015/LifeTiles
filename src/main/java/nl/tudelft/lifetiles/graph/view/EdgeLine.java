@@ -11,7 +11,6 @@ import javafx.scene.shape.Line;
  * however this can be changed.
  *
  */
-@SuppressWarnings("restriction")
 public class EdgeLine extends Group {
 
     /**

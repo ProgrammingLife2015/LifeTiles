@@ -17,7 +17,6 @@ import javafx.scene.input.MouseEvent;
  * @author Joren Hammudoglu
  *
  */
-@SuppressWarnings("restriction")
 public class MenuController implements Initializable {
     /**
      * The initial x-coordinate of the window.

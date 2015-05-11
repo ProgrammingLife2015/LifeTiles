@@ -15,7 +15,6 @@ import javafx.scene.paint.Color;
  * the TileController.
  *
  */
-@SuppressWarnings("restriction")
 public class TileView {
     /**
      * Default color of a tile element.

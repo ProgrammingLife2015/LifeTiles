@@ -14,7 +14,6 @@ import javafx.stage.Stage;
  * @author Joren Hammudoglu
  *
  */
-@SuppressWarnings("restriction")
 public class WindowControlController implements Initializable {
 
     /**

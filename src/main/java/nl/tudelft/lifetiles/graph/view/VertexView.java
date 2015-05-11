@@ -15,7 +15,6 @@ import javafx.scene.text.Text;
  * @author AC Langerak
  *
  */
-@SuppressWarnings("restriction")
 public class VertexView extends Group {
     /**
      * this is the DNA strain the display on the vertex.
