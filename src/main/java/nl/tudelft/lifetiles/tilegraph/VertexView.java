@@ -56,14 +56,16 @@ public class VertexView extends Group {
      *            - top-left x coordinate
      * @param initY
      *            - top-left y coordinate
+     * @param width
+     *            - the width of the vertex
      * @param height
      *            - the height of the vertex
-     * @param d 
      * @param color
      *            - the color of the vertex
      */
-    public VertexView(final String string, final double initX, final double initY,
-            final double width, double height, final Color color) {
+    public VertexView(final String string, final double initX,
+            final double initY, final double width, double height,
+            final Color color) {
 
         this.text = new Text(string);
         text.setTextOrigin(VPos.CENTER);
@@ -73,15 +75,15 @@ public class VertexView extends Group {
         double scale = 20;
         text.setFont(Font.font("Open Sans", fontSize));
 
-        this.rectangle = new Rectangle(width * scale , height * scale);
+        this.rectangle = new Rectangle(width * scale, height * scale);
         rectangle.setFill(color);
 
-        this.clip = new Rectangle(width * scale , height * scale );
+        this.clip = new Rectangle(width * scale, height * scale);
         text.setClip(clip);
 
-		this.setLayoutX(initX * scale );
+        this.setLayoutX(initX * scale);
         this.setLayoutY(initY * scale);
-        
+
         this.setHeight(height * scale - spacing);
         this.setWidth(width * scale - spacing);
 
