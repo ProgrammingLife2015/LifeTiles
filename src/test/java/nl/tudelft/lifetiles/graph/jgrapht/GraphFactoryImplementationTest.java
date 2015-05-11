@@ -1,9 +1,10 @@
 package nl.tudelft.lifetiles.graph.jgrapht;
 
-import nl.tudelft.lifetiles.graph.FactoryProducer;
-import nl.tudelft.lifetiles.graph.Graph;
-import nl.tudelft.lifetiles.graph.GraphFactory;
-import nl.tudelft.lifetiles.graph.SequenceSegment;
+import nl.tudelft.lifetiles.graph.models.FactoryProducer;
+import nl.tudelft.lifetiles.graph.models.Graph;
+import nl.tudelft.lifetiles.graph.models.GraphFactory;
+import nl.tudelft.lifetiles.graph.models.JGraphTGraph;
+import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -29,6 +30,6 @@ public class GraphFactoryImplementationTest {
     @Test
     public void testGetGraph() {
         Graph<SequenceSegment> g = gf.getGraph();
-        assert (g instanceof JGraphTGraphAdapter);
+        assert (g instanceof JGraphTGraph);
     }
 }

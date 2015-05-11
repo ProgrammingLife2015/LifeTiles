@@ -5,6 +5,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import nl.tudelft.lifetiles.graph.models.sequence.DefaultSequence;
+import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
+import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,19 +27,19 @@ public class SequenceTest {
 
     @Test
     public void testConstruct() {
-        s1 = new SequenceImplementation("s1");
+        s1 = new DefaultSequence("s1");
         assertTrue(s1 instanceof Sequence);
     }
 
     @Test
     public void testEmpty() {
-        s1 = new SequenceImplementation("s1");
+        s1 = new DefaultSequence("s1");
         assertEquals(0, s1.getSegments().size());
     }
 
     @Test
     public void testAppend() {
-        s1 = new SequenceImplementation("s1");
+        s1 = new DefaultSequence("s1");
         s1.appendSegment(ss1);
         s1.appendSegment(ss2);
         s1.appendSegment(ss3);
