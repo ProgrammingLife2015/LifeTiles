@@ -85,6 +85,7 @@ public class TileView {
 	 *            - the graph that contains the to be sorted nodes
 	 * @return - Iterator of the sorted list
 	 */
+	@Deprecated
 	private PriorityQueue<SequenceSegment> sortStartVar(final Graph<SequenceSegment> gr) {
 		PriorityQueue<SequenceSegment> it = new PriorityQueue<SequenceSegment>();
 		for (SequenceSegment segment : gr.getAllVertices()) {

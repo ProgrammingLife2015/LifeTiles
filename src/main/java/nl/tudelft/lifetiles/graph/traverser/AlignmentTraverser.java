@@ -59,6 +59,7 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
 	 * @param edges
 	 * @return
 	 */
+	@Deprecated
 	private PriorityQueue<SortedEdge> getSortedEdges(Graph<SequenceSegment> graph, Set<Edge<SequenceSegment>> edges) {
 		PriorityQueue<SortedEdge> it = new PriorityQueue<SortedEdge>();
 		for (Edge<SequenceSegment> edge : edges) {
@@ -106,29 +107,35 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
  * @author Jos
  *
  */
+@Deprecated
 class SortedEdge implements Comparable<SortedEdge> {
 
 	private Edge<SequenceSegment> edge;
 	private SequenceSegment segment;
 
+	@Deprecated
 	public SortedEdge(Edge<SequenceSegment> edge, SequenceSegment segment) {
 		this.edge = edge;
 		this.segment = segment;
 	}
 
+	@Deprecated
 	public Edge<SequenceSegment> getEdge() {
 		return edge;
 	}
 
 	@Override
+	@Deprecated
 	public int compareTo(SortedEdge other) {
 		return  ((Long) other.getSegment().getAbsStart()).compareTo((Long) this.segment.getAbsStart());
 	}
 
+	@Deprecated
 	public SequenceSegment getSegment() {
 		return segment;
 	}
 
+	@Deprecated
 	public String toString() {
 		return segment.getSources().toString();
 	}
