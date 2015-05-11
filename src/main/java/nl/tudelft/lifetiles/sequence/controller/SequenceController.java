@@ -1,8 +1,12 @@
 package nl.tudelft.lifetiles.sequence.controller;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +15,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
+import nl.tudelft.lifetiles.graph.models.FactoryProducer;
+import nl.tudelft.lifetiles.graph.models.Graph;
+import nl.tudelft.lifetiles.graph.models.GraphFactory;
+import nl.tudelft.lifetiles.graph.models.sequence.DefaultSequence;
+import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
+import nl.tudelft.lifetiles.graph.models.sequence.SequenceGenerator;
+import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 
 /**
  * The controller of the data view.
@@ -31,27 +42,52 @@ public class SequenceController implements Initializable {
     @FXML
     private ListView<Label> sequenceList;
 
+    /**
+     * The sequences.
+     */
+    private ObservableList<Sequence> sequences;
+
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        ObservableList<String> sequences = FXCollections.observableList(Arrays
-                .asList("TKK-REF", "TKK-01-0066", "TKK-01-0058", "TKK-01-0026",
-                        "TKK-01-0029", "TKK-01-0015"));
-        sequenceList.setItems(label(sequences));
+        ObservableList<Label> sequenceItems = FXCollections
+                .observableList(getSequences().stream()
+                        .map(Sequence::getIdentifier).map(Label::new)
+                        .collect(Collectors.toList()));
+        sequenceList.setItems(sequenceItems);
     }
 
     /**
-     * Helper method, embeds the strings in a list in labels.
+     * Gets or creates the sequences.
      *
-     * @param strings the list of strings
-     * @return a list of labels
+     * @return a list of the sequences
      */
-    private ObservableList<Label> label(final ObservableList<String> strings) {
-        ObservableList<Label> res = FXCollections.observableArrayList();
-        for (String s : strings) {
-            res.add(new Label(s));
+    private List<Sequence> getSequences() {
+        if (sequences == null) {
+            FactoryProducer<SequenceSegment> fp;
+            fp = new FactoryProducer<SequenceSegment>();
+            GraphFactory<SequenceSegment> gf = fp.getFactory("JGraphT");
+            Graph<SequenceSegment> graph = gf.getGraph();
+            SequenceGenerator sg = new SequenceGenerator(graph);
+            sequences = FXCollections.observableList(new ArrayList<Sequence>(sg
+                    .generateSequences().values()));
+
+            sequences.addAll(getDummyData()); // TODO: read actual data
         }
-        return res;
+        return sequences;
+    }
+
+    /**
+     * Generates dummy data for testing purposes. Obsolete.
+     *
+     * @return collection of dummy sequences
+     */
+    @Deprecated
+    private Collection<Sequence> getDummyData() {
+        List<String> dummyStrings = Arrays.asList("TKK-REF", "TKK-01-0066",
+                "TKK-01-0058", "TKK-01-0026", "TKK-01-0029", "TKK-01-0015");
+        return dummyStrings.stream().map(DefaultSequence::new)
+                .collect(Collectors.toList());
     }
 
 }

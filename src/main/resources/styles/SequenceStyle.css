@@ -6,3 +6,21 @@
     -fx-border-style: solid;
     -fx-background-color: #FFFFFF;
 }
+
+#sequenceList {
+    -fx-box-border: 0.0;
+}
+
+#sequenceList .list-cell {
+    -fx-background-color: #FFFFFF;
+}
+
+#sequenceList .list-cell .label {
+    -fx-background-color: magenta;
+    -fx-background-radius: 10.0;
+    -fx-padding: 5.0
+}
+
+#sequenceList .list-cell .label:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
