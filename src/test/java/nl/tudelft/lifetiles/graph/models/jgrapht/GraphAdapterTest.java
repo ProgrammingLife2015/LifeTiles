@@ -1,14 +1,14 @@
-package nl.tudelft.lifetiles.graph.jgrapht;
+package nl.tudelft.lifetiles.graph.models.jgrapht;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.util.Set;
 
+import nl.tudelft.lifetiles.graph.models.Edge;
 import nl.tudelft.lifetiles.graph.models.FactoryProducer;
 import nl.tudelft.lifetiles.graph.models.Graph;
 import nl.tudelft.lifetiles.graph.models.GraphFactory;
-import nl.tudelft.lifetiles.graph.models.edge.Edge;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 
 import org.junit.Before;
