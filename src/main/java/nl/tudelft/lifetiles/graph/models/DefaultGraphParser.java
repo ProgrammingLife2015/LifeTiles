@@ -29,16 +29,26 @@ public class DefaultGraphParser implements GraphParser {
     private static final int START_POS = 2;
 
     /**
+     * Map containing all sequences.
+     */
+    private Map<String, Sequence> sequences;
+
+    /**
+     * Creates a new graph parser.
+     */
+    public DefaultGraphParser() {
+        sequences = new HashMap<>();
+    }
+
+    /**
      * @param descriptor
      *            Description line in the vertex file.
      * @param content
      *            Content line in the vertex file.
-     * @param sequences
-     *            A map containing sequences that have already been seen.
      * @return a new SequenceSegment
      */
     private SequenceSegment createSegment(final String descriptor,
-            final String content, final Map<String, Sequence> sequences) {
+            final String content) {
         if (!descriptor.startsWith(">")) {
             throw new IllegalArgumentException();
         }
@@ -46,7 +56,8 @@ public class DefaultGraphParser implements GraphParser {
         String[] sources = desc[2].split(",");
         Set<Sequence> currentSequences = new HashSet<>();
         for (String sequencename : sources) {
-            if (!sequences.containsKey(sequencename.trim())) {
+            sequencename = sequencename.trim();
+            if (!sequences.containsKey(sequencename)) {
                 sequences.put(sequencename, new DefaultSequence(sequencename));
             }
             currentSequences.add(sequences.get(sequencename));
@@ -107,13 +118,12 @@ public class DefaultGraphParser implements GraphParser {
      */
     private void parseVertices(final String filename,
             final Graph<SequenceSegment> graph) {
-        Map<String, Sequence> sequences = new HashMap<>();
         try {
             File file = new File(this.getClass()
                     .getResource("/" + filename + ".node.graph").toURI());
             Iterator<String> it = Files.lines(file.toPath()).iterator();
             while (it.hasNext()) {
-                graph.addVertex(createSegment(it.next(), it.next(), sequences));
+                graph.addVertex(createSegment(it.next(), it.next()));
             }
         } catch (IOException e) {
             e.printStackTrace();
