@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph.traverser;
+package nl.tudelft.lifetiles.graph.controller.traverser;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
