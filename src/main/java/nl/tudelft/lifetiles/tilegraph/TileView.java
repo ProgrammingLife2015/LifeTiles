@@ -183,7 +183,7 @@ public class TileView {
 	 */
 	private void drawVertex(final String text, final double x, final double y,
 			final double width, final double height, final Color color) {
-		Vertex v = new Vertex(text, x, y, width, height, color);
+		VertexView v = new VertexView(text, x, y, width, height, color);
 		nodes.getChildren().add(v);
 	}
 
@@ -194,7 +194,7 @@ public class TileView {
 	 * @param color
 	 *            - the new colour
 	 */
-	public final void changeVertexColour(final Vertex v, final Color color) {
+	public final void changeVertexColour(final VertexView v, final Color color) {
 		v.setColour(color);
 	}
 

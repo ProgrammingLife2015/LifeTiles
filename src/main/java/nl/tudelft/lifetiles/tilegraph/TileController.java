@@ -53,7 +53,7 @@ public class TileController {
      * @param v
      *            - to be changed vertex
      */
-    public final void changeColour(final Color color, final Vertex v) {
+    public final void changeColour(final Color color, final VertexView v) {
         List<Object> args = new ArrayList<Object>();
         args.add(v);
         args.add(color);
@@ -72,7 +72,7 @@ public class TileController {
             final List<Object> args) {
 
         if (propertyName.equals("COLOR_CHANGED")) {
-            viewVar.changeVertexColour((Vertex) args.get(0), (Color) args
+            viewVar.changeVertexColour((VertexView) args.get(0), (Color) args
                     .get(1));
         }
     }

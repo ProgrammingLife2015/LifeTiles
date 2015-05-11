@@ -16,7 +16,7 @@ import javafx.scene.text.Text;
  *
  */
 @SuppressWarnings("restriction")
-public class Vertex extends Group {
+public class VertexView extends Group {
     /**
      * this is the DNA strain the display on the vertex.
      */
@@ -62,7 +62,7 @@ public class Vertex extends Group {
      * @param color
      *            - the color of the vertex
      */
-    public Vertex(final String string, final double initX, final double initY,
+    public VertexView(final String string, final double initX, final double initY,
             final double width, double height, final Color color) {
 
         this.text = new Text(string);
