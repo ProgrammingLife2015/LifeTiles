@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import nl.tudelft.lifetiles.graph.models.sequence.DefaultSequence;
+import nl.tudelft.lifetiles.graph.models.sequence.SegmentString;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 
@@ -65,7 +66,8 @@ public class DefaultGraphParser implements GraphParser {
 
         return new SequenceSegment(currentSequences,
                 Integer.parseInt(desc[START_POS].trim()),
-                Integer.parseInt(desc[END_POS].trim()), content.trim());
+                Integer.parseInt(desc[END_POS].trim()),
+                new SegmentString(content.trim()));
     }
 
     /**

@@ -13,6 +13,7 @@ import javafx.scene.layout.VBox;
  * @author Joren Hammudoglu
  *
  */
+@SuppressWarnings("restriction")
 public class MainController implements Initializable {
 
     /**

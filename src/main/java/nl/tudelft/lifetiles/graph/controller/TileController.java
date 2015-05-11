@@ -5,7 +5,7 @@ import java.util.List;
 
 import nl.tudelft.lifetiles.graph.models.Tile;
 import nl.tudelft.lifetiles.graph.view.TileView;
-import nl.tudelft.lifetiles.graph.view.Vertex;
+import nl.tudelft.lifetiles.graph.view.VertexView;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 
@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
  * screen by given only that info the view.
  *
  */
+@SuppressWarnings("restriction")
 public class TileController {
     /**
      * the model.
@@ -45,7 +46,7 @@ public class TileController {
      * @param v
      *            - to be changed vertex
      */
-    public final void changeColour(final Color color, final Vertex v) {
+    public final void changeColour(final Color color, final VertexView v) {
         List<Object> args = new ArrayList<Object>();
         args.add(v);
         args.add(color);
@@ -57,7 +58,7 @@ public class TileController {
      *
      * @return Group object to be drawn on the screen
      */
-    public final Group drawGraph() {
+	public final Group drawGraph() {
         return viewVar.drawGraph(modelVar.getGraph());
     }
 
@@ -73,7 +74,7 @@ public class TileController {
             final List<Object> args) {
 
         if (propertyName.equals("COLOR_CHANGED")) {
-            viewVar.changeVertexColour((Vertex) args.get(0),
+            viewVar.changeVertexColour((VertexView) args.get(0),
                     (Color) args.get(1));
         }
     }

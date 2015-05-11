@@ -73,7 +73,17 @@ public class GraphAdapterTest {
         assert (s.contains(v1));
         assertEquals(1, s.size());
     }
-
+    
+    @Test
+    public void testGetSink() {
+    	gr.addVertex(v1);
+    	gr.addVertex(v2);
+    	gr.addEdge(v1, v2);
+    	Set<SequenceSegment> s = gr.getSink();
+    	assert (s.contains(v2));
+    	assertEquals(1, s.size());
+    }
+    
     @Test
     public void testGetIncoming() {
         gr.addVertex(v1);
@@ -119,6 +129,18 @@ public class GraphAdapterTest {
         gr.addEdge(v1, v2);
         Set<Edge<SequenceSegment>> inc = gr.getIncoming(v2);
         assertEquals(v2, gr.getDestination(inc.iterator().next()));
+    }
+
+    @Test
+    public void testDivideEdge() {
+    	gr.addVertex(v1);
+    	gr.addVertex(v2);
+    	gr.addEdge(v1, v2);
+    	Set<Edge<SequenceSegment>> inc = gr.getIncoming(v2);
+    	SequenceSegment v3 = new SequenceSegment(null, 0, 0, null);
+    	gr.divideEdge(inc.iterator().next(), v3);
+    	assertEquals(v3, gr.getSource(gr.getIncoming(v2).iterator().next()));
+    	assertEquals(v3, gr.getDestination(gr.getOutgoing(v1).iterator().next()));
     }
 
 }

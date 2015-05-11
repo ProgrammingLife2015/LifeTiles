@@ -16,6 +16,7 @@ import javafx.stage.StageStyle;
  * @author Joren Hammudoglu
  *
  */
+@SuppressWarnings("restriction")
 public class Main extends Application {
 
     /**
