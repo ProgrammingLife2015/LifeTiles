@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.graph.models.FactoryProducer;
 import nl.tudelft.lifetiles.graph.models.Graph;
 import nl.tudelft.lifetiles.graph.models.GraphFactory;
@@ -50,11 +51,78 @@ public class SequenceController implements Initializable {
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
+
         ObservableList<Label> sequenceItems = FXCollections
-                .observableList(getSequences().stream()
-                        .map(Sequence::getIdentifier).map(Label::new)
-                        .collect(Collectors.toList()));
+                .observableArrayList();
+        for (Sequence item : getSequences()) {
+            String id = item.getIdentifier();
+            Label label = new Label(id);
+
+            Color color = getSequenceColor(item);
+
+            label.setStyle("-fx-background-color: rgba(" + rgbaFormat(color)
+                    + ")");
+
+            sequenceItems.add(label);
+        }
+
         sequenceList.setItems(sequenceItems);
+    }
+
+    /**
+     * Format the color into r,g,b,a format.
+     *
+     * @param color
+     *            the color
+     * @return the web color code of the color
+     */
+    public static String rgbaFormat(final Color color) {
+        final int colorRange = 255;
+        return String.format("%d,%d,%d,%f",
+                (int) (color.getRed() * colorRange),
+                (int) (color.getGreen() * colorRange),
+                (int) (color.getBlue() * colorRange), color.getOpacity());
+    }
+
+    /**
+     * Get the color of the sequence based on its identifier's hash-code. Helper
+     * method. TODO: move to appropriate class.
+     *
+     * @param sequence
+     *            the sequence
+     * @return the color of the sequence
+     */
+    public static Color getSequenceColor(final Sequence sequence) {
+        String id = sequence.getIdentifier();
+
+        // TODO: improve hash convertion
+        List<Integer> colors = Arrays.asList(
+                // first half
+                id.substring(0, id.length() / 2).hashCode(),
+                // second half
+                id.substring(id.length() / 2).hashCode(),
+                // whole string
+                id.hashCode());
+        colors = colors.stream().map(color -> ubyteValue((byte) (int) (color)))
+                .collect(Collectors.toList());
+
+        System.out.println("colors(" + id + ") = " + colors);
+
+        final double opacity = 0.5;
+        return Color.rgb(colors.get(0), colors.get(1), colors.get(2), opacity);
+    }
+
+    /**
+     * Returns the value of an unsigned byte.
+     *
+     * @param b
+     *            the unsigned byte
+     * @return the integer value of the unsigned byte
+     */
+    public static int ubyteValue(final byte b) {
+        final int mask = 0xFF;
+        final int value = b & mask;
+        return value;
     }
 
     /**
