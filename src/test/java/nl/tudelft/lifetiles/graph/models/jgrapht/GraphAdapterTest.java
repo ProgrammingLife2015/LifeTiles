@@ -2,6 +2,7 @@ package nl.tudelft.lifetiles.graph.models.jgrapht;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
 
@@ -70,7 +71,7 @@ public class GraphAdapterTest {
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
         Set<SequenceSegment> s = gr.getSource();
-        assert (s.contains(v1));
+        assertTrue(s.contains(v1));
         assertEquals(1, s.size());
     }
     
