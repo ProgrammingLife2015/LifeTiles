@@ -63,7 +63,7 @@ public class AbsoluteProjectionTraverser implements
      */
     private void traverseGraphBackward(Graph<SequenceSegment> graph) {
         for (SequenceSegment sink : graph.getSink()) {
-            sink.setAbsEnd(sink.getAbsStart() + sink.getContent().length() - 1);
+            sink.setAbsEnd(sink.getAbsStart() + sink.getContent().getLength() - 1);
             traverseVertexBackward(graph, sink);
         }
     }
@@ -82,7 +82,7 @@ public class AbsoluteProjectionTraverser implements
 
         if (vertex.getSources().contains(reference)
                 && vertex.getContent() instanceof SegmentString) {
-            position += vertex.getContent().length();
+            position += vertex.getContent().getLength();
         }
         for (Edge<SequenceSegment> edge : graph.getOutgoing(vertex)) {
             SequenceSegment destination = graph.getDestination(edge);
@@ -106,7 +106,7 @@ public class AbsoluteProjectionTraverser implements
         long position = vertex.getAbsEnd();
         if (vertex.getSources().contains(reference)
                 && vertex.getContent() instanceof SegmentString) {
-            position -= vertex.getContent().length();
+            position -= vertex.getContent().getLength();
         }
         for (Edge<SequenceSegment> edge : graph.getIncoming(vertex)) {
             SequenceSegment source = graph.getSource(edge);

@@ -37,12 +37,12 @@ public class SequenceSegmentTest {
 
     @Test
     public void testLengthEmpty() {
-        assertEquals(10, v2.getContent().length());
+        assertEquals(10, v2.getContent().getLength());
     }
 
     @Test
     public void testLengthString() {
-        assertEquals(10, v1.getContent().length());
+        assertEquals(10, v1.getContent().getLength());
     }
 
     @Test

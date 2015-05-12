@@ -99,7 +99,7 @@ public class TileView {
                 segmentInsert(i, segment, lanes);
                 String text = segment.getContent().toString();
                 drawVertex(text, segment.getStart(), i, segment.getContent()
-                        .length(), segment.getSources().size(),
+                        .getLength(), segment.getSources().size(),
                         sequenceColor(segment.getMutation()));
                 break;
             }
