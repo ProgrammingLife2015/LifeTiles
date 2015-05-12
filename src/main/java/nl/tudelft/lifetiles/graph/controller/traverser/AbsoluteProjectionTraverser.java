@@ -109,10 +109,10 @@ public class AbsoluteProjectionTraverser implements
             position -= vertex.getContent().length();
         }
         for (Edge<SequenceSegment> edge : graph.getIncoming(vertex)) {
-            SequenceSegment destination = graph.getSource(edge);
-            if (destination.getAbsEnd() > position) {
-                destination.setAbsEnd(position);
-                traverseVertexBackward(graph, destination);
+            SequenceSegment source = graph.getSource(edge);
+            if (source.getAbsEnd() > position) {
+                source.setAbsEnd(position);
+                traverseVertexBackward(graph, source);
             }
         }
     }
