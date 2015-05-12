@@ -13,5 +13,13 @@ public abstract class SunburstUnit extends StackPane {
     protected Text name;
     
     protected Shape display;
+    
+    /*
+     * Constants
+     */
+    
+    protected static final double CENTER_DIAMETER = 50.0d;
+
+    protected static final double RING_WIDTH = 25.0d;
 
 }
