@@ -59,7 +59,7 @@ public class AlignmentTraverserTest {
 
     @Test
     public void testTraverseForkGraph() {
-        SequenceSegment v4 = new SequenceSegment(null, 1, 11,
+        SequenceSegment v4 = new SequenceSegment(s2, 1, 11,
                 new SegmentString("AAAAAAAAAA"));
         gr.addVertex(v4);
         gr.addEdge(v1, v3);
@@ -70,7 +70,7 @@ public class AlignmentTraverserTest {
 
     @Test
     public void testTraverseBranchGraph() {
-        SequenceSegment v4 = new SequenceSegment(null, 21, 31,
+        SequenceSegment v4 = new SequenceSegment(s2, 21, 31,
                 new SegmentString("AAAAAAAAAA"));
         gr.addVertex(v4);
         gr.addEdge(v1, v3);

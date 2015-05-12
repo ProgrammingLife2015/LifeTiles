@@ -44,13 +44,13 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
      */
     private void traverseVertex(Graph<SequenceSegment> graph,
             SequenceSegment vertex) {
-        HashSet<Sequence> buffer = setCopy(vertex.getSources());
+        HashSet<Sequence> buffer = new HashSet<Sequence>(vertex.getSources());
         PriorityQueue<SortedEdge> it = getSortedEdges(graph,
                 graph.getOutgoing(vertex));
         while (!it.isEmpty()) {
             SortedEdge edge = it.poll();
             SequenceSegment destination = edge.getSegment();
-            HashSet<Sequence> sources = setCopy(destination.getSources());
+            HashSet<Sequence> sources = new HashSet<Sequence>(destination.getSources());
             sources.retainAll(buffer);
             if (vertex.distanceTo(destination) > 1) {
                 graph.divideEdge(edge.getEdge(),
@@ -77,21 +77,6 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
             it.add(new SortedEdge(edge, graph.getDestination(edge)));
         }
         return it;
-    }
-
-    /**
-     * Helper method which copies a Set into a HashSet. Pass by value instead of
-     * pass by reference.
-     * 
-     * @param set
-     *            The set that must be copied.
-     * @return The copied set.
-     */
-    private HashSet<Sequence> setCopy(Set<Sequence> set) {
-        if (set == null) {
-            return new HashSet<Sequence>();
-        }
-        return new HashSet<Sequence>(set);
     }
 
     /**
