@@ -39,7 +39,7 @@ public class MutationTraverser implements GraphTraverser<SequenceSegment> {
      * @return mutation annotated graph.
      */
     @Override
-    public Graph<SequenceSegment> traverseGraph(Graph<SequenceSegment> graph) {
+    public final Graph<SequenceSegment> traverseGraph(Graph<SequenceSegment> graph) {
         for (SequenceSegment vertex : graph.getAllVertices()) {
             traverseVertex(graph, vertex);
         }

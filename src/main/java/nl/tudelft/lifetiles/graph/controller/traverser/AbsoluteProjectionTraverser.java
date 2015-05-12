@@ -15,6 +15,9 @@ import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 public class AbsoluteProjectionTraverser implements
         GraphTraverser<SequenceSegment> {
 
+    /**
+     * Reference sequence which graphs are projected to.
+     */
     private Sequence reference;
 
     /**
@@ -36,7 +39,8 @@ public class AbsoluteProjectionTraverser implements
      * @return absolute projected graph.
      */
     @Override
-    public Graph<SequenceSegment> traverseGraph(Graph<SequenceSegment> graph) {
+    public final Graph<SequenceSegment> traverseGraph(
+            Graph<SequenceSegment> graph) {
         traverseGraphForward(graph);
         traverseGraphBackward(graph);
         return graph;

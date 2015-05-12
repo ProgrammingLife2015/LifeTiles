@@ -26,7 +26,7 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
      * @return aligned graph.
      */
     @Override
-    public Graph<SequenceSegment> traverseGraph(Graph<SequenceSegment> graph) {
+    public final Graph<SequenceSegment> traverseGraph(Graph<SequenceSegment> graph) {
         for (SequenceSegment source : new HashSet<SequenceSegment>(
                 graph.getSource())) {
             traverseVertex(graph, source);
@@ -50,7 +50,8 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
         while (!it.isEmpty()) {
             SortedEdge edge = it.poll();
             SequenceSegment destination = edge.getSegment();
-            HashSet<Sequence> sources = new HashSet<Sequence>(destination.getSources());
+            HashSet<Sequence> sources = new HashSet<Sequence>(
+                    destination.getSources());
             sources.retainAll(buffer);
             if (vertex.distanceTo(destination) > 1) {
                 graph.divideEdge(edge.getEdge(),
@@ -67,7 +68,8 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
      *
      * @param graph
      * @param edges
-     * @return
+     * @return priority queue with sorted edges on destination starting
+     *         position.
      */
     @Deprecated
     private PriorityQueue<SortedEdge> getSortedEdges(

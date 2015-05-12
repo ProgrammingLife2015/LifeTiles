@@ -12,13 +12,17 @@ import javafx.scene.paint.Color;
  */
 public class DeletionMutation implements Mutation {
 
+    /**
+     * Color value of this mutation in the view.
+     * Currently here because of javafx css bug.
+     */
     private static final Color color = Color.web("f35959");
 
     /**
      * @return Tile color of the mutation type.
      */
     @Override
-    public Color getColor() {
+    public final Color getColor() {
         return color;
     }
 

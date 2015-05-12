@@ -2,21 +2,24 @@ package nl.tudelft.lifetiles.graph.models.sequence;
 
 /**
  * Segment content with empty content.
- * 
+ *
  * @author Jos
  *
  */
 public class SegmentEmpty implements SegmentContent {
 
+    /**
+     * length of the segment content.
+     */
     private long lengthVar;
 
     /**
      * Constructs a sequence segment with given string as content.
-     * 
+     *
      * @param length
      *            Length of the empty content of the segment.
      */
-    public SegmentEmpty(long length) {
+    public SegmentEmpty(final long length) {
         lengthVar = length;
     }
 
@@ -24,14 +27,14 @@ public class SegmentEmpty implements SegmentContent {
      * @return length of the empty content of the segment.
      */
     @Override
-    public long getLength() {
+    public final long getLength() {
         return lengthVar;
     }
 
     /**
      * @return string representation of the empty segment.
      */
-    public String toString() {
+    public final String toString() {
         return new String(new char[(int) lengthVar]).replace("\0", "_");
     }
 

@@ -2,7 +2,7 @@ package nl.tudelft.lifetiles.graph.models.sequence;
 
 /**
  * Interface for the content in a sequence segment.
- * 
+ *
  * @author Jos
  *
  */
