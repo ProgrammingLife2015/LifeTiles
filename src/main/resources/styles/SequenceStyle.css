@@ -16,7 +16,6 @@
 }
 
 #sequenceList .list-cell .label {
-    -fx-background-color: magenta;
     -fx-background-radius: 10.0;
     -fx-padding: 5.0
 }
