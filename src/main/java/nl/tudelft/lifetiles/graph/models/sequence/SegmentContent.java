@@ -11,7 +11,7 @@ public interface SegmentContent {
     /**
      * @return length of the content in the segment.
      */
-    long length();
+    long getLength();
 
     /**
      * @return string representation of the segment content.

@@ -24,7 +24,7 @@ public class SegmentString implements SegmentContent {
      * @return length of the string content in the segment.
      */
     @Override
-    public long length() {
+    public long getLength() {
         return contentVar.length();
     }
 

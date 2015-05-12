@@ -24,7 +24,7 @@ public class SegmentEmpty implements SegmentContent {
      * @return length of the empty content of the segment.
      */
     @Override
-    public long length() {
+    public long getLength() {
         return lengthVar;
     }
 
