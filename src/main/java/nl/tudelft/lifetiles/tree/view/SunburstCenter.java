@@ -12,15 +12,15 @@ public class SunburstCenter extends SunburstUnit {
     
 
     public SunburstCenter() {
-        Circle circle = new Circle(50,Color.BLUE);
-        getChildren().add(circle);
+        display = new Circle(CENTER_DIAMETER,Color.BLUE);
+        getChildren().add(display);
     }
 
     public SunburstCenter(PhylogeneticTreeItem v){
         value = v;
-        Circle circle = new Circle(50,Color.BLUE);
-        Text text = new Text(value.getName());
-        this.getChildren().addAll(circle,text);
+        display = new Circle(CENTER_DIAMETER, Color.BLUE);
+        name = new Text(value.getName());
+        this.getChildren().addAll(display, name);
     }
 
 }
