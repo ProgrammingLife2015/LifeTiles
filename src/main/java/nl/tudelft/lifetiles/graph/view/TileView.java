@@ -19,7 +19,7 @@ public class TileView {
     /**
      * Default color of a tile element.
      */
-    private static final Color defaultColor = Color.web("a1d3ff");;
+    private static Color defaultColor = Color.web("a1d3ff");;
     /**
      * The root contains all the to be displayed
      * elements.
@@ -93,16 +93,14 @@ public class TileView {
      * 
      * @param segment
      *            segment to be drawn
-     * @param lanes
-     *            already drawn segments
      */
     private void checkAvailable(final SequenceSegment segment) {
-        for (int i = 0; i <= lanes.size(); i++) {
-            if (i >= lanes.size() || lanes.get(i) <= segment.getStart()
-                    && segmentFree(i, segment)) {
-                segmentInsert(i, segment);
+        for (int index = 0; index <= lanes.size(); index++) {
+            if (index >= lanes.size() || lanes.get(index) <= segment.getStart()
+                    && segmentFree(index, segment)) {
+                segmentInsert(index, segment);
                 String text = segment.getContent().toString();
-                drawVertex(text, segment.getStart(), i, segment.getContent()
+                drawVertex(text, segment.getStart(), index, segment.getContent()
                         .getLength(), segment.getSources().size(),
                         sequenceColor(segment.getMutation()));
                 break;
@@ -128,18 +126,16 @@ public class TileView {
     /**
      * Check if there is a free spot to draw the segment at this location.
      * 
-     * @param i
+     * @param index
      *            location in the linked list of already drawn segments
      * @param segment
      *            segment to be drawn
-     * @param lanes
-     *            already drawn segments
      * @return Boolean indicating if there is a free spot
      */
-    private Boolean segmentFree(final int i, final SequenceSegment segment) {
-        for (int w = 0; w < segment.getSources().size(); w++) {
-            if ((i + w < lanes.size())
-                    && (lanes.get(i + w) > segment.getStart())) {
+    private Boolean segmentFree(final int index, final SequenceSegment segment) {
+        for (int height = 0; height < segment.getSources().size(); height++) {
+            if ((index + height < lanes.size())
+                    && (lanes.get(index + height) > segment.getStart())) {
                 return false;
             }
         }
@@ -149,19 +145,17 @@ public class TileView {
     /**
      * Insert a segment in the linked list.
      * 
-     * @param i
+     * @param index
      *            location in the linked list of already drawn segments
      * @param segment
      *            segment to be inserted
-     * @param lanes
-     *            linked list
      */
-    private void segmentInsert(final int i, final SequenceSegment segment) {
-        for (int w = 0; w < segment.getSources().size(); w++) {
-            if (i + w < lanes.size()) {
-                lanes.set(i + w, segment.getEnd());
+    private void segmentInsert(final int index, final SequenceSegment segment) {
+        for (int height = 0; height < segment.getSources().size(); height++) {
+            if (index + height < lanes.size()) {
+                lanes.set(index + height, segment.getEnd());
             } else {
-                lanes.add(i + w, segment.getEnd());
+                lanes.add(index + height, segment.getEnd());
             }
         }
     }
