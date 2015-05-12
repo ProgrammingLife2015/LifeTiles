@@ -13,14 +13,14 @@ import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 /**
  * Aligns sequences in a graph of sequences, by filling empty space with empty
  * vertices.
- * 
+ *
  * @author Jos
  */
 public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
 
     /**
      * Traverse a graph and return the aligned graph.
-     * 
+     *
      * @param graph
      *            The graph that is being aligned.
      * @return aligned graph.
@@ -36,14 +36,14 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
 
     /**
      * Traverse a vertex in the graph.
-     * 
+     *
      * @param graph
      *            The graph that can be modified on.
      * @param vertex
      *            The vertex that is being traversed.
      */
     private void traverseVertex(Graph<SequenceSegment> graph,
-            SequenceSegment vertex) {
+            final SequenceSegment vertex) {
         HashSet<Sequence> buffer = new HashSet<Sequence>(vertex.getSources());
         PriorityQueue<SortedEdge> it = getSortedEdges(graph,
                 graph.getOutgoing(vertex));
@@ -64,14 +64,14 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
     /**
      * Temporary method. Obsolete with #56 Internal sorting of edges on
      * destination starting position.
-     * 
+     *
      * @param graph
      * @param edges
      * @return
      */
     @Deprecated
     private PriorityQueue<SortedEdge> getSortedEdges(
-            Graph<SequenceSegment> graph, Set<Edge<SequenceSegment>> edges) {
+            Graph<SequenceSegment> graph, final Set<Edge<SequenceSegment>> edges) {
         PriorityQueue<SortedEdge> it = new PriorityQueue<SortedEdge>();
         for (Edge<SequenceSegment> edge : edges) {
             it.add(new SortedEdge(edge, graph.getDestination(edge)));
@@ -82,7 +82,7 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
     /**
      * Creates a bridge sequence segment between a source and destination
      * segment.
-     * 
+     *
      * @param source
      *            The vertex that is the source segment.
      * @param destination
@@ -90,8 +90,8 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
      * @param sources
      * @return sequence segment between source and destination segment
      */
-    private SequenceSegment bridgeSequence(SequenceSegment source,
-            SequenceSegment destination, Set<Sequence> sources) {
+    private SequenceSegment bridgeSequence(final SequenceSegment source,
+            final SequenceSegment destination, final Set<Sequence> sources) {
         return new SequenceSegment(sources, source.getEnd(),
                 destination.getStart(), new SegmentEmpty(
                         source.distanceTo(destination) + 1));
@@ -101,7 +101,7 @@ public class AlignmentTraverser implements GraphTraverser<SequenceSegment> {
 /**
  * Temporary class. Obsolete with #56 Internal sorting of edges on destination
  * starting position.
- * 
+ *
  * @author Jos
  *
  */
