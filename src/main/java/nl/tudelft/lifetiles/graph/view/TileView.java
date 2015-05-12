@@ -189,8 +189,7 @@ public class TileView {
      * @param color
      *            the new colour
      */
-    public final void changeVertexColour(final VertexView v,
-            final Color color) {
+    public final void changeVertexColour(final VertexView v, final Color color) {
         v.setColour(color);
     }
 
