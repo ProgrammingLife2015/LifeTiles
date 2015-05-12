@@ -33,7 +33,11 @@ public class TileView {
      * The edges contains all EdgeLines to be displayed.
      */
     private Group edges;
-
+    /**
+     * The lanes list which contains the occupation of the lanes inside the tileview.
+     */
+    private List<Long> lanes;
+    
     /**
      * Create the TileView by intilializing the groups where the to be drawn
      * vertices and edges are stored.
@@ -52,7 +56,7 @@ public class TileView {
      * @return the elements that must be displayed on the screen
      */
     public final Group drawGraph(final Graph<SequenceSegment> gr) {
-        List<Long> lanes = new LinkedList<Long>();
+        lanes = new LinkedList<Long>();
         PriorityQueue<SequenceSegment> it = sortStartVar(gr);
         while (!it.isEmpty()) {
             SequenceSegment segment = it.poll();
