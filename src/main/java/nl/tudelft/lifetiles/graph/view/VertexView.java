@@ -50,17 +50,17 @@ public class VertexView extends Group {
      * following data can be set:
      *
      * @param string
-     *            - Base-pair sequence
+     *            Base-pair sequence
      * @param initX
-     *            - top-left x coordinate
+     *            top-left x coordinate
      * @param initY
-     *            - top-left y coordinate
+     *            top-left y coordinate
      * @param width
-     *            - the width of the vertex
+     *            the width of the vertex
      * @param height
-     *            - the height of the vertex
+     *            the height of the vertex
      * @param color
-     *            - the color of the vertex
+     *            the color of the vertex
      */
     public VertexView(final String string, final double initX,
             final double initY, final double width, double height,
@@ -103,7 +103,7 @@ public class VertexView extends Group {
      * Resize the width of the Vertex.
      *
      * @param width
-     *            - new width of the vertex
+     *            new width of the vertex
      */
     public final void setWidth(final double width) {
         rectangle.setWidth(width);
@@ -127,7 +127,7 @@ public class VertexView extends Group {
      * Resize the width of the Vertex.
      *
      * @param height
-     *            - new width of the vertex
+     *            new width of the vertex
      */
     public final void setHeight(final double height) {
         rectangle.setHeight(height);
@@ -140,7 +140,7 @@ public class VertexView extends Group {
      * Change the Colour of the Vertex.
      *
      * @param color
-     *            - the new color
+     *            the new color
      */
     public final void setColour(final Color color) {
         this.rectangle.setFill(color);

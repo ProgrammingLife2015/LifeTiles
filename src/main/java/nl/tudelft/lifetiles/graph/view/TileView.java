@@ -48,8 +48,8 @@ public class TileView {
      * Draw the given graph.
      * 
      * @param gr
-     *            - Graph to be drawn
-     * @return - the elements that must be displayed on the screen
+     *            Graph to be drawn
+     * @return the elements that must be displayed on the screen
      */
     public final Group drawGraph(final Graph<SequenceSegment> gr) {
         List<Long> lanes = new LinkedList<Long>();
@@ -69,8 +69,8 @@ public class TileView {
      * sorting of edges on destination starting position
      * 
      * @param gr
-     *            - the graph that contains the to be sorted nodes
-     * @return - Iterator of the sorted list
+     *            the graph that contains the to be sorted nodes
+     * @return Iterator of the sorted list
      */
     @Deprecated
     private PriorityQueue<SequenceSegment> sortStartVar(
@@ -87,9 +87,9 @@ public class TileView {
      * at a certain position.
      * 
      * @param segment
-     *            - segment to be drawn
+     *            segment to be drawn
      * @param lanes
-     *            - already drawn segments
+     *            already drawn segments
      */
     private void checkAvailable(final SequenceSegment segment,
             final List<Long> lanes) {
@@ -110,7 +110,7 @@ public class TileView {
      * Returns the mutation color of a given mutation. Default if no mutation.
      * 
      * @param mutation
-     *            - mutation to return color from.
+     *            mutation to return color from.
      * @return color of the mutation
      */
     private Color sequenceColor(final Mutation mutation) {
@@ -125,12 +125,12 @@ public class TileView {
      * Check if there is a free spot to draw the segment at this location.
      * 
      * @param i
-     *            - location in the linked list of already drawn segments
+     *            location in the linked list of already drawn segments
      * @param segment
-     *            - segment to be drawn
+     *            segment to be drawn
      * @param lanes
-     *            - already drawn segments
-     * @return - Boolean indicating if there is a free spot
+     *            already drawn segments
+     * @return Boolean indicating if there is a free spot
      */
     private Boolean segmentFree(final int i, final SequenceSegment segment,
             final List<Long> lanes) {
@@ -147,11 +147,11 @@ public class TileView {
      * Insert a segment in the linked list.
      * 
      * @param i
-     *            - location in the linked list of already drawn segments
+     *            location in the linked list of already drawn segments
      * @param segment
-     *            - segment to be inserted
+     *            segment to be inserted
      * @param lanes
-     *            - linked list
+     *            linked list
      */
     private void segmentInsert(final int i, final SequenceSegment segment,
             final List<Long> lanes) {
@@ -168,17 +168,17 @@ public class TileView {
      * Create a Vertex that can be displayed on the screen.
      * 
      * @param text
-     *            - text of the dna segment
+     *            text of the dna segment
      * @param x
-     *            - top left x coordinate
+     *            top left x coordinate
      * @param y
-     *            - top left y coordinate
+     *            top left y coordinate
      * @param width
-     *            - the width of the vertex
+     *            the width of the vertex
      * @param height
-     *            - the height of the vertex
+     *            the height of the vertex
      * @param color
-     *            - the colour of the vertex
+     *            the colour of the vertex
      */
     private void drawVertex(final String text, final double x, final double y,
             final double width, final double height, final Color color) {
@@ -190,9 +190,9 @@ public class TileView {
      * Change Vertex colour.
      * 
      * @param v
-     *            - vertex to be changed.
+     *            vertex to be changed.
      * @param color
-     *            - the new colour
+     *            the new colour
      */
     public final void changeVertexColour(final VertexView v, final Color color) {
         v.setColour(color);
