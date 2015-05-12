@@ -34,10 +34,11 @@ public class TileView {
      */
     private Group edges;
     /**
-     * The lanes list which contains the occupation of the lanes inside the tileview.
+     * The lanes list which contains the occupation of the lanes inside the
+     * tileview.
      */
     private List<Long> lanes;
-    
+
     /**
      * Create the TileView by intilializing the groups where the to be drawn
      * vertices and edges are stored.
@@ -60,7 +61,7 @@ public class TileView {
         PriorityQueue<SequenceSegment> it = sortStartVar(gr);
         while (!it.isEmpty()) {
             SequenceSegment segment = it.poll();
-            checkAvailable(segment, lanes);
+            checkAvailable(segment);
         }
         root.getChildren().addAll(edges, nodes);
         return root;
@@ -95,12 +96,11 @@ public class TileView {
      * @param lanes
      *            already drawn segments
      */
-    private void checkAvailable(final SequenceSegment segment,
-            final List<Long> lanes) {
+    private void checkAvailable(final SequenceSegment segment) {
         for (int i = 0; i <= lanes.size(); i++) {
             if (i >= lanes.size() || lanes.get(i) <= segment.getStart()
-                    && segmentFree(i, segment, lanes)) {
-                segmentInsert(i, segment, lanes);
+                    && segmentFree(i, segment)) {
+                segmentInsert(i, segment);
                 String text = segment.getContent().toString();
                 drawVertex(text, segment.getStart(), i, segment.getContent()
                         .getLength(), segment.getSources().size(),
@@ -136,8 +136,7 @@ public class TileView {
      *            already drawn segments
      * @return Boolean indicating if there is a free spot
      */
-    private Boolean segmentFree(final int i, final SequenceSegment segment,
-            final List<Long> lanes) {
+    private Boolean segmentFree(final int i, final SequenceSegment segment) {
         for (int w = 0; w < segment.getSources().size(); w++) {
             if ((i + w < lanes.size())
                     && (lanes.get(i + w) > segment.getStart())) {
@@ -157,8 +156,7 @@ public class TileView {
      * @param lanes
      *            linked list
      */
-    private void segmentInsert(final int i, final SequenceSegment segment,
-            final List<Long> lanes) {
+    private void segmentInsert(final int i, final SequenceSegment segment) {
         for (int w = 0; w < segment.getSources().size(); w++) {
             if (i + w < lanes.size()) {
                 lanes.set(i + w, segment.getEnd());
