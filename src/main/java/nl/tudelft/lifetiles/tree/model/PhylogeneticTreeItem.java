@@ -46,6 +46,18 @@ public class PhylogeneticTreeItem {
         children = new ArrayList<PhylogeneticTreeItem>();
         this.id = nextID.incrementAndGet();
     }
+    /**
+     * Method to determine the amount of descendant nodes each node has.
+     * @return  the amount of descendant nodes
+     */
+    public final int numberDescendants() {
+        int result = 0;
+        for (PhylogeneticTreeItem child: children) {
+            result += child.numberDescendants() + 1;
+        }
+        
+        return result;
+    }
 
     /**
      * Adds a child to the PhylogeneticTreeItem. This method will add the

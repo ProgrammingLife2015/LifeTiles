@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.tree.models;
 
 import static org.junit.Assert.*;
+import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeFactory;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
 import org.junit.Test;
@@ -30,6 +31,36 @@ public class TestPhylogeneticTreeItem {
 	    
 	    assertEquals("parent was not correctly set","Parent",child.getParent().getName());
 	    assertTrue("Child was not properly added", parent.getChildren().contains(child));
+	}
+	
+	/**
+	 * Test for nu
+	 */
+	@Test
+	public void testNumberDescendants() {
+	    // create the test tree
+	    // (A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5)F;
+	    PhylogeneticTreeItem root = new PhylogeneticTreeItem();
+        // add 3 child nodes
+        PhylogeneticTreeItem test2 = new PhylogeneticTreeItem();
+        test2.setParent(root);
+        test2.setDistance(0.1);
+        PhylogeneticTreeItem current = new PhylogeneticTreeItem();
+        current.setDistance(0.2);
+        current.setParent(root);
+        current = new PhylogeneticTreeItem();
+        current.setParent(root);
+        current.setDistance(0.5);
+        // add 2 child nodes to the third node
+        PhylogeneticTreeItem current2 = new PhylogeneticTreeItem();
+        current2.setParent(current);
+        current2.setDistance(0.4);
+        current2 = new PhylogeneticTreeItem();
+        current2.setParent(current);
+        current2.setDistance(0.3);
+        
+        assertEquals("numberDescendants did not match for full tree",5,root.numberDescendants());
+        assertEquals("numberDescendants did not match for childless tree",0,test2.numberDescendants());
 	}
 	
 	/**
