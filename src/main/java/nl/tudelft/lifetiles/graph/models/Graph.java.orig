@@ -71,10 +71,14 @@ public interface Graph<V> {
     List<Edge<V>> getOutgoing(V vertex);
 
     /**
-     * @return A List of source nodes. Source being a node that has no incoming
+     * @return A Set of source nodes. Source being a node that has no incoming
      *         edges.
      */
-    List<V> getSources();
+<<<<<<< HEAD
+    Set<V> getSources();
+=======
+    List<V> getSource();
+>>>>>>> Modify Graph to return lists instead of sets.
 
     /**
      * @param e
@@ -84,10 +88,10 @@ public interface Graph<V> {
     V getSource(Edge<V> e);
 
     /**
-     * @return A List of sink nodes. Sink being a node that has no outgoing
+     * @return A Set of sink nodes. Sink being a node that has no outgoing
      *         edges.
      */
-    List<V> getSinks();
+    Set<V> getSinks();
 
     /**
      * Splits an edge into two edges with an inserted vertex in the middle.

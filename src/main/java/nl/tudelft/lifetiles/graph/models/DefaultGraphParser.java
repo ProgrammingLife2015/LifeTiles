@@ -4,11 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import nl.tudelft.lifetiles.graph.models.sequence.DefaultSequence;
 import nl.tudelft.lifetiles.graph.models.sequence.SegmentString;
@@ -55,7 +55,7 @@ public class DefaultGraphParser implements GraphParser {
         }
         String[] desc = descriptor.split("\\|");
         String[] sources = desc[1].split(",");
-        Set<Sequence> currentSequences = new HashSet<>();
+        List<Sequence> currentSequences = new ArrayList<>();
         for (String sequencename : sources) {
             sequencename = sequencename.trim();
             if (!sequences.containsKey(sequencename)) {

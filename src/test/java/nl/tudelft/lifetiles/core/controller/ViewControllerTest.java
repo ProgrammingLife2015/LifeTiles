@@ -26,7 +26,9 @@ public class ViewControllerTest extends ApplicationTest {
     Sequence s1, s2;
 
     static final String testGraphFilename = "data/test_set/simple_graph";
-    static final int[] windowSize = new int[] {1280, 720};
+    static final int[] windowSize = new int[] {
+            1280, 720
+    };
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -68,7 +70,8 @@ public class ViewControllerTest extends ApplicationTest {
 
         Collection<Sequence> sequences = controller.getSequences().values();
         Sequence visibleSequence = new ArrayList<>(sequences).get(0);
-        Set<Sequence> visibleSequences = new HashSet<>(Arrays.asList(visibleSequence));
+        Set<Sequence> visibleSequences = new HashSet<>(
+                Arrays.asList(visibleSequence));
         controller.setVisible(visibleSequences);
 
         assertTrue(controller.getVisible().contains(visibleSequence));

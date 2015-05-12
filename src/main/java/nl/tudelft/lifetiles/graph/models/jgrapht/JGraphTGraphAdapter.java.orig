@@ -30,11 +30,11 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
     /**
      * Keep track of all vertices that have no incoming edges.
      */
-    private List<V> sources;
+    private Set<V> sources;
     /**
      * Keep track of all vertices that have no outgoing edges.
      */
-    private List<V> sinks;
+    private Set<V> sinks;
     /**
      * List of vertices. Used to be able to identify nodes by ids.
      */
@@ -50,8 +50,8 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
         internalGraph = new DirectedAcyclicGraph<V, DefaultEdge>(
                 DefaultEdge.class);
         edgeFact = ef;
-        sources = new ArrayList<>();
-        sinks = new ArrayList<>();
+        sources = new HashSet<>();
+        sinks = new HashSet<>();
         vertexIdentifiers = new ArrayList<>();
     }
 
@@ -70,13 +70,17 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      * @return <code>true</code> iff adding succeeded.
      */
     @Override
-    public final boolean addEdge(final V source, final V destination)
-            throws IllegalArgumentException {
-
-        internalGraph.addEdge(source, destination);
-        sources.remove(destination);
-        sinks.remove(source);
-        return true;
+    public final boolean addEdge(final V source, final V destination) {
+        if (internalGraph.containsVertex(source)
+                && internalGraph.containsVertex(destination)) {
+            internalGraph.addEdge(source, destination);
+            sources.remove(destination);
+            sinks.remove(source);
+            return true;
+        } else {
+            throw new IllegalArgumentException(
+                    "Source or destination not in graph.");
+        }
     }
 
     /**
@@ -159,8 +163,13 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      * @return All vertices that have no incoming edges.
      */
     @Override
-    public final List<V> getSources() {
+<<<<<<< HEAD
+    public final Set<V> getSources() {
+        return sources;
+=======
+    public final List<V> getSource() {
         return new ArrayList<V>(sources);
+>>>>>>> Modify Graph to return lists instead of sets.
     }
 
     /**
@@ -193,7 +202,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      * @return All vertices that have no outgoing edges.
      */
     @Override
-    public final List<V> getSinks() {
+    public final Set<V> getSinks() {
         return sinks;
     }
 

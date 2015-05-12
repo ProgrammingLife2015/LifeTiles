@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.graph.models.jgrapht;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -62,10 +63,10 @@ public class GraphAdapterTest {
 
     @Test
     public void testAddWrongEdge() {
+        thrown.expect(IllegalArgumentException.class);
         gr.addVertex(v1);
         assertEquals(0, gr.getAllEdges().size());
-        thrown.expect(IllegalArgumentException.class);
-        gr.addEdge(v1, v2);
+        assertFalse(gr.addEdge(v1, v2));
         assertEquals(0, gr.getAllEdges().size());
     }
 
@@ -74,7 +75,8 @@ public class GraphAdapterTest {
         gr.addVertex(v1);
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
-        List<SequenceSegment> s = gr.getSources();
+<<<<<<< HEAD
+        Set<SequenceSegment> s = gr.getSources();
         assertTrue(s.contains(v1));
         assertEquals(1, s.size());
     }
@@ -84,8 +86,12 @@ public class GraphAdapterTest {
         gr.addVertex(v1);
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
-        List<SequenceSegment> s = gr.getSinks();
+        Set<SequenceSegment> s = gr.getSinks();
         assertTrue(s.contains(v2));
+=======
+        List<SequenceSegment> s = gr.getSource();
+        assert (s.contains(v1));
+>>>>>>> Modify Graph to return lists instead of sets.
         assertEquals(1, s.size());
     }
 
@@ -141,11 +147,12 @@ public class GraphAdapterTest {
         gr.addVertex(v1);
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
-        List<Edge<SequenceSegment>> inc = gr.getIncoming(v2);
+        Set<Edge<SequenceSegment>> inc = gr.getIncoming(v2);
         SequenceSegment v3 = new SequenceSegment(null, 0, 0, null);
-        gr.splitEdge(inc.get(0), v3);
-        assertEquals(v3, gr.getSource(gr.getIncoming(v2).get(0)));
-        assertEquals(v3, gr.getDestination(gr.getOutgoing(v1).get(0)));
+        gr.splitEdge(inc.iterator().next(), v3);
+        assertEquals(v3, gr.getSource(gr.getIncoming(v2).iterator().next()));
+        assertEquals(v3,
+                gr.getDestination(gr.getOutgoing(v1).iterator().next()));
     }
 
 }
