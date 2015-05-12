@@ -32,12 +32,12 @@ public class VertexView extends Group {
      * this value is to make sure that when this vertex has to be resized, it
      * will be the new resized width.
      */
-    private static double resizeWidth = -1;
+    private double resizeWidth = -1;
 
     /**
      * The fontsize of the string.
      */
-    private static double fontSize = 12;
+    private static double fontSize = 16;
 
     /**
      * Horizontal and vertical spacing between rectangles.
@@ -47,7 +47,7 @@ public class VertexView extends Group {
     /**
      * Horizontal and vertical scale for each coordinate.
      */
-    private static double scale = 20;
+    private static double scale = 25;
 
     /**
      * Creates a new Block to be displayed on the screen. The width is already
@@ -149,12 +149,12 @@ public class VertexView extends Group {
 
     @Override
     protected final void layoutChildren() {
-        final double w = rectangle.getWidth();
-        final double h = rectangle.getHeight();
-        clip.setWidth(w);
-        clip.setHeight(h);
+        final double width = rectangle.getWidth();
+        final double height = rectangle.getHeight();
+        clip.setWidth(width);
+        clip.setHeight(height);
         clip.setLayoutX(0);
-        clip.setLayoutY(-h / 2);
+        clip.setLayoutY(-height / 2);
 
         if (resizeWidth == -1) {
             rectangle.setWidth(text.getLayoutBounds().getWidth());
@@ -162,7 +162,7 @@ public class VertexView extends Group {
             rectangle.setWidth(resizeWidth);
         }
 
-        text.setLayoutX(w / 2 - text.getLayoutBounds().getWidth() / 2);
-        text.setLayoutY(h / 2);
+        text.setLayoutX(width / 2 - text.getLayoutBounds().getWidth() / 2);
+        text.setLayoutY(height / 2);
     }
 }

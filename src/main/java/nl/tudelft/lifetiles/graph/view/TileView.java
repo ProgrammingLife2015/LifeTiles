@@ -61,7 +61,7 @@ public class TileView {
         PriorityQueue<SequenceSegment> it = sortStartVar(gr);
         while (!it.isEmpty()) {
             SequenceSegment segment = it.poll();
-            checkAvailable(segment);
+            drawVertexLane(segment);
         }
         root.getChildren().addAll(edges, nodes);
         return root;
@@ -88,13 +88,12 @@ public class TileView {
     }
 
     /**
-     * Functions that will find if it can draw a segment
-     * at a certain position.
+     * Draws a given segment to an available position in the graph.
      * 
      * @param segment
      *            segment to be drawn
      */
-    private void checkAvailable(final SequenceSegment segment) {
+    private void drawVertexLane(final SequenceSegment segment) {
         for (int index = 0; index <= lanes.size(); index++) {
             if (index >= lanes.size() || lanes.get(index) <= segment.getStart()
                     && segmentFree(index, segment)) {
