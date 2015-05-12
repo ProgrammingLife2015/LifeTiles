@@ -12,13 +12,6 @@ import nl.tudelft.lifetiles.graph.models.Graph;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.graph.DefaultEdge;
 
-/**
- * @author Rutger van den Berg
- *
- * @param <V>
- *            The type of vertex to use.
- */
-
 public class JGraphTGraphAdapter<V> implements Graph<V> {
 	/**
 	 * The edgefactory to use to create the edges for this graph.
@@ -220,5 +213,5 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
 	private void removeEdge(Edge<V> edge) {
 		internalGraph.removeEdge(unpackEdge(edge));
 	}
-	
+
 }

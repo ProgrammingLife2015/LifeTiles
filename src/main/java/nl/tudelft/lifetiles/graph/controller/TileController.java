@@ -41,9 +41,9 @@ public class TileController {
      * Change the Colour of a Vertex.
      *
      * @param color
-     *            - new color
+     *            new color
      * @param v
-     *            - to be changed vertex
+     *            to be changed vertex
      */
     public final void changeColour(final Color color, final VertexView v) {
         List<Object> args = new ArrayList<Object>();
@@ -57,7 +57,7 @@ public class TileController {
      *
      * @return Group object to be drawn on the screen
      */
-	public final Group drawGraph() {
+    public final Group drawGraph() {
         return viewVar.drawGraph(modelVar.getGraph());
     }
 
@@ -65,9 +65,9 @@ public class TileController {
      * set a certain changed property with the arguments.
      *
      * @param propertyName
-     *            - Name of the property
+     *            Name of the property
      * @param args
-     *            - Arguments for the function that needs to be called.
+     *            Arguments for the function that needs to be called.
      */
     public final void setChangedProperty(final String propertyName,
             final List<Object> args) {

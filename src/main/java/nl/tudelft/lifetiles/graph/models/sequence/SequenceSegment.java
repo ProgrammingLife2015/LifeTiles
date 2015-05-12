@@ -82,7 +82,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      * @return the absolute start position
      */
     public final long getAbsStart() {
-    	return absStartVar;
+        return absStartVar;
     }
 
     /**
@@ -90,14 +90,14 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      *            absolute start position of this sequence segment.
      */
     public final void setAbsStart(long absStart) {
-    	absStartVar = absStart;
+        absStartVar = absStart;
     }
 
     /**
      * @return the absolute end position
      */
     public final long getAbsEnd() {
-    	return absEndVar;
+        return absEndVar;
     }
 
     /**
@@ -105,7 +105,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      *            absolute end position of this sequence segment.
      */
     public final void setAbsEnd(long absEnd) {
-    	absEndVar = absEnd;
+        absEndVar = absEnd;
     }
 
     /**
@@ -114,12 +114,12 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
     public final SegmentContent getContent() {
         return contentVar;
     }
-    
+
     /**
      * @return mutation annotation of sequence segment.
      */
     public Mutation getMutation() {
-    	return mutationVar;
+        return mutationVar;
     }
 
     /**
@@ -127,28 +127,30 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      *            Mutation which is annotated onto the sequence segment.
      */
     public void setMutation(Mutation mutation) {
-    	mutationVar = mutation;
+        mutationVar = mutation;
     }
 
     /**
      * Returns the distance between this sequence segment and another.
      * (non-euclidian distance)
+     * 
      * @param other
      *            Sequence segment which needs to be compared.
      * @return
-     *            Distance between this sequence and other sequence.
+     *         Distance between this sequence and other sequence.
      */
     public long distanceTo(SequenceSegment other) {
-    	return other.getStart() - getEnd() - 1;
+        return other.getStart() - getEnd() - 1;
     }
 
     /**
      * Compares the the start position of this and another sequence segment.
+     * 
      * @param other
      *            Sequence segment which needs to be compared.
      */
-	@Override
-	public int compareTo(SequenceSegment other) {
-		return ((Long) startVar).compareTo((Long) other.getStart());
-	}
+    @Override
+    public int compareTo(SequenceSegment other) {
+        return ((Long) startVar).compareTo((Long) other.getStart());
+    }
 }

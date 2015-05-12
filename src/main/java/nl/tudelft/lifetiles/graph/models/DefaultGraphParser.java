@@ -66,8 +66,8 @@ public class DefaultGraphParser implements GraphParser {
 
         return new SequenceSegment(currentSequences,
                 Integer.parseInt(desc[START_POS].trim()),
-                Integer.parseInt(desc[END_POS].trim()),
-                new SegmentString(content.trim()));
+                Integer.parseInt(desc[END_POS].trim()), new SegmentString(
+                        content.trim()));
     }
 
     /**

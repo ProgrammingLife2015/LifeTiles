@@ -36,7 +36,7 @@ public class GraphController implements Initializable {
     private ScrollPane wrapper;
 
     /**
-     * Initializes the Graph View
+     * Initializes the Graph View.
      */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
@@ -50,6 +50,7 @@ public class GraphController implements Initializable {
 
     /**
      * Loads a mock graph model.
+     * 
      * @return mock graph.
      */
     private Graph<SequenceSegment> loadGraphModel() {
