@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph.models;
+package nl.tudelft.lifetiles.graph.view;
 
 /**
  * A DataPair (point) in 2D space.
