@@ -16,7 +16,7 @@ public class InsertionMutation implements Mutation {
      * Color value of this mutation in the view.
      * Currently here because of javafx css bug.
      */
-    private static final Color color = Color.web("8df08c");
+    private static Color color = Color.web("8df08c");
 
     /**
      * @return Tile color of the mutation type.
