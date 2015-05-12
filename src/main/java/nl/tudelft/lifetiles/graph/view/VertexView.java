@@ -45,9 +45,14 @@ public class VertexView extends Group {
     private static double spacing = 3;
 
     /**
-     * Horizontal and vertical scale for each coordinate.
+     * Horizontal scale for each coordinate.
      */
-    private static double scale = 25;
+    private static double horizontalScale = 15;
+
+    /**
+     * Vertical scale for each coordinate.
+     */
+    private static double verticalScale = 40;
 
     /**
      * Creates a new Block to be displayed on the screen. The width is already
@@ -77,17 +82,17 @@ public class VertexView extends Group {
         text.setFontSmoothingType(FontSmoothingType.LCD);
         text.setFont(Font.font("Open Sans", fontSize));
 
-        this.rectangle = new Rectangle(width * scale, height * scale);
+        this.rectangle = new Rectangle(width * horizontalScale, height * verticalScale);
         rectangle.setFill(color);
 
-        this.clip = new Rectangle(width * scale, height * scale);
+        this.clip = new Rectangle(width * horizontalScale, height * verticalScale);
         text.setClip(clip);
 
-        this.setLayoutX(initX * scale);
-        this.setLayoutY(initY * scale);
+        this.setLayoutX(initX * horizontalScale);
+        this.setLayoutY(initY * verticalScale);
 
-        this.setHeight(height * scale - spacing);
-        this.setWidth(width * scale - spacing);
+        this.setHeight(height * verticalScale - spacing);
+        this.setWidth(width * horizontalScale - spacing);
 
         this.getChildren().addAll(rectangle, text);
 
