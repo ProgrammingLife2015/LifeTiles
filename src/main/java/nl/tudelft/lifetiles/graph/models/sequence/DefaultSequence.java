@@ -43,7 +43,7 @@ public class DefaultSequence implements Sequence {
     }
 
     @Override
-    public boolean equals(Object other) {
+    public final boolean equals(final Object other) {
         if (other instanceof Sequence) {
             return ident.equals(((Sequence) other).getIdentifier());
         }

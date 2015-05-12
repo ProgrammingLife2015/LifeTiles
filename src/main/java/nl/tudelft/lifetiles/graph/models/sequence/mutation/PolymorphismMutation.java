@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
  * Polymorphism Mutation type of Mutation annotations.
  * Sequence with content on absolute range where
  * reference sequence has different content.
- * 
+ *
  * @author Jos
  *
  */

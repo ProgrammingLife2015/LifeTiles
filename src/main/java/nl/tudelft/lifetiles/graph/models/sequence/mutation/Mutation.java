@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 
 /**
  * Interface for different type of Mutation annotations.
- * 
+ *
  * @author Jos
  *
  */

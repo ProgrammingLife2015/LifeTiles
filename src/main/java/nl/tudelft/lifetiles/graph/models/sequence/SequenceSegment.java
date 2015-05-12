@@ -89,7 +89,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      * @param absStart
      *            absolute start position of this sequence segment.
      */
-    public final void setAbsStart(long absStart) {
+    public final void setAbsStart(final long absStart) {
         absStartVar = absStart;
     }
 
@@ -104,7 +104,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      * @param absEnd
      *            absolute end position of this sequence segment.
      */
-    public final void setAbsEnd(long absEnd) {
+    public final void setAbsEnd(final long absEnd) {
         absEndVar = absEnd;
     }
 
@@ -118,15 +118,15 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
     /**
      * @return mutation annotation of sequence segment.
      */
-    public Mutation getMutation() {
+    public final Mutation getMutation() {
         return mutationVar;
     }
 
     /**
-     * @param mutationVar
+     * @param mutation
      *            Mutation which is annotated onto the sequence segment.
      */
-    public void setMutation(Mutation mutation) {
+    public final void setMutation(final Mutation mutation) {
         mutationVar = mutation;
     }
 
@@ -139,7 +139,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      * @return
      *         Distance between this sequence and other sequence.
      */
-    public long distanceTo(SequenceSegment other) {
+    public final long distanceTo(final SequenceSegment other) {
         return other.getStart() - getEnd() - 1;
     }
 
@@ -150,7 +150,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      *            Sequence segment which needs to be compared.
      */
     @Override
-    public int compareTo(SequenceSegment other) {
+    public final int compareTo(final SequenceSegment other) {
         return ((Long) startVar).compareTo((Long) other.getStart());
     }
 }

@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
  * Insertion Mutation type of Mutation annotations.
  * Sequence with content on absolute range where
  * reference sequence has no content.
- * 
+ *
  * @author Jos
  *
  */
