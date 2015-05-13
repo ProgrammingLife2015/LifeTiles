@@ -9,6 +9,14 @@ import nl.tudelft.lifetiles.graph.view.Mutation;
  */
 public class SequenceSegment implements Comparable<SequenceSegment> {
     /**
+     * The content of this segment.
+     */
+    private SegmentContent contentVar;
+    /**
+     * The end position for this segment.
+     */
+    private long endVar;
+    /**
      * Contains the sources containing this segment.
      */
     private Set<Sequence> sourcesVar;
@@ -17,10 +25,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      * The start position for this segment.
      */
     private long startVar;
-    /**
-     * The end position for this segment.
-     */
-    private long endVar;
+
     /**
      * The absolute start position for this segment.
      */
@@ -29,10 +34,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      * The absolute end position for this segment.
      */
     private long absEndVar = Long.MAX_VALUE;
-    /**
-     * The content of this segment.
-     */
-    private SegmentContent contentVar;
+
     /**
      * The mutation annotation of this segment.
      */
@@ -58,6 +60,20 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
     }
 
     /**
+     * @return the content
+     */
+    public final SegmentContent getContent() {
+        return contentVar;
+    }
+
+    /**
+     * @return the end position
+     */
+    public final long getEnd() {
+        return endVar;
+    }
+
+    /**
      * @return the sources
      */
     public final Set<Sequence> getSources() {
@@ -69,13 +85,6 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      */
     public final long getStart() {
         return startVar;
-    }
-
-    /**
-     * @return the end position
-     */
-    public final long getEnd() {
-        return endVar;
     }
 
     /**
@@ -106,13 +115,6 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      */
     public final void setAbsEnd(final long absEnd) {
         absEndVar = absEnd;
-    }
-
-    /**
-     * @return the content
-     */
-    public final SegmentContent getContent() {
-        return contentVar;
     }
 
     /**
