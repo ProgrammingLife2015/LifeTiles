@@ -2,7 +2,7 @@ package nl.tudelft.lifetiles.graph.models.sequence;
 
 import java.util.Set;
 
-import nl.tudelft.lifetiles.graph.models.sequence.mutation.Mutation;
+import nl.tudelft.lifetiles.graph.view.Mutation;
 
 /**
  * @author Rutger van den Berg Contains a partial sequence.

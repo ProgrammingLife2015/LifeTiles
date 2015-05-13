@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import nl.tudelft.lifetiles.graph.models.sequence.SegmentEmpty;
 import nl.tudelft.lifetiles.graph.models.sequence.SegmentString;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
-import nl.tudelft.lifetiles.graph.models.sequence.mutation.InsertionMutation;
+import nl.tudelft.lifetiles.graph.view.Mutation;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public class SequenceSegmentTest {
 
     @Test
     public void testMutation() {
-        InsertionMutation insertion = new InsertionMutation();
+        Mutation insertion = Mutation.INSERTION;
         v1.setMutation(insertion);
         assertEquals(insertion, v1.getMutation());
     }

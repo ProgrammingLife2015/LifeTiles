@@ -6,7 +6,6 @@ import java.util.PriorityQueue;
 
 import nl.tudelft.lifetiles.graph.models.Graph;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
-import nl.tudelft.lifetiles.graph.models.sequence.mutation.Mutation;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 
