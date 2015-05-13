@@ -4,9 +4,6 @@ import java.net.URL;
 import java.util.HashSet;
 import java.util.ResourceBundle;
 
-import nl.tudelft.lifetiles.graph.controller.traverser.AbsoluteProjectionTraverser;
-import nl.tudelft.lifetiles.graph.controller.traverser.AlignmentTraverser;
-import nl.tudelft.lifetiles.graph.controller.traverser.MutationTraverser;
 import nl.tudelft.lifetiles.graph.models.DefaultGraphParser;
 import nl.tudelft.lifetiles.graph.models.FactoryProducer;
 import nl.tudelft.lifetiles.graph.models.Graph;
