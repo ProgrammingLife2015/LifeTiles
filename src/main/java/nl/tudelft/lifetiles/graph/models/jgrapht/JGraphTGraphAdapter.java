@@ -228,15 +228,11 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
      * @author Rutger van den Berg
      *         Compares two edges by their target vertex.
      */
-    class EdgeComparatorByVertex implements Comparator<JGraphTEdgeAdapter<V>> {
+    class EdgeComparatorByVertex implements Comparator<Edge<V>> {
 
         @Override
-        public int compare(final JGraphTEdgeAdapter<V> o1,
-                final JGraphTEdgeAdapter<V> o2) {
-
-            V target1 = internalGraph.getEdgeTarget(o1.getInternalEdge());
-            V target2 = internalGraph.getEdgeTarget(o2.getInternalEdge());
-            return target1.compareTo(target2);
+        public int compare(final Edge<V> o1, final Edge<V> o2) {
+            return getDestination(o1).compareTo(getDestination(o2));
         }
 
     }
