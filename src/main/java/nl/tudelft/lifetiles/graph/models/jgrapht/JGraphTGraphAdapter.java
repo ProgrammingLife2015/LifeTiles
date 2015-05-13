@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph.models;
+package nl.tudelft.lifetiles.graph.models.jgrapht;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -6,9 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import nl.tudelft.lifetiles.graph.models.edge.Edge;
-import nl.tudelft.lifetiles.graph.models.edge.JGraphTEdge;
-import nl.tudelft.lifetiles.graph.models.edge.JGraphTEdgeFactory;
+import nl.tudelft.lifetiles.graph.models.Edge;
+import nl.tudelft.lifetiles.graph.models.Graph;
 
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.graph.DefaultEdge;
@@ -19,7 +18,7 @@ import org.jgrapht.graph.DefaultEdge;
  * @param <V>
  *            The type of vertex to use.
  */
-public class JGraphTGraph<V> implements Graph<V> {
+public class JGraphTGraphAdapter<V> implements Graph<V> {
     /**
      * The edgefactory to use to create the edges for this graph.
      */
@@ -43,7 +42,7 @@ public class JGraphTGraph<V> implements Graph<V> {
      * @param ef
      *            The edgefactory to use for this graph.
      */
-    public JGraphTGraph(final JGraphTEdgeFactory<V> ef) {
+    public JGraphTGraphAdapter(final JGraphTEdgeFactory<V> ef) {
         internalGraph = new DirectedAcyclicGraph<V, DefaultEdge>(
                 DefaultEdge.class);
         edgeFact = ef;
@@ -176,10 +175,10 @@ public class JGraphTGraph<V> implements Graph<V> {
      * @return the internal edge.
      */
     private DefaultEdge unpackEdge(final Edge<V> input) {
-        if (!(input instanceof JGraphTEdge<?>)) {
+        if (!(input instanceof JGraphTEdgeAdapter<?>)) {
             throw new IllegalArgumentException("Wrong edge type!");
         }
-        JGraphTEdge<V> ed = (JGraphTEdge<V>) input;
+        JGraphTEdgeAdapter<V> ed = (JGraphTEdgeAdapter<V>) input;
         return ed.getInternalEdge();
     }
 

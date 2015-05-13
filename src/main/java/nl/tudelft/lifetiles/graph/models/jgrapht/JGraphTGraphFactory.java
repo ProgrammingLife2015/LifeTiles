@@ -1,8 +1,7 @@
-package nl.tudelft.lifetiles.graph.models;
+package nl.tudelft.lifetiles.graph.models.jgrapht;
 
-import nl.tudelft.lifetiles.graph.models.edge.JGraphTEdgeFactory;
-
-
+import nl.tudelft.lifetiles.graph.models.Graph;
+import nl.tudelft.lifetiles.graph.models.GraphFactory;
 
 /**
  * @author Rutger van den Berg
@@ -28,6 +27,6 @@ public class JGraphTGraphFactory<V> implements GraphFactory<V> {
      */
     @Override
     public final Graph<V> getGraph() {
-        return new JGraphTGraph<V>(edgeFact);
+        return new JGraphTGraphAdapter<V>(edgeFact);
     }
 }

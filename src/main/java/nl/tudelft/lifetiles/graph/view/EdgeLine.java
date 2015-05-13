@@ -1,6 +1,5 @@
 package nl.tudelft.lifetiles.graph.view;
 
-import nl.tudelft.lifetiles.graph.models.DataPair;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.shape.Circle;
