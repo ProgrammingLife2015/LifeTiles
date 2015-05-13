@@ -1,12 +1,9 @@
 package nl.tudelft.lifetiles.sequence.controller;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -16,14 +13,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import nl.tudelft.lifetiles.graph.models.FactoryProducer;
-import nl.tudelft.lifetiles.graph.models.Graph;
-import nl.tudelft.lifetiles.graph.models.GraphFactory;
-import nl.tudelft.lifetiles.graph.models.sequence.DefaultSequence;
+import nl.tudelft.lifetiles.core.controller.ViewController;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceColor;
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceGenerator;
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.graph.view.SequenceColor;
 
 /**
  * The controller of the data view.
@@ -31,7 +23,7 @@ import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
  * @author Joren Hammudoglu
  *
  */
-public class SequenceController implements Initializable {
+public class SequenceController implements Initializable, Observer {
 
     /**
      * The wrapper element.
@@ -44,30 +36,13 @@ public class SequenceController implements Initializable {
     @FXML
     private ListView<Label> sequenceList;
 
-    /**
-     * The sequences.
-     */
-    private ObservableList<Sequence> sequences;
-
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-
-        ObservableList<Label> sequenceItems = FXCollections
-                .observableArrayList();
-        for (Sequence item : getSequences()) {
-            String id = item.getIdentifier();
-            Label label = new Label(id);
-
-            Color color = (new SequenceColor(item)).getColor();
-
-            label.setStyle("-fx-background-color: rgba(" + rgbaFormat(color)
-                    + ")");
-
-            sequenceItems.add(label);
-        }
-
-        sequenceList.setItems(sequenceItems);
+        ViewController vc = ViewController.getInstance();
+        vc.addObserver(this);
+        vc.loadGraph("data/2_strains/simple_graph");
+        repaint();
     }
 
     /**
@@ -85,37 +60,34 @@ public class SequenceController implements Initializable {
                 (int) (color.getBlue() * colorRange), color.getOpacity());
     }
 
-    /**
-     * Gets or creates the sequences.
-     *
-     * @return a list of the sequences
-     */
-    private List<Sequence> getSequences() {
-        if (sequences == null) {
-            FactoryProducer<SequenceSegment> fp;
-            fp = new FactoryProducer<SequenceSegment>();
-            GraphFactory<SequenceSegment> gf = fp.getFactory("JGraphT");
-            Graph<SequenceSegment> graph = gf.getGraph();
-            SequenceGenerator sg = new SequenceGenerator(graph);
-            sequences = FXCollections.observableList(new ArrayList<Sequence>(sg
-                    .generateSequences().values()));
-
-            sequences.addAll(getDummyData()); // TODO: read actual data
-        }
-        return sequences;
+    @Override
+    public final void update(final Observable o, final Object arg) {
+        repaint();
     }
 
     /**
-     * Generates dummy data for testing purposes. Obsolete.
-     *
-     * @return collection of dummy sequences
+     * Fills the sequence view and removes the old content.
      */
-    @Deprecated
-    private Collection<Sequence> getDummyData() {
-        List<String> dummyStrings = Arrays.asList("TKK-REF", "TKK-01-0066",
-                "TKK-01-0058", "TKK-01-0026", "TKK-01-0029", "TKK-01-0015");
-        return dummyStrings.stream().map(DefaultSequence::new)
-                .collect(Collectors.toList());
+    private void repaint() {
+        ViewController vc = ViewController.getInstance();
+        ObservableList<Label> sequenceItems = FXCollections
+                .observableArrayList();
+
+        if (vc.isLoaded()) {
+            for (Sequence item : vc.getVisible()) {
+                String id = item.getIdentifier();
+                Label label = new Label(id);
+
+                Color color = (new SequenceColor(item)).getColor();
+
+                label.setStyle("-fx-background-color: rgba("
+                        + rgbaFormat(color) + ")");
+
+                sequenceItems.add(label);
+            }
+        }
+
+        sequenceList.setItems(sequenceItems);
     }
 
 }
