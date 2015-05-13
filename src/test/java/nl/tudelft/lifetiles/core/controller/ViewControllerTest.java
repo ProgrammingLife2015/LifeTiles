@@ -2,7 +2,6 @@ package nl.tudelft.lifetiles.core.controller;
 
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Observable;
 import java.util.Observer;
 import java.util.Set;
 
@@ -14,7 +13,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.Mockito;
 
 public class ViewControllerTest {
     ViewController controller;
@@ -52,20 +50,8 @@ public class ViewControllerTest {
         Set<Sequence> newSequences = new HashSet<>();
         newSequences.add(s1);
         newSequences.add(s4);
-        thrown.expect(IllegalArgumentException.class);
+        thrown.expect(UnsupportedOperationException.class);
         controller.setVisible(newSequences);
-    }
-
-    @Test
-    public void testObserve() {
-        view = Mockito.mock(Observer.class);
-        controller.addObserver(view);
-        Set<Sequence> newSequences = new HashSet<>();
-        newSequences.add(s1);
-        newSequences.add(s2);
-        controller.setVisible(newSequences);
-        Mockito.verify(view, Mockito.atLeastOnce()).update(
-                Mockito.<Observable> any(), Mockito.<Object> any());
     }
 
 }

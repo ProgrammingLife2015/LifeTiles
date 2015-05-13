@@ -1,5 +1,6 @@
 package nl.tudelft.lifetiles.core.controller;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Observable;
@@ -43,7 +44,8 @@ public class ViewController extends Observable {
      * Creates a new viewcontroller.
      */
     public ViewController() {
-        graph = null;
+        sequenceMap = new HashMap<>();
+        visibleSequences = new HashSet<>();
     }
 
     /**
@@ -60,11 +62,12 @@ public class ViewController extends Observable {
      *            The sequences to set to visible.
      */
     public final void setVisible(final Set<Sequence> sequences) {
-        visibleSequences = sequences;
-        if (visibleSequences.retainAll(sequenceMap.values())) {
+        visibleSequences = new HashSet<>(sequences);
+        if (visibleSequences.retainAll(getSequences().values())) {
             throw new IllegalArgumentException(
                     "Attempted to set a non-existant sequence to visible");
         }
+
         setChanged();
         notifyObservers();
     }
@@ -107,6 +110,9 @@ public class ViewController extends Observable {
         // obtain the sequences
         SequenceGenerator sg = new SequenceGenerator(graph);
         setSequences(sg.generateSequences());
+
+        setChanged();
+        notifyObservers();
     }
 
     /**
