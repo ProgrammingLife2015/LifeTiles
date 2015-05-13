@@ -24,7 +24,7 @@ import org.junit.rules.ExpectedException;
 public class GraphAdapterTest {
     GraphFactory<SequenceSegment> gf;
     static FactoryProducer<SequenceSegment> fp;
-    SequenceSegment v1, v2;
+    SequenceSegment v1, v2, v3;
     Graph<SequenceSegment> gr;
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -37,8 +37,9 @@ public class GraphAdapterTest {
     @Before
     public void setUp() throws Exception {
         gf = fp.getFactory("JGraphT");
-        v1 = new SequenceSegment(null, 0, 0, null);
-        v2 = new SequenceSegment(null, 0, 0, null);
+        v1 = new SequenceSegment(null, 1, 5, null);
+        v2 = new SequenceSegment(null, 6, 10, null);
+        v3 = new SequenceSegment(null, 7, 10, null);
         gr = gf.getGraph();
     }
 
@@ -107,6 +108,32 @@ public class GraphAdapterTest {
         List<Edge<SequenceSegment>> inc = gr.getOutgoing(v1);
         assertEquals(1, inc.size());
         assertEquals(v2, gr.getDestination(inc.iterator().next()));
+    }
+
+    @Test
+    public void testGetSortedOutgoing() {
+        gr.addVertex(v1);
+        gr.addVertex(v2);
+        gr.addVertex(v3);
+        gr.addEdge(v1, v2);
+        gr.addEdge(v1, v3);
+        List<Edge<SequenceSegment>> inc = gr.getOutgoing(v1);
+        assertEquals(2, inc.size());
+        assertEquals(v2, gr.getDestination(inc.get(0)));
+        assertEquals(v3, gr.getDestination(inc.get(1)));
+    }
+
+    @Test
+    public void testGetSortedOutgoing2() {
+        gr.addVertex(v1);
+        gr.addVertex(v2);
+        gr.addVertex(v3);
+        gr.addEdge(v1, v3);
+        gr.addEdge(v1, v2);
+        List<Edge<SequenceSegment>> inc = gr.getOutgoing(v1);
+        assertEquals(2, inc.size());
+        assertEquals(v2, gr.getDestination(inc.get(0)));
+        assertEquals(v3, gr.getDestination(inc.get(1)));
     }
 
     @Test
