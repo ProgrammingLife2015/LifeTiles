@@ -3,11 +3,11 @@ package nl.tudelft.lifetiles.graph.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.scene.Group;
+import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.graph.view.Tile;
 import nl.tudelft.lifetiles.graph.view.TileView;
 import nl.tudelft.lifetiles.graph.view.VertexView;
-import javafx.scene.Group;
-import javafx.scene.paint.Color;
 
 /**
  * The TileControllers controls what from the model has to be displayed on the
@@ -28,9 +28,9 @@ public class TileController {
      * Creates a TileController which controls the dataflow.
      *
      * @param view
-     *            - the view that draws everything
+     *            the view that draws everything
      * @param model
-     *            - the model that holds the data
+     *            the model that holds the data
      */
     public TileController(final TileView view, final Tile model) {
         this.viewVar = view;
@@ -41,9 +41,9 @@ public class TileController {
      * Change the Colour of a Vertex.
      *
      * @param color
-     *            - new color
+     *            new color
      * @param v
-     *            - to be changed vertex
+     *            to be changed vertex
      */
     public final void changeColour(final Color color, final VertexView v) {
         List<Object> args = new ArrayList<Object>();
@@ -65,9 +65,9 @@ public class TileController {
      * set a certain changed property with the arguments.
      *
      * @param propertyName
-     *            - Name of the property
+     *            Name of the property
      * @param args
-     *            - Arguments for the function that needs to be called.
+     *            Arguments for the function that needs to be called.
      */
     public final void setChangedProperty(final String propertyName,
             final List<Object> args) {
