@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.controller;
+package nl.tudelft.lifetiles.core.controller;
 
 import java.util.HashMap;
 import java.util.HashSet;

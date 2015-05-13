@@ -2,8 +2,6 @@ package nl.tudelft.lifetiles.graph.models;
 
 import java.util.Set;
 
-import nl.tudelft.lifetiles.graph.models.edge.Edge;
-
 /**
  * Interface for a generic graph.
  *

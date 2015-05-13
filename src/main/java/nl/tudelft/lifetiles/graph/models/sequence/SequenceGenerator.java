@@ -3,8 +3,8 @@ package nl.tudelft.lifetiles.graph.models.sequence;
 import java.util.HashMap;
 import java.util.Map;
 
+import nl.tudelft.lifetiles.graph.models.Edge;
 import nl.tudelft.lifetiles.graph.models.Graph;
-import nl.tudelft.lifetiles.graph.models.edge.Edge;
 
 /**
  * Class that derives seperate sequences from a sequencegraph.
