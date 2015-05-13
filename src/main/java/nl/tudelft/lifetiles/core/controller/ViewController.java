@@ -75,6 +75,9 @@ public class ViewController extends Observable {
      * @return A Map containing all sequences.
      */
     public final Map<String, Sequence> getSequences() {
+        if (!isLoaded()) {
+            throw new UnsupportedOperationException("Graph not loaded.");
+        }
         return sequenceMap;
     }
 
@@ -82,6 +85,9 @@ public class ViewController extends Observable {
      * @return the currently loaded graph.
      */
     public final Graph<SequenceSegment> getGraph() {
+        if (!isLoaded()) {
+            throw new UnsupportedOperationException("Graph not loaded.");
+        }
         return graph;
     }
 
