@@ -28,6 +28,7 @@ public class SunburstRing extends SunburstUnit {
      * @return
      */
     private Shape createRing(int layer, double degreeStart, double degreeEnd) {
+        
         Path result = new Path();
 
         result.setFill(Color.RED);
@@ -40,16 +41,16 @@ public class SunburstRing extends SunburstUnit {
         double angleAlphaNext = degreeEnd * (Math.PI / 180);
 
         double point1X = innerRadius * Math.sin(angleAlpha);
-        double point1Y = -(innerRadius * Math.cos(angleAlpha));
+        double point1Y = (innerRadius * Math.cos(angleAlpha));
 
         double point2X = outerRadius * Math.sin(angleAlpha);
-        double point2Y = -(outerRadius * Math.cos(angleAlpha));
+        double point2Y = (outerRadius * Math.cos(angleAlpha));
 
         double point3X = outerRadius * Math.sin(angleAlphaNext);
-        double point3Y = -(outerRadius * Math.cos(angleAlphaNext));
+        double point3Y = (outerRadius * Math.cos(angleAlphaNext));
 
         double point4X = innerRadius * Math.sin(angleAlphaNext);
-        double point4Y = -(innerRadius * Math.cos(angleAlphaNext));
+        double point4Y = (innerRadius * Math.cos(angleAlphaNext));
 
         MoveTo move1 = new MoveTo(point1X, point1Y);
         LineTo line12 = new LineTo(point2X, point2Y);

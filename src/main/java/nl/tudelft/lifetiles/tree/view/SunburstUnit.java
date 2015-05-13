@@ -21,5 +21,22 @@ public abstract class SunburstUnit extends StackPane {
     protected static final double CENTER_DIAMETER = 50.0d;
 
     protected static final double RING_WIDTH = 25.0d;
+    
+    /*
+     * Helpers
+     */
 
+    protected static double calculateAngle(double degreeStart, double degreeEnd) {
+        double result = 0;
+        
+        if (degreeStart > degreeEnd) {
+            result = 360 - ( degreeStart - degreeEnd);
+        }
+        
+        else if (degreeEnd  > degreeStart) {
+            result = degreeEnd - degreeStart;
+        }
+        
+        return result;
+    }
 }
