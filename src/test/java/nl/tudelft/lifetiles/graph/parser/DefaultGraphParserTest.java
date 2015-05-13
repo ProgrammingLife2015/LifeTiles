@@ -18,7 +18,7 @@ public class DefaultGraphParserTest {
         GraphFactory<SequenceSegment> gf = fp.getFactory("JGraphT");
         DefaultGraphParser parser = new DefaultGraphParser();
         Graph<SequenceSegment> gr = parser.parseFile(
-                "data/simple_graph/simple_graph", gf);
+                "data/test_graph/test_graph", gf);
         assertEquals(2849, gr.getAllVertices().size());
         assertEquals(3842, gr.getAllEdges().size());
     }

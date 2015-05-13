@@ -50,7 +50,7 @@ public class GraphController implements Initializable {
         GraphFactory<SequenceSegment> gf = fp.getFactory("JGraphT");
         DefaultGraphParser parser = new DefaultGraphParser();
         Graph<SequenceSegment> gr = parser.parseFile(
-                "data/simple_graph/simple_graph", gf);
+                "data/test_graph/test_graph", gf);
         return gr;
     }
 
