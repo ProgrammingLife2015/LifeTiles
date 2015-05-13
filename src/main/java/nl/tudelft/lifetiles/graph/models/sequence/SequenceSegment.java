@@ -2,29 +2,41 @@ package nl.tudelft.lifetiles.graph.models.sequence;
 
 import java.util.Set;
 
-/**
- * Contains a partial sequence.
- *
- * @author Rutger van den Berg
- */
-public class SequenceSegment {
-    /**
-     * The content of this segment.
-     */
-    private String contentVar;
+import nl.tudelft.lifetiles.graph.view.Mutation;
 
+/**
+ * @author Rutger van den Berg Contains a partial sequence.
+ */
+public class SequenceSegment implements Comparable<SequenceSegment> {
+    /**
+     * Contains the sources containing this segment.
+     */
+    private Set<Sequence> sourcesVar;
+
+    /**
+     * The start position for this segment.
+     */
+    private long startVar;
     /**
      * The end position for this segment.
      */
     private long endVar;
     /**
-     * Contains the sources containing this segment.
+     * The absolute start position for this segment.
      */
-    private Set<Sequence> sourcesVar;
+    private long absStartVar = 0;
     /**
-     * The start position for this segment.
+     * The absolute end position for this segment.
      */
-    private long startVar;
+    private long absEndVar = Long.MAX_VALUE;
+    /**
+     * The content of this segment.
+     */
+    private SegmentContent contentVar;
+    /**
+     * The mutation annotation of this segment.
+     */
+    private Mutation mutationVar;
 
     /**
      * @param sources
@@ -38,25 +50,11 @@ public class SequenceSegment {
      */
     public SequenceSegment(final Set<Sequence> sources,
             final long startPosition, final long endPosition,
-            final String content) {
+            final SegmentContent content) {
         sourcesVar = sources;
         startVar = startPosition;
         endVar = endPosition;
         contentVar = content;
-    }
-
-    /**
-     * @return the content
-     */
-    public final String getContent() {
-        return contentVar;
-    }
-
-    /**
-     * @return the end position
-     */
-    public final long getEnd() {
-        return endVar;
     }
 
     /**
@@ -71,5 +69,89 @@ public class SequenceSegment {
      */
     public final long getStart() {
         return startVar;
+    }
+
+    /**
+     * @return the end position
+     */
+    public final long getEnd() {
+        return endVar;
+    }
+
+    /**
+     * @return the absolute start position
+     */
+    public final long getAbsStart() {
+        return absStartVar;
+    }
+
+    /**
+     * @param absStart
+     *            absolute start position of this sequence segment.
+     */
+    public final void setAbsStart(final long absStart) {
+        absStartVar = absStart;
+    }
+
+    /**
+     * @return the absolute end position
+     */
+    public final long getAbsEnd() {
+        return absEndVar;
+    }
+
+    /**
+     * @param absEnd
+     *            absolute end position of this sequence segment.
+     */
+    public final void setAbsEnd(final long absEnd) {
+        absEndVar = absEnd;
+    }
+
+    /**
+     * @return the content
+     */
+    public final SegmentContent getContent() {
+        return contentVar;
+    }
+
+    /**
+     * @return mutation annotation of sequence segment.
+     */
+    public final Mutation getMutation() {
+        return mutationVar;
+    }
+
+    /**
+     * @param mutation
+     *            Mutation which is annotated onto the sequence segment.
+     */
+    public final void setMutation(final Mutation mutation) {
+        mutationVar = mutation;
+    }
+
+    /**
+     * Returns the distance between this sequence segment and another.
+     * (non-euclidian distance)
+     *
+     * @param other
+     *            Sequence segment which needs to be compared.
+     * @return
+     *         Distance between this sequence and other sequence.
+     */
+    public final long distanceTo(final SequenceSegment other) {
+        return other.getStart() - getEnd() - 1;
+    }
+
+    /**
+     * Compares the the start position of this and another sequence segment.
+     *
+     * @param other
+     *            Sequence segment which needs to be compared.
+     * @return the compare value of the start positions.
+     */
+    @Override
+    public final int compareTo(final SequenceSegment other) {
+        return ((Long) startVar).compareTo(other.getStart());
     }
 }
