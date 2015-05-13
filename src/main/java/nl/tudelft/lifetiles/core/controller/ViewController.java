@@ -69,8 +69,7 @@ public final class ViewController extends Observable {
                     "Attempted to set a non-existant sequence to visible");
         }
 
-        setChanged();
-        notifyObservers();
+        notifyChanged();
     }
 
     /**
@@ -112,6 +111,39 @@ public final class ViewController extends Observable {
         SequenceGenerator sg = new SequenceGenerator(graph);
         setSequences(sg.generateSequences());
 
+        notifyChanged();
+    }
+
+    /**
+     * Unload the graph and sequences.
+     */
+    public void unloadGraph() {
+        sequenceMap = null;
+        visibleSequences = null;
+        graph = null;
+
+        notifyChanged();
+    }
+
+    /**
+     * Set a new graph.
+     *
+     * @param newGraph
+     *            the new graph
+     */
+    public void setGraph(final Graph<SequenceSegment> newGraph) {
+        graph = newGraph;
+
+        SequenceGenerator sg = new SequenceGenerator(graph);
+        setSequences(sg.generateSequences());
+
+        notifyChanged();
+    }
+
+    /**
+     * Notify the observers of a change.
+     */
+    public void notifyChanged() {
         setChanged();
         notifyObservers();
     }
