@@ -1,6 +1,5 @@
 package nl.tudelft.lifetiles.core.controller;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Observable;
@@ -32,11 +31,20 @@ public class ViewControllerTest {
         s2 = new DefaultSequence("s2");
         s3 = new DefaultSequence("s3");
         s4 = new DefaultSequence("s4");
-        sequences = new HashMap<>();
-        sequences.put("s1", s1);
-        sequences.put("s2", s2);
-        sequences.put("s3", s3);
-        controller = new ViewController(sequences);
+
+        controller = new ViewController();
+    }
+
+    @Test
+    public void testUnloadedGraph() {
+        thrown.expect(UnsupportedOperationException.class);
+        controller.getGraph();
+    }
+
+    @Test
+    public void testUnloadedSequences() {
+        thrown.expect(UnsupportedOperationException.class);
+        controller.getSequences();
     }
 
     @Test
