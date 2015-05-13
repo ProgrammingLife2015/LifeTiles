@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.Observer;
 import java.util.Set;
 
-import nl.tudelft.lifetiles.core.controller.ViewController;
 import nl.tudelft.lifetiles.graph.models.sequence.DefaultSequence;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 
@@ -30,7 +29,7 @@ public class ViewControllerTest {
         s3 = new DefaultSequence("s3");
         s4 = new DefaultSequence("s4");
 
-        controller = new ViewController();
+        controller = ViewController.getInstance();
     }
 
     @Test
