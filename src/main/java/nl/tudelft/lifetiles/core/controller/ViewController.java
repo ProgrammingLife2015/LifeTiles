@@ -19,6 +19,7 @@ import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
  * Controls what the view modules display.
  *
  * @author Rutger van den Berg
+ * @author Joren Hammudoglu
  */
 public class ViewController extends Observable {
 
