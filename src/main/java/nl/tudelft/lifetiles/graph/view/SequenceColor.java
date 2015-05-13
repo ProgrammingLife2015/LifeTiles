@@ -1,8 +1,9 @@
-package nl.tudelft.lifetiles.graph.models.sequence;
+package nl.tudelft.lifetiles.graph.view;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 import javafx.scene.paint.Color;
 
 /**
