@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.graph.models.jgrapht;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -18,7 +19,7 @@ import org.jgrapht.graph.DefaultEdge;
  * @param <V>
  *            The type of vertex to use.
  */
-public class JGraphTGraphAdapter<V> implements Graph<V> {
+public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
     /**
      * The edgefactory to use to create the edges for this graph.
      */
@@ -145,6 +146,8 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
     }
 
     /**
+     * Get outgoing edges for a vertex, sorted by distance.
+     *
      * @param vertex
      *            The vertex to use.
      * @return The edges outgoing from <code>vertex</code>.
@@ -221,4 +224,20 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
         internalGraph.removeEdge(unpackEdge(edge));
     }
 
+    /**
+     * @author Rutger van den Berg
+     *         Compares two edges by their target vertex.
+     */
+    class EdgeComparatorByVertex implements Comparator<JGraphTEdgeAdapter<V>> {
+
+        @Override
+        public int compare(final JGraphTEdgeAdapter<V> o1,
+                final JGraphTEdgeAdapter<V> o2) {
+
+            V target1 = internalGraph.getEdgeTarget(o1.getInternalEdge());
+            V target2 = internalGraph.getEdgeTarget(o2.getInternalEdge());
+            return target1.compareTo(target2);
+        }
+
+    }
 }

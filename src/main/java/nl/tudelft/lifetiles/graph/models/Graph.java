@@ -9,7 +9,7 @@ import java.util.List;
  * @param <V>
  *            The Class to use as vertices.
  */
-public interface Graph<V> {
+public interface Graph<V extends Comparable<V>> {
     /**
      * @param source
      *            Id of the source vertex.
