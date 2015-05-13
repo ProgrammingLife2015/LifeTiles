@@ -21,7 +21,7 @@ import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
  * @author Rutger van den Berg
  * @author Joren Hammudoglu
  */
-public class ViewController extends Observable {
+public final class ViewController extends Observable {
 
     /**
      * The singelton of ViewController.
@@ -44,7 +44,7 @@ public class ViewController extends Observable {
     /**
      * Creates a new viewcontroller.
      */
-    public ViewController() {
+    private ViewController() {
         sequenceMap = new HashMap<>();
         visibleSequences = new HashSet<>();
     }
@@ -52,7 +52,7 @@ public class ViewController extends Observable {
     /**
      * @return A set containing all visible sequences.
      */
-    public final Set<Sequence> getVisible() {
+    public Set<Sequence> getVisible() {
         return visibleSequences;
     }
 
@@ -62,7 +62,7 @@ public class ViewController extends Observable {
      * @param sequences
      *            The sequences to set to visible.
      */
-    public final void setVisible(final Set<Sequence> sequences) {
+    public void setVisible(final Set<Sequence> sequences) {
         visibleSequences = new HashSet<>(sequences);
         if (visibleSequences.retainAll(getSequences().values())) {
             throw new IllegalArgumentException(
@@ -78,7 +78,7 @@ public class ViewController extends Observable {
      *
      * @return A Map containing all sequences.
      */
-    public final Map<String, Sequence> getSequences() {
+    public Map<String, Sequence> getSequences() {
         if (!isLoaded()) {
             throw new UnsupportedOperationException("Graph not loaded.");
         }
@@ -88,7 +88,7 @@ public class ViewController extends Observable {
     /**
      * @return the currently loaded graph.
      */
-    public final Graph<SequenceSegment> getGraph() {
+    public Graph<SequenceSegment> getGraph() {
         if (!isLoaded()) {
             throw new UnsupportedOperationException("Graph not loaded.");
         }
@@ -101,7 +101,7 @@ public class ViewController extends Observable {
      * @param filename
      *            The name of the file to load.
      */
-    public final void loadGraph(final String filename) {
+    public void loadGraph(final String filename) {
         // create the graph
         FactoryProducer<SequenceSegment> fp = new FactoryProducer<>();
         GraphFactory<SequenceSegment> gf = fp.getFactory("JGraphT");
@@ -121,7 +121,7 @@ public class ViewController extends Observable {
      *
      * @return true if the graph is loaded
      */
-    public final boolean isLoaded() {
+    public boolean isLoaded() {
         return graph != null;
     }
 
