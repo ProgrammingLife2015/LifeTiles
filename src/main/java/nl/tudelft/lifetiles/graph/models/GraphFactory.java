@@ -1,6 +1,5 @@
 package nl.tudelft.lifetiles.graph.models;
 
-
 /**
  * Factory interface for Graphs.
  *

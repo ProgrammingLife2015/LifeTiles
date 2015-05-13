@@ -33,7 +33,7 @@ public class EdgeLine extends Group {
      * @param to
      *            Vertex to draw to
      */
-    public EdgeLine(final Vertex from, final Vertex to) {
+    public EdgeLine(final VertexView from, final VertexView to) {
         this.line = new Line();
         Bounds boundFrom = from.getBoundsInParent();
         Bounds boundTo = to.getBoundsInParent();
@@ -53,14 +53,14 @@ public class EdgeLine extends Group {
      * for more information.
      *
      * @param p0
-     *            - Point 0 of the first line
+     *            Point 0 of the first line
      * @param t0
-     *            - Point 1 of the first line
+     *            Point 1 of the first line
      * @param p1
-     *            - Point 0 of the second line
+     *            Point 0 of the second line
      * @param t1
-     *            - Point 1 of the second line
-     * @return - y intersection point
+     *            Point 1 of the second line
+     * @return y intersection point
      */
     private double calculateYIntersection(final DataPair p0, final DataPair t0,
             final DataPair p1, final DataPair t1) {
@@ -94,15 +94,15 @@ public class EdgeLine extends Group {
      * Draw a Crossed line between two Vertices.
      *
      * @param from
-     *            - Start Vertex
+     *            Start Vertex
      * @param to
-     *            - Destination Vertex
+     *            Destination Vertex
      * @param boundFrom
-     *            - The Bounds of the start Vertex
+     *            The Bounds of the start Vertex
      * @param boundTo
-     *            - The Bounds of the end Vertex
+     *            The Bounds of the end Vertex
      */
-    private void drawCrossLine(final Vertex from, final Vertex to,
+    private void drawCrossLine(final VertexView from, final VertexView to,
             final Bounds boundFrom, final Bounds boundTo) {
         Circle head = new Circle();
         head.setRadius(HEAD_RADIUS);
@@ -134,13 +134,13 @@ public class EdgeLine extends Group {
      * Draw a line given the start and end coordinates.
      *
      * @param startX
-     *            - starting x coordinate
+     *            starting x coordinate
      * @param startY
-     *            - starting y coordinate
+     *            starting y coordinate
      * @param endX
-     *            - ending x coordinate
+     *            ending x coordinate
      * @param endY
-     *            - ending y coordinate
+     *            ending y coordinate
      */
     private void drawLine(final double startX, final double startY,
             final double endX, final double endY) {
@@ -154,15 +154,15 @@ public class EdgeLine extends Group {
      * Draw a straight between two vertices.
      *
      * @param from
-     *            - Start Vertex
+     *            Start Vertex
      * @param to
-     *            - Destination Vertex
+     *            Destination Vertex
      * @param boundFrom
-     *            - The Bounds of the start Vertex
+     *            The Bounds of the start Vertex
      * @param boundTo
-     *            - The Bounds of the end Vertex
+     *            The Bounds of the end Vertex
      */
-    private void drawStraightLine(final Vertex from, final Vertex to,
+    private void drawStraightLine(final VertexView from, final VertexView to,
             final Bounds boundFrom, final Bounds boundTo) {
         Circle head = new Circle();
         head.setRadius(HEAD_RADIUS);

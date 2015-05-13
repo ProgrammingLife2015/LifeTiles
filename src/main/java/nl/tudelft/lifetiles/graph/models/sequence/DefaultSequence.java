@@ -42,4 +42,12 @@ public class DefaultSequence implements Sequence {
         return sequenceList;
     }
 
+    @Override
+    public final boolean equals(final Object other) {
+        if (other instanceof Sequence) {
+            return ident.equals(((Sequence) other).getIdentifier());
+        }
+        return false;
+    }
+
 }

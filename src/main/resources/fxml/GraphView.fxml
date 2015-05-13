@@ -11,7 +11,7 @@
 
 <ScrollPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="342"
 	prefWidth="200.0" fx:controller="nl.tudelft.lifetiles.graph.controller.GraphController"
-	id="graphPane">
+	id="graphPane" fx:id="wrapper">
 	<content>
 		<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="342"
 			prefWidth="2000" id="graphPaneInner">

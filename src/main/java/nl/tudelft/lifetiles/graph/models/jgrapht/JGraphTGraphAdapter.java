@@ -12,12 +12,6 @@ import nl.tudelft.lifetiles.graph.models.Graph;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.graph.DefaultEdge;
 
-/**
- * @author Rutger van den Berg
- *
- * @param <V>
- *            The type of vertex to use.
- */
 public class JGraphTGraphAdapter<V> implements Graph<V> {
     /**
      * The edgefactory to use to create the edges for this graph.
@@ -31,6 +25,10 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      * Keep track of all vertices that have no incoming edges.
      */
     private Set<V> sources;
+    /**
+     * Keep track of all vertices that have no outgoing edges.
+     */
+    private Set<V> sinks;
     /**
      * List of vertices. Used to be able to identify nodes by ids.
      */
@@ -47,6 +45,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
                 DefaultEdge.class);
         edgeFact = ef;
         sources = new HashSet<>();
+        sinks = new HashSet<>();
         vertexIdentifiers = new ArrayList<>();
     }
 
@@ -69,6 +68,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
         try {
             internalGraph.addEdge(source, destination);
             sources.remove(destination);
+            sinks.remove(source);
             return true;
         } catch (IllegalArgumentException e) {
             return false;
@@ -84,6 +84,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
         internalGraph.addVertex(vertex);
         vertexIdentifiers.add(vertex);
         sources.add(vertex);
+        sinks.add(vertex);
     }
 
     /**
@@ -157,13 +158,20 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
     }
 
     /**
+     * @return All vertices that have no outgoing edges.
+     */
+    @Override
+    public Set<V> getSink() {
+        return sinks;
+    }
+
+    /**
      * @param e
      *            The edge to use.
      * @return The source <code>Vertex</code> for <code>e</code>.
      */
     @Override
     public final V getSource(final Edge<V> e) {
-
         return internalGraph.getEdgeSource(unpackEdge(e));
     }
 
@@ -180,6 +188,30 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
         }
         JGraphTEdgeAdapter<V> ed = (JGraphTEdgeAdapter<V>) input;
         return ed.getInternalEdge();
+    }
+
+    /**
+     * Divides an edge into two edges with an inserted vertex in the middle.
+     * 
+     * @param edge
+     *            Edge to be divided.
+     * @param vertex
+     *            Vertex to be inserted.
+     */
+    @Override
+    public void divideEdge(Edge<V> edge, V vertex) {
+        removeEdge(edge);
+        addVertex(vertex);
+        addEdge(getSource(edge), vertex);
+        addEdge(vertex, getDestination(edge));
+    }
+
+    /**
+     * @param edge
+     *            Edge to be removed.
+     */
+    private void removeEdge(Edge<V> edge) {
+        internalGraph.removeEdge(unpackEdge(edge));
     }
 
 }

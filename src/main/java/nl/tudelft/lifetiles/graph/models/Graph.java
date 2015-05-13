@@ -77,9 +77,25 @@ public interface Graph<V> {
     Set<V> getSource();
 
     /**
+     * @return A Set of sink nodes. Sink being a node that has no outgoing
+     *         edges.
+     */
+    Set<V> getSink();
+
+    /**
      * @param e
-     *            THe edge for which the source is to be retrieved.
+     *            The edge for which the source is to be retrieved.
      * @return The source vertex.
      */
     V getSource(Edge<V> e);
+
+    /**
+     * Divides an edge into two edges with an inserted vertex in the middle.
+     *
+     * @param edge
+     *            Edge to be divided.
+     * @param vertex
+     *            Vertex to be inserted.
+     */
+    void divideEdge(Edge<V> edge, V vertex);
 }

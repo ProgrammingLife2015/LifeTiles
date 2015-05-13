@@ -5,7 +5,7 @@ import java.util.List;
 
 import nl.tudelft.lifetiles.graph.models.Tile;
 import nl.tudelft.lifetiles.graph.view.TileView;
-import nl.tudelft.lifetiles.graph.view.Vertex;
+import nl.tudelft.lifetiles.graph.view.VertexView;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 
@@ -41,11 +41,11 @@ public class TileController {
      * Change the Colour of a Vertex.
      *
      * @param color
-     *            - new color
+     *            new color
      * @param v
-     *            - to be changed vertex
+     *            to be changed vertex
      */
-    public final void changeColour(final Color color, final Vertex v) {
+    public final void changeColour(final Color color, final VertexView v) {
         List<Object> args = new ArrayList<Object>();
         args.add(v);
         args.add(color);
@@ -65,15 +65,15 @@ public class TileController {
      * set a certain changed property with the arguments.
      *
      * @param propertyName
-     *            - Name of the property
+     *            Name of the property
      * @param args
-     *            - Arguments for the function that needs to be called.
+     *            Arguments for the function that needs to be called.
      */
     public final void setChangedProperty(final String propertyName,
             final List<Object> args) {
 
         if (propertyName.equals("COLOR_CHANGED")) {
-            viewVar.changeVertexColour((Vertex) args.get(0),
+            viewVar.changeVertexColour((VertexView) args.get(0),
                     (Color) args.get(1));
         }
     }

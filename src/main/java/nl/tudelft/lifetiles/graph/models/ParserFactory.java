@@ -2,7 +2,6 @@ package nl.tudelft.lifetiles.graph.models;
 
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 
-
 /**
  * Interface for ParserFactory. Implementations will parse various files into a
  * graph.
