@@ -44,10 +44,10 @@ public class SunburstView extends Control {
         SunburstCenter Center = new SunburstCenter(currentItem);
         container.getChildren().add(Center);
 
-        int totalDescendants = currentItem.numberDescendants();
+        double totalDescendants = currentItem.numberDescendants();
         double degreeStart = 0;
         for (PhylogeneticTreeItem child : currentItem.getChildren()) {
-            double sectorSize = child.numberDescendants() / totalDescendants;
+            double sectorSize = (child.numberDescendants() + 1) / totalDescendants;
             double degreeEnd = degreeStart + (360 * sectorSize);
 
             drawRingRecursive(child, 0, degreeStart, degreeEnd);
@@ -61,13 +61,13 @@ public class SunburstView extends Control {
         SunburstRing ringUnit = new SunburstRing(node, layer, degreeStart,
                 degreeEnd);
         container.getChildren().add(ringUnit);
-
-        int totalDescendants = currentItem.numberDescendants();
+        double totalDescendants = currentItem.numberDescendants();
         double start = degreeStart;
         double sectorAngle = SunburstUnit
                 .calculateAngle(degreeStart, degreeEnd);
+        // generate rings for child nodes
         for (PhylogeneticTreeItem child : node.getChildren()) {
-            double sectorSize = child.numberDescendants() / totalDescendants;
+            double sectorSize = (child.numberDescendants() + 1) / totalDescendants;
             double end = start + (sectorAngle * sectorSize);
 
             drawRingRecursive(child, layer + 1, start, end);
