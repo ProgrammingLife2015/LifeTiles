@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.graph.models.jgrapht;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -154,8 +155,10 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
      */
     @Override
     public final List<Edge<V>> getOutgoing(final V vertex) {
-        return new ArrayList<Edge<V>>(
+        List<Edge<V>> output = new ArrayList<Edge<V>>(
                 convertEdges(internalGraph.outgoingEdgesOf(vertex)));
+        Collections.sort(output, new EdgeComparatorByVertex());
+        return output;
     }
 
     /**
