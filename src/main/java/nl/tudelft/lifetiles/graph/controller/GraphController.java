@@ -1,7 +1,6 @@
 package nl.tudelft.lifetiles.graph.controller;
 
 import java.net.URL;
-import java.util.HashSet;
 import java.util.ResourceBundle;
 
 import nl.tudelft.lifetiles.graph.models.DefaultGraphParser;
@@ -9,9 +8,6 @@ import nl.tudelft.lifetiles.graph.models.FactoryProducer;
 import nl.tudelft.lifetiles.graph.models.Graph;
 import nl.tudelft.lifetiles.graph.models.GraphFactory;
 import nl.tudelft.lifetiles.graph.models.Tile;
-import nl.tudelft.lifetiles.graph.models.sequence.DefaultSequence;
-import nl.tudelft.lifetiles.graph.models.sequence.SegmentString;
-import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 import nl.tudelft.lifetiles.graph.view.TileView;
 import javafx.fxml.FXML;
@@ -33,11 +29,9 @@ public class GraphController implements Initializable {
     @FXML
     private ScrollPane wrapper;
 
-    /**
-     * Initializes the Graph View.
-     */
     @Override
-    public void initialize(final URL location, final ResourceBundle resources) {
+    public final void initialize(final URL location,
+            final ResourceBundle resources) {
         Tile model = new Tile(loadGraphModel());
         TileView view = new TileView();
         TileController controller = new TileController(view, model);
@@ -48,7 +42,7 @@ public class GraphController implements Initializable {
 
     /**
      * Loads a graph by filename.
-     * 
+     *
      * @return parsed graph by filename.
      */
     private Graph<SequenceSegment> loadGraphModel() {

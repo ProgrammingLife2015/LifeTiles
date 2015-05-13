@@ -22,5 +22,5 @@ public class DefaultGraphParserTest {
         assertEquals(2849, gr.getAllVertices().size());
         assertEquals(3842, gr.getAllEdges().size());
     }
-}
 
+}
