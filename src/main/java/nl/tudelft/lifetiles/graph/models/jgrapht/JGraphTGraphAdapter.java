@@ -32,6 +32,10 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      */
     private Set<V> sources;
     /**
+     * Keep track of all vertices that have no outgoing edges.
+     */
+    private Set<V> sinks;
+    /**
      * List of vertices. Used to be able to identify nodes by ids.
      */
     private List<V> vertexIdentifiers;
@@ -47,6 +51,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
                 DefaultEdge.class);
         edgeFact = ef;
         sources = new HashSet<>();
+        sinks = new HashSet<>();
         vertexIdentifiers = new ArrayList<>();
     }
 
@@ -69,6 +74,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
         try {
             internalGraph.addEdge(source, destination);
             sources.remove(destination);
+            sinks.remove(source);
             return true;
         } catch (IllegalArgumentException e) {
             return false;
@@ -84,6 +90,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
         internalGraph.addVertex(vertex);
         vertexIdentifiers.add(vertex);
         sources.add(vertex);
+        sinks.add(vertex);
     }
 
     /**
@@ -180,6 +187,38 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
         }
         JGraphTEdgeAdapter<V> ed = (JGraphTEdgeAdapter<V>) input;
         return ed.getInternalEdge();
+    }
+
+    /**
+     * @return All vertices that have no outgoing edges.
+     */
+    @Override
+    public final Set<V> getSink() {
+        return sinks;
+    }
+
+    /**
+     * Divides an edge into two edges with an inserted vertex in the middle.
+     *
+     * @param edge
+     *            Edge to be divided.
+     * @param vertex
+     *            Vertex to be inserted.
+     */
+    @Override
+    public final void divideEdge(final Edge<V> edge, final V vertex) {
+        removeEdge(edge);
+        addVertex(vertex);
+        addEdge(getSource(edge), vertex);
+        addEdge(vertex, getDestination(edge));
+    }
+
+    /**
+     * @param edge
+     *            Edge to be removed.
+     */
+    private void removeEdge(final Edge<V> edge) {
+        internalGraph.removeEdge(unpackEdge(edge));
     }
 
 }
