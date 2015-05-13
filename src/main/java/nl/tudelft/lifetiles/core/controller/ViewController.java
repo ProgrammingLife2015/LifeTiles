@@ -103,6 +103,11 @@ public class ViewController extends Observable {
         setSequences(sg.generateSequences());
     }
 
+    /**
+     * Check if the graph is loaded.
+     *
+     * @return true if the graph is loaded
+     */
     public final boolean isLoaded() {
         return graph != null;
     }
