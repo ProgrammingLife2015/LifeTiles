@@ -41,7 +41,6 @@ public class SequenceController implements Initializable, Observer {
             final ResourceBundle resources) {
         ViewController vc = ViewController.getInstance();
         vc.addObserver(this);
-        vc.loadGraph("data/2_strains/simple_graph");
         repaint();
     }
 
