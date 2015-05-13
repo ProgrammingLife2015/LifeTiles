@@ -16,7 +16,7 @@ import javafx.scene.text.Text;
  * @author AC Langerak
  *
  */
-public class Vertex extends Group {
+public class VertexView extends Group {
     /**
      * this will hold text in the right place.
      */
@@ -67,7 +67,7 @@ public class Vertex extends Group {
      * @param color
      *            the color of the vertex
      */
-    public Vertex(final String string, final double initX, final double initY,
+    public VertexView(final String string, final double initX, final double initY,
             final double height, final Color color) {
         // TODO: move style related code to css
         this.text = new Text(string);
@@ -179,7 +179,7 @@ public class Vertex extends Group {
      * @param color
      *            the new color
      */
-    public final void setColour(final Color color) {
+    public final void setColor(final Color color) {
         this.rectangle.setFill(color);
     }
 

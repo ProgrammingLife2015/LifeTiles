@@ -33,7 +33,7 @@ public class EdgeLine extends Group {
      * @param to
      *            Vertex to draw to
      */
-    public EdgeLine(final Vertex from, final Vertex to) {
+    public EdgeLine(final VertexView from, final VertexView to) {
         this.line = new Line();
         Bounds boundFrom = from.getBoundsInParent();
         Bounds boundTo = to.getBoundsInParent();
@@ -102,7 +102,7 @@ public class EdgeLine extends Group {
      * @param boundTo
      *            - The Bounds of the end Vertex
      */
-    private void drawCrossLine(final Vertex from, final Vertex to,
+    private void drawCrossLine(final VertexView from, final VertexView to,
             final Bounds boundFrom, final Bounds boundTo) {
         Circle head = new Circle();
         head.setRadius(HEAD_RADIUS);
@@ -162,7 +162,7 @@ public class EdgeLine extends Group {
      * @param boundTo
      *            - The Bounds of the end Vertex
      */
-    private void drawStraightLine(final Vertex from, final Vertex to,
+    private void drawStraightLine(final VertexView from, final VertexView to,
             final Bounds boundFrom, final Bounds boundTo) {
         Circle head = new Circle();
         head.setRadius(HEAD_RADIUS);
