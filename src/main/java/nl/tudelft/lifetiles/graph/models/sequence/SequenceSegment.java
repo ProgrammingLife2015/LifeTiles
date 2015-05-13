@@ -154,6 +154,6 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      */
     @Override
     public final int compareTo(final SequenceSegment other) {
-        return ((Long) startVar).compareTo(other.getStart());
+        return Long.compare(this.getStart(), other.getStart());
     }
 }
