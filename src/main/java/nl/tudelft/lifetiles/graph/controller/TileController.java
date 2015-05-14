@@ -1,13 +1,8 @@
 package nl.tudelft.lifetiles.graph.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javafx.scene.Group;
-import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.graph.view.Tile;
 import nl.tudelft.lifetiles.graph.view.TileView;
-import nl.tudelft.lifetiles.graph.view.VertexView;
 
 /**
  * The TileControllers controls what from the model has to be displayed on the
