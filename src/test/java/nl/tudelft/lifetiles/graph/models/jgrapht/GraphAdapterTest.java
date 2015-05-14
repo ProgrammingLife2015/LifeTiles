@@ -14,7 +14,9 @@ import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * @author Rutger van den Berg
@@ -25,6 +27,8 @@ public class GraphAdapterTest {
     static FactoryProducer<SequenceSegment> fp;
     SequenceSegment v1, v2;
     Graph<SequenceSegment> gr;
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @BeforeClass
     public static void runOnce() {
@@ -59,6 +63,7 @@ public class GraphAdapterTest {
 
     @Test
     public void testAddWrongEdge() {
+        thrown.expect(IllegalArgumentException.class);
         gr.addVertex(v1);
         assertEquals(0, gr.getAllEdges().size());
         assertFalse(gr.addEdge(v1, v2));

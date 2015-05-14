@@ -71,13 +71,15 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      */
     @Override
     public final boolean addEdge(final V source, final V destination) {
-        try {
+        if (internalGraph.containsVertex(source)
+                && internalGraph.containsVertex(destination)) {
             internalGraph.addEdge(source, destination);
             sources.remove(destination);
             sinks.remove(source);
             return true;
-        } catch (IllegalArgumentException e) {
-            return false;
+        } else {
+            throw new IllegalArgumentException(
+                    "Source or destination not in graph.");
         }
     }
 
