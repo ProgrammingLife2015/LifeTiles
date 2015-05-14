@@ -92,7 +92,6 @@ public class TileView {
         long width = segment.getContent().getLength();
         long height = segment.getSources().size();
         Color color = sequenceColor(segment.getMutation());
-        
         for (int index = 0; index < lanes.size(); index++) {
             if (lanes.get(index) <= segment.getStart()
                     && segmentFree(index, segment)) {
