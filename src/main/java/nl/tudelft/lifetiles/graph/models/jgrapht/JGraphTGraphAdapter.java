@@ -198,7 +198,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
     }
 
     /**
-     * Divides an edge into two edges with an inserted vertex in the middle.
+     * Splits an edge into two edges with an inserted vertex in the middle.
      *
      * @param edge
      *            Edge to be divided.
@@ -206,7 +206,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      *            Vertex to be inserted.
      */
     @Override
-    public final void divideEdge(final Edge<V> edge, final V vertex) {
+    public final void splitEdge(final Edge<V> edge, final V vertex) {
         removeEdge(edge);
         addVertex(vertex);
         addEdge(getSource(edge), vertex);

@@ -139,7 +139,7 @@ public class GraphAdapterTest {
         gr.addEdge(v1, v2);
         Set<Edge<SequenceSegment>> inc = gr.getIncoming(v2);
         SequenceSegment v3 = new SequenceSegment(null, 0, 0, null);
-        gr.divideEdge(inc.iterator().next(), v3);
+        gr.splitEdge(inc.iterator().next(), v3);
         assertEquals(v3, gr.getSource(gr.getIncoming(v2).iterator().next()));
         assertEquals(v3,
                 gr.getDestination(gr.getOutgoing(v1).iterator().next()));

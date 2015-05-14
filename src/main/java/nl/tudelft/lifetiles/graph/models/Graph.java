@@ -90,12 +90,12 @@ public interface Graph<V> {
     Set<V> getSinks();
 
     /**
-     * Divides an edge into two edges with an inserted vertex in the middle.
+     * Splits an edge into two edges with an inserted vertex in the middle.
      *
      * @param edge
      *            Edge to be divided.
      * @param vertex
      *            Vertex to be inserted.
      */
-    void divideEdge(Edge<V> edge, V vertex);
+    void splitEdge(Edge<V> edge, V vertex);
 }
