@@ -87,17 +87,22 @@ public class TileView {
      *            segment to be drawn
      */
     private void drawVertexLane(final SequenceSegment segment) {
-        for (int index = 0; index <= lanes.size(); index++) {
-            if (index >= lanes.size() || lanes.get(index) <= segment.getStart()
+        String text = segment.getContent().toString();
+        long start = segment.getStart();
+        long width = segment.getContent().getLength();
+        long height = segment.getSources().size();
+        Color color = sequenceColor(segment.getMutation());
+        
+        for (int index = 0; index < lanes.size(); index++) {
+            if (lanes.get(index) <= segment.getStart()
                     && segmentFree(index, segment)) {
+                drawVertex(text, start, index, width, height, color);
                 segmentInsert(index, segment);
-                String text = segment.getContent().toString();
-                drawVertex(text, segment.getStart(), index, segment
-                        .getContent().getLength(), segment.getSources().size(),
-                        sequenceColor(segment.getMutation()));
-                break;
+                return;
             }
         }
+        drawVertex(text, start, lanes.size(), width, height, color);
+        segmentInsert(lanes.size(), segment);
     }
 
     /**
