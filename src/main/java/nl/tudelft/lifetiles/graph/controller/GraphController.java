@@ -30,6 +30,7 @@ public class GraphController implements Initializable {
     private ScrollPane wrapper;
 
     @Override
+    @Deprecated
     public final void initialize(final URL location,
             final ResourceBundle resources) {
         Tile model = new Tile(loadGraphModel());
@@ -45,6 +46,7 @@ public class GraphController implements Initializable {
      *
      * @return parsed graph by filename.
      */
+    @Deprecated
     private Graph<SequenceSegment> loadGraphModel() {
         FactoryProducer<SequenceSegment> fp;
         fp = new FactoryProducer<SequenceSegment>();
