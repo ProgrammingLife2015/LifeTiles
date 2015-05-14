@@ -159,7 +159,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      * @return All vertices that have no incoming edges.
      */
     @Override
-    public final Set<V> getSource() {
+    public final Set<V> getSources() {
         return sources;
     }
 
@@ -193,7 +193,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      * @return All vertices that have no outgoing edges.
      */
     @Override
-    public final Set<V> getSink() {
+    public final Set<V> getSinks() {
         return sinks;
     }
 

@@ -70,7 +70,7 @@ public class GraphAdapterTest {
         gr.addVertex(v1);
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
-        Set<SequenceSegment> s = gr.getSource();
+        Set<SequenceSegment> s = gr.getSources();
         assertTrue(s.contains(v1));
         assertEquals(1, s.size());
     }
@@ -80,7 +80,7 @@ public class GraphAdapterTest {
         gr.addVertex(v1);
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
-        Set<SequenceSegment> s = gr.getSink();
+        Set<SequenceSegment> s = gr.getSinks();
         assertTrue(s.contains(v2));
         assertEquals(1, s.size());
     }
