@@ -3,7 +3,7 @@ package nl.tudelft.lifetiles.graph.view;
 import javafx.scene.paint.Color;
 
 /**
- * Interface for different type of Mutation annotations.
+ * Enumeration for different type of Mutation annotations.
  *
  * @author Jos
  *
