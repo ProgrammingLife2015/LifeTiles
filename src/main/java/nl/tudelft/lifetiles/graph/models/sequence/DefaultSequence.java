@@ -61,7 +61,6 @@ public class DefaultSequence implements Sequence {
      * (non-Javadoc)
      * @see java.lang.Object#equals(java.lang.Object)
      */
-
     @Override
     public final boolean equals(final Object other) {
         if (other instanceof Sequence) {
