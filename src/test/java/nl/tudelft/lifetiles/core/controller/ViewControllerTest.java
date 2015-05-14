@@ -1,19 +1,19 @@
 package nl.tudelft.lifetiles.core.controller;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Observer;
 import java.util.Set;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import nl.tudelft.lifetiles.graph.models.FactoryProducer;
-import nl.tudelft.lifetiles.graph.models.Graph;
-import nl.tudelft.lifetiles.graph.models.GraphFactory;
 import nl.tudelft.lifetiles.graph.models.sequence.DefaultSequence;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -23,12 +23,9 @@ import org.testfx.framework.junit.ApplicationTest;
 
 public class ViewControllerTest extends ApplicationTest {
     ViewController controller;
-    Observer view;
-    Map<String, Sequence> sequences;
     Sequence s1, s2;
-    Stage testStage;
 
-    static final String testGraphFilename = "data/test_graph/test_graph";
+    static final String testGraphFilename = "data/test_set/simple_graph";
     static final int[] windowSize = new int[] {1280, 720};
 
     @Rule
@@ -55,30 +52,49 @@ public class ViewControllerTest extends ApplicationTest {
     }
 
     @Test
+    public void testGraphLoading() {
+        assertFalse(controller.isLoaded());
+
+        controller.loadGraph(testGraphFilename);
+        assertTrue(controller.isLoaded());
+
+        controller.unloadGraph();
+        assertFalse(controller.isLoaded());
+    }
+
+    @Test
+    public void testSetVisible() {
+        controller.loadGraph(testGraphFilename);
+
+        Collection<Sequence> sequences = controller.getSequences().values();
+        Sequence visibleSequence = new ArrayList<>(sequences).get(0);
+        Set<Sequence> visibleSequences = new HashSet<>(Arrays.asList(visibleSequence));
+        controller.setVisible(visibleSequences);
+
+        assertTrue(controller.getVisible().contains(visibleSequence));
+
+        controller.unloadGraph();
+    }
+
+    @Test
     public void testSetWrongVisible() {
-        ViewController vc = ViewController.getInstance();
-        vc.setGraph(emptyGraph());
+        controller.loadGraph(testGraphFilename);
 
         Set<Sequence> newSequences = new HashSet<>();
         newSequences.add(s1);
         newSequences.add(s2);
         thrown.expect(IllegalArgumentException.class);
         controller.setVisible(newSequences);
-    }
 
-    private Graph<SequenceSegment> emptyGraph() {
-        FactoryProducer<SequenceSegment> fp = new FactoryProducer<>();
-        GraphFactory<SequenceSegment> gf = fp.getFactory("JGraphT");
-        return gf.getGraph();
+        controller.unloadGraph();
     }
 
     @Override
     public void start(Stage stage) throws Exception {
-        testStage = stage;
-
         Scene scene = new Scene(new Group(), windowSize[0], windowSize[1]);
         stage.setScene(scene);
         stage.show();
+        stage.hide();
     }
 
 }
