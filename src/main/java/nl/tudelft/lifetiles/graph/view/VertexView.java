@@ -77,7 +77,6 @@ public class VertexView extends Group {
     public VertexView(final String string, final double initX,
             final double initY, final double width, final double height,
             final Color color) {
-
         this.text = new Text(string);
         text.setTextOrigin(VPos.CENTER);
         text.setFill(Color.WHITE);
@@ -87,7 +86,6 @@ public class VertexView extends Group {
         this.rectangle = new Rectangle(width * HORIZONTALSCALE, height
                 * VERTICALSCALE);
         rectangle.setFill(color);
-
         this.clip = new Rectangle(width * HORIZONTALSCALE, height
                 * VERTICALSCALE);
         text.setClip(clip);
@@ -122,8 +120,8 @@ public class VertexView extends Group {
 
     @Override
     protected final void layoutChildren() {
-        final double width = rectangle.getWidth();
-        final double height = rectangle.getHeight();
+        double width = rectangle.getWidth();
+        double height = rectangle.getHeight();
         clip.setWidth(width);
         clip.setHeight(height);
         clip.setLayoutX(0);
@@ -158,7 +156,6 @@ public class VertexView extends Group {
     public final void setHeight(final double height) {
         rectangle.setHeight(height);
         clip.setHeight(height);
-        // redraw
         layoutChildren();
     }
 
@@ -171,7 +168,6 @@ public class VertexView extends Group {
     public final void setWidth(final double width) {
         rectangle.setWidth(width);
         clip.setWidth(width);
-        // redraw
         resizeWidth = width;
         layoutChildren();
     }
