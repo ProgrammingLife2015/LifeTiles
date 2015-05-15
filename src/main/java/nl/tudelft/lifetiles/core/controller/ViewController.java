@@ -1,22 +1,33 @@
 package nl.tudelft.lifetiles.core.controller;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
 
+import nl.tudelft.lifetiles.graph.models.DefaultGraphParser;
+import nl.tudelft.lifetiles.graph.models.FactoryProducer;
+import nl.tudelft.lifetiles.graph.models.Graph;
+import nl.tudelft.lifetiles.graph.models.GraphFactory;
+import nl.tudelft.lifetiles.graph.models.GraphParser;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
+import nl.tudelft.lifetiles.graph.models.sequence.SequenceGenerator;
+import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 
 /**
  * Controls what the view modules display.
  *
  * @author Rutger van den Berg
+ * @author Joren Hammudoglu
  */
-public class ViewController extends Observable {
+public final class ViewController extends Observable {
+
     /**
-     * Set containing all sequences currently loaded.
+     * The singelton of ViewController.
      */
-    private Set<Sequence> allSequences;
+    private static ViewController instance = null;
+
     /**
      * Map of all sequences currently loaded.
      */
@@ -25,28 +36,23 @@ public class ViewController extends Observable {
      * Set containing the currently visible sequences.
      */
     private Set<Sequence> visibleSequences;
+    /**
+     * The currently loaded graph.
+     */
+    private Graph<SequenceSegment> graph;
 
     /**
      * Creates a new viewcontroller.
-     *
-     * @param sequences
-     *            The current sequences.
      */
-    public ViewController(final Map<String, Sequence> sequences) {
-        sequenceMap = sequences;
-        allSequences = new HashSet<>();
-
-        for (Map.Entry<String, Sequence> map : sequenceMap.entrySet()) {
-            Sequence seq = map.getValue();
-            allSequences.add(seq);
-        }
-        visibleSequences = new HashSet<>(allSequences);
+    private ViewController() {
+        sequenceMap = new HashMap<>();
+        visibleSequences = new HashSet<>();
     }
 
     /**
      * @return A set containing all visible sequences.
      */
-    public final Set<Sequence> getVisible() {
+    public Set<Sequence> getVisible() {
         return visibleSequences;
     }
 
@@ -56,14 +62,122 @@ public class ViewController extends Observable {
      * @param sequences
      *            The sequences to set to visible.
      */
-    public final void setVisible(final Set<Sequence> sequences) {
-        visibleSequences = sequences;
-        if (visibleSequences.retainAll(allSequences)) {
+    public void setVisible(final Set<Sequence> sequences) {
+        visibleSequences = new HashSet<>(sequences);
+        if (visibleSequences.retainAll(getSequences().values())) {
             throw new IllegalArgumentException(
                     "Attempted to set a non-existant sequence to visible");
         }
+
+        notifyChanged();
+    }
+
+    /**
+     * Get all sequences, wether they are visible or not.
+     *
+     * @return A Map containing all sequences.
+     */
+    public Map<String, Sequence> getSequences() {
+        if (!isLoaded()) {
+            throw new UnsupportedOperationException("Graph not loaded.");
+        }
+        return sequenceMap;
+    }
+
+    /**
+     * @return the currently loaded graph.
+     */
+    public Graph<SequenceSegment> getGraph() {
+        if (!isLoaded()) {
+            throw new UnsupportedOperationException("Graph not loaded.");
+        }
+        return graph;
+    }
+
+    /**
+     * Load a new graph from the specified file.
+     *
+     * @param filename
+     *            The name of the file to load.
+     */
+    public void loadGraph(final String filename) {
+        // create the graph
+        FactoryProducer<SequenceSegment> fp = new FactoryProducer<>();
+        GraphFactory<SequenceSegment> gf = fp.getFactory("JGraphT");
+        GraphParser gp = new DefaultGraphParser();
+        graph = gp.parseFile(filename, gf);
+
+        // obtain the sequences
+        SequenceGenerator sg = new SequenceGenerator(graph);
+        setSequences(sg.generateSequences());
+
+        notifyChanged();
+    }
+
+    /**
+     * Unload the graph and sequences.
+     */
+    public void unloadGraph() {
+        sequenceMap = null;
+        visibleSequences = null;
+        graph = null;
+
+        notifyChanged();
+    }
+
+    /**
+     * Set a new graph.
+     *
+     * @param newGraph
+     *            the new graph
+     */
+    public void setGraph(final Graph<SequenceSegment> newGraph) {
+        graph = newGraph;
+
+        SequenceGenerator sg = new SequenceGenerator(graph);
+        setSequences(sg.generateSequences());
+
+        notifyChanged();
+    }
+
+    /**
+     * Notify the observers of a change.
+     */
+    public void notifyChanged() {
         setChanged();
         notifyObservers();
+    }
+
+    /**
+     * Check if the graph is loaded.
+     *
+     * @return true if the graph is loaded
+     */
+    public boolean isLoaded() {
+        return graph != null;
+    }
+
+    /**
+     * Set the sequences.
+     *
+     * @param sequences
+     *            the sequences
+     */
+    private void setSequences(final Map<String, Sequence> sequences) {
+        sequenceMap = sequences;
+        visibleSequences = new HashSet<>(sequences.values());
+    }
+
+    /**
+     * Get the instance of ViewController.
+     *
+     * @return the ViewController
+     */
+    public static ViewController getInstance() {
+        if (instance == null) {
+            instance = new ViewController();
+        }
+        return instance;
     }
 
 }
