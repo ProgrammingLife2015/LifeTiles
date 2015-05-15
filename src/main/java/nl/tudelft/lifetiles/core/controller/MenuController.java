@@ -9,13 +9,11 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 
@@ -146,26 +144,20 @@ public class MenuController implements Initializable {
      *            the node
      */
     private void addDraggableNode(final Node node) {
-        node.setOnMousePressed(new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(final MouseEvent me) {
-                if (me.getButton() != MouseButton.MIDDLE) {
-                    initialX = me.getSceneX();
-                    initialY = me.getSceneY();
-                }
+        node.setOnMousePressed((mouseEvent) -> {
+            if (mouseEvent.getButton() != MouseButton.MIDDLE) {
+                initialX = mouseEvent.getSceneX();
+                initialY = mouseEvent.getSceneY();
             }
         });
 
-        node.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(final MouseEvent me) {
-                if (me.getButton() != MouseButton.MIDDLE) {
-                    node.getScene().getWindow()
-                    .setX(me.getScreenX() - initialX);
-                    node.getScene().getWindow()
-                    .setY(me.getScreenY() - initialY);
-                }
+        node.setOnMouseDragged((mouseEvent) -> {
+            if (mouseEvent.getButton() != MouseButton.MIDDLE) {
+                double x = mouseEvent.getScreenX() - initialX;
+                double y = mouseEvent.getScreenY() - initialY;
+
+                node.getScene().getWindow().setX(x);
+                node.getScene().getWindow().setY(y);
             }
         });
     }
