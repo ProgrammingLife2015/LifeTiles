@@ -1,12 +1,13 @@
 package nl.tudelft.lifetiles.tree.view;
 
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
-public abstract class SunburstUnit extends StackPane {
+public abstract class SunburstUnit extends Group {
 
     protected PhylogeneticTreeItem value;
     
@@ -18,7 +19,7 @@ public abstract class SunburstUnit extends StackPane {
      * Constants
      */
     
-    protected static final double CENTER_DIAMETER = 50.0d;
+    protected static final double CENTER_RADIUS = 50.0d;
 
     protected static final double RING_WIDTH = 25.0d;
     
