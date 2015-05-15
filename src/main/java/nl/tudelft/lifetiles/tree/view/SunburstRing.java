@@ -10,14 +10,25 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
-
 public class SunburstRing extends SunburstUnit {
 
     public SunburstRing(PhylogeneticTreeItem v, int layer, double degreeStart,
             double degreeEnd, double centerX, double centerY) {
         value = v;
         name = new Text(value.getName());
-        display = createRing(layer, degreeStart, degreeEnd, centerX , centerY);
+        display = createRing(layer, degreeStart, degreeEnd, centerX, centerY);
+
+        double radius = CENTER_RADIUS + (layer * RING_WIDTH) + (RING_WIDTH / 2);
+
+        double degreeCenter = degreeStart
+                + SunburstUnit.calculateAngle(degreeStart, degreeEnd) / 2;
+
+        double angle = degreeCenter * (Math.PI / 180);
+
+        double pointRingCenterX = centerX + radius * Math.sin(angle);
+        double pointRingCenterY = centerY - (radius * Math.cos(angle));
+
+        name.relocate(pointRingCenterX, pointRingCenterY);
         getChildren().addAll(display, name);
     }
 
@@ -28,7 +39,8 @@ public class SunburstRing extends SunburstUnit {
      * @param size
      * @return
      */
-    private Shape createRing(int layer, double degreeStart, double degreeEnd, double centerX, double centerY) {
+    private Shape createRing(int layer, double degreeStart, double degreeEnd,
+            double centerX, double centerY) {
         Path result = new Path();
 
         result.setFill(Color.RED);
@@ -43,7 +55,7 @@ public class SunburstRing extends SunburstUnit {
         double angleAlpha = degreeStart * (Math.PI / 180);
         double angleAlphaNext = degreeEnd * (Math.PI / 180);
 
-        double point1X = centerX  + innerRadius * Math.sin(angleAlpha);
+        double point1X = centerX + innerRadius * Math.sin(angleAlpha);
         double point1Y = centerY - (innerRadius * Math.cos(angleAlpha));
 
         double point2X = centerX + outerRadius * Math.sin(angleAlpha);
