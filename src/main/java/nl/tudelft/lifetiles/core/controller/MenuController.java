@@ -79,7 +79,6 @@ public class MenuController implements Initializable {
             e.printStackTrace();
         }
 
-        System.out.println("[DEBUG] graph file: " + graphFileName);
         controller.loadGraph(graphFileName);
     }
 
