@@ -2,6 +2,7 @@ package nl.tudelft.lifetiles.graph.models.jgrapht;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Set;
 
@@ -13,7 +14,9 @@ import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 /**
  * @author Rutger van den Berg
@@ -24,6 +27,8 @@ public class GraphAdapterTest {
     static FactoryProducer<SequenceSegment> fp;
     SequenceSegment v1, v2;
     Graph<SequenceSegment> gr;
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @BeforeClass
     public static void runOnce() {
@@ -58,6 +63,7 @@ public class GraphAdapterTest {
 
     @Test
     public void testAddWrongEdge() {
+        thrown.expect(IllegalArgumentException.class);
         gr.addVertex(v1);
         assertEquals(0, gr.getAllEdges().size());
         assertFalse(gr.addEdge(v1, v2));
@@ -69,8 +75,18 @@ public class GraphAdapterTest {
         gr.addVertex(v1);
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
-        Set<SequenceSegment> s = gr.getSource();
-        assert (s.contains(v1));
+        Set<SequenceSegment> s = gr.getSources();
+        assertTrue(s.contains(v1));
+        assertEquals(1, s.size());
+    }
+
+    @Test
+    public void testGetSink() {
+        gr.addVertex(v1);
+        gr.addVertex(v2);
+        gr.addEdge(v1, v2);
+        Set<SequenceSegment> s = gr.getSinks();
+        assertTrue(s.contains(v2));
         assertEquals(1, s.size());
     }
 
@@ -119,6 +135,19 @@ public class GraphAdapterTest {
         gr.addEdge(v1, v2);
         Set<Edge<SequenceSegment>> inc = gr.getIncoming(v2);
         assertEquals(v2, gr.getDestination(inc.iterator().next()));
+    }
+
+    @Test
+    public void testDivideEdge() {
+        gr.addVertex(v1);
+        gr.addVertex(v2);
+        gr.addEdge(v1, v2);
+        Set<Edge<SequenceSegment>> inc = gr.getIncoming(v2);
+        SequenceSegment v3 = new SequenceSegment(null, 0, 0, null);
+        gr.splitEdge(inc.iterator().next(), v3);
+        assertEquals(v3, gr.getSource(gr.getIncoming(v2).iterator().next()));
+        assertEquals(v3,
+                gr.getDestination(gr.getOutgoing(v1).iterator().next()));
     }
 
 }

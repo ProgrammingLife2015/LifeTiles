@@ -39,8 +39,7 @@ public class SequenceGenerator {
      * @return A list of sequences
      */
     public final Map<String, Sequence> generateSequences() {
-
-        for (SequenceSegment segment : sourceGraph.getSource()) {
+        for (SequenceSegment segment : sourceGraph.getSources()) {
             generateSequences(segment);
         }
         return sequences;

@@ -42,4 +42,31 @@ public class DefaultSequence implements Sequence {
         return sequenceList;
     }
 
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public final int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result;
+        if (ident != null) {
+            result += ident.hashCode();
+        }
+        return result;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public final boolean equals(final Object other) {
+        if (other instanceof Sequence) {
+            return ident.equals(((Sequence) other).getIdentifier());
+        }
+        return false;
+    }
+
 }
