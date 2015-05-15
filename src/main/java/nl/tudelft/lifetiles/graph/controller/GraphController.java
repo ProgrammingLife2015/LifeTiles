@@ -1,0 +1,54 @@
+package nl.tudelft.lifetiles.graph.controller;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.Group;
+import javafx.scene.control.ScrollPane;
+import nl.tudelft.lifetiles.core.controller.ViewController;
+import nl.tudelft.lifetiles.graph.models.Graph;
+import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.graph.view.Tile;
+import nl.tudelft.lifetiles.graph.view.TileView;
+
+/**
+ * The controller of the graph view.
+ *
+ * @author Joren Hammudoglu
+ *
+ */
+public class GraphController implements Initializable {
+
+    /**
+     * The wrapper element.
+     */
+    @FXML
+    private ScrollPane wrapper;
+
+    @Override
+    @Deprecated
+    public final void initialize(final URL location,
+            final ResourceBundle resources) {
+        Tile model = new Tile(loadGraphModel());
+        TileView view = new TileView();
+        TileController controller = new TileController(view, model);
+
+        Group root = controller.drawGraph();
+        wrapper.setContent(root);
+    }
+
+    /**
+     * Loads a graph by filename.
+     *
+     * @return parsed graph by filename.
+     */
+    @Deprecated
+    private Graph<SequenceSegment> loadGraphModel() {
+        ViewController vc = ViewController.getInstance();
+        vc.loadGraph("data/test_set/simple_graph");
+        return vc.getGraph();
+    }
+
+}

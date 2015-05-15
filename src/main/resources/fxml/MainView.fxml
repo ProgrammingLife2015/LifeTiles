@@ -11,7 +11,7 @@
 
 <VBox id="wrapper" prefHeight="720" prefWidth="1280"
 	xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="nl.tudelft.lifetiles.controller.MainController">
+	fx:controller="nl.tudelft.lifetiles.core.controller.MainController">
 
 	<AnchorPane prefHeight="39.0" id="window_controls">
 		<children>
@@ -34,7 +34,7 @@
 				prefHeight="346.0" vgrow="SOMETIMES" />
 		</rowConstraints>
 		<children>
-			<fx:include fx:id="dataContent" source="DataView.fxml"
+			<fx:include fx:id="sequenceContent" source="SequenceView.fxml"
 				GridPane.columnIndex="0" GridPane.rowIndex="1" />
 			<fx:include fx:id="treeContent" source="TreeView.fxml"
 				GridPane.columnIndex="1" GridPane.rowIndex="1" />
