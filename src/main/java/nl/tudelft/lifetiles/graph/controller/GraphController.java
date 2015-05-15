@@ -7,10 +7,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
-import nl.tudelft.lifetiles.graph.models.DefaultGraphParser;
-import nl.tudelft.lifetiles.graph.models.FactoryProducer;
+import nl.tudelft.lifetiles.core.controller.ViewController;
 import nl.tudelft.lifetiles.graph.models.Graph;
-import nl.tudelft.lifetiles.graph.models.GraphFactory;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 import nl.tudelft.lifetiles.graph.view.Tile;
 import nl.tudelft.lifetiles.graph.view.TileView;
@@ -48,13 +46,9 @@ public class GraphController implements Initializable {
      */
     @Deprecated
     private Graph<SequenceSegment> loadGraphModel() {
-        FactoryProducer<SequenceSegment> fp;
-        fp = new FactoryProducer<SequenceSegment>();
-        GraphFactory<SequenceSegment> gf = fp.getFactory("JGraphT");
-        DefaultGraphParser parser = new DefaultGraphParser();
-        Graph<SequenceSegment> gr = parser.parseFile(
-                "data/test_set/simple_graph", gf);
-        return gr;
+        ViewController vc = ViewController.getInstance();
+        vc.loadGraph("data/test_set/simple_graph");
+        return vc.getGraph();
     }
 
 }
