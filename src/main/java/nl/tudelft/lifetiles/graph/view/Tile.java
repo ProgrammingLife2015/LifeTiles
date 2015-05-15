@@ -1,5 +1,6 @@
-package nl.tudelft.lifetiles.graph.models;
+package nl.tudelft.lifetiles.graph.view;
 
+import nl.tudelft.lifetiles.graph.models.Graph;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 
 /**

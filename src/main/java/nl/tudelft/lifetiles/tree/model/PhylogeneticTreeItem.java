@@ -158,8 +158,9 @@ public class PhylogeneticTreeItem {
         return parent;
     }
 
-    /**
-     * Calculates a hash for the tree.
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
      */
     @Override
     public final int hashCode() {
