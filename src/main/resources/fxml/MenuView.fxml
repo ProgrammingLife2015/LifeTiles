@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 
 <MenuBar xmlns:fx="http://javafx.com/fxml/1" id="menubar" fx:id="menuBar"
-	fx:controller="nl.tudelft.lifetiles.controller.MenuController"
+	fx:controller="nl.tudelft.lifetiles.core.controller.MenuController"
 	AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0"
 	AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 
