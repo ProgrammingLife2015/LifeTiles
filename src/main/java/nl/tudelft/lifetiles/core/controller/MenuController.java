@@ -43,6 +43,11 @@ public class MenuController implements Initializable {
     private MenuBar menuBar;
 
     /**
+     * The view controller.
+     */
+    private ViewController controller;
+
+    /**
      * Handle action related to "Open" menu item.
      *
      * @param event
@@ -61,16 +66,23 @@ public class MenuController implements Initializable {
         directoryChooser.setTitle("Open folder containing data files");
         Window window = menuBar.getScene().getWindow();
         File directory = directoryChooser.showDialog(window);
-        String graphFileName = null;
-        if (directory != null) {
-            try {
-                graphFileName = collectGraphFileName(directory);
-            } catch (IOException e) {
-                // TODO: display what went wrong
-                e.printStackTrace();
-            }
+
+        // user aborted
+        if (directory == null) {
+            return;
         }
-        System.out.println(graphFileName);
+
+        String graphFileName = null;
+        try {
+            graphFileName = getRelativePath(directory);
+            graphFileName += collectGraphFileName(directory);
+        } catch (IOException e) {
+            // TODO: notify the user that no graph files were found
+            e.printStackTrace();
+        }
+
+        System.out.println("[DEBUG] graph file: " + graphFileName);
+        controller.loadGraph(graphFileName);
     }
 
     /**
@@ -158,9 +170,29 @@ public class MenuController implements Initializable {
         });
     }
 
+    /**
+     * Get the path relative to the build path of a file. Workaround for <a
+     * href="https://github.com/ProgrammingLife5/LifeTiles/issues/75">#75</a>.
+     *
+     * @param file
+     *            the file
+     * @return the relative path of the file
+     * @throws IOException
+     */
+    @Deprecated
+    private static String getRelativePath(File file) throws IOException {
+        String path = file.getCanonicalPath();
+        String base = System.getProperty("user.dir");
+
+        return new File(base).toURI().relativize(new File(path).toURI())
+                .getPath().substring("src/main/resources/".length());
+    }
+
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        this.addDraggableNode(menuBar);
+        addDraggableNode(menuBar);
+
+        controller = ViewController.getInstance();
     }
 }
