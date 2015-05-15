@@ -54,7 +54,7 @@ public class DefaultGraphParser implements GraphParser {
             throw new IllegalArgumentException();
         }
         String[] desc = descriptor.split("\\|");
-        String[] sources = desc[2].split(",");
+        String[] sources = desc[1].split(",");
         Set<Sequence> currentSequences = new HashSet<>();
         for (String sequencename : sources) {
             sequencename = sequencename.trim();
