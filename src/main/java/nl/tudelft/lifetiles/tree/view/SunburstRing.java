@@ -10,13 +10,14 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
+
 public class SunburstRing extends SunburstUnit {
 
     public SunburstRing(PhylogeneticTreeItem v, int layer, double degreeStart,
-            double degreeEnd) {
+            double degreeEnd, double centerX, double centerY) {
         value = v;
         name = new Text(value.getName());
-        display = createRing(layer, degreeStart, degreeEnd);
+        display = createRing(layer, degreeStart, degreeEnd, centerX , centerY);
         getChildren().addAll(display, name);
     }
 
@@ -27,30 +28,32 @@ public class SunburstRing extends SunburstUnit {
      * @param size
      * @return
      */
-    private Shape createRing(int layer, double degreeStart, double degreeEnd) {
-        
+    private Shape createRing(int layer, double degreeStart, double degreeEnd, double centerX, double centerY) {
         Path result = new Path();
 
         result.setFill(Color.RED);
         result.setFillRule(FillRule.EVEN_ODD);
 
-        double innerRadius = CENTER_DIAMETER + (layer * RING_WIDTH);
+        double arcSize = SunburstUnit.calculateAngle(degreeStart, degreeEnd);
+        boolean largeArc = arcSize > 180;
+
+        double innerRadius = CENTER_RADIUS + (layer * RING_WIDTH);
         double outerRadius = innerRadius + RING_WIDTH;
 
         double angleAlpha = degreeStart * (Math.PI / 180);
         double angleAlphaNext = degreeEnd * (Math.PI / 180);
 
-        double point1X = innerRadius * Math.sin(angleAlpha);
-        double point1Y = (innerRadius * Math.cos(angleAlpha));
+        double point1X = centerX  + innerRadius * Math.sin(angleAlpha);
+        double point1Y = centerY - (innerRadius * Math.cos(angleAlpha));
 
-        double point2X = outerRadius * Math.sin(angleAlpha);
-        double point2Y = (outerRadius * Math.cos(angleAlpha));
+        double point2X = centerX + outerRadius * Math.sin(angleAlpha);
+        double point2Y = centerY - (outerRadius * Math.cos(angleAlpha));
 
-        double point3X = outerRadius * Math.sin(angleAlphaNext);
-        double point3Y = (outerRadius * Math.cos(angleAlphaNext));
+        double point3X = centerX + outerRadius * Math.sin(angleAlphaNext);
+        double point3Y = centerY - (outerRadius * Math.cos(angleAlphaNext));
 
-        double point4X = innerRadius * Math.sin(angleAlphaNext);
-        double point4Y = (innerRadius * Math.cos(angleAlphaNext));
+        double point4X = centerX + innerRadius * Math.sin(angleAlphaNext);
+        double point4Y = centerY - (innerRadius * Math.cos(angleAlphaNext));
 
         MoveTo move1 = new MoveTo(point1X, point1Y);
         LineTo line12 = new LineTo(point2X, point2Y);
@@ -61,6 +64,7 @@ public class SunburstRing extends SunburstUnit {
         arc23.setX(point3X);
         arc23.setY(point3Y);
         arc23.setSweepFlag(true);
+        arc23.setLargeArcFlag(largeArc);
 
         LineTo line34 = new LineTo(point4X, point4Y);
 
@@ -70,6 +74,7 @@ public class SunburstRing extends SunburstUnit {
         arc41.setX(point1X);
         arc41.setY(point1Y);
         arc41.setSweepFlag(false);
+        arc41.setLargeArcFlag(largeArc);
 
         result.getElements().add(move1);
         result.getElements().add(line12);

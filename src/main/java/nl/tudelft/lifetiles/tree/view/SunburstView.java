@@ -19,19 +19,18 @@ public class SunburstView extends Control {
 
     public SunburstView() {
         super();
-        container = new HBox();
-        getChildren().add(container);
-
+        centerX = getWidth() / 2d;
+        centerY = getHeight() / 2d;
     }
 
     public SunburstView(PhylogeneticTreeItem root) {
         super();
-        container = new HBox();
-        getChildren().add(container);
 
+        centerX = getWidth() / 2d;
+        centerY = getHeight() / 2d;
         rootItem = root;
         selectNode(rootItem);
-        
+
     }
 
     public void selectNode(PhylogeneticTreeItem selected) {
@@ -40,10 +39,14 @@ public class SunburstView extends Control {
     }
 
     private void update() {
-        container.getChildren().clear();
-        SunburstCenter Center = new SunburstCenter(currentItem);
-        container.getChildren().add(Center);
+        // remove the old elements
+        getChildren().clear();
 
+        //add a center unit
+        SunburstCenter center = new SunburstCenter(currentItem);
+        getChildren().add(center);
+        
+        // add the ring units 
         double totalDescendants = currentItem.numberDescendants();
         double degreeStart = 0;
         for (PhylogeneticTreeItem child : currentItem.getChildren()) {
@@ -59,12 +62,14 @@ public class SunburstView extends Control {
             double degreeStart, double degreeEnd) {
         // generate ring
         SunburstRing ringUnit = new SunburstRing(node, layer, degreeStart,
-                degreeEnd);
-        container.getChildren().add(ringUnit);
+                degreeEnd, centerX, centerY);
+        getChildren().add(ringUnit);
+
         double totalDescendants = currentItem.numberDescendants();
         double start = degreeStart;
         double sectorAngle = SunburstUnit
                 .calculateAngle(degreeStart, degreeEnd);
+        
         // generate rings for child nodes
         for (PhylogeneticTreeItem child : node.getChildren()) {
             double sectorSize = (child.numberDescendants() + 1) / totalDescendants;
