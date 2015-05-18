@@ -10,9 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import nl.tudelft.lifetiles.core.controller.ViewController;
-import nl.tudelft.lifetiles.graph.models.FactoryProducer;
 import nl.tudelft.lifetiles.graph.models.Graph;
-import nl.tudelft.lifetiles.graph.models.GraphFactory;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 import nl.tudelft.lifetiles.graph.view.Tile;
 import nl.tudelft.lifetiles.graph.view.TileView;
@@ -41,8 +39,6 @@ public class GraphController implements Initializable, Observer {
             final ResourceBundle resources) {
         controller = ViewController.getInstance();
         controller.addObserver(this);
-
-        repaint(emptyGraph());
     }
 
     /**
@@ -57,18 +53,6 @@ public class GraphController implements Initializable, Observer {
 
         Group root = tc.drawGraph();
         wrapper.setContent(root);
-    }
-
-    /**
-     * Creates an empty graph.
-     *
-     * @return the empty graph
-     */
-    private static Graph<SequenceSegment> emptyGraph() {
-        FactoryProducer<SequenceSegment> fp;
-        fp = new FactoryProducer<SequenceSegment>();
-        GraphFactory<SequenceSegment> gf = fp.getFactory("JGraphT");
-        return gf.getGraph();
     }
 
     @Override
