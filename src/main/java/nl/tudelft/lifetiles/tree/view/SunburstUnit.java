@@ -2,8 +2,6 @@ package nl.tudelft.lifetiles.tree.view;
 
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
@@ -17,18 +15,18 @@ public abstract class SunburstUnit extends Group {
     /**
      * the {@link PhylogeneticTreeItem} this node represents.
      */
-    protected PhylogeneticTreeItem value;
+    private PhylogeneticTreeItem value;
 
     /**
      * A {@link Text} that will show this nodes name.
      */
-    protected Text name;
+    private Text name;
 
     /**
      * The {@link Shape} that will be shown in the sunburst vew.
      *
      */
-    protected Shape display;
+    private Shape display;
 
     /*
      * Constants
@@ -43,6 +41,12 @@ public abstract class SunburstUnit extends Group {
      * The width of a single ring.
      */
     protected static final double RING_WIDTH = 25.0d;
+
+    /**
+     * the number of degrees in a circle.
+     */
+    protected static final double CIRCLEDEGREES = 360.0d;
+
 
     /*
      * Helpers
@@ -59,12 +63,58 @@ public abstract class SunburstUnit extends Group {
         double result = 0;
 
         if (degreeStart > degreeEnd) {
-            result = 360 - (degreeStart - degreeEnd);
+            result = CIRCLEDEGREES - (degreeStart - degreeEnd);
 
         } else if (degreeEnd  > degreeStart) {
             result = degreeEnd - degreeStart;
         }
 
         return result;
+    }
+
+    /*
+     * Getters and setters.
+     */
+
+    /**
+     * @return the display
+     */
+    protected final Shape getDisplay() {
+        return display;
+    }
+
+    /**
+     * @param disp the display to set
+     */
+    protected final void setDisplay(final Shape disp) {
+        this.display = disp;
+    }
+
+    /**
+     * @return the value
+     */
+    protected final PhylogeneticTreeItem getValue() {
+        return value;
+    }
+
+    /**
+     * @param val the value to set
+     */
+    protected final void setValue(final PhylogeneticTreeItem val) {
+        this.value = val;
+    }
+
+    /**
+     * @return the name
+     */
+    protected final Text getName() {
+        return name;
+    }
+
+    /**
+     * @param nameText the name to set
+     */
+    protected final void setName(final Text nameText) {
+        this.name = nameText;
     }
 }

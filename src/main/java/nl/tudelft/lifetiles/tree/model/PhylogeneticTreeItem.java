@@ -55,7 +55,7 @@ public class PhylogeneticTreeItem {
         for (PhylogeneticTreeItem child: children) {
             result += child.numberDescendants() + 1;
         }
-        
+
         return result;
     }
 

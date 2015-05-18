@@ -14,11 +14,11 @@ public class SunburstView extends Control {
     /**
      * The root of the tree this view will show.
      */
-    PhylogeneticTreeItem rootItem;
+    private PhylogeneticTreeItem rootItem;
     /**
      * the current node we use as the center of the view.
      */
-    PhylogeneticTreeItem currentItem;
+    private PhylogeneticTreeItem currentItem;
 
     /**
      * the center X coordinate of the view.
@@ -90,7 +90,8 @@ public class SunburstView extends Control {
         for (PhylogeneticTreeItem child : currentItem.getChildren()) {
             double sectorSize = (child.numberDescendants() + 1)
                     / totalDescendants;
-            double degreeEnd = degreeStart + (360 * sectorSize);
+            double degreeEnd = degreeStart
+                    + (SunburstUnit.CIRCLEDEGREES * sectorSize);
 
             drawRingRecursive(child, 0, degreeStart, degreeEnd);
             degreeStart = degreeEnd;
