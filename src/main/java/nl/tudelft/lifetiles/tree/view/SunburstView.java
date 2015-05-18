@@ -64,6 +64,7 @@ public class SunburstView extends Control {
         update();
     }
 
+
     /**
      * updates the view by redrawing all elements.
      */
@@ -108,11 +109,11 @@ public class SunburstView extends Control {
                 degreeEnd, centerX, centerY);
         getChildren().add(ringUnit);
 
-        double totalDescendants = currentItem.numberDescendants();
+        double totalDescendants = node.numberDescendants();
         double start = degreeStart;
         double sectorAngle = SunburstUnit
                 .calculateAngle(degreeStart, degreeEnd);
-
+       
         // generate rings for child nodes
         for (PhylogeneticTreeItem child : node.getChildren()) {
             double sectorSize = (child.numberDescendants() + 1)
