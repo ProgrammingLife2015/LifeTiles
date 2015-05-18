@@ -47,7 +47,6 @@ public class MainController implements Initializable, Observer {
             final ResourceBundle resources) {
         vc = ViewController.getInstance();
         vc.addObserver(this);
-        vc.displayError("oh noes");
 
         mainGrid.setVisible(false);
     }
