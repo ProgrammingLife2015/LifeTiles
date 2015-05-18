@@ -23,14 +23,25 @@ public class TreeController implements Initializable {
      */
     @FXML
     private BorderPane wrapper;
-    
+
+    /**
+     * the diagram.
+     */
     private SunburstView view;
-    
+
+    /**
+     * the parser to create the tree.
+     */
     private PhylogeneticTreeFactory np;
+
+    /**
+     * the tree to display.
+     */
     private PhylogeneticTreeItem root;
 
     @Override
-    public void initialize(final URL location, final ResourceBundle resources) {
+    public final void initialize(final URL location,
+            final ResourceBundle resources) {
         np = new PhylogeneticTreeFactory("(A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5)F;");
         root = np.getRoot();
 

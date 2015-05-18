@@ -41,26 +41,26 @@ public class SunburstRing extends SunburstUnit {
             final double degreeStart, final double degreeEnd,
             final double centerX, final double centerY) {
         // set the value, and create the text and semi-circle
-        value = v;
-        name = new Text(value.getName());
-        display = createRing(layer, degreeStart, degreeEnd, centerX, centerY);
+        setValue(v);
+        setName(new Text(getValue().getName()));
+        setDisplay(createRing(layer, degreeStart, degreeEnd, centerX, centerY));
 
         // calculate the positon of the text
         double radius = CENTER_RADIUS + (layer * RING_WIDTH) + (RING_WIDTH / 2);
 
         double degreeCenter = degreeStart
                 + SunburstUnit.calculateAngle(degreeStart, degreeEnd) / 2;
-
-        double angle = degreeCenter * (Math.PI / 180);
+        //convert to radians
+        double angle = degreeCenter * (Math.PI / (CIRCLEDEGREES / 2));
 
         double pointRingCenterX = centerX + radius * Math.sin(angle);
         double pointRingCenterY = centerY - radius * Math.cos(angle);
 
         // move the text into position
-        name.relocate(pointRingCenterX, pointRingCenterY);
+        getName().relocate(pointRingCenterX, pointRingCenterY);
 
         // add the text and semicircle to the group
-        getChildren().addAll(display, name);
+        getChildren().addAll(getDisplay(), getName());
     }
 
     /**
@@ -82,7 +82,8 @@ public class SunburstRing extends SunburstUnit {
      * @return a semi-circle with the specified dimensions
      */
     private Shape createRing(final int layer, final double degreeStart,
-            final double degreeEnd, final double centerX, final double centerY) {
+            final double degreeEnd, final double centerX,
+            final double centerY) {
         Path result = new Path();
 
         result.setFill(Color.RED);
@@ -90,15 +91,15 @@ public class SunburstRing extends SunburstUnit {
 
         // check if this is a large arc
         double arcSize = SunburstUnit.calculateAngle(degreeStart, degreeEnd);
-        boolean largeArc = arcSize > 180;
+        boolean largeArc = arcSize > (CIRCLEDEGREES / 2);
 
         // calculate the radii of the two arcs
         double innerRadius = CENTER_RADIUS + (layer * RING_WIDTH);
         double outerRadius = innerRadius + RING_WIDTH;
 
         // convert degrees to radians for Math.sin and Math.cos
-        double angleAlpha = degreeStart * (Math.PI / 180);
-        double angleAlphaNext = degreeEnd * (Math.PI / 180);
+        double angleAlpha = degreeStart * (Math.PI / (CIRCLEDEGREES / 2));
+        double angleAlphaNext = degreeEnd * (Math.PI / (CIRCLEDEGREES / 2));
 
         // calculate the positon of the four corners of the semi-circle
         double point1X = centerX + innerRadius * Math.sin(angleAlpha);

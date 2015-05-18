@@ -1,7 +1,7 @@
 /**
  * Controller for the tree module.
  *
- * @author Rutger van den Berg
+ * @author Albert Smit
  */
 package nl.tudelft.lifetiles.tree.controller;
 
