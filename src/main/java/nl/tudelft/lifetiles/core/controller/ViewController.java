@@ -2,10 +2,14 @@ package nl.tudelft.lifetiles.core.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.net.URISyntaxException;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Observable;
+import java.util.Scanner;
 import java.util.Set;
 
 import javafx.stage.Stage;
@@ -16,12 +20,15 @@ import nl.tudelft.lifetiles.graph.models.GraphFactory;
 import nl.tudelft.lifetiles.graph.models.GraphParser;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeFactory;
+import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
 /**
  * Controls what the view modules display.
  *
  * @author Rutger van den Berg
  * @author Joren Hammudoglu
+ * @author Albert Smit
  */
 public final class ViewController extends Observable {
 
@@ -42,6 +49,10 @@ public final class ViewController extends Observable {
      * The currently loaded graph.
      */
     private Graph<SequenceSegment> graph;
+    /**
+     * The currently loaded tree.
+     */
+    private PhylogeneticTreeItem tree;
 
     /**
      * The main stage.
@@ -176,6 +187,38 @@ public final class ViewController extends Observable {
      */
     public void displayError(final String message) {
         System.out.println("[ERROR] " + message);
+
+    }
+    /**
+     *
+     * @return the tree
+     */
+    public PhylogeneticTreeItem getTree() {
+        return tree;
+
+    }
+
+    /**
+     *
+     * @param fileName
+     */
+    public void loadTree(final String fileName){
+        File file;
+        Scanner sc = null;
+        try {
+            file = new File(this.getClass()
+                    .getResource("/" + fileName + ".nwk").toURI());
+            sc = new Scanner(file).useDelimiter("\\Z");
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (URISyntaxException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        String fileString = sc.next();
+        PhylogeneticTreeFactory np = new PhylogeneticTreeFactory(fileString);
+        tree = np.getRoot();
     }
 
     /**
