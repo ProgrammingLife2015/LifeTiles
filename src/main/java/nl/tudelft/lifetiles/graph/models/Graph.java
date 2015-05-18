@@ -98,4 +98,12 @@ public interface Graph<V> {
      *            Vertex to be inserted.
      */
     void splitEdge(Edge<V> edge, V vertex);
+
+    /**
+     * Returns a copy of the graph including edges and vertices.
+     *
+     * @return
+     *         Copy of the Graph.
+     */
+    Graph<V> copy();
 }
