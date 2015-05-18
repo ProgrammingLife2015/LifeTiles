@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
 /**
- *
+ *  A sunburstRing is a part of the rings of the sunburst view.
  * @author Albert Smit
  *
  */
@@ -115,33 +115,38 @@ public class SunburstRing extends SunburstUnit {
         double point4Y = centerY - innerRadius * Math.cos(angleAlphaNext);
 
         // draw the semi-circle
+        // first go to the start point
         MoveTo move1 = new MoveTo(point1X, point1Y);
-        LineTo line12 = new LineTo(point2X, point2Y);
+        //draw a line from point 1 to point 2
+        LineTo line1To2 = new LineTo(point2X, point2Y);
 
-        ArcTo arc23 = new ArcTo();
-        arc23.setRadiusX(outerRadius);
-        arc23.setRadiusY(outerRadius);
-        arc23.setX(point3X);
-        arc23.setY(point3Y);
-        arc23.setSweepFlag(true);
-        arc23.setLargeArcFlag(largeArc);
+        // draw an arc from point 2 to point 3
+        ArcTo arc2To3 = new ArcTo();
+        arc2To3.setRadiusX(outerRadius);
+        arc2To3.setRadiusY(outerRadius);
+        arc2To3.setX(point3X);
+        arc2To3.setY(point3Y);
+        arc2To3.setSweepFlag(true);
+        arc2To3.setLargeArcFlag(largeArc);
 
-        LineTo line34 = new LineTo(point4X, point4Y);
+        // draw a line from point 3 to point 4
+        LineTo line3To4 = new LineTo(point4X, point4Y);
 
-        ArcTo arc41 = new ArcTo();
-        arc41.setRadiusX(innerRadius);
-        arc41.setRadiusY(innerRadius);
-        arc41.setX(point1X);
-        arc41.setY(point1Y);
-        arc41.setSweepFlag(false);
-        arc41.setLargeArcFlag(largeArc);
+        // draw an arc from point 4 back to point 1
+        ArcTo arc4To1 = new ArcTo();
+        arc4To1.setRadiusX(innerRadius);
+        arc4To1.setRadiusY(innerRadius);
+        arc4To1.setX(point1X);
+        arc4To1.setY(point1Y);
+        arc4To1.setSweepFlag(false);
+        arc4To1.setLargeArcFlag(largeArc);
 
         // add all elements to the path
         result.getElements().add(move1);
-        result.getElements().add(line12);
-        result.getElements().add(arc23);
-        result.getElements().add(line34);
-        result.getElements().add(arc41);
+        result.getElements().add(line1To2);
+        result.getElements().add(arc2To3);
+        result.getElements().add(line3To4);
+        result.getElements().add(arc4To1);
 
         return result;
     }
