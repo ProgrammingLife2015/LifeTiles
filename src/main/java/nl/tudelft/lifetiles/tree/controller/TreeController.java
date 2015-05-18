@@ -3,6 +3,7 @@ package nl.tudelft.lifetiles.tree.controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import nl.tudelft.lifetiles.core.controller.ViewController;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeFactory;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 import nl.tudelft.lifetiles.tree.view.SunburstView;
@@ -42,8 +43,9 @@ public class TreeController implements Initializable {
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        np = new PhylogeneticTreeFactory("(A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5)F;");
-        root = np.getRoot();
+        ViewController vc = ViewController.getInstance();
+        vc.loadTree("data/10_set/nj_tree_10_strains");
+        root = vc.getTree();
 
         view = new SunburstView(root);
         wrapper.setCenter(view);
