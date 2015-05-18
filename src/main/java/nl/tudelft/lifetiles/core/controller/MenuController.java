@@ -75,8 +75,8 @@ public class MenuController implements Initializable {
             graphFileName = getRelativePath(directory);
             graphFileName += collectGraphFileName(directory);
         } catch (IOException e) {
-            // TODO: notify the user that no graph files were found
-            e.printStackTrace();
+            ViewController.getInstance().displayError(e.getMessage());
+            return;
         }
 
         controller.loadGraph(graphFileName);
@@ -107,9 +107,6 @@ public class MenuController implements Initializable {
         }
 
         List<File> graphFiles = Arrays.asList(listFiles);
-        if (graphFiles.size() != 2) {
-            throw new IOException("Expected 2 " + suffixCommon + " files.");
-        }
 
         // check if these are the .node.graph and .edge.graph files
         List<String> fileNames = new ArrayList<String>();
@@ -175,8 +172,15 @@ public class MenuController implements Initializable {
         String path = file.getCanonicalPath();
         String base = System.getProperty("user.dir");
 
-        return new File(base).toURI().relativize(new File(path).toURI())
-                .getPath().substring("src/main/resources/".length());
+        int relLength = "src/main/resources/".length();
+        String relativePath = new File(base).toURI()
+                .relativize(new File(path).toURI()).getPath();
+
+        if (relLength > relativePath.length()) {
+            throw new IOException("Directory not in build path.");
+        }
+
+        return relativePath.substring(relLength);
     }
 
     @Override
