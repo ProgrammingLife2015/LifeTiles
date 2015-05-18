@@ -88,12 +88,12 @@ public class TileView {
      */
     private void drawVertexLane(final SequenceSegment segment) {
         String text = segment.getContent().toString();
-        long start = segment.getStart();
+        long start = segment.getUnifiedStart();
         long width = segment.getContent().getLength();
         long height = segment.getSources().size();
         Color color = sequenceColor(segment.getMutation());
         for (int index = 0; index < lanes.size(); index++) {
-            if (lanes.get(index) <= segment.getStart()
+            if (lanes.get(index) <= segment.getUnifiedStart()
                     && segmentFree(index, segment)) {
                 drawVertex(text, start, index, width, height, color);
                 segmentInsert(index, segment);
@@ -153,7 +153,7 @@ public class TileView {
     private boolean segmentFree(final int ind, final SequenceSegment segment) {
         for (int height = 0; height < segment.getSources().size(); height++) {
             if ((ind + height < lanes.size())
-                    && (lanes.get(ind + height) > segment.getStart())) {
+                    && (lanes.get(ind + height) > segment.getUnifiedStart())) {
                 return false;
             }
         }
@@ -171,9 +171,9 @@ public class TileView {
     private void segmentInsert(final int index, final SequenceSegment segment) {
         for (int height = 0; height < segment.getSources().size(); height++) {
             if (index + height < lanes.size()) {
-                lanes.set(index + height, segment.getEnd());
+                lanes.set(index + height, segment.getUnifiedEnd());
             } else {
-                lanes.add(index + height, segment.getEnd());
+                lanes.add(index + height, segment.getUnifiedEnd());
             }
         }
     }
