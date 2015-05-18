@@ -54,7 +54,7 @@ public class SunburstRing extends SunburstUnit {
         double angle = degreeCenter * (Math.PI / 180);
 
         double pointRingCenterX = centerX + radius * Math.sin(angle);
-        double pointRingCenterY = centerY - (radius * Math.cos(angle));
+        double pointRingCenterY = centerY - radius * Math.cos(angle);
 
         // move the text into position
         name.relocate(pointRingCenterX, pointRingCenterY);
@@ -81,9 +81,8 @@ public class SunburstRing extends SunburstUnit {
      *            the Y coordinate of the center of the circle
      * @return a semi-circle with the specified dimensions
      */
-    private Shape createRing(final int layer,
-            final double degreeStart, final double degreeEnd,
-            final double centerX, final double centerY) {
+    private Shape createRing(final int layer, final double degreeStart,
+            final double degreeEnd, final double centerX, final double centerY) {
         Path result = new Path();
 
         result.setFill(Color.RED);
@@ -93,7 +92,7 @@ public class SunburstRing extends SunburstUnit {
         double arcSize = SunburstUnit.calculateAngle(degreeStart, degreeEnd);
         boolean largeArc = arcSize > 180;
 
-        //calculate the radii of the two arcs
+        // calculate the radii of the two arcs
         double innerRadius = CENTER_RADIUS + (layer * RING_WIDTH);
         double outerRadius = innerRadius + RING_WIDTH;
 
@@ -101,18 +100,18 @@ public class SunburstRing extends SunburstUnit {
         double angleAlpha = degreeStart * (Math.PI / 180);
         double angleAlphaNext = degreeEnd * (Math.PI / 180);
 
-        //calculate the positon of the four corners of the semi-circle
+        // calculate the positon of the four corners of the semi-circle
         double point1X = centerX + innerRadius * Math.sin(angleAlpha);
-        double point1Y = centerY - (innerRadius * Math.cos(angleAlpha));
+        double point1Y = centerY - innerRadius * Math.cos(angleAlpha);
 
         double point2X = centerX + outerRadius * Math.sin(angleAlpha);
-        double point2Y = centerY - (outerRadius * Math.cos(angleAlpha));
+        double point2Y = centerY - outerRadius * Math.cos(angleAlpha);
 
         double point3X = centerX + outerRadius * Math.sin(angleAlphaNext);
-        double point3Y = centerY - (outerRadius * Math.cos(angleAlphaNext));
+        double point3Y = centerY - outerRadius * Math.cos(angleAlphaNext);
 
         double point4X = centerX + innerRadius * Math.sin(angleAlphaNext);
-        double point4Y = centerY - (innerRadius * Math.cos(angleAlphaNext));
+        double point4Y = centerY - innerRadius * Math.cos(angleAlphaNext);
 
         // draw the semi-circle
         MoveTo move1 = new MoveTo(point1X, point1Y);

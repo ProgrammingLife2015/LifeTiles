@@ -2,6 +2,7 @@ package nl.tudelft.lifetiles.tree.view;
 
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 import javafx.scene.control.Control;
+import javafx.scene.input.MouseButton;
 
 /**
  *
@@ -60,10 +61,12 @@ public class SunburstView extends Control {
      *            the new selected node.
      */
     public final void selectNode(final PhylogeneticTreeItem selected) {
-        currentItem = selected;
-        update();
-    }
+        if (selected != null) {
+            currentItem = selected;
+            update();
+        }
 
+    }
 
     /**
      * updates the view by redrawing all elements.
@@ -74,6 +77,11 @@ public class SunburstView extends Control {
 
         // add a center unit
         SunburstCenter center = new SunburstCenter(currentItem);
+        center.setOnMouseClicked((mouseEvent) -> {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                selectNode(currentItem.getParent());
+            }
+        });
         getChildren().add(center);
 
         // add the ring units
@@ -107,13 +115,18 @@ public class SunburstView extends Control {
         // generate ring
         SunburstRing ringUnit = new SunburstRing(node, layer, degreeStart,
                 degreeEnd, centerX, centerY);
+        ringUnit.setOnMouseClicked((mouseEvent) -> {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                selectNode(node);
+            }
+        });
         getChildren().add(ringUnit);
 
         double totalDescendants = node.numberDescendants();
         double start = degreeStart;
         double sectorAngle = SunburstUnit
                 .calculateAngle(degreeStart, degreeEnd);
-       
+
         // generate rings for child nodes
         for (PhylogeneticTreeItem child : node.getChildren()) {
             double sectorSize = (child.numberDescendants() + 1)
