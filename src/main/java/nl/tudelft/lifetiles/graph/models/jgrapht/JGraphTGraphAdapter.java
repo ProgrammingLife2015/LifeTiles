@@ -223,4 +223,22 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
         internalGraph.removeEdge(unpackEdge(edge));
     }
 
+    /**
+     * Returns a copy of the graph including edges and vertices.
+     *
+     * @return
+     *         Copy of the Graph.
+     */
+    @Override
+    public final Graph<V> copy() {
+        Graph<V> graph = new JGraphTGraphAdapter<V>(edgeFact);
+        for (V vertex : getAllVertices()) {
+            graph.addVertex(vertex);
+        }
+        for (Edge<V> edge : getAllEdges()) {
+            graph.addEdge(getSource(edge), getDestination(edge));
+        }
+        return graph;
+    }
+
 }
