@@ -69,6 +69,8 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
      *            The source vertex to use.
      * @param destination
      *            The destination vertex to use.
+     * @throws IllegalArgumentException
+     *             Edge may not induce a cycle.
      * @return <code>true</code> iff adding succeeded.
      */
     @Override
