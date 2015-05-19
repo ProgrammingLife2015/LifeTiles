@@ -1,10 +1,11 @@
 package nl.tudelft.lifetiles.graph.models.jgrapht;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import nl.tudelft.lifetiles.graph.models.Edge;
 import nl.tudelft.lifetiles.graph.models.Graph;
@@ -30,11 +31,11 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
     /**
      * Keep track of all vertices that have no incoming edges.
      */
-    private Set<V> sources;
+    private SortedSet<V> sources;
     /**
      * Keep track of all vertices that have no outgoing edges.
      */
-    private Set<V> sinks;
+    private SortedSet<V> sinks;
     /**
      * List of vertices. Used to be able to identify nodes by ids.
      */
@@ -50,8 +51,8 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
         internalGraph = new SimpleDirectedGraph<V, DefaultEdge>(
                 DefaultEdge.class);
         edgeFact = ef;
-        sources = new HashSet<>();
-        sinks = new HashSet<>();
+        sources = new TreeSet<>();
+        sinks = new TreeSet<>();
         vertexIdentifiers = new ArrayList<>();
     }
 
@@ -102,9 +103,9 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      *            the set to convert.
      * @return The converted set.
      */
-    private Set<Edge<V>> convertEdges(final Set<DefaultEdge> input) {
+    private SortedSet<Edge<V>> convertEdges(final Set<DefaultEdge> input) {
         Iterator<DefaultEdge> edgeIt = input.iterator();
-        Set<Edge<V>> output = new HashSet<>();
+        SortedSet<Edge<V>> output = new TreeSet<>();
         while (edgeIt.hasNext()) {
             output.add(edgeFact.getEdge(edgeIt.next()));
         }
@@ -115,7 +116,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      * @return All edges.
      */
     @Override
-    public final Set<Edge<V>> getAllEdges() {
+    public final SortedSet<Edge<V>> getAllEdges() {
         return convertEdges(internalGraph.edgeSet());
     }
 
@@ -123,8 +124,8 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      * @return All vertices.
      */
     @Override
-    public final Set<V> getAllVertices() {
-        return internalGraph.vertexSet();
+    public final SortedSet<V> getAllVertices() {
+        return new TreeSet<V>(internalGraph.vertexSet());
     }
 
     /**
@@ -143,7 +144,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      * @return The edges incoming to <code>vertex</code>.
      */
     @Override
-    public final Set<Edge<V>> getIncoming(final V vertex) {
+    public final SortedSet<Edge<V>> getIncoming(final V vertex) {
         return convertEdges(internalGraph.incomingEdgesOf(vertex));
     }
 
@@ -153,7 +154,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      * @return The edges outgoing from <code>vertex</code>.
      */
     @Override
-    public final Set<Edge<V>> getOutgoing(final V vertex) {
+    public final SortedSet<Edge<V>> getOutgoing(final V vertex) {
         return convertEdges(internalGraph.outgoingEdgesOf(vertex));
     }
 
@@ -161,7 +162,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      * @return All vertices that have no incoming edges.
      */
     @Override
-    public final Set<V> getSources() {
+    public final SortedSet<V> getSources() {
         return sources;
     }
 
@@ -195,7 +196,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      * @return All vertices that have no outgoing edges.
      */
     @Override
-    public final Set<V> getSinks() {
+    public final SortedSet<V> getSinks() {
         return sinks;
     }
 
