@@ -52,7 +52,7 @@ public class SunburstRingSegment extends SunburstNode {
         double degreeCenter = degreeStart
                 + SunburstNode.calculateAngle(degreeStart, degreeEnd) / 2;
         //convert to radians
-        double angle = degreeCenter * (Math.PI / (CIRCLEDEGREES / 2));
+        double angle = Math.toRadians(degreeCenter);
 
         double pointRingCenterX = centerX + radius * Math.sin(angle);
         double pointRingCenterY = centerY - radius * Math.cos(angle);
@@ -92,15 +92,15 @@ public class SunburstRingSegment extends SunburstNode {
 
         // check if this is a large arc
         double arcSize = SunburstNode.calculateAngle(degreeStart, degreeEnd);
-        boolean largeArc = arcSize > (CIRCLEDEGREES / 2);
+        boolean largeArc = arcSize > (SunburstNode.CIRCLEDEGREES / 2);
 
         // calculate the radii of the two arcs
         double innerRadius = CENTER_RADIUS + (layer * RING_WIDTH);
         double outerRadius = innerRadius + RING_WIDTH;
 
         // convert degrees to radians for Math.sin and Math.cos
-        double angleAlpha = degreeStart * (Math.PI / (CIRCLEDEGREES / 2));
-        double angleAlphaNext = degreeEnd * (Math.PI / (CIRCLEDEGREES / 2));
+        double angleAlpha = Math.toRadians(degreeStart);
+        double angleAlphaNext = Math.toRadians(degreeEnd);
 
         // calculate the positon of the four corners of the semi-circle
         double point1X = centerX + innerRadius * Math.sin(angleAlpha);
