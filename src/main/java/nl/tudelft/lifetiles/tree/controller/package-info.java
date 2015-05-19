@@ -1,5 +1,5 @@
 /**
- * Controller for the tree module.
+ * Controllers for the tree module.
  *
  * @author Albert Smit
  */
