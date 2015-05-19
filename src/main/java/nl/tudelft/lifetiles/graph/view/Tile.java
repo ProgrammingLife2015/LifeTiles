@@ -1,7 +1,12 @@
 package nl.tudelft.lifetiles.graph.view;
 
 import nl.tudelft.lifetiles.graph.models.Graph;
+import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.traverser.models.EmptySegmentTraverser;
+import nl.tudelft.lifetiles.traverser.models.MutationIndicationTraverser;
+import nl.tudelft.lifetiles.traverser.models.ReferencePositionTraverser;
+import nl.tudelft.lifetiles.traverser.models.UnifiedPositionTraverser;
 
 /**
  * The Tile holds the graph and will be transformed to this modelgraph so
@@ -32,16 +37,23 @@ public class Tile {
      * Align the graph.
      */
     private void alignGraph() {
-        // AlignmentTraverser at = new AlignmentTraverser();
-        // graph = at.traverseGraph(graph);
+        UnifiedPositionTraverser pt = new UnifiedPositionTraverser();
+        EmptySegmentTraverser est = new EmptySegmentTraverser();
+
+        graph = est.traverseGraph(pt.traverseGraph(graph));
     }
 
     /**
      * Find the mutations on the graph.
      */
     private void findMutations() {
-        // AlignmentTraverser at = new AlignmentTraverser();
-        // graph = at.traverseGraph(graph);
+        Sequence reference = graph.getSources().iterator().next().getSources()
+                .iterator().next();
+        ReferencePositionTraverser rmt = new ReferencePositionTraverser(
+                reference);
+        MutationIndicationTraverser mt = new MutationIndicationTraverser(
+                reference);
+        graph = mt.traverseGraph(rmt.traverseGraph(graph));
     }
 
     /**
