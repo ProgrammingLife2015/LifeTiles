@@ -144,16 +144,17 @@ public class TileView {
     /**
      * Check if there is a free spot to draw the segment at this location.
      *
-     * @param ind
+     * @param index
      *            location in the linked list of already drawn segments
      * @param segment
      *            segment to be drawn
      * @return Boolean indicating if there is a free spot
      */
-    private boolean segmentFree(final int ind, final SequenceSegment segment) {
+    private boolean segmentFree(final int index, final SequenceSegment segment) {
         for (int height = 0; height < segment.getSources().size(); height++) {
-            if ((ind + height < lanes.size())
-                    && (lanes.get(ind + height) > segment.getUnifiedStart())) {
+            int position = index + height;
+            if ((position < lanes.size())
+                    && (lanes.get(position) > segment.getUnifiedStart())) {
                 return false;
             }
         }
@@ -170,10 +171,11 @@ public class TileView {
      */
     private void segmentInsert(final int index, final SequenceSegment segment) {
         for (int height = 0; height < segment.getSources().size(); height++) {
-            if (index + height < lanes.size()) {
-                lanes.set(index + height, segment.getUnifiedEnd());
+            int position = index + height;
+            if (position < lanes.size()) {
+                lanes.set(position, segment.getUnifiedEnd());
             } else {
-                lanes.add(index + height, segment.getUnifiedEnd());
+                lanes.add(position, segment.getUnifiedEnd());
             }
         }
     }
