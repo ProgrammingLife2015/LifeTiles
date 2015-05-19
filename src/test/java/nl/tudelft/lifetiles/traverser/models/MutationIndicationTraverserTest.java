@@ -25,8 +25,8 @@ import nl.tudelft.lifetiles.traverser.models.ReferencePositionTraverser;
 public class MutationIndicationTraverserTest {
     GraphFactory<SequenceSegment> gf;
     static FactoryProducer<SequenceSegment> fp;
-    static ReferencePositionTraverser apt;
-    static MutationIndicationTraverser mt;
+    static ReferencePositionTraverser rpt;
+    static MutationIndicationTraverser mit;
     static Set<Sequence> s1, s2, s3;
     SequenceSegment v1, v4;
     Graph<SequenceSegment> gr;
@@ -38,8 +38,8 @@ public class MutationIndicationTraverserTest {
         Sequence ss1 = new DefaultSequence("reference");
         Sequence ss2 = new DefaultSequence("mutation");
 
-        apt = new ReferencePositionTraverser(ss1);
-        mt = new MutationIndicationTraverser(ss1);
+        rpt = new ReferencePositionTraverser(ss1);
+        mit = new MutationIndicationTraverser(ss1);
 
         s1 = new HashSet<Sequence>();
         s1.add(ss1);
@@ -74,8 +74,8 @@ public class MutationIndicationTraverserTest {
         gr.addEdge(v1, v6);
         gr.addEdge(v5, v4);
         gr.addEdge(v6, v4);
-        apt.traverseGraph(gr);
-        mt.traverseGraph(gr);
+        rpt.traverseGraph(gr);
+        mit.traverseGraph(gr);
         assertNull(v1.getMutation());
         assertNull(v5.getMutation());
         assertNull(v4.getMutation());
@@ -94,8 +94,8 @@ public class MutationIndicationTraverserTest {
         gr.addEdge(v1, v3);
         gr.addEdge(v2, v4);
         gr.addEdge(v3, v4);
-        apt.traverseGraph(gr);
-        mt.traverseGraph(gr);
+        rpt.traverseGraph(gr);
+        mit.traverseGraph(gr);
         assertNull(v1.getMutation());
         assertNull(v2.getMutation());
         assertNull(v4.getMutation());
@@ -114,8 +114,8 @@ public class MutationIndicationTraverserTest {
         gr.addEdge(v1, v6);
         gr.addEdge(v2, v4);
         gr.addEdge(v6, v4);
-        apt.traverseGraph(gr);
-        mt.traverseGraph(gr);
+        rpt.traverseGraph(gr);
+        mit.traverseGraph(gr);
         assertNull(v1.getMutation());
         assertNull(v2.getMutation());
         assertNull(v4.getMutation());

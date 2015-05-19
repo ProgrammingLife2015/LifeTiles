@@ -22,7 +22,7 @@ import nl.tudelft.lifetiles.traverser.models.ReferencePositionTraverser;
 public class ReferencePositionTraverserTest {
     GraphFactory<SequenceSegment> gf;
     static FactoryProducer<SequenceSegment> fp;
-    static ReferencePositionTraverser apt;
+    static ReferencePositionTraverser rpt;
     static Set<Sequence> s1, s2, s3;
     SequenceSegment v1, v4;
     Graph<SequenceSegment> gr;
@@ -34,7 +34,7 @@ public class ReferencePositionTraverserTest {
         Sequence ss1 = new DefaultSequence("reference");
         Sequence ss2 = new DefaultSequence("mutation");
 
-        apt = new ReferencePositionTraverser(ss1);
+        rpt = new ReferencePositionTraverser(ss1);
 
         s1 = new HashSet<Sequence>();
         s1.add(ss1);
@@ -69,7 +69,7 @@ public class ReferencePositionTraverserTest {
         gr.addEdge(v1, v6);
         gr.addEdge(v3, v4);
         gr.addEdge(v6, v4);
-        apt.traverseGraph(gr);
+        rpt.traverseGraph(gr);
 
         assertEquals(1, v1.getReferenceStart());
         assertEquals(10, v1.getReferenceEnd());
@@ -93,7 +93,7 @@ public class ReferencePositionTraverserTest {
         gr.addEdge(v1, v5);
         gr.addEdge(v2, v4);
         gr.addEdge(v5, v4);
-        apt.traverseGraph(gr);
+        rpt.traverseGraph(gr);
 
         assertEquals(1, v1.getReferenceStart());
         assertEquals(10, v1.getReferenceEnd());
@@ -117,7 +117,7 @@ public class ReferencePositionTraverserTest {
         gr.addEdge(v1, v6);
         gr.addEdge(v2, v4);
         gr.addEdge(v6, v4);
-        apt.traverseGraph(gr);
+        rpt.traverseGraph(gr);
 
         assertEquals(1, v1.getReferenceStart());
         assertEquals(10, v1.getReferenceEnd());
