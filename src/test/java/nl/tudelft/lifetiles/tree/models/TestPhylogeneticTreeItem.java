@@ -34,7 +34,7 @@ public class TestPhylogeneticTreeItem {
 	}
 	
 	/**
-	 * Test for nu
+	 * Test for number descendants
 	 */
 	@Test
 	public void testNumberDescendants() {
