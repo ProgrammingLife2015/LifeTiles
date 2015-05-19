@@ -38,7 +38,7 @@ public class GraphAdapterTest {
     @Before
     public void setUp() throws Exception {
         gf = fp.getFactory("JGraphT");
-        v1 = new SequenceSegment(null, 0, 0, null);
+        v1 = new SequenceSegment(null, 0, 2, null);
         v2 = new SequenceSegment(null, 0, 0, null);
         gr = gf.getGraph();
     }
@@ -143,7 +143,7 @@ public class GraphAdapterTest {
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
         Set<Edge<SequenceSegment>> inc = gr.getIncoming(v2);
-        SequenceSegment v3 = new SequenceSegment(null, 0, 0, null);
+        SequenceSegment v3 = new SequenceSegment(null, 0, 3, null);
         gr.splitEdge(inc.iterator().next(), v3);
         assertEquals(v3, gr.getSource(gr.getIncoming(v2).iterator().next()));
         assertEquals(v3,

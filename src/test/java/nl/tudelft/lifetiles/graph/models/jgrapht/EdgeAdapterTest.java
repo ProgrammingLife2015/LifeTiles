@@ -27,10 +27,10 @@ public class EdgeAdapterTest {
     @Before
     public void setUp() throws Exception {
         gf = fp.getFactory("JGraphT");
-        v1 = new SequenceSegment(null, 0, 0, null);
-        v2 = new SequenceSegment(null, 0, 0, null);
-        v3 = new SequenceSegment(null, 0, 0, null);
-        v4 = new SequenceSegment(null, 0, 0, null);
+        v1 = new SequenceSegment(null, 0, 1, null);
+        v2 = new SequenceSegment(null, 0, 2, null);
+        v3 = new SequenceSegment(null, 0, 3, null);
+        v4 = new SequenceSegment(null, 0, 4, null);
         gr = gf.getGraph();
         gr.addVertex(v1);
         gr.addVertex(v2);
