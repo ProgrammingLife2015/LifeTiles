@@ -5,7 +5,8 @@ import javafx.scene.control.Control;
 import javafx.scene.input.MouseButton;
 
 /**
- *
+ * A View to display a tree.
+ * The tree will be displayed in a circle.
  * @author Albert Smit
  *
  */

@@ -6,7 +6,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
 /**
- *
+ * A sunburstCenter represents the node that is displayed in the center.
  * @author Albert Smit
  *
  */
