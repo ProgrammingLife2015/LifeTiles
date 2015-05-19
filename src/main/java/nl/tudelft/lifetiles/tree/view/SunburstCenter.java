@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
  * @author Albert Smit
  *
  */
-public class SunburstCenter extends SunburstUnit {
+public class SunburstCenter extends SunburstNode {
 
 
     /**
