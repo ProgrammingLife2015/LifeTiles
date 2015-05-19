@@ -91,7 +91,7 @@ public class SunburstView extends Control {
             double sectorSize = (child.numberDescendants() + 1)
                     / totalDescendants;
             double degreeEnd = degreeStart
-                    + (SunburstUnit.CIRCLEDEGREES * sectorSize);
+                    + (SunburstNode.CIRCLEDEGREES * sectorSize);
 
             drawRingRecursive(child, 0, degreeStart, degreeEnd);
             degreeStart = degreeEnd;
@@ -103,9 +103,9 @@ public class SunburstView extends Control {
      *
      * @param node
      *            the {@link PhylogeneticTreeItem} that this
-     *            {@link SunburstRing} will represent.
+     *            {@link SunburstRingSegment} will represent.
      * @param layer
-     *            the layer on which this {@link SunburstRing} is located
+     *            the layer on which this {@link SunburstRingSegment} is located
      * @param degreeStart
      *            the start point in degrees
      * @param degreeEnd
@@ -114,8 +114,8 @@ public class SunburstView extends Control {
     private void drawRingRecursive(final PhylogeneticTreeItem node,
             final int layer, final double degreeStart, final double degreeEnd) {
         // generate ring
-        SunburstRing ringUnit = new SunburstRing(node, layer, degreeStart,
-                degreeEnd, centerX, centerY);
+        SunburstRingSegment ringUnit = new SunburstRingSegment(node, layer,
+                degreeStart, degreeEnd, centerX, centerY);
         ringUnit.setOnMouseClicked((mouseEvent) -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 selectNode(node);
@@ -125,7 +125,7 @@ public class SunburstView extends Control {
 
         double totalDescendants = node.numberDescendants();
         double start = degreeStart;
-        double sectorAngle = SunburstUnit
+        double sectorAngle = SunburstNode
                 .calculateAngle(degreeStart, degreeEnd);
 
         // generate rings for child nodes

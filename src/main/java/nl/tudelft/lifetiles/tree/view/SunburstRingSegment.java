@@ -11,15 +11,16 @@ import javafx.scene.text.Text;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
 /**
- *  A sunburstRing is a part of the rings of the sunburst view.
+ * A {@link SunburstRingSegment} represents a segment
+ * of the sunburst diagrams rings.
  * @author Albert Smit
  *
  */
 
-public class SunburstRing extends SunburstUnit {
+public class SunburstRingSegment extends SunburstNode {
 
     /**
-     * Creates a SunburstRing.
+     * Creates a SunburstRingSegment.
      *
      *
      * @param v
@@ -37,7 +38,7 @@ public class SunburstRing extends SunburstUnit {
      * @param centerY
      *            the Y coordinate of the center of the circle
      */
-    public SunburstRing(final PhylogeneticTreeItem v, final int layer,
+    public SunburstRingSegment(final PhylogeneticTreeItem v, final int layer,
             final double degreeStart, final double degreeEnd,
             final double centerX, final double centerY) {
         // set the value, and create the text and semi-circle
@@ -49,7 +50,7 @@ public class SunburstRing extends SunburstUnit {
         double radius = CENTER_RADIUS + (layer * RING_WIDTH) + (RING_WIDTH / 2);
 
         double degreeCenter = degreeStart
-                + SunburstUnit.calculateAngle(degreeStart, degreeEnd) / 2;
+                + SunburstNode.calculateAngle(degreeStart, degreeEnd) / 2;
         //convert to radians
         double angle = degreeCenter * (Math.PI / (CIRCLEDEGREES / 2));
 
@@ -90,7 +91,7 @@ public class SunburstRing extends SunburstUnit {
         result.setFillRule(FillRule.EVEN_ODD);
 
         // check if this is a large arc
-        double arcSize = SunburstUnit.calculateAngle(degreeStart, degreeEnd);
+        double arcSize = SunburstNode.calculateAngle(degreeStart, degreeEnd);
         boolean largeArc = arcSize > (CIRCLEDEGREES / 2);
 
         // calculate the radii of the two arcs

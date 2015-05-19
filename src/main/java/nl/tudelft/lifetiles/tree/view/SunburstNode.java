@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
  * @author Albert Smit
  *
  */
-public abstract class SunburstUnit extends Group {
+public abstract class SunburstNode extends Group {
 
     /**
      * the {@link PhylogeneticTreeItem} this node represents.
