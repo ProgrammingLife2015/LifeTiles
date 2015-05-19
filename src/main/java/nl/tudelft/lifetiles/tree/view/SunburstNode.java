@@ -6,7 +6,8 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 
 /**
- *
+ * A sunburst Node represents a displayed node in
+ * a sunburst diagram.
  * @author Albert Smit
  *
  */
