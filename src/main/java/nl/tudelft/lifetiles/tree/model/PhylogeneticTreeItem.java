@@ -96,27 +96,27 @@ public class PhylogeneticTreeItem {
             return true;
         } else if (other instanceof PhylogeneticTreeItem) {
             PhylogeneticTreeItem that = (PhylogeneticTreeItem) other;
-            boolean result;
+            boolean res;
             // compare name
             if (name == null && that.getName() == null) {
                 // both are empty and thus the same
-                result = true;
+                res = true;
             } else if (name == null) {
                 // the names are not both empty so not the same
-                result = false;
+                res = false;
             } else {
                 // name is not null check if it is the same
-                result = name.equals(that.getName());
+                res = name.equals(that.getName());
             }
 
             // compare distance
-            result = result && (distance == that.getDistance());
+            res = res && (Double.compare(distance, that.getDistance()) == 0);
 
             // compare children
             for (PhylogeneticTreeItem child : children) {
-                result = result && that.getChildren().contains(child);
+                res = res && that.getChildren().contains(child);
             }
-            return result;
+            return res;
         } else {
             return false;
         }
