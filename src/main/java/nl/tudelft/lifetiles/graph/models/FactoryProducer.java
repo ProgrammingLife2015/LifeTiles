@@ -11,7 +11,7 @@ import nl.tudelft.lifetiles.graph.models.jgrapht.JGraphTGraphFactory;
  * @param <V>
  *            The type of vertex to use.
  */
-public class FactoryProducer<V> {
+public class FactoryProducer<V extends Comparable<V>> {
     /**
      * The graph library to use when none is specified.
      */

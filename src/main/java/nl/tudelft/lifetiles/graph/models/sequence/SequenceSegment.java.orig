@@ -1,13 +1,11 @@
 package nl.tudelft.lifetiles.graph.models.sequence;
 
-import java.util.List;
+import java.util.Set;
 
 import nl.tudelft.lifetiles.graph.view.Mutation;
 
 /**
- * Contains a partial sequence.
- *
- * @author Rutger van den Berg
+ * @author Rutger van den Berg Contains a partial sequence.
  */
 public class SequenceSegment implements Comparable<SequenceSegment> {
     /**
@@ -21,7 +19,8 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
     /**
      * Contains the sources containing this segment.
      */
-    private List<Sequence> sourcesVar;
+    private Set<Sequence> sourcesVar;
+
     /**
      * The start position for this segment.
      */
@@ -51,7 +50,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      * @param content
      *            The content for this segment.
      */
-    public SequenceSegment(final List<Sequence> sources,
+    public SequenceSegment(final Set<Sequence> sources,
             final long startPosition, final long endPosition,
             final SegmentContent content) {
         sourcesVar = sources;
@@ -77,7 +76,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
     /**
      * @return the sources
      */
-    public final List<Sequence> getSources() {
+    public final Set<Sequence> getSources() {
         return sourcesVar;
     }
 
@@ -88,6 +87,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
         return startVar;
     }
 
+<<<<<<< HEAD
     /**
      * @return the absolute start position
      */
@@ -156,5 +156,10 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
     @Override
     public final int compareTo(final SequenceSegment other) {
         return Long.compare(this.getStart(), other.getStart());
+=======
+    @Override
+    public final int compareTo(final SequenceSegment other) {
+        return (new Long(startVar).compareTo(new Long(other.getStart())));
+>>>>>>> Make SequenceSegment comparable.
     }
 }

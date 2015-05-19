@@ -1,6 +1,8 @@
 package nl.tudelft.lifetiles.graph.models.jgrapht;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -18,7 +20,7 @@ import org.jgrapht.graph.DefaultEdge;
  * @param <V>
  *            The type of vertex to use.
  */
-public class JGraphTGraphAdapter<V> implements Graph<V> {
+public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
     /**
      * The edgefactory to use to create the edges for this graph.
      */
@@ -30,11 +32,11 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
     /**
      * Keep track of all vertices that have no incoming edges.
      */
-    private Set<V> sources;
+    private List<V> sources;
     /**
      * Keep track of all vertices that have no outgoing edges.
      */
-    private Set<V> sinks;
+    private List<V> sinks;
     /**
      * List of vertices. Used to be able to identify nodes by ids.
      */
@@ -50,8 +52,8 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
         internalGraph = new DirectedAcyclicGraph<V, DefaultEdge>(
                 DefaultEdge.class);
         edgeFact = ef;
-        sources = new HashSet<>();
-        sinks = new HashSet<>();
+        sources = new ArrayList<>();
+        sinks = new ArrayList<>();
         vertexIdentifiers = new ArrayList<>();
     }
 
@@ -67,20 +69,18 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      *            The source vertex to use.
      * @param destination
      *            The destination vertex to use.
+     * @throws IllegalArgumentException
+     *             Edge may not induce a cycle.
      * @return <code>true</code> iff adding succeeded.
      */
     @Override
-    public final boolean addEdge(final V source, final V destination) {
-        if (internalGraph.containsVertex(source)
-                && internalGraph.containsVertex(destination)) {
-            internalGraph.addEdge(source, destination);
-            sources.remove(destination);
-            sinks.remove(source);
-            return true;
-        } else {
-            throw new IllegalArgumentException(
-                    "Source or destination not in graph.");
-        }
+    public final boolean addEdge(final V source, final V destination)
+            throws IllegalArgumentException {
+
+        internalGraph.addEdge(source, destination);
+        sources.remove(destination);
+        sinks.remove(source);
+        return true;
     }
 
     /**
@@ -115,16 +115,16 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      * @return All edges.
      */
     @Override
-    public final Set<Edge<V>> getAllEdges() {
-        return convertEdges(internalGraph.edgeSet());
+    public final List<Edge<V>> getAllEdges() {
+        return new ArrayList<Edge<V>>(convertEdges(internalGraph.edgeSet()));
     }
 
     /**
      * @return All vertices.
      */
     @Override
-    public final Set<V> getAllVertices() {
-        return internalGraph.vertexSet();
+    public final List<V> getAllVertices() {
+        return new ArrayList<V>(internalGraph.vertexSet());
     }
 
     /**
@@ -143,26 +143,32 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      * @return The edges incoming to <code>vertex</code>.
      */
     @Override
-    public final Set<Edge<V>> getIncoming(final V vertex) {
-        return convertEdges(internalGraph.incomingEdgesOf(vertex));
+    public final List<Edge<V>> getIncoming(final V vertex) {
+        return new ArrayList<Edge<V>>(
+                convertEdges(internalGraph.incomingEdgesOf(vertex)));
     }
 
     /**
+     * Get outgoing edges for a vertex, sorted by distance.
+     *
      * @param vertex
      *            The vertex to use.
      * @return The edges outgoing from <code>vertex</code>.
      */
     @Override
-    public final Set<Edge<V>> getOutgoing(final V vertex) {
-        return convertEdges(internalGraph.outgoingEdgesOf(vertex));
+    public final List<Edge<V>> getOutgoing(final V vertex) {
+        List<Edge<V>> output = new ArrayList<Edge<V>>(
+                convertEdges(internalGraph.outgoingEdgesOf(vertex)));
+        Collections.sort(output, new EdgeComparatorByVertex());
+        return output;
     }
 
     /**
      * @return All vertices that have no incoming edges.
      */
     @Override
-    public final Set<V> getSources() {
-        return sources;
+    public final List<V> getSources() {
+        return new ArrayList<V>(sources);
     }
 
     /**
@@ -195,7 +201,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      * @return All vertices that have no outgoing edges.
      */
     @Override
-    public final Set<V> getSinks() {
+    public final List<V> getSinks() {
         return sinks;
     }
 
@@ -223,4 +229,16 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
         internalGraph.removeEdge(unpackEdge(edge));
     }
 
+    /**
+     * @author Rutger van den Berg
+     *         Compares two edges by their target vertex.
+     */
+    class EdgeComparatorByVertex implements Comparator<Edge<V>> {
+
+        @Override
+        public int compare(final Edge<V> o1, final Edge<V> o2) {
+            return getDestination(o1).compareTo(getDestination(o2));
+        }
+
+    }
 }

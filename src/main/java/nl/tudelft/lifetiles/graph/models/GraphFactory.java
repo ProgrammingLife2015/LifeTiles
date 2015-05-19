@@ -8,7 +8,7 @@ package nl.tudelft.lifetiles.graph.models;
  * @param <V>
  *            the vertex type.
  */
-public interface GraphFactory<V> {
+public interface GraphFactory<V extends Comparable<V>> {
     /**
      * @return a new empty graph.
      */
