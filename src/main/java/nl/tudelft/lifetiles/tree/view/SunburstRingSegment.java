@@ -102,54 +102,86 @@ public class SunburstRingSegment extends SunburstNode {
         double angleAlpha = Math.toRadians(degreeStart);
         double angleAlphaNext = Math.toRadians(degreeEnd);
 
-        // calculate the positon of the four corners of the semi-circle
-        double point1X = centerX + innerRadius * Math.sin(angleAlpha);
-        double point1Y = centerY - innerRadius * Math.cos(angleAlpha);
-
-        double point2X = centerX + outerRadius * Math.sin(angleAlpha);
-        double point2Y = centerY - outerRadius * Math.cos(angleAlpha);
-
-        double point3X = centerX + outerRadius * Math.sin(angleAlphaNext);
-        double point3Y = centerY - outerRadius * Math.cos(angleAlphaNext);
-
-        double point4X = centerX + innerRadius * Math.sin(angleAlphaNext);
-        double point4Y = centerY - innerRadius * Math.cos(angleAlphaNext);
-
         // draw the semi-circle
         // first go to the start point
-        MoveTo move1 = new MoveTo(point1X, point1Y);
+        double startX = centerX + innerRadius * Math.sin(angleAlpha);
+        double startY = centerY - innerRadius * Math.cos(angleAlpha);
+        MoveTo move1 = new MoveTo(startX, startY);
+
         //draw a line from point 1 to point 2
-        LineTo line1To2 = new LineTo(point2X, point2Y);
+        LineTo line1To2 = createLine(outerRadius, centerX, centerY, angleAlpha);
 
         // draw an arc from point 2 to point 3
-        ArcTo arc2To3 = new ArcTo();
-        arc2To3.setRadiusX(outerRadius);
-        arc2To3.setRadiusY(outerRadius);
-        arc2To3.setX(point3X);
-        arc2To3.setY(point3Y);
-        arc2To3.setSweepFlag(true);
-        arc2To3.setLargeArcFlag(largeArc);
+        ArcTo arc2To3 = createArc(outerRadius, centerX, centerY,
+                angleAlphaNext, true, largeArc);
 
         // draw a line from point 3 to point 4
-        LineTo line3To4 = new LineTo(point4X, point4Y);
+        LineTo line3To4 = createLine(innerRadius, centerX, centerY,
+                angleAlphaNext);
 
         // draw an arc from point 4 back to point 1
-        ArcTo arc4To1 = new ArcTo();
-        arc4To1.setRadiusX(innerRadius);
-        arc4To1.setRadiusY(innerRadius);
-        arc4To1.setX(point1X);
-        arc4To1.setY(point1Y);
-        arc4To1.setSweepFlag(false);
-        arc4To1.setLargeArcFlag(largeArc);
+        ArcTo arc4To1 = createArc(innerRadius, centerX, centerY,
+                angleAlpha, false, largeArc);
 
         // add all elements to the path
-        result.getElements().add(move1);
-        result.getElements().add(line1To2);
-        result.getElements().add(arc2To3);
-        result.getElements().add(line3To4);
-        result.getElements().add(arc4To1);
+        result.getElements().addAll(move1, line1To2, arc2To3,
+                                    line3To4, arc4To1);
 
         return result;
+    }
+
+    /**
+     * Creates an {@link ArcTo} with the specified parameters.
+     *
+     * Coordinates of the end point of the arc are given in polar form
+     * relative to the center of the arcs.
+     *
+     * @param radius The radius of the arc.
+     * @param centerX The center X coordinate of the arc.
+     * @param centerY The center Y coordinate of the arc.
+     * @param angle The angle of the end point.
+     * @param sweep The draw direction of the arc.
+     * @param largeArc if true draw an arc larger than 180 degrees.
+     * @return an ArcTo with the specified parameters.
+     */
+    private ArcTo createArc(final double radius, final double centerX,
+            final double centerY, final double angle, final boolean sweep,
+            final boolean largeArc) {
+        // calculate the end point of the arc
+        double endX = centerX + radius * Math.sin(angle);
+        double endY = centerY - radius * Math.cos(angle);
+
+        //create the arc
+        ArcTo result = new ArcTo();
+        result.setRadiusX(radius);
+        result.setRadiusY(radius);
+        result.setX(endX);
+        result.setY(endY);
+        result.setSweepFlag(sweep);
+        result.setLargeArcFlag(largeArc);
+
+        return result;
+    }
+
+    /**
+     * Creates a {@link LineTo} with the specified parameters.
+     *
+     * Coordinates of the end point of the arc are given in polar form
+     * relative to the center of the arcs.
+     *
+     * @param radius The radius of the arc.
+     * @param centerX The center X coordinate of the arc.
+     * @param centerY The center Y coordinate of the arc.
+     * @param angle The angle of the end point.
+     * @return the LineTo with the specified parameters.
+     */
+    private LineTo createLine(final double radius, final double centerX,
+            final double centerY, final double angle) {
+        // calculate the end point coordinates
+        double endX = centerX + radius * Math.sin(angle);
+        double endY = centerY - radius * Math.cos(angle);
+
+        return new LineTo(endX, endY);
     }
 
 }
