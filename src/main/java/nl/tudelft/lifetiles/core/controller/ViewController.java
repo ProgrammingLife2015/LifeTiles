@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Set;
 
+import javafx.stage.Stage;
 import nl.tudelft.lifetiles.graph.models.DefaultGraphParser;
 import nl.tudelft.lifetiles.graph.models.FactoryProducer;
 import nl.tudelft.lifetiles.graph.models.Graph;
@@ -40,6 +41,11 @@ public final class ViewController extends Observable {
      * The currently loaded graph.
      */
     private Graph<SequenceSegment> graph;
+
+    /**
+     * The main stage.
+     */
+    private Stage stage;
 
     /**
      * Creates a new viewcontroller.
@@ -141,6 +147,21 @@ public final class ViewController extends Observable {
     }
 
     /**
+     * @return the stage
+     */
+    public Stage getStage() {
+        return stage;
+    }
+
+    /**
+     * @param stage
+     *            the stage to set
+     */
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    /**
      * Notify the observers of a change.
      */
     public void notifyChanged() {
@@ -155,6 +176,17 @@ public final class ViewController extends Observable {
      */
     public boolean isLoaded() {
         return graph != null;
+    }
+
+    /**
+     * Display an error.
+     *
+     * @param message
+     *            the error message
+     */
+    public void displayError(final String message) {
+        // TODO: display error in the gui
+        System.out.println("[ERROR] " + message);
     }
 
     /**

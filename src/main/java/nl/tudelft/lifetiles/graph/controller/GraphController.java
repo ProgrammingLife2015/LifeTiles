@@ -1,6 +1,8 @@
 package nl.tudelft.lifetiles.graph.controller;
 
 import java.net.URL;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
@@ -19,7 +21,7 @@ import nl.tudelft.lifetiles.graph.view.TileView;
  * @author Joren Hammudoglu
  *
  */
-public class GraphController implements Initializable {
+public class GraphController implements Initializable, Observer {
 
     /**
      * The wrapper element.
@@ -27,28 +29,37 @@ public class GraphController implements Initializable {
     @FXML
     private ScrollPane wrapper;
 
+    /**
+     * The view controller.
+     */
+    private ViewController controller;
+
     @Override
-    @Deprecated
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        Tile model = new Tile(loadGraphModel());
-        TileView view = new TileView();
-        TileController controller = new TileController(view, model);
-
-        Group root = controller.drawGraph();
-        wrapper.setContent(root);
+        controller = ViewController.getInstance();
+        controller.addObserver(this);
     }
 
     /**
-     * Loads a graph by filename.
+     * Fills the graph view and removes the old content.
      *
-     * @return parsed graph by filename.
+     * @param graph the graph
      */
-    @Deprecated
-    private Graph<SequenceSegment> loadGraphModel() {
-        ViewController vc = ViewController.getInstance();
-        vc.loadGraph("data/test_set/simple_graph");
-        return vc.getGraph();
+    private void repaint(final Graph<SequenceSegment> graph) {
+        Tile model = new Tile(graph);
+        TileView view = new TileView();
+        TileController tc = new TileController(view, model);
+
+        Group root = tc.drawGraph();
+        wrapper.setContent(root);
+    }
+
+    @Override
+    public final void update(final Observable o, final Object arg) {
+        if (controller.isLoaded()) {
+            repaint(controller.getGraph());
+        }
     }
 
 }
