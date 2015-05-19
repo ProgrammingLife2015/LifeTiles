@@ -149,5 +149,16 @@ public class GraphAdapterTest {
         assertEquals(v3,
                 gr.getDestination(gr.getOutgoing(v1).iterator().next()));
     }
+    
+    @Test
+    public void testCopy() {
+        gr.addVertex(v1);
+        gr.addVertex(v2);
+        gr.addEdge(v1, v2);
+        
+        Graph<SequenceSegment> copy = gr.copy();
+        assertEquals(2, copy.getAllVertices().size());
+        assertEquals(1, copy.getAllEdges().size());
+    }
 
 }
