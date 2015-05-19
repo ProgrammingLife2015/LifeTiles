@@ -2,6 +2,7 @@ package nl.tudelft.lifetiles.traverser.models;
 
 import java.util.HashSet;
 import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
 
 import nl.tudelft.lifetiles.graph.models.Edge;
@@ -53,13 +54,12 @@ public class EmptySegmentTraverser {
      *            the vertex to traverse.
      */
     private void traverseVertex(final SequenceSegment vertex) {
-        HashSet<Sequence> buffer = new HashSet<Sequence>(vertex.getSources());
-        PriorityQueue<SortedEdge> it = getSortedEdges(graphVar
-                .getOutgoing(vertex));
+        Set<Sequence> buffer = new HashSet<Sequence>(vertex.getSources());
+        Queue<SortedEdge> it = getSortedEdges(graphVar.getOutgoing(vertex));
         while (!it.isEmpty()) {
             SortedEdge edge = it.poll();
             SequenceSegment destination = edge.getSegment();
-            HashSet<Sequence> sources = new HashSet<Sequence>(
+            Set<Sequence> sources = new HashSet<Sequence>(
                     destination.getSources());
             sources.retainAll(buffer);
             if (vertex.distanceTo(destination) > 0) {
@@ -79,9 +79,9 @@ public class EmptySegmentTraverser {
      * @return priority queue of sorted edges.
      */
     @Deprecated
-    private PriorityQueue<SortedEdge> getSortedEdges(
+    private Queue<SortedEdge> getSortedEdges(
             final Set<Edge<SequenceSegment>> edges) {
-        PriorityQueue<SortedEdge> it = new PriorityQueue<SortedEdge>();
+        Queue<SortedEdge> it = new PriorityQueue<SortedEdge>();
         for (Edge<SequenceSegment> edge : edges) {
             it.add(new SortedEdge(edge, graphVar.getDestination(edge)));
         }
@@ -101,7 +101,7 @@ public class EmptySegmentTraverser {
      * @return sequence segment between source and destination segment
      */
     private SequenceSegment bridgeSequence(final SequenceSegment source,
-            final SequenceSegment destination, final HashSet<Sequence> sources) {
+            final SequenceSegment destination, final Set<Sequence> sources) {
         SequenceSegment vertex = new SequenceSegment(sources,
                 source.getUnifiedEnd(), destination.getUnifiedStart(),
                 new SegmentEmpty(source.distanceTo(destination) + 1));
