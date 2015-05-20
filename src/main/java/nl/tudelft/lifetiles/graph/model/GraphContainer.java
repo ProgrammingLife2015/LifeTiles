@@ -1,6 +1,8 @@
 package nl.tudelft.lifetiles.graph.model;
 
+import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 
 import nl.tudelft.lifetiles.core.util.Settings;
 import nl.tudelft.lifetiles.graph.traverser.EmptySegmentTraverser;
@@ -81,12 +83,45 @@ public class GraphContainer {
      *            Reference of the graph which is used to indicate mutations.
      */
     private void findMutations(final Sequence reference) {
+
         if (!Settings.getBoolean(SETTING_MUTATION)) {
             return;
         }
         new ReferencePositionTraverser(reference).referenceMapGraph(graph);
         new MutationIndicationTraverser(reference)
-        .indicateGraphMutations(graph);
+                .indicateGraphMutations(graph);
+
+    }
+
+    /**
+     * Change the graph by selecting the sequences to draw.
+     *
+     * @param visibleSequences
+     *            the sequences to display
+     */
+    public final void changeGraph(final Set<Sequence> visibleSequences,
+            final Graph<SequenceSegment> currgraph) {
+        GraphFactory<SequenceSegment> factory = FactoryProducer.getFactory();
+
+        // Find out which vertices are visible now
+        Set<SequenceSegment> vertices = new TreeSet<SequenceSegment>();
+        for (Sequence seq : visibleSequences) {
+            Iterator<SequenceSegment> it = seq.getSegments().iterator();
+            while (it.hasNext()) {
+                vertices.add(it.next());
+            }
+        }
+
+        // Create a new subgraph based on visible vertices and update the
+        // sources to only the visibleSequences
+        /*
+         * Graph<SequenceSegment> subgr = gf.getSubGraph(currgraph, vertices);
+         * Graph<SequenceSegment> copy = subgr.deepcopy(gf);
+         * for (SequenceSegment vertex : copy.getAllVertices()) {
+         * vertex.getSources().retainAll(visibleSequences);
+         * }
+         * graph = copy;
+         */
     }
 
     /**
