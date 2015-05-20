@@ -205,7 +205,7 @@ public final class ViewController extends Observable {
      *
      * @return the ViewController
      */
-    public static ViewController getInstance() {
+    public static synchronized ViewController getInstance() {
         if (instance == null) {
             instance = new ViewController();
         }
