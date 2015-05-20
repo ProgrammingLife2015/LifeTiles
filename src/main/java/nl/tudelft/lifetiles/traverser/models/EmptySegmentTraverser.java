@@ -19,16 +19,16 @@ import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
  */
 public class EmptySegmentTraverser {
     /**
-     * Traverser's copy of the graph.
+     * Traverser's graph.
      */
     private Graph<SequenceSegment> graphVar;
 
     /**
-     * Traverses the copied graph.
+     * Traverses the graph.
      *
      * @param graph
-     *            the graph to copy and traverse.
-     * @return the traversed copy of the graph.
+     *            the graph to traverse.
+     * @return the traversed of the graph.
      */
     public final Graph<SequenceSegment> traverseGraph(
             final Graph<SequenceSegment> graph) {
@@ -38,7 +38,7 @@ public class EmptySegmentTraverser {
     }
 
     /**
-     * Traverses the copied graph.
+     * Traverses the graph.
      */
     public final void traverseGraph() {
         for (SequenceSegment vertex : new HashSet<SequenceSegment>(
@@ -48,7 +48,7 @@ public class EmptySegmentTraverser {
     }
 
     /**
-     * Traverses a vertex in the copied graph.
+     * Traverses a vertex in the graph.
      *
      * @param vertex
      *            the vertex to traverse.

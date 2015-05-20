@@ -30,28 +30,28 @@ public class MutationIndicationTraverser {
     }
 
     /**
-     * Copy of the graph which is being traversed.
+     * Graph which is being traversed.
      */
     private Graph<SequenceSegment> graphVar;
 
     /**
-     * Traverses the copy of the graph and indicates the mutation types.
+     * Traverses the graph and indicates the mutation types.
      *
      * @param graph
-     *            The graph to copy and traverse.
-     * @return the traversed copy of the graph.
+     *            The graph to traverse.
+     * @return the traversed graph.
      */
     public final Graph<SequenceSegment> traverseGraph(
             final Graph<SequenceSegment> graph) {
-        graphVar = graph.copy();
+        graphVar = graph;
         traverseGraph();
         return graphVar;
     }
 
     /**
-     * Traverse the copy of the graph and indicates the mutation types.
+     * Traverse the graph and indicates the mutation types.
      *
-     * @return traversed copy of the graph.
+     * @return traversed graph.
      */
     public final Graph<SequenceSegment> traverseGraph() {
         for (SequenceSegment vertex : graphVar.getAllVertices()) {
@@ -65,7 +65,7 @@ public class MutationIndicationTraverser {
      * type of the mutation, if it has one.
      *
      * @param vertex
-     *            Vertex in the copy of the graph to be traversed.
+     *            Vertex in the graph to be traversed.
      */
     private void traverseVertex(final SequenceSegment vertex) {
         if (!vertex.getSources().contains(referenceVar)) {
