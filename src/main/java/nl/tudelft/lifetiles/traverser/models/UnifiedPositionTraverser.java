@@ -12,7 +12,7 @@ import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
  * @author Jos
  *
  */
-public class UnifiedPositionTraverser {
+public class UnifiedPositionTraverser implements Traverser {
     /**
      * Graph which is being traversed.
      */

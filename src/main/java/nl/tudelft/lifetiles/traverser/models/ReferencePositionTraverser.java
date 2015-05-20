@@ -13,7 +13,7 @@ import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
  * @author Jos
  *
  */
-public class ReferencePositionTraverser {
+public class ReferencePositionTraverser implements Traverser {
 
     /**
      * Reference sequence which segments are compared to.
