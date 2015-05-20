@@ -1,7 +1,6 @@
 package nl.tudelft.lifetiles.traverser.models;
 
 import nl.tudelft.lifetiles.graph.models.Graph;
-import nl.tudelft.lifetiles.graph.models.sequence.SegmentEmpty;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 import nl.tudelft.lifetiles.graph.view.Mutation;
@@ -53,7 +52,7 @@ public class MutationIndicationTraverser implements Traverser {
      *
      * @return traversed graph.
      */
-    private final Graph<SequenceSegment> indicateGraphMutations() {
+    private Graph<SequenceSegment> indicateGraphMutations() {
         for (SequenceSegment vertex : graphVar.getAllVertices()) {
             indicateVertexMutations(vertex);
         }
@@ -70,7 +69,7 @@ public class MutationIndicationTraverser implements Traverser {
     private void indicateVertexMutations(final SequenceSegment vertex) {
         if (!vertex.getSources().contains(referenceVar)) {
             Mutation mutation;
-            if (vertex.getContent() instanceof SegmentEmpty) {
+            if (vertex.getContent().isEmpty()) {
                 mutation = Mutation.DELETION;
             } else if (vertex.getReferenceStart() > vertex.getReferenceEnd()) {
                 mutation = Mutation.INSERTION;

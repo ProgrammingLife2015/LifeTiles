@@ -37,7 +37,7 @@ public class UnifiedPositionTraverser implements Traverser {
      * Traverses the graph, calculates unified positions. Unified positions
      * are needed to visualize a comprehensible model of the graph.
      */
-    private final void unifyGraph() {
+    private void unifyGraph() {
         for (SequenceSegment vertex : graphVar.getSources()) {
             vertex.setUnifiedStart(1);
             vertex.setUnifiedEnd(vertex.getUnifiedStart()

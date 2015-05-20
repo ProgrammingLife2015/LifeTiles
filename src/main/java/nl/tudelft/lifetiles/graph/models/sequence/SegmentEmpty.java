@@ -38,4 +38,12 @@ public class SegmentEmpty implements SegmentContent {
         return new String(new char[(int) lengthVar]).replace("\0", "_");
     }
 
+    /**
+     * @return that the segment content is an empty node.
+     */
+    @Override
+    public final boolean isEmpty() {
+        return true;
+    }
+
 }

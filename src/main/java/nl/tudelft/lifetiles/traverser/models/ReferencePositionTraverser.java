@@ -56,7 +56,7 @@ public class ReferencePositionTraverser implements Traverser {
      * to the reference sequence. Reference coordinates are needed to indicate
      * mutations.
      */
-    private final void referenceMapGraph() {
+    private void referenceMapGraph() {
         referenceMapGraphForward();
         referenceMapGraphBackward();
     }

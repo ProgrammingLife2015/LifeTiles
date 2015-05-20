@@ -43,7 +43,7 @@ public class EmptySegmentTraverser implements Traverser {
      * Traverses the graph. Adds empty vertices to the graph which are being
      * used to indicate mutations on.
      */
-    private final void addEmptySegmentsGraph() {
+    private void addEmptySegmentsGraph() {
         for (SequenceSegment vertex : new ArrayList<SequenceSegment>(
                 graphVar.getAllVertices())) {
             addEmptySegmentsVertex(vertex);
