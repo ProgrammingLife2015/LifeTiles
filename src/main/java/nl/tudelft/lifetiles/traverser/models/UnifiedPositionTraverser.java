@@ -19,11 +19,12 @@ public class UnifiedPositionTraverser implements Traverser {
     private Graph<SequenceSegment> graphVar;
 
     /**
-     * Traverses and copies a graph.
+     * Traverses the graph, calculates the unified position. Unified positions
+     * are needed to visualize a comprehensible model of the graph.
      *
      * @param graph
      *            Graph to be traversed, calculate unified positions.
-     * @return traversed copy of the graph.
+     * @return traversed graph.
      */
     public final Graph<SequenceSegment> traverseGraph(
             final Graph<SequenceSegment> graph) {
@@ -33,7 +34,8 @@ public class UnifiedPositionTraverser implements Traverser {
     }
 
     /**
-     * Traverses the graph, calculates unified positions.
+     * Traverses the graph, calculates unified positions. Unified positions
+     * are needed to visualize a comprehensible model of the graph.
      */
     public final void traverseGraph() {
         for (SequenceSegment vertex : graphVar.getSources()) {
