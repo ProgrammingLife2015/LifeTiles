@@ -42,7 +42,11 @@ public class GraphController extends AbstractController {
     private ScrollPane wrapper;
 
     /**
+     * <<<<<<< HEAD
      * The model of the graph.
+     * =======
+     * The currently loaded graph.
+     * >>>>>>> First run on drawing Edges
      */
     private GraphContainer model;
 
@@ -209,7 +213,7 @@ public class GraphController extends AbstractController {
      * @return Group object to be drawn on the screen
      */
     public final Group drawGraph(final int position) {
-        return view.drawGraph(model.getSegments(position));
+        return view.drawGraph(model.getSegments(position), graph);
     }
 
     /**
