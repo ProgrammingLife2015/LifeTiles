@@ -29,6 +29,11 @@ public class Main extends Application {
     private static final int WINDOW_WIDTH = 1280;
 
     /**
+     * The font size used at font load.
+     */
+    private static final double FONT_SIZE = 12;
+
+    /**
      * Launch LifeTiles.
      *
      * @param args
@@ -41,19 +46,14 @@ public class Main extends Application {
     @Override
     public final void start(final Stage stage) {
         try {
+            loadFonts();
             stage.initStyle(StageStyle.UNDECORATED);
 
             URL mainView = getClass().getClassLoader().getResource(
                     "fxml/MainView.fxml");
-            URL fontFile = getClass().getClassLoader().getResource(
-                    "fonts/Open_Sans/OpenSans-Light.ttf");
 
             Parent root = FXMLLoader.load(mainView);
-
             Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-            final int fontSize = 12;
-            Font.loadFont(fontFile.toExternalForm(), fontSize);
 
             stage.setTitle("LifeTiles");
             stage.setScene(scene);
@@ -61,5 +61,18 @@ public class Main extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Loads Open Sans and Oxygen Mono font into the application.
+     */
+    private void loadFonts() {
+        URL openSansFontFile = getClass().getClassLoader().getResource(
+                "fonts/Open_Sans/OpenSans-Light.ttf");
+        URL oxygenFontFile = getClass().getClassLoader().getResource(
+                "fonts/Oxygen_Mono/OxygenMono-Regular.ttf");
+
+        Font.loadFont(openSansFontFile.toExternalForm(), FONT_SIZE);
+        Font.loadFont(oxygenFontFile.toExternalForm(), FONT_SIZE);
     }
 }
