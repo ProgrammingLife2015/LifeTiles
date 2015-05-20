@@ -152,7 +152,8 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
     }
 
     /**
-     * Compares the the start position of this and another sequence segment.
+     * Compares two segments, first by start positions, then end positions, then
+     * content, then sources.
      *
      * @param other
      *            Sequence segment which needs to be compared.
