@@ -44,7 +44,7 @@ public class MutationIndicationTraverser implements Traverser {
     public final Graph<SequenceSegment> traverseGraph(
             final Graph<SequenceSegment> graph) {
         graphVar = graph;
-        traverseGraph();
+        indicateGraphMutations();
         return graphVar;
     }
 
@@ -53,9 +53,9 @@ public class MutationIndicationTraverser implements Traverser {
      *
      * @return traversed graph.
      */
-    public final Graph<SequenceSegment> traverseGraph() {
+    private final Graph<SequenceSegment> indicateGraphMutations() {
         for (SequenceSegment vertex : graphVar.getAllVertices()) {
-            traverseVertex(vertex);
+            indicateVertexMutations(vertex);
         }
         return graphVar;
     }
@@ -67,7 +67,7 @@ public class MutationIndicationTraverser implements Traverser {
      * @param vertex
      *            Vertex in the graph to be traversed.
      */
-    private void traverseVertex(final SequenceSegment vertex) {
+    private void indicateVertexMutations(final SequenceSegment vertex) {
         if (!vertex.getSources().contains(referenceVar)) {
             Mutation mutation;
             if (vertex.getContent() instanceof SegmentEmpty) {

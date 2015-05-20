@@ -35,17 +35,18 @@ public class EmptySegmentTraverser implements Traverser {
     public final Graph<SequenceSegment> traverseGraph(
             final Graph<SequenceSegment> graph) {
         graphVar = graph;
-        traverseGraph();
+        addEmptySegmentsGraph();
         return this.graphVar;
     }
 
     /**
-     * Traverses the graph.
+     * Traverses the graph. Adds empty vertices to the graph which are being
+     * used to indicate mutations on.
      */
-    public final void traverseGraph() {
+    private final void addEmptySegmentsGraph() {
         for (SequenceSegment vertex : new ArrayList<SequenceSegment>(
                 graphVar.getAllVertices())) {
-            traverseVertex(vertex);
+            addEmptySegmentsVertex(vertex);
         }
     }
 
@@ -56,7 +57,7 @@ public class EmptySegmentTraverser implements Traverser {
      * @param vertex
      *            the vertex to traverse.
      */
-    private void traverseVertex(final SequenceSegment vertex) {
+    private void addEmptySegmentsVertex(final SequenceSegment vertex) {
         Set<Sequence> buffer = new HashSet<Sequence>(vertex.getSources());
         Queue<SortedEdge> it = getSortedEdges(graphVar.getOutgoing(vertex));
         while (!it.isEmpty()) {

@@ -29,7 +29,7 @@ public class UnifiedPositionTraverser implements Traverser {
     public final Graph<SequenceSegment> traverseGraph(
             final Graph<SequenceSegment> graph) {
         this.graphVar = graph;
-        traverseGraph();
+        unifyGraph();
         return graphVar;
     }
 
@@ -37,12 +37,12 @@ public class UnifiedPositionTraverser implements Traverser {
      * Traverses the graph, calculates unified positions. Unified positions
      * are needed to visualize a comprehensible model of the graph.
      */
-    public final void traverseGraph() {
+    private final void unifyGraph() {
         for (SequenceSegment vertex : graphVar.getSources()) {
             vertex.setUnifiedStart(1);
             vertex.setUnifiedEnd(vertex.getUnifiedStart()
                     + vertex.getContent().getLength());
-            traverseVertex(vertex);
+            unifyVertex(vertex);
         }
     }
 
@@ -52,14 +52,14 @@ public class UnifiedPositionTraverser implements Traverser {
      * @param vertex
      *            Vertex to be traversed.
      */
-    private void traverseVertex(final SequenceSegment vertex) {
+    private void unifyVertex(final SequenceSegment vertex) {
         for (Edge<SequenceSegment> edge : graphVar.getOutgoing(vertex)) {
             SequenceSegment destination = graphVar.getDestination(edge);
             if (destination.getUnifiedStart() < vertex.getUnifiedEnd()) {
                 destination.setUnifiedStart(vertex.getUnifiedEnd());
                 destination.setUnifiedEnd(destination.getUnifiedStart()
                         + destination.getContent().getLength());
-                traverseVertex(destination);
+                unifyVertex(destination);
             }
         }
     }
