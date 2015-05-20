@@ -47,7 +47,7 @@ public class ReferencePositionTraverser implements Traverser {
     public final Graph<SequenceSegment> traverseGraph(
             final Graph<SequenceSegment> graph) {
         graphVar = graph;
-        traverseGraph();
+        referenceMapGraph();
         return graphVar;
     }
 
@@ -56,25 +56,25 @@ public class ReferencePositionTraverser implements Traverser {
      * to the reference sequence. Reference coordinates are needed to indicate
      * mutations.
      */
-    public final void traverseGraph() {
-        traverseGraphForward();
-        traverseGraphBackward();
+    private final void referenceMapGraph() {
+        referenceMapGraphForward();
+        referenceMapGraphBackward();
     }
 
     /**
      * Traverses the graph forward to generate reference start positions.
      */
-    private void traverseGraphForward() {
+    private void referenceMapGraphForward() {
         for (SequenceSegment source : graphVar.getSources()) {
             source.setReferenceStart(1);
-            traverseVertexForward(source);
+            referenceMapVertexForward(source);
         }
     }
 
     /**
      * Traverses the graph backward to generate reference end position.
      */
-    private void traverseGraphBackward() {
+    private void referenceMapGraphBackward() {
         for (SequenceSegment sink : graphVar.getSinks()) {
             if (sink.getSources().contains(referenceVar)) {
                 sink.setReferenceEnd(sink.getReferenceStart()
@@ -82,7 +82,7 @@ public class ReferencePositionTraverser implements Traverser {
             } else {
                 sink.setReferenceEnd(sink.getReferenceStart() - 1);
             }
-            traverseVertexBackward(sink);
+            referenceMapVertexBackward(sink);
         }
     }
 
@@ -92,7 +92,7 @@ public class ReferencePositionTraverser implements Traverser {
      * @param vertex
      *            Vertex to be traversed, calculate reference start position.
      */
-    private void traverseVertexForward(final SequenceSegment vertex) {
+    private void referenceMapVertexForward(final SequenceSegment vertex) {
         long position = vertex.getReferenceStart();
 
         if (vertex.getSources().contains(referenceVar)
@@ -103,7 +103,7 @@ public class ReferencePositionTraverser implements Traverser {
             SequenceSegment destination = graphVar.getDestination(edge);
             if (destination.getReferenceStart() < position) {
                 destination.setReferenceStart(position);
-                traverseVertexForward(destination);
+                referenceMapVertexForward(destination);
             }
         }
     }
@@ -114,7 +114,7 @@ public class ReferencePositionTraverser implements Traverser {
      * @param vertex
      *            Vertex to be traversed, calculate reference end position.
      */
-    private void traverseVertexBackward(final SequenceSegment vertex) {
+    private void referenceMapVertexBackward(final SequenceSegment vertex) {
         long position = vertex.getReferenceEnd();
 
         if (vertex.getSources().contains(referenceVar)
@@ -125,7 +125,7 @@ public class ReferencePositionTraverser implements Traverser {
             SequenceSegment source = graphVar.getSource(edge);
             if (source.getReferenceEnd() > position) {
                 source.setReferenceEnd(position);
-                traverseVertexBackward(source);
+                referenceMapVertexBackward(source);
             }
         }
     }
