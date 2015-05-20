@@ -21,6 +21,11 @@ public class ReferencePositionTraverser {
     private Sequence referenceVar;
 
     /**
+     * Graph to be traversed.
+     */
+    private Graph<SequenceSegment> graphVar;
+
+    /**
      * Constructs a ReferencePositionTraverser.
      *
      * @param reference
@@ -31,20 +36,15 @@ public class ReferencePositionTraverser {
     }
 
     /**
-     * Copy of the graph to be traversed.
-     */
-    private Graph<SequenceSegment> graphVar;
-
-    /**
-     * Traverses and copies the graph.
+     * Traverses the graph.
      *
      * @param graph
-     *            Graph to be copied and traversed.
-     * @return Traversed copy of the graph with reference positions.
+     *            Graph to be traversed.
+     * @return Traversed graph with reference positions.
      */
     public final Graph<SequenceSegment> traverseGraph(
             final Graph<SequenceSegment> graph) {
-        graphVar = graph.copy();
+        graphVar = graph;
         traverseGraph();
         return graphVar;
     }
