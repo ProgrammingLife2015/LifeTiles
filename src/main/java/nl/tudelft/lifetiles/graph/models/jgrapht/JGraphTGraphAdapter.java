@@ -43,11 +43,6 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
     private List<V> vertexIdentifiers;
 
     /**
-     * Compares edges by using the ordering of their target vertices.
-     */
-    private Comparator<Edge<V>> edgeCompByTarget;
-
-    /**
      * Creates a new Graph.
      *
      * @param ef
@@ -57,8 +52,6 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
         internalGraph = new SimpleDirectedGraph<V, DefaultEdge>(
                 DefaultEdge.class);
         edgeFact = ef;
-        edgeCompByTarget = (Edge<V> e1, Edge<V> e2) -> getDestination(e1)
-                .compareTo(getDestination(e2));
         sources = new TreeSet<>();
         sinks = new TreeSet<>();
         vertexIdentifiers = new ArrayList<>();
@@ -79,7 +72,8 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
      * @return <code>true</code> iff adding succeeded.
      */
     @Override
-    public final boolean addEdge(final V source, final V destination) {
+    public final boolean addEdge(final V source, final V destination)
+            throws IllegalArgumentException {
         if (internalGraph.containsVertex(source)
                 && internalGraph.containsVertex(destination)) {
             internalGraph.addEdge(source, destination);
@@ -113,7 +107,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
      */
     private SortedSet<Edge<V>> convertEdges(final Set<DefaultEdge> input) {
         Iterator<DefaultEdge> edgeIt = input.iterator();
-        SortedSet<Edge<V>> output = new TreeSet<>(edgeCompByTarget);
+        SortedSet<Edge<V>> output = new TreeSet<>(new EdgeComparatorByVertex());
         while (edgeIt.hasNext()) {
             output.add(edgeFact.getEdge(edgeIt.next()));
         }
@@ -230,6 +224,23 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
      */
     private void removeEdge(final Edge<V> edge) {
         internalGraph.removeEdge(unpackEdge(edge));
+    }
+
+    /**
+     * @author Rutger van den Berg
+     *         Compares two edges by their target vertex.
+     */
+    class EdgeComparatorByVertex implements Comparator<Edge<V>> {
+
+        @Override
+        public int compare(final Edge<V> o1, final Edge<V> o2) {
+            int candidate = getDestination(o1).compareTo(getDestination(o2));
+            if (candidate == 0) {
+                candidate = getSource(o1).compareTo(getSource(o2));
+            }
+            return candidate;
+        }
+
     }
 
 }
