@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javafx.fxml.FXML;
 import javafx.scene.Group;
@@ -22,12 +23,14 @@ import nl.tudelft.lifetiles.graph.view.TileView;
 import nl.tudelft.lifetiles.graph.view.VertexView;
 import nl.tudelft.lifetiles.notification.controller.NotificationController;
 import nl.tudelft.lifetiles.notification.model.NotificationFactory;
+import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
  * The controller of the graph view.
  *
  * @author Joren Hammudoglu
+ * @author AC Langerak
  *
  */
 public class GraphController extends AbstractController {
@@ -39,7 +42,17 @@ public class GraphController extends AbstractController {
     private ScrollPane wrapper;
 
     /**
-     * The currently loaded graph.
+     * The model of the graph.
+     */
+    private GraphContainer model;
+
+    /**
+     * The view of the graph.
+     */
+    private TileView view;
+
+    /**
+     * The view controller.
      */
     private Graph<SequenceSegment> graph;
 
@@ -60,21 +73,29 @@ public class GraphController extends AbstractController {
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
+
         NotificationFactory notFact = new NotificationFactory();
+        listen(Message.OPENED, (controller, args) -> {
+            assert (controller instanceof MenuController);
+            assert (args[0] instanceof File && args[1] instanceof File);
+            try {
+                loadGraph((File) args[0], (File) args[1]);
+            } catch (Exception exception) {
+                shout(NotificationController.NOTIFY, notFact
+                        .getNotification(exception));
+            }
+        });
 
-        listen(Message.OPENED,
-                (controller, args) -> {
-                    assert controller instanceof MenuController;
-                    assert args[0] instanceof File && args[1] instanceof File;
+        listen(Message.FILTERED, (controller, args) -> {
+            assert (args.length == 1);
+            if (!(args[0] instanceof Set<?>)) {
+                throw new IllegalArgumentException(
+                        "Argument not of type Set<Sequence>");
+            }
 
-                    try {
-                        loadGraph((File) args[0], (File) args[1]);
-                    } catch (IOException exception) {
-                        shout(NotificationController.NOTIFY,
-                                notFact.getNotification(exception));
-                    }
+            model.changeGraph((Set<Sequence>) args[0], graph);
+        });
 
-                });
     }
 
     /**
@@ -89,6 +110,7 @@ public class GraphController extends AbstractController {
 
     /**
      * Load a new graph from the specified file.
+     *
      *
      * @param vertexfile
      *            The file to get vertices for.
@@ -113,45 +135,38 @@ public class GraphController extends AbstractController {
      */
     private void repaint() {
         if (graph != null) {
-            GraphContainer model = new GraphContainer(graph);
-            TileView view = new TileView();
-            TileController tileController = new TileController(view, model);
+            model = new GraphContainer(graph);
+            view = new TileView(this);
 
             Group root = new Group();
 
-            repaintPosition(tileController, root, wrapper.hvalueProperty()
-                    .doubleValue());
+            repaintPosition(root, wrapper.hvalueProperty().doubleValue());
             wrapper.hvalueProperty().addListener(
                     (observable, oldValue, newValue) -> {
-                        repaintPosition(tileController, root,
-                                newValue.doubleValue());
+                        repaintPosition(root, newValue.doubleValue());
                     });
 
             Rectangle clip = new Rectangle(getMaxUnifiedEnd(graph)
                     * VertexView.HORIZONTALSCALE, 0);
             root.getChildren().add(clip);
 
-            repaintPosition(tileController, root, wrapper.hvalueProperty()
-                    .doubleValue());
+            repaintPosition(root, wrapper.hvalueProperty().doubleValue());
         }
     }
 
     /**
      * Repaints the view indicated by the bucket in the given position.
      *
-     * @param tileController
-     *            TileController used to draw the graph.
      * @param root
      *            Root group used to store the visualized graph in.
      * @param position
      *            Position in the scrollPane.
      */
-    private void repaintPosition(final TileController tileController,
-            final Group root, final double position) {
-        int nextPosition = tileController.getBucketPosition(position);
+    private void repaintPosition(final Group root, final double position) {
+        int nextPosition = getBucketPosition(position);
         if (currentPosition != nextPosition) {
             graphNode = new Group();
-            graphNode.getChildren().add(tileController.drawGraph(nextPosition));
+            graphNode.getChildren().add(drawGraph(nextPosition));
             root.getChildren().add(graphNode);
             wrapper.setContent(root);
             currentPosition = nextPosition;
@@ -174,4 +189,51 @@ public class GraphController extends AbstractController {
         }
         return max;
     }
+
+    /**
+     * Return the position in the bucket.
+     *
+     * @param position
+     *            Position in the scrollPane.
+     * @return position in the bucket.
+     */
+    private final int getBucketPosition(final double position) {
+        return model.getBucketCache().bucketPercentagePosition(position);
+    }
+
+    /**
+     * Creates a drawable object of the graph from the model.
+     *
+     * @param position
+     *            Bucket position of the scrollPane.
+     * @return Group object to be drawn on the screen
+     */
+    public final Group drawGraph(final int position) {
+        return view.drawGraph(model.getSegments(position));
+    }
+
+    /**
+     * Set that this segment is selected and set those sequences visible.
+     *
+     * @param segment
+     *            The selected segment
+     */
+    public final void clicked(final SequenceSegment segment) {
+        System.out.println("Clicked on segments:" + segment.getSources());
+        // ViewController.getInstance().setVisible(segment.getSources());
+    }
+
+    /**
+     * Set that this segment is hovered over.
+     *
+     * @param segment
+     *            the hovered element
+     * @param hovering
+     *            set if mouse is entering this segment or leaving
+     */
+    public final void hovered(final SequenceSegment segment,
+            final Boolean hovering) {
+
+    }
+
 }
