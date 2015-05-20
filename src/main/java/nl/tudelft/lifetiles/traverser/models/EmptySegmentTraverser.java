@@ -1,5 +1,6 @@
 package nl.tudelft.lifetiles.traverser.models;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -41,7 +42,7 @@ public class EmptySegmentTraverser {
      * Traverses the graph.
      */
     public final void traverseGraph() {
-        for (SequenceSegment vertex : new HashSet<SequenceSegment>(
+        for (SequenceSegment vertex : new ArrayList<SequenceSegment>(
                 graphVar.getAllVertices())) {
             traverseVertex(vertex);
         }
