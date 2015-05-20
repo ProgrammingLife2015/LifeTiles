@@ -9,7 +9,8 @@ import nl.tudelft.lifetiles.graph.models.GraphFactory;
  * @param <V>
  *            The type of Vertex to use.
  */
-public class JGraphTGraphFactory<V> implements GraphFactory<V> {
+public class JGraphTGraphFactory<V extends Comparable<V>> implements
+        GraphFactory<V> {
     /**
      * The edgefactory associated with this graph factory.
      */

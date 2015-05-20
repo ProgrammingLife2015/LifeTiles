@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.graph.models.jgrapht;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -19,7 +20,7 @@ import org.jgrapht.graph.SimpleDirectedGraph;
  * @param <V>
  *            The type of vertex to use.
  */
-public class JGraphTGraphAdapter<V> implements Graph<V> {
+public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
     /**
      * The edgefactory to use to create the edges for this graph.
      */
@@ -42,6 +43,11 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
     private List<V> vertexIdentifiers;
 
     /**
+     * Compares edges by using the ordering of their target vertices.
+     */
+    private Comparator<Edge<V>> edgeCompByTarget;
+
+    /**
      * Creates a new Graph.
      *
      * @param ef
@@ -51,6 +57,8 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
         internalGraph = new SimpleDirectedGraph<V, DefaultEdge>(
                 DefaultEdge.class);
         edgeFact = ef;
+        edgeCompByTarget = (Edge<V> e1, Edge<V> e2) -> getDestination(e1)
+                .compareTo(getDestination(e2));
         sources = new TreeSet<>();
         sinks = new TreeSet<>();
         vertexIdentifiers = new ArrayList<>();
@@ -105,7 +113,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      */
     private SortedSet<Edge<V>> convertEdges(final Set<DefaultEdge> input) {
         Iterator<DefaultEdge> edgeIt = input.iterator();
-        SortedSet<Edge<V>> output = new TreeSet<>();
+        SortedSet<Edge<V>> output = new TreeSet<>(edgeCompByTarget);
         while (edgeIt.hasNext()) {
             output.add(edgeFact.getEdge(edgeIt.next()));
         }
