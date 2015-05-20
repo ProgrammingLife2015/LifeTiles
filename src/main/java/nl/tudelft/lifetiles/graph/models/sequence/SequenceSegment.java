@@ -1,5 +1,6 @@
 package nl.tudelft.lifetiles.graph.models.sequence;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import nl.tudelft.lifetiles.graph.view.Mutation;
@@ -159,7 +160,36 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      */
     @Override
     public final int compareTo(final SequenceSegment other) {
-        return Long.compare(this.getStart(), other.getStart());
+        int candidateComp = Long.compare(this.getAbsStart(),
+                other.getAbsStart());
+        if (candidateComp == 0) {
+            candidateComp = Long.compare(this.getStart(), other.getStart());
+        }
+        if (candidateComp == 0) {
+            candidateComp = Long.compare(this.getAbsEnd(), other.getAbsEnd());
+        }
+        if (candidateComp == 0) {
+            candidateComp = Long.compare(this.getEnd(), other.getEnd());
+        }
+        if (candidateComp == 0) {
+            candidateComp = this.getContent().toString()
+                    .compareTo(other.getContent().toString());
+        }
+        if (candidateComp == 0) {
+            candidateComp = this.getSources().size()
+                    - other.getSources().size();
+        }
+        if (candidateComp == 0) {
+            Iterator<Sequence> thisIt = this.getSources().iterator();
+            Iterator<Sequence> otherIt = other.getSources().iterator();
+            while (thisIt.hasNext()) {
+                if (candidateComp == 0) {
+                    candidateComp = thisIt.next().getIdentifier()
+                            .compareTo(otherIt.next().getIdentifier());
+                }
+            }
+        }
+        return candidateComp;
     }
 
     /*
@@ -222,9 +252,6 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
             return false;
         }
         if (endVar != other.endVar) {
-            return false;
-        }
-        if (mutationVar != other.mutationVar) {
             return false;
         }
         if (sourcesVar == null) {
