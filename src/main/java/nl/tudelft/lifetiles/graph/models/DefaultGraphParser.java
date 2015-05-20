@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -63,11 +64,27 @@ public class DefaultGraphParser implements GraphParser {
             }
             currentSequences.add(sequences.get(sequencename));
         }
-
-        return new SequenceSegment(currentSequences,
+        SequenceSegment segment = new SequenceSegment(currentSequences,
                 Integer.parseInt(desc[START_POS].trim()),
                 Integer.parseInt(desc[END_POS].trim()), new SegmentString(
                         content.trim()));
+
+        for (Sequence s : currentSequences) {
+            s.appendSegment(segment);
+        }
+
+        return segment;
+    }
+
+    /**
+     * @return A map of sequences.
+     */
+    @Override
+    public final Map<String, Sequence> getSequences() {
+        if (sequences.isEmpty()) {
+            throw new UnsupportedOperationException("Graph not parsed yet.");
+        }
+        return sequences;
     }
 
     /**
@@ -106,9 +123,14 @@ public class DefaultGraphParser implements GraphParser {
     @Override
     public final Graph<SequenceSegment> parseFile(final String filename,
             final GraphFactory<SequenceSegment> gfact) {
+        Calendar cal = Calendar.getInstance();
+        long startTime = cal.getTimeInMillis();
         Graph<SequenceSegment> graph = gfact.getGraph();
         parseVertices(filename, graph);
         parseEdges(filename, graph);
+        Calendar cal2 = Calendar.getInstance();
+        System.out.println("Graph parsed. Took "
+                + (cal2.getTimeInMillis() - startTime) + " ms.");
         return graph;
     }
 
@@ -120,6 +142,7 @@ public class DefaultGraphParser implements GraphParser {
      */
     private void parseVertices(final String filename,
             final Graph<SequenceSegment> graph) {
+        System.out.println(filename);
         try {
             File file = new File(this.getClass()
                     .getResource("/" + filename + ".node.graph").toURI());
@@ -133,5 +156,4 @@ public class DefaultGraphParser implements GraphParser {
             e.printStackTrace();
         }
     }
-
 }
