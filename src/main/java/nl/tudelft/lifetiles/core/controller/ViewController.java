@@ -13,7 +13,6 @@ import nl.tudelft.lifetiles.graph.models.Graph;
 import nl.tudelft.lifetiles.graph.models.GraphFactory;
 import nl.tudelft.lifetiles.graph.models.GraphParser;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceGenerator;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 
 /**
@@ -114,8 +113,8 @@ public final class ViewController extends Observable {
         graph = gp.parseFile(filename, gf);
 
         // obtain the sequences
-        SequenceGenerator sg = new SequenceGenerator(graph);
-        setSequences(sg.generateSequences());
+        // SequenceGenerator sg = new SequenceGenerator(graph);
+        setSequences(gp.getSequences());
 
         notifyChanged();
     }
@@ -140,8 +139,8 @@ public final class ViewController extends Observable {
     public void setGraph(final Graph<SequenceSegment> newGraph) {
         graph = newGraph;
 
-        SequenceGenerator sg = new SequenceGenerator(graph);
-        setSequences(sg.generateSequences());
+        // SequenceGenerator sg = new SequenceGenerator(graph);
+        // setSequences(sg.generateSequences());
 
         notifyChanged();
     }
