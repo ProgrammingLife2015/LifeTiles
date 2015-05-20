@@ -42,11 +42,6 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
     private Mutation mutationVar;
 
     /**
-     * Distance to shift. Used for hashcode.
-     */
-    private static final int SHIFTDISTANCE = 32;
-
-    /**
      * @param sources
      *            The sources containing this segment.
      * @param startPosition
@@ -202,14 +197,14 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
         final int prime = 31;
         int result = 1;
         result = prime * result;
-        result += (int) (absEndVar ^ (absEndVar >>> SHIFTDISTANCE));
+        result += (int) (absEndVar ^ (absEndVar >>> prime + 1));
         result = prime * result
-                + (int) (absStartVar ^ (absStartVar >>> SHIFTDISTANCE));
+                + (int) (absStartVar ^ (absStartVar >>> prime + 1));
         result = prime * result;
         if (contentVar != null) {
             result += contentVar.hashCode();
         }
-        result = prime * result + (int) (endVar ^ (endVar >>> SHIFTDISTANCE));
+        result = prime * result + (int) (endVar ^ (endVar >>> prime + 1));
         result = prime * result;
         if (mutationVar != null) {
             result += mutationVar.hashCode();
@@ -218,8 +213,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
         if (sourcesVar != null) {
             result += sourcesVar.hashCode();
         }
-        result = prime * result
-                + (int) (startVar ^ (startVar >>> SHIFTDISTANCE));
+        result = prime * result + (int) (startVar ^ (startVar >>> prime + 1));
         return result;
     }
 
