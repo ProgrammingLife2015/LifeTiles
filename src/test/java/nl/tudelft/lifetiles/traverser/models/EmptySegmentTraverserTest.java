@@ -17,14 +17,11 @@ import nl.tudelft.lifetiles.graph.models.sequence.SegmentEmpty;
 import nl.tudelft.lifetiles.graph.models.sequence.SegmentString;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
-import nl.tudelft.lifetiles.traverser.models.EmptySegmentTraverser;
-import nl.tudelft.lifetiles.traverser.models.UnifiedPositionTraverser;
 
 public class EmptySegmentTraverserTest {
     GraphFactory<SequenceSegment> gf;
     static FactoryProducer<SequenceSegment> fp;
-    static EmptySegmentTraverser at;
-    static UnifiedPositionTraverser pt;
+    static Traverser at, pt;
     static Set<Sequence> s1, s2, s3;
     SequenceSegment v1, v2, v3;
     Graph<SequenceSegment> gr;
@@ -32,8 +29,9 @@ public class EmptySegmentTraverserTest {
     @BeforeClass
     public static void runOnce() {
         fp = new FactoryProducer<SequenceSegment>();
-        pt = new UnifiedPositionTraverser();
-        at = new EmptySegmentTraverser();
+        TraverserFactory tf = new TraverserFactory();
+        pt = tf.getTraverser("UnifiedPosition");
+        at = tf.getTraverser("EmptySegment");
 
         Sequence ss1 = new DefaultSequence("reference");
         Sequence ss2 = new DefaultSequence("mutation");
