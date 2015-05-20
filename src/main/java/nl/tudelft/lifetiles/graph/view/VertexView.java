@@ -77,26 +77,26 @@ public class VertexView extends Group {
     public VertexView(final String string, final double initX,
             final double initY, final double width, final double height,
             final Color color) {
-        this.text = new Text(string);
+        text = new Text(string);
         text.setTextOrigin(VPos.CENTER);
         text.setFill(Color.WHITE);
         text.setFontSmoothingType(FontSmoothingType.LCD);
         text.setFont(Font.font("Open Sans", FONTSIZE));
 
-        this.rectangle = new Rectangle(width * HORIZONTALSCALE, height
+        rectangle = new Rectangle(width * HORIZONTALSCALE, height
                 * VERTICALSCALE);
         rectangle.setFill(color);
-        this.clip = new Rectangle(width * HORIZONTALSCALE, height
+        clip = new Rectangle(width * HORIZONTALSCALE, height
                 * VERTICALSCALE);
         text.setClip(clip);
 
-        this.setLayoutX(initX * HORIZONTALSCALE);
-        this.setLayoutY(initY * VERTICALSCALE);
+        setLayoutX(initX * HORIZONTALSCALE);
+        setLayoutY(initY * VERTICALSCALE);
 
-        this.setHeight(height * VERTICALSCALE - SPACING);
-        this.setWidth(width * HORIZONTALSCALE - SPACING);
+        setHeight(height * VERTICALSCALE - SPACING);
+        setWidth(width * HORIZONTALSCALE - SPACING);
 
-        this.getChildren().addAll(rectangle, text);
+        getChildren().addAll(rectangle, text);
 
     }
 
