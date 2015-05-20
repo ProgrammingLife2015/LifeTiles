@@ -21,7 +21,8 @@ public interface GraphFactory<V> {
      * @param base
      *            the graph to create a new subgraph from
      * @param vertexSubSet
-     *            vertices to be included in the subgraph
+     *            vertices to be included in the subgraph. null will include all
+     *            vertices of the base graph.
      * @return a subgraph
      */
     Graph<V> getSubGraph(Graph<V> base, Set<V> vertexSubSet);
