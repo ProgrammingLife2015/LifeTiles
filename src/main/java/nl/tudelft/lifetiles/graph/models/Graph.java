@@ -102,8 +102,9 @@ public interface Graph<V> {
     /**
      * Returns a copy of the graph including edges and vertices.
      *
-     * @return
-     *         Copy of the Graph.
+     * @param gfact
+     *            Factory used to create the copy of the graph.
+     * @return copy of the Graph.
      */
-    Graph<V> copy();
+    Graph<V> copy(GraphFactory<V> gfact);
 }
