@@ -2,6 +2,7 @@ package nl.tudelft.lifetiles.graph.view;
 
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
@@ -33,7 +34,7 @@ public class EdgeLine extends Group {
      * @param destination
      *            Vertex to draw to
      */
-    public EdgeLine(final VertexView source, final VertexView destination) {
+    public EdgeLine(final Node source, final Node destination) {
         this.line = new Line();
         Bounds boundFrom = source.getBoundsInParent();
         Bounds boundTo = destination.getBoundsInParent();
@@ -103,9 +104,8 @@ public class EdgeLine extends Group {
      * @param boundTo
      *            The Bounds of the end Vertex
      */
-    private void drawCrossLine(final VertexView source,
-            final VertexView destination, final Bounds boundFrom,
-            final Bounds boundTo) {
+    private void drawCrossLine(final Node source, final Node destination,
+            final Bounds boundFrom, final Bounds boundTo) {
         Circle head = new Circle();
         head.setRadius(HEAD_RADIUS);
 
@@ -163,6 +163,7 @@ public class EdgeLine extends Group {
      *            The Bounds of the end Vertex
      */
     private void drawStraightLine(final Bounds boundFrom, final Bounds boundTo) {
+
         Circle head = new Circle();
         head.setRadius(HEAD_RADIUS);
 
@@ -218,12 +219,14 @@ public class EdgeLine extends Group {
      * @return true on y coordinate is outside of the range
      */
     private Boolean outofboundsY(final Bounds source, final Bounds destination) {
-        if (source.getMinY() > destination.getMinY() && source.getMinY() > destination.getMaxY()
+        if (source.getMinY() > destination.getMinY()
+                && source.getMinY() > destination.getMaxY()
                 && source.getMaxY() > destination.getMaxY()
                 && source.getMaxY() > destination.getMinY()) {
             return true;
         }
-        if (source.getMinY() < destination.getMinY() && source.getMinY() < destination.getMaxY()
+        if (source.getMinY() < destination.getMinY()
+                && source.getMinY() < destination.getMaxY()
                 && source.getMaxY() < destination.getMaxY()
                 && source.getMaxY() < destination.getMinY()) {
             return true;

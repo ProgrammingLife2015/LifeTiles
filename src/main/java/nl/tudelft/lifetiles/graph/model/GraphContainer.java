@@ -106,6 +106,7 @@ public class GraphContainer {
         // Find out which vertices are visible now
         Set<SequenceSegment> vertices = new TreeSet<SequenceSegment>();
         for (Sequence seq : visibleSequences) {
+
             Iterator<SequenceSegment> it = seq.getSegments().iterator();
             while (it.hasNext()) {
                 vertices.add(it.next());

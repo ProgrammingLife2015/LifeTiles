@@ -1,12 +1,16 @@
 package nl.tudelft.lifetiles.graph.view;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
+import nl.tudelft.lifetiles.graph.model.Edge;
+import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
@@ -71,7 +75,8 @@ public class TileView {
      *            Graph to be drawn
      * @return the elements that must be displayed on the screen
      */
-    public final Group drawGraph(final Set<SequenceSegment> segments) {
+    public final Group drawGraph(final Set<SequenceSegment> segments,
+            final Graph<SequenceSegment> graph) {
         root = new Group();
         nodes = new Group();
         edges = new Group();
@@ -80,8 +85,37 @@ public class TileView {
         for (SequenceSegment segment : segments) {
             drawVertexLane(segment);
         }
+
+        drawAllEdges(graph);
+
         root.getChildren().addAll(edges, nodes);
         return root;
+    }
+
+    private void drawAllEdges(final Graph<SequenceSegment> gr) {
+        Set<Edge<SequenceSegment>> edges = gr.getAllEdges();
+
+        for (Edge<SequenceSegment> edge : edges) {
+            SequenceSegment from = gr.getSource(edge);
+            SequenceSegment to = gr.getDestination(edge);
+            VertexView f = findVertex(from);
+            VertexView t = findVertex(to);
+
+            drawEdge(f, t);
+
+        }
+    }
+
+    private VertexView findVertex(SequenceSegment segment) {
+        Iterator<Node> it = nodes.getChildren().iterator();
+
+        while (it.hasNext()) {
+            VertexView v = (VertexView) it.next();
+
+            return v;
+
+        }
+        return null;
     }
 
     /**
@@ -151,6 +185,11 @@ public class TileView {
         vertex.setOnMouseEntered(event -> controller.hovered(segment, true));
         vertex.setOnMouseExited(event -> controller.hovered(segment, false));
 
+    }
+
+    private void drawEdge(final Node source, final Node destination) {
+        EdgeLine e = new EdgeLine(source, destination);
+        edges.getChildren().add(e);
     }
 
     /**
