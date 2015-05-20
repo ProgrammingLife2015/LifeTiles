@@ -69,13 +69,15 @@ public class MutationIndicationTraverser {
      */
     private void traverseVertex(final SequenceSegment vertex) {
         if (!vertex.getSources().contains(referenceVar)) {
+            Mutation mutation;
             if (vertex.getContent() instanceof SegmentEmpty) {
-                vertex.setMutation(Mutation.DELETION);
+                mutation = Mutation.DELETION;
             } else if (vertex.getReferenceStart() > vertex.getReferenceEnd()) {
-                vertex.setMutation(Mutation.INSERTION);
+                mutation = Mutation.INSERTION;
             } else {
-                vertex.setMutation(Mutation.POLYMORPHISM);
+                mutation = Mutation.POLYMORPHISM;
             }
+            vertex.setMutation(mutation);
         }
     }
 
