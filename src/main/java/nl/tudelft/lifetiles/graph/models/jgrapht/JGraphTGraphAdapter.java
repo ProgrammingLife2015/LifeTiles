@@ -9,8 +9,8 @@ import java.util.Set;
 import nl.tudelft.lifetiles.graph.models.Edge;
 import nl.tudelft.lifetiles.graph.models.Graph;
 
-import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.SimpleDirectedGraph;
 
 /**
  * @author Rutger van den Berg
@@ -26,7 +26,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
     /**
      * This is the actual graph.
      */
-    private DirectedAcyclicGraph<V, DefaultEdge> internalGraph;
+    private SimpleDirectedGraph<V, DefaultEdge> internalGraph;
     /**
      * Keep track of all vertices that have no incoming edges.
      */
@@ -47,7 +47,7 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
      *            The edgefactory to use for this graph.
      */
     public JGraphTGraphAdapter(final JGraphTEdgeFactory<V> ef) {
-        internalGraph = new DirectedAcyclicGraph<V, DefaultEdge>(
+        internalGraph = new SimpleDirectedGraph<V, DefaultEdge>(
                 DefaultEdge.class);
         edgeFact = ef;
         sources = new HashSet<>();
