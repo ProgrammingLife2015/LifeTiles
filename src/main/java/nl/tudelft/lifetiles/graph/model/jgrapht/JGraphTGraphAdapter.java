@@ -11,6 +11,7 @@ import nl.tudelft.lifetiles.graph.model.Edge;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
 
+import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
 
@@ -28,7 +29,8 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
     /**
      * This is the actual graph.
      */
-    private final SimpleDirectedGraph<V, DefaultEdge> internalGraph;
+    private DirectedGraph<V, DefaultEdge> internalGraph;
+
     /**
      * Keep track of all vertices that have no incoming edges.
      */
@@ -62,8 +64,8 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
      */
     @Override
     public final void addEdge(final int source, final int destination) {
-        addEdge(vertexIdentifiers.get(source),
-                vertexIdentifiers.get(destination));
+        addEdge(vertexIdentifiers.get(source), vertexIdentifiers
+                .get(destination));
 
     }
 
@@ -230,6 +232,17 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
      */
     private void removeEdge(final Edge<V> edge) {
         internalGraph.removeEdge(unpackEdge(edge));
+    }
+
+    @Override
+    public DirectedGraph<V, DefaultEdge> getInternalGraph() {
+        return internalGraph;
+    }
+
+    protected void setInternalGraph(
+            DirectedGraph<V, DefaultEdge> directedSubgraph) {
+        internalGraph = directedSubgraph;
+
     }
 
     /**
