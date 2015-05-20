@@ -36,7 +36,9 @@ public class ReferencePositionTraverser implements Traverser {
     }
 
     /**
-     * Traverses the graph.
+     * Traverses the graph. Computes the position of the vertices in comparison
+     * to the reference sequence. Reference coordinates are needed to indicate
+     * mutations.
      *
      * @param graph
      *            Graph to be traversed.
@@ -50,7 +52,9 @@ public class ReferencePositionTraverser implements Traverser {
     }
 
     /**
-     * Traverses the graph and generates reference positions.
+     * Traverses the graph. Computes the position of the vertices in comparison
+     * to the reference sequence. Reference coordinates are needed to indicate
+     * mutations.
      */
     public final void traverseGraph() {
         traverseGraphForward();

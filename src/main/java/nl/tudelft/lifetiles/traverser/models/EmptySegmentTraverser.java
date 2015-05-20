@@ -25,7 +25,8 @@ public class EmptySegmentTraverser implements Traverser {
     private Graph<SequenceSegment> graphVar;
 
     /**
-     * Traverses the graph.
+     * Traverses the graph. Adds empty vertices to the graph which are being
+     * used to indicate mutations on.
      *
      * @param graph
      *            the graph to traverse.
@@ -49,7 +50,8 @@ public class EmptySegmentTraverser implements Traverser {
     }
 
     /**
-     * Traverses a vertex in the graph.
+     * Traverses a vertex in the graph. Adds empty vertices to the graph which
+     * are being used to indicate mutations on.
      *
      * @param vertex
      *            the vertex to traverse.
