@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import nl.tudelft.lifetiles.graph.controller.GraphController;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
@@ -27,17 +28,28 @@ public class TileView {
      */
     private Group nodes;
 
-    /**
-     * The root contains all the to be displayed
-     * elements.
-     */
     private Group root;
-
     /**
      * The lanes list which contains the occupation of the lanes inside the
      * tileview.
      */
     private List<Long> lanes;
+
+    /**
+     * Controller for the View.
+     */
+    private GraphController controller;
+
+    /**
+     * Create the TileView by initializing the groups where the to be drawn
+     * vertices and edges are stored.
+     *
+     * @param control
+     *            The controller for the TileView
+     */
+    public TileView(final GraphController control) {
+        controller = control;
+    }
 
     /**
      * Change Vertex colour.
@@ -79,7 +91,6 @@ public class TileView {
      *            segment to be drawn
      */
     private void drawVertexLane(final SequenceSegment segment) {
-        String text = segment.getContent().toString();
         long start = segment.getUnifiedStart();
         long width = segment.getContent().getLength();
         long height = segment.getSources().size();
@@ -87,12 +98,12 @@ public class TileView {
         for (int index = 0; index < lanes.size(); index++) {
             if (lanes.get(index) <= segment.getUnifiedStart()
                     && segmentFree(index, segment)) {
-                drawVertex(text, start, index, width, height, color);
+                drawVertex(segment, start, index, width, height, color);
                 segmentInsert(index, segment);
                 return;
             }
         }
-        drawVertex(text, start, lanes.size(), width, height, color);
+        drawVertex(segment, start, lanes.size(), width, height, color);
         segmentInsert(lanes.size(), segment);
     }
 
@@ -127,12 +138,19 @@ public class TileView {
      * @param color
      *            the colour of the vertex
      */
-    private void drawVertex(final String text, final double xcoord,
+
+    private void drawVertex(final SequenceSegment segment, final double xcoord,
             final double ycoord, final double width, final double height,
             final Color color) {
-        VertexView vertex = new VertexView(text, xcoord, ycoord, width, height,
-                color);
+        VertexView vertex = new VertexView(segment.getContent().toString(),
+                xcoord, ycoord, width, height, color);
         nodes.getChildren().add(vertex);
+
+        vertex.setOnMouseClicked(event -> controller.clicked(segment));
+        // Hovering
+        vertex.setOnMouseEntered(event -> controller.hovered(segment, true));
+        vertex.setOnMouseExited(event -> controller.hovered(segment, false));
+
     }
 
     /**
