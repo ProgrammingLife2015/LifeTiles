@@ -17,12 +17,11 @@ import nl.tudelft.lifetiles.graph.models.sequence.SegmentEmpty;
 import nl.tudelft.lifetiles.graph.models.sequence.SegmentString;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
-import nl.tudelft.lifetiles.traverser.models.ReferencePositionTraverser;
 
 public class ReferencePositionTraverserTest {
     GraphFactory<SequenceSegment> gf;
     static FactoryProducer<SequenceSegment> fp;
-    static ReferencePositionTraverser rpt;
+    static Traverser rpt;
     static Set<Sequence> s1, s2, s3;
     SequenceSegment v1, v4;
     Graph<SequenceSegment> gr;
@@ -30,11 +29,11 @@ public class ReferencePositionTraverserTest {
     @BeforeClass
     public static void runOnce() {
         fp = new FactoryProducer<SequenceSegment>();
-
+        TraverserFactory tf = new TraverserFactory();
         Sequence ss1 = new DefaultSequence("reference");
         Sequence ss2 = new DefaultSequence("mutation");
 
-        rpt = new ReferencePositionTraverser(ss1);
+        rpt = tf.getTraverser("ReferencePosition", ss1);
 
         s1 = new HashSet<Sequence>();
         s1.add(ss1);
