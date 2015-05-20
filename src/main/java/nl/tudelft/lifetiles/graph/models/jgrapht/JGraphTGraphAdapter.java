@@ -2,7 +2,6 @@ package nl.tudelft.lifetiles.graph.models.jgrapht;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -110,10 +109,9 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
      * @return The converted set.
      */
     private SortedSet<Edge<V>> convertEdges(final Set<DefaultEdge> input) {
-        Iterator<DefaultEdge> edgeIt = input.iterator();
         SortedSet<Edge<V>> output = new TreeSet<>(new EdgeComparatorByVertex());
-        while (edgeIt.hasNext()) {
-            output.add(edgeFact.getEdge(edgeIt.next()));
+        for (DefaultEdge e : input) {
+            output.add(edgeFact.getEdge(e));
         }
         return output;
     }
