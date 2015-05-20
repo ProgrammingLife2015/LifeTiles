@@ -2,6 +2,9 @@ package nl.tudelft.lifetiles.graph.model;
 
 import java.util.SortedSet;
 
+import org.jgrapht.DirectedGraph;
+import org.jgrapht.graph.DefaultEdge;
+
 /**
  * Interface for a generic graph.
  *
@@ -107,4 +110,10 @@ public interface Graph<V> {
      * @return copy of the Graph.
      */
     Graph<V> copy(GraphFactory<V> gfact);
+
+    /**
+     * @return the "actual" graph
+     */
+    DirectedGraph<V, DefaultEdge> getInternalGraph();
+
 }
