@@ -12,7 +12,7 @@ import nl.tudelft.lifetiles.graph.view.Mutation;
  * @author Jos
  *
  */
-public class MutationIndicationTraverser {
+public class MutationIndicationTraverser implements Traverser {
 
     /**
      * Reference which is compared to determine the mutation types.
