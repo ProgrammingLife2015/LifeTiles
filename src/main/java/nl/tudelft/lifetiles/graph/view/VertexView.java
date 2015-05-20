@@ -20,10 +20,6 @@ public class VertexView extends Group {
      * this will hold text in the right place.
      */
     private Rectangle clip;
-    /**
-     * The fontsize of the string.
-     */
-    private static final double FONTSIZE = 16;
 
     /**
      * this is the region coloring the text.
@@ -39,12 +35,12 @@ public class VertexView extends Group {
     /**
      * Horizontal and vertical spacing between rectangles.
      */
-    private static final double SPACING = 3;
+    private static final double SPACING = 2;
 
     /**
      * Horizontal scale for each coordinate.
      */
-    private static final double HORIZONTALSCALE = 15;
+    private static final double HORIZONTALSCALE = 11;
 
     /**
      * Vertical scale for each coordinate.
@@ -81,13 +77,12 @@ public class VertexView extends Group {
         text.setTextOrigin(VPos.CENTER);
         text.setFill(Color.WHITE);
         text.setFontSmoothingType(FontSmoothingType.LCD);
-        text.setFont(Font.font("Open Sans", FONTSIZE));
+        text.setFont(Font.font("Oxygen Mono", HORIZONTALSCALE));
 
         rectangle = new Rectangle(width * HORIZONTALSCALE, height
                 * VERTICALSCALE);
         rectangle.setFill(color);
-        clip = new Rectangle(width * HORIZONTALSCALE, height
-                * VERTICALSCALE);
+        clip = new Rectangle(width * HORIZONTALSCALE, height * VERTICALSCALE);
         text.setClip(clip);
 
         setLayoutX(initX * HORIZONTALSCALE);
@@ -122,16 +117,15 @@ public class VertexView extends Group {
     protected final void layoutChildren() {
         double width = rectangle.getWidth();
         double height = rectangle.getHeight();
+
+        double fontWidth = text.getLayoutBounds().getWidth();
+        text.setFont(Font.font("Oxygen Mono", (HORIZONTALSCALE) * width
+                / fontWidth));
+
         clip.setWidth(width);
         clip.setHeight(height);
         clip.setLayoutX(0);
         clip.setLayoutY(-height / 2);
-
-        if (resizeWidth == -1) {
-            rectangle.setWidth(text.getLayoutBounds().getWidth());
-        } else {
-            rectangle.setWidth(resizeWidth);
-        }
 
         text.setLayoutX(width / 2 - text.getLayoutBounds().getWidth() / 2);
         text.setLayoutY(height / 2);
