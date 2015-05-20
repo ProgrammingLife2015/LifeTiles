@@ -18,4 +18,9 @@ public interface SegmentContent {
      */
     String toString();
 
+    /**
+     * @return whether the segment content is an empty node or not.
+     */
+    boolean isEmpty();
+
 }
