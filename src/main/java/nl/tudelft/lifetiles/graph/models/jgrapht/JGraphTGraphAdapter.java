@@ -8,6 +8,7 @@ import java.util.Set;
 
 import nl.tudelft.lifetiles.graph.models.Edge;
 import nl.tudelft.lifetiles.graph.models.Graph;
+import nl.tudelft.lifetiles.graph.models.GraphFactory;
 
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
 import org.jgrapht.graph.DefaultEdge;
@@ -226,12 +227,13 @@ public class JGraphTGraphAdapter<V> implements Graph<V> {
     /**
      * Returns a copy of the graph including edges and vertices.
      *
-     * @return
-     *         Copy of the Graph.
+     * @param gfact
+     *            Factory which is used to copy the graph.
+     * @return copy of the Graph.
      */
     @Override
-    public final Graph<V> copy() {
-        Graph<V> graph = new JGraphTGraphAdapter<V>(edgeFact);
+    public final Graph<V> copy(final GraphFactory<V> gfact) {
+        Graph<V> graph = gfact.getGraph();
         for (V vertex : getAllVertices()) {
             graph.addVertex(vertex);
         }

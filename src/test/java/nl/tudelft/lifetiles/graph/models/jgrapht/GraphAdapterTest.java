@@ -156,7 +156,7 @@ public class GraphAdapterTest {
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
         
-        Graph<SequenceSegment> copy = gr.copy();
+        Graph<SequenceSegment> copy = gr.copy(gf);
         assertEquals(2, copy.getAllVertices().size());
         assertEquals(1, copy.getAllEdges().size());
     }
