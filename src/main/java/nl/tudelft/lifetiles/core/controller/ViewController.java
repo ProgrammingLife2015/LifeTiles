@@ -180,6 +180,14 @@ public final class ViewController extends Observable {
     }
 
     /**
+     * Check if the tree is loaded.
+     * @return true if the tree is loaded
+     */
+    public boolean treeIsLoaded() {
+        return tree != null;
+    }
+
+    /**
      * Display an error.
      *
      * @param message
@@ -219,6 +227,8 @@ public final class ViewController extends Observable {
         String fileString = sc.next();
         PhylogeneticTreeFactory np = new PhylogeneticTreeFactory(fileString);
         tree = np.getRoot();
+
+        notifyChanged();
     }
 
     /**
