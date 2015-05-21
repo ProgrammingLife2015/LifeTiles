@@ -9,9 +9,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 import nl.tudelft.lifetiles.graph.models.sequence.DefaultSequence;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 
@@ -19,9 +16,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.testfx.framework.junit.ApplicationTest;
 
-public class ViewControllerTest extends ApplicationTest {
+public class ViewControllerTest {
     ViewController controller;
     Sequence s1, s2;
 
@@ -87,14 +83,6 @@ public class ViewControllerTest extends ApplicationTest {
         controller.setVisible(newSequences);
 
         controller.unloadGraph();
-    }
-
-    @Override
-    public void start(Stage stage) throws Exception {
-        Scene scene = new Scene(new Group(), windowSize[0], windowSize[1]);
-        stage.setScene(scene);
-        stage.show();
-        stage.hide();
     }
 
 }
