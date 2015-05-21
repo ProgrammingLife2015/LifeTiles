@@ -16,6 +16,8 @@ import nl.tudelft.lifetiles.graph.models.GraphFactory;
 import nl.tudelft.lifetiles.graph.models.GraphParser;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.notification.model.Notification;
+import nl.tudelft.lifetiles.notification.model.NotificationFactory;
 
 /**
  * Controls what the view modules display.
@@ -48,12 +50,15 @@ public final class ViewController extends Observable {
      */
     private Stage stageVar;
 
+    private NotificationFactory nf;
+
     /**
      * Creates a new viewcontroller.
      */
     private ViewController() {
         sequenceMap = new HashMap<>();
         visibleSequences = new HashSet<>();
+        nf = new NotificationFactory();
     }
 
     /**
@@ -160,6 +165,17 @@ public final class ViewController extends Observable {
     }
 
     /**
+     * Notify the observers of a change.
+     *
+     * @param arg
+     *            any object
+     */
+    public void notifyChanged(final Object arg) {
+        setChanged();
+        notifyObservers(arg);
+    }
+
+    /**
      * Check if the graph is loaded.
      *
      * @return true if the graph is loaded
@@ -175,7 +191,30 @@ public final class ViewController extends Observable {
      *            the error message
      */
     public void displayError(final String message) {
-        System.out.println("[ERROR] " + message);
+        Notification error = nf.error(message);
+        notifyObservers(error);
+    }
+
+    /**
+     * Display a warning.
+     *
+     * @param message
+     *            the warning message
+     */
+    public void displayWarning(final String message) {
+        Notification warning = nf.warning(message);
+        notifyObservers(warning);
+    }
+
+    /**
+     * Display info.
+     *
+     * @param message
+     *            the info message
+     */
+    public void displayInfo(final String message) {
+        Notification info = nf.info(message);
+        notifyObservers(info);
     }
 
     /**

@@ -27,7 +27,7 @@ public class ErrorNotification extends Notification {
 
     @Override
     public final Color getColor() {
-        return Color.FIREBRICK;
+        return Color.ORANGERED;
     }
 
 }
