@@ -3,11 +3,8 @@ package nl.tudelft.lifetiles.graph.models.sequence;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashSet;
 import java.util.List;
-
-import nl.tudelft.lifetiles.graph.models.sequence.DefaultSequence;
-import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,10 +15,14 @@ public class SequenceTest {
 
     @Before
     public void setUp() throws Exception {
-        ss1 = new SequenceSegment(null, 0, 1, null);
-        ss2 = new SequenceSegment(null, 1, 3, null);
-        ss3 = new SequenceSegment(null, 4, 6, null);
-        ss4 = new SequenceSegment(null, 7, 10, null);
+        ss1 = new SequenceSegment(new HashSet<Sequence>(), 0, 1,
+                new SegmentEmpty(1));
+        ss2 = new SequenceSegment(new HashSet<Sequence>(), 1, 3,
+                new SegmentEmpty(2));
+        ss3 = new SequenceSegment(new HashSet<Sequence>(), 4, 6,
+                new SegmentEmpty(3));
+        ss4 = new SequenceSegment(new HashSet<Sequence>(), 7, 10,
+                new SegmentEmpty(4));
 
     }
 
