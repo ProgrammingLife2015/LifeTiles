@@ -7,9 +7,9 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.GridPane;
+import javafx.scene.control.SplitPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 /**
  * The controller of the main view.
@@ -23,13 +23,13 @@ public class MainController implements Initializable, Observer {
      * The wrapper element.
      */
     @FXML
-    private VBox wrapper;
+    private AnchorPane wrapper;
 
     /**
      * The main grid element.
      */
     @FXML
-    private GridPane mainGrid;
+    private SplitPane mainSplitPane;
 
     /**
      * The content to be displayed when the data is not yet loaded.
@@ -48,14 +48,14 @@ public class MainController implements Initializable, Observer {
         vc = ViewController.getInstance();
         vc.addObserver(this);
 
-        mainGrid.setVisible(false);
+        mainSplitPane.setVisible(false);
     }
 
     @Override
     public final void update(final Observable o, final Object arg) {
         if (vc.isLoaded()) {
             splashPane.setVisible(false);
-            mainGrid.setVisible(true);
+            mainSplitPane.setVisible(true);
         }
     }
 
