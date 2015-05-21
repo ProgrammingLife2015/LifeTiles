@@ -130,17 +130,6 @@ public final class ViewController extends Observable {
     }
 
     /**
-     * Set a new graph.
-     *
-     * @param newGraph
-     *            the new graph
-     */
-    public void setGraph(final Graph<SequenceSegment> newGraph) {
-        graph = newGraph;
-        notifyChanged();
-    }
-
-    /**
      * @return the stage
      */
     public Stage getStage() {
