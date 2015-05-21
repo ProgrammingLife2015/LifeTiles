@@ -70,7 +70,7 @@ public class SunburstView extends Control {
     }
 
     /**
-     *
+     * Changes the displayed tree.
      * @param root the new root
      */
     public final void setRoot(final PhylogeneticTreeItem root) {
