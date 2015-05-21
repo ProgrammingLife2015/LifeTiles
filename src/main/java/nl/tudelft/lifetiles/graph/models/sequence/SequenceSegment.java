@@ -243,18 +243,12 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
         final int prime = 31;
         int result = 1;
         result = prime * result;
-        result += (int) (unifiedEndVar ^ (unifiedEndVar >>> prime + 1));
-        result = prime * result
-                + (int) (unifiedStartVar ^ (unifiedStartVar >>> prime + 1));
         result = prime * result;
         if (contentVar != null) {
             result += contentVar.hashCode();
         }
         result = prime * result + (int) (endVar ^ (endVar >>> prime + 1));
         result = prime * result;
-        if (mutationVar != null) {
-            result += mutationVar.hashCode();
-        }
         result = prime * result;
         if (sourcesVar != null) {
             result += sourcesVar.hashCode();
