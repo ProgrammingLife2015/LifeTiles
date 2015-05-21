@@ -3,6 +3,7 @@ package nl.tudelft.lifetiles.core.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.DirectoryIteratorException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -71,12 +72,17 @@ public class MenuController implements Initializable {
 
         String graphFileName = null;
         File vertexfile, edgefile;
+        String treeFileName = null;
         try {
             graphFileName = directory.getCanonicalPath();
             graphFileName += "/";
             graphFileName += collectGraphFileName(directory);
             vertexfile = new File(graphFileName + ".node.graph");
             edgefile = new File(graphFileName + ".edge.graph");
+
+            treeFileName = directory.getCanonicalPath();
+            treeFileName += collectTreeFileName(directory);
+
         } catch (IOException e) {
             ViewController.getInstance().displayError(e.getMessage());
             return;
@@ -87,6 +93,9 @@ public class MenuController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        controller.loadTree(treeFileName);;
+
     }
 
     /**
@@ -136,6 +145,34 @@ public class MenuController implements Initializable {
         }
 
         return fileNames.get(0);
+    }
+
+    /**
+     *
+     * @param directory the directory in which the .nwk file is located
+     * @return the name of the nwk file without its extension
+     * @throws IOException
+     *      throws an exception when no, or too many files have been found
+     */
+    private String collectTreeFileName(final File directory)
+            throws IOException {
+        assert (directory.isDirectory());
+
+        final String suffix = ".nwk";
+
+        final File[] listFiles = directory.listFiles((dir, name) -> name
+                .endsWith(suffix));
+        if (listFiles == null) {
+            throw new IOException("No " + suffix + " files found.");
+        } else if (listFiles.length > 1) {
+            throw new IOException("Multiple " + suffix + " files found.");
+        }
+
+        String result = listFiles[0].getName();
+        result = result.replaceAll(suffix, "");
+        return result;
+
+
     }
 
     /**
