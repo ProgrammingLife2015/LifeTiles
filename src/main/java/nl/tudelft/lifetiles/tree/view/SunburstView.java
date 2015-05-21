@@ -70,6 +70,15 @@ public class SunburstView extends Control {
     }
 
     /**
+     *
+     * @param root the new root
+     */
+    public final void setRoot(final PhylogeneticTreeItem root) {
+        rootItem = root;
+        selectNode(rootItem);
+    }
+
+    /**
      * updates the view by redrawing all elements.
      */
     private void update() {

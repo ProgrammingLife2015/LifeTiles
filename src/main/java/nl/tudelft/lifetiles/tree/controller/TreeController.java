@@ -1,10 +1,11 @@
 package nl.tudelft.lifetiles.tree.controller;
 
 import java.net.URL;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
 import nl.tudelft.lifetiles.core.controller.ViewController;
-import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeFactory;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 import nl.tudelft.lifetiles.tree.view.SunburstView;
 import javafx.fxml.FXML;
@@ -17,7 +18,7 @@ import javafx.scene.layout.BorderPane;
  * @author Albert Smit
  *
  */
-public class TreeController implements Initializable {
+public class TreeController implements Initializable , Observer{
 
     /**
      * The wrapper element.
@@ -27,28 +28,45 @@ public class TreeController implements Initializable {
 
     /**
      * the diagram.
+     *
      */
+    @FXML
     private SunburstView view;
-
-    /**
-     * the parser to create the tree.
-     */
-    private PhylogeneticTreeFactory np;
 
     /**
      * the tree to display.
      */
     private PhylogeneticTreeItem root;
 
+    /**
+     *
+     */
+    private ViewController controller;
+
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        ViewController vc = ViewController.getInstance();
-        vc.loadTree("data/10_set/nj_tree_10_strains");
-        root = vc.getTree();
+        controller = ViewController.getInstance();
+        controller.addObserver(this);
+    }
 
-        view = new SunburstView(root);
-        wrapper.setCenter(view);
+    /**
+     * update the SunburstView.
+     */
+    @Override
+    public final void update(final Observable o, final Object arg) {
+        if (controller.treeIsLoaded()) {
+            repaint();
+        }
+    }
+
+    /**
+     * Redraw the tree.
+     */
+    private void repaint() {
+        root = controller.getTree();
+        view.setRoot(root);
+        //view = new SunburstView(root);
     }
 
 }
