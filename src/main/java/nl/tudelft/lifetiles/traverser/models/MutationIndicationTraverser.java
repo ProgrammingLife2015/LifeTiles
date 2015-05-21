@@ -67,7 +67,7 @@ public class MutationIndicationTraverser implements Traverser {
      */
     private void indicateVertexMutations(final SequenceSegment vertex) {
         if (!vertex.getSources().contains(referenceVar)) {
-            vertex.setMutation(vertex.calculateMutation());
+            vertex.setMutation(vertex.determineMutation());
         }
     }
 
