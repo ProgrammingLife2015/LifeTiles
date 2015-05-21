@@ -214,13 +214,9 @@ public final class ViewController extends Observable {
         File file;
         Scanner sc = null;
         try {
-            file = new File(this.getClass()
-                    .getResource("/" + fileName + ".nwk").toURI());
+            file = new File(fileName + ".nwk");
             sc = new Scanner(file).useDelimiter("\\Z");
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
