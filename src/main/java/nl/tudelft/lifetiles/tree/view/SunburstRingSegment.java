@@ -8,11 +8,14 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
+import nl.tudelft.lifetiles.sequence.SequenceColor;
+import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
 /**
- * A {@link SunburstRingSegment} represents a segment
- * of the sunburst diagrams rings.
+ * A {@link SunburstRingSegment} represents a segment of the sunburst diagrams
+ * rings.
+ *
  * @author Albert Smit
  *
  */
@@ -83,11 +86,10 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      * @return a semi-circle with the specified dimensions
      */
     private Shape createRing(final int layer, final double degreeStart,
-            final double degreeEnd, final double centerX,
-            final double centerY) {
+            final double degreeEnd, final double centerX, final double centerY) {
         Path result = new Path();
 
-        result.setFill(Color.RED);
+        result.setFill(createColor());
         result.setFillRule(FillRule.EVEN_ODD);
 
         // check if this is a large arc
@@ -108,7 +110,7 @@ public class SunburstRingSegment extends AbstractSunburstNode {
         double startY = centerY - innerRadius * Math.cos(angleAlpha);
         MoveTo move1 = new MoveTo(startX, startY);
 
-        //draw a line from point 1 to point 2
+        // draw a line from point 1 to point 2
         LineTo line1To2 = createLine(outerRadius, centerX, centerY, angleAlpha);
 
         // draw an arc from point 2 to point 3
@@ -120,12 +122,12 @@ public class SunburstRingSegment extends AbstractSunburstNode {
                 angleAlphaNext);
 
         // draw an arc from point 4 back to point 1
-        ArcTo arc4To1 = createArc(innerRadius, centerX, centerY,
-                angleAlpha, false, largeArc);
+        ArcTo arc4To1 = createArc(innerRadius, centerX, centerY, angleAlpha,
+                false, largeArc);
 
         // add all elements to the path
-        result.getElements().addAll(move1, line1To2, arc2To3,
-                                    line3To4, arc4To1);
+        result.getElements()
+                .addAll(move1, line1To2, arc2To3, line3To4, arc4To1);
 
         return result;
     }
@@ -133,15 +135,21 @@ public class SunburstRingSegment extends AbstractSunburstNode {
     /**
      * Creates an {@link ArcTo} with the specified parameters.
      *
-     * Coordinates of the end point of the arc are given in polar form
-     * relative to the center of the arcs.
+     * Coordinates of the end point of the arc are given in polar form relative
+     * to the center of the arcs.
      *
-     * @param radius The radius of the arc.
-     * @param centerX The center X coordinate of the arc.
-     * @param centerY The center Y coordinate of the arc.
-     * @param angle The angle of the end point.
-     * @param sweep The draw direction of the arc.
-     * @param largeArc if true draw an arc larger than 180 degrees.
+     * @param radius
+     *            The radius of the arc.
+     * @param centerX
+     *            The center X coordinate of the arc.
+     * @param centerY
+     *            The center Y coordinate of the arc.
+     * @param angle
+     *            The angle of the end point.
+     * @param sweep
+     *            The draw direction of the arc.
+     * @param largeArc
+     *            if true draw an arc larger than 180 degrees.
      * @return an ArcTo with the specified parameters.
      */
     private ArcTo createArc(final double radius, final double centerX,
@@ -151,7 +159,7 @@ public class SunburstRingSegment extends AbstractSunburstNode {
         double endX = centerX + radius * Math.sin(angle);
         double endY = centerY - radius * Math.cos(angle);
 
-        //create the arc
+        // create the arc
         ArcTo result = new ArcTo();
         result.setRadiusX(radius);
         result.setRadiusY(radius);
@@ -166,13 +174,17 @@ public class SunburstRingSegment extends AbstractSunburstNode {
     /**
      * Creates a {@link LineTo} with the specified parameters.
      *
-     * Coordinates of the end point of the arc are given in polar form
-     * relative to the center of the arcs.
+     * Coordinates of the end point of the arc are given in polar form relative
+     * to the center of the arcs.
      *
-     * @param radius The radius of the arc.
-     * @param centerX The center X coordinate of the arc.
-     * @param centerY The center Y coordinate of the arc.
-     * @param angle The angle of the end point.
+     * @param radius
+     *            The radius of the arc.
+     * @param centerX
+     *            The center X coordinate of the arc.
+     * @param centerY
+     *            The center Y coordinate of the arc.
+     * @param angle
+     *            The angle of the end point.
      * @return the LineTo with the specified parameters.
      */
     private LineTo createLine(final double radius, final double centerX,
@@ -182,6 +194,15 @@ public class SunburstRingSegment extends AbstractSunburstNode {
         double endY = centerY - radius * Math.cos(angle);
 
         return new LineTo(endX, endY);
+    }
+
+    private Color createColor() {
+        Sequence sequence = getValue().getSequence();
+        if (sequence == null) {
+            return Color.RED;
+        } else {
+            return SequenceColor.getColor(sequence);
+        }
     }
 
 }

@@ -3,17 +3,23 @@ package nl.tudelft.lifetiles.tree.controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 
+import nl.tudelft.lifetiles.sequence.model.Sequence;
+import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
+import nl.tudelft.lifetiles.tree.view.SunburstView;
 import javafx.fxml.FXML;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.controller.MenuController;
 import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.core.util.Message;
-import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
+import nl.tudelft.lifetiles.graph.controller.GraphController;
+import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeParser;
-import nl.tudelft.lifetiles.tree.view.SunburstView;
 
 /**
  * The controller of the tree view.
@@ -34,6 +40,12 @@ public class TreeController extends AbstractController {
      */
     private PhylogeneticTreeItem tree;
 
+
+    /**
+     * The model of sequences.
+     */
+    private Map<String, Sequence> sequences;
+
     /**
      * {@inheritDoc}
      */
@@ -50,6 +62,15 @@ public class TreeController extends AbstractController {
                 loadTree((File) args[2]);
             } catch (FileNotFoundException e) {
                 Logging.exception(e);
+            }
+        });
+
+        listen(Message.LOADED, (controller, args) -> {
+            if (controller instanceof GraphController) {
+                assert (args[0] instanceof Graph);
+                assert (args[1] instanceof Map<?, ?>);
+                sequences = (Map<String, Sequence>) args[1];
+                repaint();
             }
         });
     }
@@ -84,6 +105,20 @@ public class TreeController extends AbstractController {
     private void repaint() {
         if (tree != null) {
             view.setRoot(tree);
+        }
+    }
+
+    private void linkSequences() {
+            linkSequence(sequences, tree);
+    }
+
+    private void linkSequence(Map<String, Sequence> sequences, PhylogeneticTreeItem node){
+        String id = node.getName();
+        Sequence sequence = sequences.get(id);
+        node.setSequence(sequence);
+
+        for (PhylogeneticTreeItem child: node.getChildren()) {
+            linkSequence(sequences, child);
         }
     }
 
