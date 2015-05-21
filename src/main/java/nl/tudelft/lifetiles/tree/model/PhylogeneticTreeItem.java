@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import nl.tudelft.lifetiles.sequence.model.Sequence;
+
 /**
  * A tree to store the relation between samples.
  *
@@ -37,6 +39,11 @@ public class PhylogeneticTreeItem {
      * The parent node, null when this node is the root node.
      */
     private PhylogeneticTreeItem parent;
+
+    /**
+     * The sequence this node is associated with.
+     */
+    private Sequence sequence;
 
     /**
      * Creates a new PhylogeneticTreeItem. Will initialize the ArrayList storing
@@ -224,6 +231,18 @@ public class PhylogeneticTreeItem {
         this.parent.addChild(this);
     }
 
+    /**
+     * @return the sequence
+     */
+    public final Sequence getSequence() {
+        return sequence;
+    }
+    /**
+     * @param seq the sequence to set
+     */
+    public final void setSequence(final Sequence seq) {
+        this.sequence = seq;
+    }
     /**
      * Returns a String representation of the PhylogeneticTreeItem. The String
      * will have the following format:
