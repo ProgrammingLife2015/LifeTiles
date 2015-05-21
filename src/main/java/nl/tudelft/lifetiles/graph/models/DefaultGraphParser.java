@@ -123,14 +123,14 @@ public class DefaultGraphParser implements GraphParser {
     @Override
     public final Graph<SequenceSegment> parseFile(final String filename,
             final GraphFactory<SequenceSegment> gfact) {
-        Calendar cal = Calendar.getInstance();
-        long startTime = cal.getTimeInMillis();
+
+        long startTime = Calendar.getInstance().getTimeInMillis();
         Graph<SequenceSegment> graph = gfact.getGraph();
         parseVertices(filename, graph);
         parseEdges(filename, graph);
-        Calendar cal2 = Calendar.getInstance();
         System.out.println("Graph parsed. Took "
-                + (cal2.getTimeInMillis() - startTime) + " ms.");
+                + (Calendar.getInstance().getTimeInMillis() - startTime)
+                + " ms.");
         return graph;
     }
 
