@@ -142,7 +142,6 @@ public class DefaultGraphParser implements GraphParser {
      */
     private void parseVertices(final String filename,
             final Graph<SequenceSegment> graph) {
-        System.out.println(filename);
         try {
             File file = new File(this.getClass()
                     .getResource("/" + filename + ".node.graph").toURI());
