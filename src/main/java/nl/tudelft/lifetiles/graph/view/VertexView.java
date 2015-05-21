@@ -27,12 +27,6 @@ public class VertexView extends Group {
     private Rectangle rectangle;
 
     /**
-     * this value is to make sure that when this vertex has to be resized, it
-     * will be the new resized width.
-     */
-    private double resizeWidth = -1;
-
-    /**
      * Horizontal and vertical spacing between rectangles.
      */
     private static final double SPACING = 2;
@@ -162,7 +156,6 @@ public class VertexView extends Group {
     public final void setWidth(final double width) {
         rectangle.setWidth(width);
         clip.setWidth(width);
-        resizeWidth = width;
         layoutChildren();
     }
 }
