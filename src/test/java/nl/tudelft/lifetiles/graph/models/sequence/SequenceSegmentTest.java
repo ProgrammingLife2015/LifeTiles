@@ -1,9 +1,6 @@
 package nl.tudelft.lifetiles.graph.models.sequence;
 
 import static org.junit.Assert.assertEquals;
-import nl.tudelft.lifetiles.graph.models.sequence.SegmentEmpty;
-import nl.tudelft.lifetiles.graph.models.sequence.SegmentString;
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 import nl.tudelft.lifetiles.graph.view.Mutation;
 
 import org.junit.Before;
@@ -56,5 +53,10 @@ public class SequenceSegmentTest {
         Mutation insertion = Mutation.INSERTION;
         v1.setMutation(insertion);
         assertEquals(insertion, v1.getMutation());
+    }
+
+    @Test
+    public void testCompare() {
+        assertEquals(-1, v1.compareTo(v2));
     }
 }
