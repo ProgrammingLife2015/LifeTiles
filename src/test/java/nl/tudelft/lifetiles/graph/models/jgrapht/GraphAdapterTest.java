@@ -4,12 +4,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import nl.tudelft.lifetiles.graph.models.Edge;
 import nl.tudelft.lifetiles.graph.models.FactoryProducer;
 import nl.tudelft.lifetiles.graph.models.Graph;
 import nl.tudelft.lifetiles.graph.models.GraphFactory;
+import nl.tudelft.lifetiles.graph.models.sequence.SegmentEmpty;
+import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 
 import org.junit.Before;
@@ -38,8 +41,10 @@ public class GraphAdapterTest {
     @Before
     public void setUp() throws Exception {
         gf = fp.getFactory("JGraphT");
-        v1 = new SequenceSegment(null, 0, 0, null);
-        v2 = new SequenceSegment(null, 0, 0, null);
+        v1 = new SequenceSegment(new HashSet<Sequence>(), 0, 2,
+                new SegmentEmpty(2));
+        v2 = new SequenceSegment(new HashSet<Sequence>(), 0, 0,
+                new SegmentEmpty(3));
         gr = gf.getGraph();
     }
 
@@ -143,7 +148,8 @@ public class GraphAdapterTest {
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
         Set<Edge<SequenceSegment>> inc = gr.getIncoming(v2);
-        SequenceSegment v3 = new SequenceSegment(null, 0, 0, null);
+        SequenceSegment v3 = new SequenceSegment(new HashSet<Sequence>(), 0, 3,
+                new SegmentEmpty(0));
         gr.splitEdge(inc.iterator().next(), v3);
         assertEquals(v3, gr.getSource(gr.getIncoming(v2).iterator().next()));
         assertEquals(v3,

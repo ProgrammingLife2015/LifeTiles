@@ -1,5 +1,6 @@
 package nl.tudelft.lifetiles.graph.models.sequence;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import nl.tudelft.lifetiles.graph.view.Mutation;
@@ -153,7 +154,8 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
     }
 
     /**
-     * Compares the the start position of this and another sequence segment.
+     * Compares two segments, first by start positions, then end positions, then
+     * content, then sources.
      *
      * @param other
      *            Sequence segment which needs to be compared.
@@ -161,7 +163,37 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      */
     @Override
     public final int compareTo(final SequenceSegment other) {
-        return Long.compare(this.getUnifiedStart(), other.getUnifiedStart());
+        int candidateComp = Long.compare(this.getUnifiedStart(),
+                other.getUnifiedStart());
+        if (candidateComp == 0) {
+            candidateComp = Long.compare(this.getStart(), other.getStart());
+        }
+        if (candidateComp == 0) {
+            candidateComp = Long.compare(this.getUnifiedEnd(),
+                    other.getUnifiedEnd());
+        }
+        if (candidateComp == 0) {
+            candidateComp = Long.compare(this.getEnd(), other.getEnd());
+        }
+        if (candidateComp == 0) {
+            candidateComp = this.getContent().toString()
+                    .compareTo(other.getContent().toString());
+        }
+        if (candidateComp == 0) {
+            candidateComp = this.getSources().size()
+                    - other.getSources().size();
+        }
+        if (candidateComp == 0) {
+            Iterator<Sequence> thisIt = this.getSources().iterator();
+            Iterator<Sequence> otherIt = other.getSources().iterator();
+            while (thisIt.hasNext()) {
+                if (candidateComp == 0) {
+                    candidateComp = thisIt.next().getIdentifier()
+                            .compareTo(otherIt.next().getIdentifier());
+                }
+            }
+        }
+        return candidateComp;
     }
 
     /**
@@ -200,5 +232,79 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      */
     public final void setReferenceEnd(final long referenceEnd) {
         referenceEndVar = referenceEnd;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public final int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result;
+        result += (int) (unifiedEndVar ^ (unifiedEndVar >>> prime + 1));
+        result = prime * result
+                + (int) (unifiedStartVar ^ (unifiedStartVar >>> prime + 1));
+        result = prime * result;
+        if (contentVar != null) {
+            result += contentVar.hashCode();
+        }
+        result = prime * result + (int) (endVar ^ (endVar >>> prime + 1));
+        result = prime * result;
+        if (mutationVar != null) {
+            result += mutationVar.hashCode();
+        }
+        result = prime * result;
+        if (sourcesVar != null) {
+            result += sourcesVar.hashCode();
+        }
+        result = prime * result + (int) (startVar ^ (startVar >>> prime + 1));
+        return result;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public final boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof SequenceSegment)) {
+            return false;
+        }
+        SequenceSegment other = (SequenceSegment) obj;
+        if (unifiedEndVar != other.getUnifiedEnd()) {
+            return false;
+        }
+        if (unifiedStartVar != other.getUnifiedStart()) {
+            return false;
+        }
+        if (contentVar == null) {
+            if (other.contentVar != null) {
+                return false;
+            }
+        } else if (!contentVar.equals(other.contentVar)) {
+            return false;
+        }
+        if (endVar != other.endVar) {
+            return false;
+        }
+        if (sourcesVar == null) {
+            if (other.sourcesVar != null) {
+                return false;
+            }
+        } else if (!sourcesVar.equals(other.sourcesVar)) {
+            return false;
+        }
+        if (startVar != other.startVar) {
+            return false;
+        }
+        return true;
     }
 }

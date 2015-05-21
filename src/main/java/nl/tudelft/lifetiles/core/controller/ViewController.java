@@ -13,7 +13,6 @@ import nl.tudelft.lifetiles.graph.models.Graph;
 import nl.tudelft.lifetiles.graph.models.GraphFactory;
 import nl.tudelft.lifetiles.graph.models.GraphParser;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceGenerator;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 
 /**
@@ -45,7 +44,7 @@ public final class ViewController extends Observable {
     /**
      * The main stage.
      */
-    private Stage stage;
+    private Stage stageVar;
 
     /**
      * Creates a new viewcontroller.
@@ -114,8 +113,7 @@ public final class ViewController extends Observable {
         graph = gp.parseFile(filename, gf);
 
         // obtain the sequences
-        SequenceGenerator sg = new SequenceGenerator(graph);
-        setSequences(sg.generateSequences());
+        setSequences(gp.getSequences());
 
         notifyChanged();
     }
@@ -132,33 +130,18 @@ public final class ViewController extends Observable {
     }
 
     /**
-     * Set a new graph.
-     *
-     * @param newGraph
-     *            the new graph
-     */
-    public void setGraph(final Graph<SequenceSegment> newGraph) {
-        graph = newGraph;
-
-        SequenceGenerator sg = new SequenceGenerator(graph);
-        setSequences(sg.generateSequences());
-
-        notifyChanged();
-    }
-
-    /**
      * @return the stage
      */
     public Stage getStage() {
-        return stage;
+        return stageVar;
     }
 
     /**
      * @param stage
      *            the stage to set
      */
-    public void setStage(Stage stage) {
-        this.stage = stage;
+    public void setStage(final Stage stage) {
+        this.stageVar = stage;
     }
 
     /**
@@ -185,7 +168,6 @@ public final class ViewController extends Observable {
      *            the error message
      */
     public void displayError(final String message) {
-        // TODO: display error in the gui
         System.out.println("[ERROR] " + message);
     }
 
@@ -205,7 +187,7 @@ public final class ViewController extends Observable {
      *
      * @return the ViewController
      */
-    public static ViewController getInstance() {
+    public static synchronized ViewController getInstance() {
         if (instance == null) {
             instance = new ViewController();
         }
