@@ -103,7 +103,6 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
         this.start = startPosition;
         this.endVar = endPosition;
         this.content = content;
-
         identifier = nextId.incrementAndGet();
     }
 
@@ -219,7 +218,6 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
                 return candidateComp;
             }
         }
-
         if (this.getIdentifier() == other.getIdentifier()) {
             candidateComp = 0;
         }
