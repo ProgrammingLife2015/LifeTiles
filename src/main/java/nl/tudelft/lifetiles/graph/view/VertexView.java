@@ -42,6 +42,11 @@ public class VertexView extends Group {
     private static final double VERTICALSCALE = 40;
 
     /**
+     * Name of the font used in the Vertex View.
+     */
+    private static final String FONTNAME = "Oxygen Mono";
+
+    /**
      * this is the DNA strain the display on the vertex.
      */
     private Text text;
@@ -113,8 +118,7 @@ public class VertexView extends Group {
         double height = rectangle.getHeight();
 
         double fontWidth = text.getLayoutBounds().getWidth();
-        text.setFont(Font.font("Oxygen Mono", (HORIZONTALSCALE) * width
-                / fontWidth));
+        text.setFont(Font.font(FONTNAME, (HORIZONTALSCALE) * width / fontWidth));
 
         clip.setWidth(width);
         clip.setHeight(height);
