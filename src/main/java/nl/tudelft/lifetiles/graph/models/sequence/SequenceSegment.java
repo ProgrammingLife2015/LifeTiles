@@ -301,4 +301,22 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
         }
         return true;
     }
+
+    /**
+     * Calculates the mutation for this sequence segment given that this segment
+     * is not part of the reference sequence.
+     *
+     * @return calculated mutation type of this segment.
+     */
+    public final Mutation calculateMutation() {
+        Mutation mutation;
+        if (contentVar.isEmpty()) {
+            mutation = Mutation.DELETION;
+        } else if (referenceStartVar > referenceEndVar) {
+            mutation = Mutation.INSERTION;
+        } else {
+            mutation = Mutation.POLYMORPHISM;
+        }
+        return mutation;
+    }
 }

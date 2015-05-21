@@ -3,7 +3,6 @@ package nl.tudelft.lifetiles.traverser.models;
 import nl.tudelft.lifetiles.graph.models.Graph;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
-import nl.tudelft.lifetiles.graph.view.Mutation;
 
 /**
  * Indicates mutations by traversing over all the vertices.
@@ -68,15 +67,7 @@ public class MutationIndicationTraverser implements Traverser {
      */
     private void indicateVertexMutations(final SequenceSegment vertex) {
         if (!vertex.getSources().contains(referenceVar)) {
-            Mutation mutation;
-            if (vertex.getContent().isEmpty()) {
-                mutation = Mutation.DELETION;
-            } else if (vertex.getReferenceStart() > vertex.getReferenceEnd()) {
-                mutation = Mutation.INSERTION;
-            } else {
-                mutation = Mutation.POLYMORPHISM;
-            }
-            vertex.setMutation(mutation);
+            vertex.setMutation(vertex.calculateMutation());
         }
     }
 
