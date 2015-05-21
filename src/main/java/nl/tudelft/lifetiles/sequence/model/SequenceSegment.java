@@ -290,7 +290,6 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
             return false;
         }
         SequenceSegment other = (SequenceSegment) obj;
-
         return this.getIdentifier() == other.getIdentifier();
     }
 
