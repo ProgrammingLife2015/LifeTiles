@@ -50,6 +50,9 @@ public final class ViewController extends Observable {
      */
     private Stage stageVar;
 
+    /**
+     * The notification factory.
+     */
     private NotificationFactory nf;
 
     /**
@@ -192,7 +195,7 @@ public final class ViewController extends Observable {
      */
     public void displayError(final String message) {
         Notification error = nf.error(message);
-        notifyObservers(error);
+        notifyChanged(error);
     }
 
     /**
@@ -203,7 +206,7 @@ public final class ViewController extends Observable {
      */
     public void displayWarning(final String message) {
         Notification warning = nf.warning(message);
-        notifyObservers(warning);
+        notifyChanged(warning);
     }
 
     /**
@@ -214,7 +217,7 @@ public final class ViewController extends Observable {
      */
     public void displayInfo(final String message) {
         Notification info = nf.info(message);
-        notifyObservers(info);
+        notifyChanged(info);
     }
 
     /**
