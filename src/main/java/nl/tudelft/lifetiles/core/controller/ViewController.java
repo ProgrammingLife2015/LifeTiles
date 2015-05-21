@@ -3,8 +3,6 @@ package nl.tudelft.lifetiles.core.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileNotFoundException;
-import java.net.URISyntaxException;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -207,14 +205,15 @@ public final class ViewController extends Observable {
     }
 
     /**
+     * Loads the tree located in the file.
      *
-     * @param fileName
+     * @param fileName The filename of the .nwk file
      */
-    public void loadTree(final String fileName){
+    public void loadTree(final String fileName) {
         File file;
         Scanner sc = null;
         try {
-            file = new File(fileName + ".nwk");
+            file = new File(fileName);
             sc = new Scanner(file).useDelimiter("\\Z");
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block

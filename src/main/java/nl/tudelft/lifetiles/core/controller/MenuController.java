@@ -3,7 +3,6 @@ package nl.tudelft.lifetiles.core.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.DirectoryIteratorException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -96,7 +95,7 @@ public class MenuController implements Initializable {
             e.printStackTrace();
         }
 
-        controller.loadTree(treeFileName);;
+        controller.loadTree(treeFileName);
 
     }
 
@@ -150,19 +149,21 @@ public class MenuController implements Initializable {
     }
 
     /**
+     * Find the file name of the newick file in the directory.
      *
-     * @param directory the directory in which the .nwk file is located
+     * @param dir
+     *            the directory in which the .nwk file is located
      * @return the name of the nwk file without its extension
      * @throws IOException
-     *      throws an exception when no, or too many files have been found
+     *             throws an exception when no, or too many files have been
+     *             found
      */
-    private String collectTreeFileName(final File directory)
-            throws IOException {
-        assert (directory.isDirectory());
+    private String collectTreeFileName(final File dir) throws IOException {
+        assert (dir.isDirectory());
 
         final String suffix = ".nwk";
 
-        final File[] listFiles = directory.listFiles((dir, name) -> name
+        final File[] listFiles = dir.listFiles((directory, name) -> name
                 .endsWith(suffix));
         if (listFiles == null) {
             throw new IOException("No " + suffix + " files found.");
@@ -170,11 +171,7 @@ public class MenuController implements Initializable {
             throw new IOException("Multiple " + suffix + " files found.");
         }
 
-        String result = listFiles[0].getName();
-        result = result.replaceAll(suffix, "");
-        return result;
-
-
+        return listFiles[0].getName();
     }
 
     /**

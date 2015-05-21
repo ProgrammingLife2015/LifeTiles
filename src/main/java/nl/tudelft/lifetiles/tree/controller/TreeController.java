@@ -18,7 +18,7 @@ import javafx.scene.layout.BorderPane;
  * @author Albert Smit
  *
  */
-public class TreeController implements Initializable , Observer{
+public class TreeController implements Initializable, Observer {
 
     /**
      * The wrapper element.
@@ -39,7 +39,7 @@ public class TreeController implements Initializable , Observer{
     private PhylogeneticTreeItem root;
 
     /**
-     *
+     * the ViewController that links this view to the sequence and graph.
      */
     private ViewController controller;
 
@@ -50,9 +50,7 @@ public class TreeController implements Initializable , Observer{
         controller.addObserver(this);
     }
 
-    /**
-     * update the SunburstView.
-     */
+
     @Override
     public final void update(final Observable o, final Object arg) {
         if (controller.treeIsLoaded()) {
@@ -66,7 +64,7 @@ public class TreeController implements Initializable , Observer{
     private void repaint() {
         root = controller.getTree();
         view.setRoot(root);
-        //view = new SunburstView(root);
+        // view = new SunburstView(root);
     }
 
 }
