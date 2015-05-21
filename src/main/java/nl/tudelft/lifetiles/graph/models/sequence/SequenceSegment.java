@@ -2,6 +2,7 @@ package nl.tudelft.lifetiles.graph.models.sequence;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import nl.tudelft.lifetiles.graph.view.Mutation;
 
@@ -9,6 +10,14 @@ import nl.tudelft.lifetiles.graph.view.Mutation;
  * @author Rutger van den Berg Contains a partial sequence.
  */
 public class SequenceSegment implements Comparable<SequenceSegment> {
+    /**
+     * Keep track of already used ID's.
+     */
+    private static AtomicInteger nextId = new AtomicInteger();
+    /**
+     * Identifier for this segment.
+     */
+    private int identifier;
     /**
      * The content of this segment.
      */
@@ -65,6 +74,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
         startVar = startPosition;
         endVar = endPosition;
         contentVar = content;
+        identifier = nextId.incrementAndGet();
     }
 
     /**
@@ -193,6 +203,9 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
                 }
             }
         }
+        if (this.getIdentifier() == other.getIdentifier()) {
+            candidateComp = 0;
+        }
         return candidateComp;
     }
 
@@ -242,18 +255,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
     public final int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result;
-        result = prime * result;
-        if (contentVar != null) {
-            result += contentVar.hashCode();
-        }
-        result = prime * result + (int) (endVar ^ (endVar >>> prime + 1));
-        result = prime * result;
-        result = prime * result;
-        if (sourcesVar != null) {
-            result += sourcesVar.hashCode();
-        }
-        result = prime * result + (int) (startVar ^ (startVar >>> prime + 1));
+        result = prime * result + identifier;
         return result;
     }
 
@@ -273,33 +275,15 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
             return false;
         }
         SequenceSegment other = (SequenceSegment) obj;
-        if (unifiedEndVar != other.getUnifiedEnd()) {
-            return false;
-        }
-        if (unifiedStartVar != other.getUnifiedStart()) {
-            return false;
-        }
-        if (contentVar == null) {
-            if (other.contentVar != null) {
-                return false;
-            }
-        } else if (!contentVar.equals(other.contentVar)) {
-            return false;
-        }
-        if (endVar != other.endVar) {
-            return false;
-        }
-        if (sourcesVar == null) {
-            if (other.sourcesVar != null) {
-                return false;
-            }
-        } else if (!sourcesVar.equals(other.sourcesVar)) {
-            return false;
-        }
-        if (startVar != other.startVar) {
-            return false;
-        }
-        return true;
+
+        return this.getIdentifier() == other.getIdentifier();
+    }
+
+    /**
+     * @return the identifier
+     */
+    public final int getIdentifier() {
+        return identifier;
     }
 
     /**

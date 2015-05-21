@@ -1,9 +1,12 @@
 package nl.tudelft.lifetiles.graph.models.jgrapht;
 
+import java.util.HashSet;
+
 import nl.tudelft.lifetiles.graph.models.FactoryProducer;
 import nl.tudelft.lifetiles.graph.models.Graph;
 import nl.tudelft.lifetiles.graph.models.GraphFactory;
-import nl.tudelft.lifetiles.graph.models.jgrapht.JGraphTGraphAdapter;
+import nl.tudelft.lifetiles.graph.models.sequence.SegmentEmpty;
+import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 
 import org.junit.Before;
@@ -23,8 +26,10 @@ public class GraphFactoryImplementationTest {
     @Before
     public void setUp() throws Exception {
         gf = fp.getFactory("JGraphT");
-        v1 = new SequenceSegment(null, 0, 0, null);
-        v2 = new SequenceSegment(null, 0, 0, null);
+        v1 = new SequenceSegment(new HashSet<Sequence>(), 0, 0,
+                new SegmentEmpty(0));
+        v2 = new SequenceSegment(new HashSet<Sequence>(), 0, 0,
+                new SegmentEmpty(0));
     }
 
     @Test
