@@ -77,11 +77,13 @@ public class MenuController implements Initializable {
             graphFileName = directory.getCanonicalPath();
             graphFileName += "/";
             graphFileName += collectGraphFileName(directory);
+
             vertexfile = new File(graphFileName + ".node.graph");
             edgefile = new File(graphFileName + ".edge.graph");
 
             treeFileName = directory.getCanonicalPath();
-            treeFileName += collectTreeFileName(directory);
+            treeFileName += "/" + collectTreeFileName(directory);
+
 
         } catch (IOException e) {
             ViewController.getInstance().displayError(e.getMessage());
