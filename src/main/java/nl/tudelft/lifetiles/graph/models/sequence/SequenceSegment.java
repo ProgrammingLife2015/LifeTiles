@@ -308,7 +308,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      *
      * @return calculated mutation type of this segment.
      */
-    public final Mutation calculateMutation() {
+    public final Mutation determineMutation() {
         Mutation mutation;
         if (contentVar.isEmpty()) {
             mutation = Mutation.DELETION;
