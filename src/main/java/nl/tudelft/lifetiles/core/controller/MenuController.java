@@ -166,9 +166,10 @@ public class MenuController implements Initializable {
      *            the file
      * @return the relative path of the file
      * @throws IOException
+     *             When the directory specified is not in the build path.
      */
     @Deprecated
-    private static String getRelativePath(File file) throws IOException {
+    private static String getRelativePath(final File file) throws IOException {
         String path = file.getCanonicalPath();
         String base = System.getProperty("user.dir");
 
