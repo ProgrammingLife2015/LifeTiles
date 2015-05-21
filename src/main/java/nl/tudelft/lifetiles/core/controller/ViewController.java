@@ -1,5 +1,7 @@
 package nl.tudelft.lifetiles.core.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -102,15 +104,20 @@ public final class ViewController extends Observable {
     /**
      * Load a new graph from the specified file.
      *
-     * @param filename
-     *            The name of the file to load.
+     * @param vertexfile
+     *            The file to get vertices for.
+     * @param edgefile
+     *            The file to get edges for.
+     * @throws IOException
+     *             When an IO error occurs while reading one of the files.
      */
-    public void loadGraph(final String filename) {
+    public void loadGraph(final File vertexfile, final File edgefile)
+            throws IOException {
         // create the graph
         FactoryProducer<SequenceSegment> fp = new FactoryProducer<>();
         GraphFactory<SequenceSegment> gf = fp.getFactory("JGraphT");
         GraphParser gp = new DefaultGraphParser();
-        graph = gp.parseFile(filename, gf);
+        graph = gp.parseGraph(vertexfile, edgefile, gf);
 
         // obtain the sequences
         setSequences(gp.getSequences());

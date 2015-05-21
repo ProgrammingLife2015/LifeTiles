@@ -64,22 +64,29 @@ public class MenuController implements Initializable {
         directoryChooser.setTitle("Open folder containing data files");
         Window window = menuBar.getScene().getWindow();
         File directory = directoryChooser.showDialog(window);
-
         // user aborted
         if (directory == null) {
             return;
         }
 
         String graphFileName = null;
+        File vertexfile, edgefile;
         try {
-            graphFileName = getRelativePath(directory);
+            graphFileName = directory.getCanonicalPath();
+            graphFileName += "/";
             graphFileName += collectGraphFileName(directory);
+            vertexfile = new File(graphFileName + ".node.graph");
+            edgefile = new File(graphFileName + ".edge.graph");
         } catch (IOException e) {
             ViewController.getInstance().displayError(e.getMessage());
             return;
         }
 
-        controller.loadGraph(graphFileName);
+        try {
+            controller.loadGraph(vertexfile, edgefile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -156,32 +163,6 @@ public class MenuController implements Initializable {
                 node.getScene().getWindow().setY(y);
             }
         });
-    }
-
-    /**
-     * Get the path relative to the build path of a file. Workaround for <a
-     * href="https://github.com/ProgrammingLife5/LifeTiles/issues/75">#75</a>.
-     *
-     * @param file
-     *            the file
-     * @return the relative path of the file
-     * @throws IOException
-     *             When the directory specified is not in the build path.
-     */
-    @Deprecated
-    private static String getRelativePath(final File file) throws IOException {
-        String path = file.getCanonicalPath();
-        String base = System.getProperty("user.dir");
-
-        int relLength = "src/main/resources/".length();
-        String relativePath = new File(base).toURI()
-                .relativize(new File(path).toURI()).getPath();
-
-        if (relLength > relativePath.length()) {
-            throw new IOException("Directory not in build path.");
-        }
-
-        return relativePath.substring(relLength);
     }
 
     @Override
