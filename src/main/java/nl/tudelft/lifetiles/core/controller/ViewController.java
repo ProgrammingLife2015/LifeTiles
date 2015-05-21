@@ -44,7 +44,7 @@ public final class ViewController extends Observable {
     /**
      * The main stage.
      */
-    private Stage stage;
+    private Stage stageVar;
 
     /**
      * Creates a new viewcontroller.
@@ -113,7 +113,6 @@ public final class ViewController extends Observable {
         graph = gp.parseFile(filename, gf);
 
         // obtain the sequences
-        // SequenceGenerator sg = new SequenceGenerator(graph);
         setSequences(gp.getSequences());
 
         notifyChanged();
@@ -138,10 +137,6 @@ public final class ViewController extends Observable {
      */
     public void setGraph(final Graph<SequenceSegment> newGraph) {
         graph = newGraph;
-
-        // SequenceGenerator sg = new SequenceGenerator(graph);
-        // setSequences(sg.generateSequences());
-
         notifyChanged();
     }
 
@@ -149,15 +144,15 @@ public final class ViewController extends Observable {
      * @return the stage
      */
     public Stage getStage() {
-        return stage;
+        return stageVar;
     }
 
     /**
      * @param stage
      *            the stage to set
      */
-    public void setStage(Stage stage) {
-        this.stage = stage;
+    public void setStage(final Stage stage) {
+        this.stageVar = stage;
     }
 
     /**
@@ -184,7 +179,6 @@ public final class ViewController extends Observable {
      *            the error message
      */
     public void displayError(final String message) {
-        // TODO: display error in the gui
         System.out.println("[ERROR] " + message);
     }
 
