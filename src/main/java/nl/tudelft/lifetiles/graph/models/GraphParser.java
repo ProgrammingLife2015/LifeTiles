@@ -1,7 +1,9 @@
 package nl.tudelft.lifetiles.graph.models;
 
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
+import java.util.Map;
 
+import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
+import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 
 /**
  * Interface for Graph Parser.
@@ -18,4 +20,9 @@ public interface GraphParser {
      */
     Graph<SequenceSegment> parseFile(final String filename,
             GraphFactory<SequenceSegment> gfact);
+
+    /**
+     * @return A mapping of sequencenames to sequences.
+     */
+    Map<String, Sequence> getSequences();
 }
