@@ -1,6 +1,6 @@
 package nl.tudelft.lifetiles.graph.models;
 
-import java.util.Set;
+import java.util.SortedSet;
 
 /**
  * Interface for a generic graph.
@@ -40,12 +40,12 @@ public interface Graph<V> {
     /**
      * @return A Set containing all edges in the graph.
      */
-    Set<Edge<V>> getAllEdges();
+    SortedSet<Edge<V>> getAllEdges();
 
     /**
      * @return A Set containing all vertices in the graph.
      */
-    Set<V> getAllVertices();
+    SortedSet<V> getAllVertices();
 
     /**
      * @param e
@@ -61,20 +61,20 @@ public interface Graph<V> {
      *            The vertex for which the incoming edges will be retrieved.
      * @return A Set of incoming edges.
      */
-    Set<Edge<V>> getIncoming(V vertex);
+    SortedSet<Edge<V>> getIncoming(V vertex);
 
     /**
      * @param vertex
      *            The vertex for which the outgoing edges will be retrieved.
      * @return A Set of outgoing edges.
      */
-    Set<Edge<V>> getOutgoing(V vertex);
+    SortedSet<Edge<V>> getOutgoing(V vertex);
 
     /**
      * @return A Set of source nodes. Source being a node that has no incoming
      *         edges.
      */
-    Set<V> getSources();
+    SortedSet<V> getSources();
 
     /**
      * @param e
@@ -87,7 +87,7 @@ public interface Graph<V> {
      * @return A Set of sink nodes. Sink being a node that has no outgoing
      *         edges.
      */
-    Set<V> getSinks();
+    SortedSet<V> getSinks();
 
     /**
      * Splits an edge into two edges with an inserted vertex in the middle.
