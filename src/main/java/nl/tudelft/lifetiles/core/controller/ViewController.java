@@ -211,7 +211,8 @@ public final class ViewController extends Observable {
      *            the error message
      */
     public void displayError(final String message) {
-        Notification error = nf.error(message);
+        Notification error = nf.getNotification(message,
+                NotificationFactory.ERROR);
         notifyChanged(error);
     }
 
@@ -222,7 +223,8 @@ public final class ViewController extends Observable {
      *            the warning message
      */
     public void displayWarning(final String message) {
-        Notification warning = nf.warning(message);
+        Notification warning = nf.getNotification(message,
+                NotificationFactory.WARNING);
         notifyChanged(warning);
     }
 
@@ -233,7 +235,8 @@ public final class ViewController extends Observable {
      *            the info message
      */
     public void displayInfo(final String message) {
-        Notification info = nf.info(message);
+        Notification info = nf.getNotification(message,
+                NotificationFactory.INFO);
         notifyChanged(info);
 
     }
