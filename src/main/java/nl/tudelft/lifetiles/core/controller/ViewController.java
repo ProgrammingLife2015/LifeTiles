@@ -220,8 +220,7 @@ public final class ViewController extends Observable {
         }
 
         //parse the string into a tree
-        PhylogeneticTreeParser np = new PhylogeneticTreeParser(fileString);
-        tree = np.getRoot();
+        tree = PhylogeneticTreeParser.parse(fileString);
 
         notifyChanged();
     }

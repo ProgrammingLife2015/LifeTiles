@@ -10,50 +10,30 @@ import java.util.StringTokenizer;
  *
  */
 
-public class PhylogeneticTreeParser {
-    /**
-     * The root node of the created tree.
-     */
-    private PhylogeneticTreeItem root;
+public final class PhylogeneticTreeParser {
 
     /**
-     * The String specifying a single tree in newick format.
+     * Uninstantiable class.
      */
-    private String treeFile;
-
-    /**
-     * Creates a new PhylogeneticTreeParser that parses the String containing
-     * a single tree and creates a tree of PhylogeneticTreeItems.
-     *
-     * @param tree
-     *            a String specifying a single tree in newick format.
-     */
-    public PhylogeneticTreeParser(final String tree) {
-        treeFile = tree;
-        root = new PhylogeneticTreeItem();
-
-        parse();
-    }
-
-    /**
-     * Returns the parsed tree.
-     *
-     * @return the root node of the tree.
-     */
-    public final PhylogeneticTreeItem getRoot() {
-        return root;
+    private PhylogeneticTreeParser() {
+        // do nothing
     }
 
     /**
      * parses the String the parser has been given.
      * the String is first tokenized,
-     * after which the method iterates over all tokens
+     * after which the method iterates over all tokens.
+     *
+     * @param tree The string describing the tree
+     * @return The parsed tree.
      */
-    private void parse() {
-        // split the string ino tokens, and keep the delimiters in the list so
+    public static PhylogeneticTreeItem parse(final String tree) {
+        PhylogeneticTreeItem root = new PhylogeneticTreeItem();
+
+        // split the string into tokens, and keep the delimiters in the list so
         // we have
         // information about the next token.
-        StringTokenizer st = new StringTokenizer(treeFile, "(:,);", true);
+        StringTokenizer st = new StringTokenizer(tree, "(:,);", true);
 
         PhylogeneticTreeItem currentNode = root;
         // loop over all tokens
@@ -93,6 +73,8 @@ public class PhylogeneticTreeParser {
                 currentNode.setName(currentToken);
             }
         }
+
+        return root;
     }
 
 }

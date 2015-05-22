@@ -18,10 +18,8 @@ public class TestPhylogeneticTreeParser {
     @Test
     public void testPhylogeneticTreeParserNoNamesNoDistance() {
         // create the actual tree
-        String tree = "(,,(,));";
-        PhylogeneticTreeParser np = new PhylogeneticTreeParser(tree);
-        assertTrue("Parser constructor failed, np is NULL", np != null);
-        PhylogeneticTreeItem rootActual = np.getRoot();
+        String tree = "(,,(,));";        
+        PhylogeneticTreeItem rootActual =  PhylogeneticTreeParser.parse(tree);
 
         // create the expected Tree
         // root node
@@ -51,9 +49,7 @@ public class TestPhylogeneticTreeParser {
     public void testPhylogeneticTreeParserNamedLeafsNoDistance() {
         // create the actual tree
         String tree = "(A,B,(C,D));";
-        PhylogeneticTreeParser np = new PhylogeneticTreeParser(tree);
-        assertTrue("Parser constructor failed, np is NULL", np != null);
-        PhylogeneticTreeItem rootActual = np.getRoot();
+        PhylogeneticTreeItem rootActual =  PhylogeneticTreeParser.parse(tree);
 
         // create the expected Tree
         // root node
@@ -87,9 +83,7 @@ public class TestPhylogeneticTreeParser {
     public void testPhylogeneticTreeParserNamednodesNoDistance() {
         // create the actual tree
         String tree = "(A,B,(C,D)E)F;";
-        PhylogeneticTreeParser np = new PhylogeneticTreeParser(tree);
-        assertTrue("Parser constructor failed, np is NULL", np != null);
-        PhylogeneticTreeItem rootActual = np.getRoot();
+        PhylogeneticTreeItem rootActual =  PhylogeneticTreeParser.parse(tree);
 
         // create the expected Tree
         // root node
@@ -125,9 +119,7 @@ public class TestPhylogeneticTreeParser {
     public void testPhylogeneticTreeParserUnnamednodesAndDistance() {
         // create the actual tree
         String tree = "(:0.1,:0.2,(:0.3,:0.4):0.5);";
-        PhylogeneticTreeParser np = new PhylogeneticTreeParser(tree);
-        assertTrue("Parser constructor failed, np is NULL", np != null);
-        PhylogeneticTreeItem rootActual = np.getRoot();
+        PhylogeneticTreeItem rootActual =  PhylogeneticTreeParser.parse(tree);
 
         // create the expected Tree
         // root node
@@ -162,9 +154,7 @@ public class TestPhylogeneticTreeParser {
     public void testPhylogeneticTreeParserNamednodesAndDistance() {
         // create the actual tree
         String tree = "(A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5)F;";
-        PhylogeneticTreeParser np = new PhylogeneticTreeParser(tree);
-        assertTrue("Parser constructor failed, np is NULL", np != null);
-        PhylogeneticTreeItem rootActual = np.getRoot();
+        PhylogeneticTreeItem rootActual =  PhylogeneticTreeParser.parse(tree);
 
         // create the expected Tree
         // root node
