@@ -65,4 +65,12 @@ public abstract class Notification {
      */
     public abstract Color getColor();
 
+    /**
+     * Get the priority of this notification (smaller priority is higher). Used
+     * to determine the order in which to display the notifications.
+     *
+     * @return the priority.
+     */
+    public abstract int getPriority();
+
 }

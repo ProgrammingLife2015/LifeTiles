@@ -23,11 +23,18 @@ public class WarningNotification extends Notification {
      */
     public WarningNotification(final String message) {
         super(PREFIX + message);
+        setDuration(Integer.MAX_VALUE);
     }
 
     @Override
     public final Color getColor() {
         return Color.ORANGE;
+    }
+
+    @Override
+    public final int getPriority() {
+        final int priority = 20;
+        return priority;
     }
 
 }
