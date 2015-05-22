@@ -70,13 +70,22 @@ public class MenuController implements Initializable {
         }
 
         String graphFileName = null;
-        File vertexfile, edgefile;
+        File vertexfile, edgefile, treeFile;
+        String treeFileName = null;
         try {
             graphFileName = directory.getCanonicalPath();
             graphFileName += "/";
             graphFileName += collectGraphFileName(directory);
+
             vertexfile = new File(graphFileName + ".node.graph");
             edgefile = new File(graphFileName + ".edge.graph");
+
+            treeFileName = directory.getCanonicalPath();
+            treeFileName += "/" + collectTreeFileName(directory);
+
+            treeFile = new File(treeFileName);
+
+
         } catch (IOException e) {
             ViewController.getInstance().displayError(e.getMessage());
             return;
@@ -84,6 +93,7 @@ public class MenuController implements Initializable {
 
         try {
             controller.loadGraph(vertexfile, edgefile);
+            controller.loadTree(treeFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -100,7 +110,9 @@ public class MenuController implements Initializable {
      */
     private String collectGraphFileName(final File directory)
             throws IOException {
-        assert (directory.isDirectory());
+        if (!directory.isDirectory()) {
+            throw new IOException("Not a directory");
+        }
 
         final String suffixCommon = ".graph";
         final String suffixNodeFile = ".node.graph";
@@ -136,6 +148,33 @@ public class MenuController implements Initializable {
         }
 
         return fileNames.get(0);
+    }
+
+    /**
+     * Find the file name of the newick file in the directory.
+     *
+     * @param dir the directory in which the .nwk file is located
+     * @return the name of the .nwk file without its extension
+     * @throws IOException
+     *             throws an exception when no, or too many files have been
+     *             found
+     */
+    private String collectTreeFileName(final File dir) throws IOException {
+        if (!dir.isDirectory()) {
+            throw new IOException("Not a directory");
+        }
+
+        final String suffix = ".nwk";
+
+        final File[] listFiles = dir.listFiles((directory, name) -> name
+                .endsWith(suffix));
+        if (listFiles == null) {
+            throw new IOException("No " + suffix + " files found.");
+        } else if (listFiles.length > 1) {
+            throw new IOException("Multiple " + suffix + " files found.");
+        }
+
+        return listFiles[0].getName();
     }
 
     /**
