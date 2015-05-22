@@ -1,6 +1,12 @@
 package nl.tudelft.lifetiles.graph.models.sequence;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
+
 import nl.tudelft.lifetiles.graph.view.Mutation;
 
 import org.junit.Before;
@@ -12,13 +18,13 @@ public class SequenceSegmentTest {
 
     @Before
     public void setUp() throws Exception {
-        v1 = new SequenceSegment(null, 1, 10, new SegmentString("AAAAAAAAAA"));
+        v1 = new SequenceSegment(new TreeSet<Sequence>(), 1, 10, new SegmentString("AAAAAAAAAA"));
         v1.setUnifiedStart(1);
         v1.setUnifiedEnd(10);
-        v2 = new SequenceSegment(null, 11, 20, new SegmentEmpty(10));
+        v2 = new SequenceSegment(new TreeSet<Sequence>(), 11, 20, new SegmentEmpty(10));
         v2.setUnifiedStart(11);
         v2.setUnifiedEnd(20);
-        v3 = new SequenceSegment(null, 21, 30, new SegmentString("AAAAAAAAAA"));
+        v3 = new SequenceSegment(new TreeSet<Sequence>(), 21, 30, new SegmentString("AAAAAAAAAA"));
         v3.setUnifiedStart(21);
         v3.setUnifiedEnd(30);
     }
@@ -58,5 +64,13 @@ public class SequenceSegmentTest {
     @Test
     public void testCompare() {
         assertEquals(-1, v1.compareTo(v2));
+    }
+
+    @Test
+    public void testCompareModify() {
+        Set<SequenceSegment> segments = new HashSet<>();
+        segments.add(v1);
+        v1.setUnifiedStart(2);
+        assertTrue(segments.contains(v1));
     }
 }
