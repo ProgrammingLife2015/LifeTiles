@@ -18,7 +18,7 @@ import nl.tudelft.lifetiles.graph.models.GraphFactory;
 import nl.tudelft.lifetiles.graph.models.GraphParser;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
-import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeFactory;
+import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeParser;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
 /**
@@ -220,7 +220,7 @@ public final class ViewController extends Observable {
         }
 
         //parse the string into a tree
-        PhylogeneticTreeFactory np = new PhylogeneticTreeFactory(fileString);
+        PhylogeneticTreeParser np = new PhylogeneticTreeParser(fileString);
         tree = np.getRoot();
 
         notifyChanged();
