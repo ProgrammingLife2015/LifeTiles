@@ -35,6 +35,16 @@ public abstract class Notification {
     }
 
     /**
+     * The number of seconds to display the notification.
+     *
+     * @return the seconds
+     */
+    public final int displayDuration() {
+        final int seconds = 3;
+        return seconds;
+    }
+
+    /**
      * Get the color of this notification.
      *
      * @return the color
