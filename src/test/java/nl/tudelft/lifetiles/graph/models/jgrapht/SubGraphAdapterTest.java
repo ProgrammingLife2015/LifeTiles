@@ -17,7 +17,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class SubGraphAdapterTest {
-    GraphFactory<SequenceSegment> gf;
+    static GraphFactory<SequenceSegment> gf;
     static FactoryProducer<SequenceSegment> fp;
     SequenceSegment v1, v2, v3, v4;
     Graph<SequenceSegment> gr;
@@ -27,12 +27,11 @@ public class SubGraphAdapterTest {
 
     @BeforeClass
     public static void runOnce() {
-        fp = new FactoryProducer<SequenceSegment>();
+        gf = FactoryProducer.getFactory("JGraphT");
     }
 
     @Before
     public void setUp() throws Exception {
-        gf = fp.getFactory("JGraphT");
         v1 = new SequenceSegment(null, 0, 0, null);
         v2 = new SequenceSegment(null, 0, 0, null);
         v3 = new SequenceSegment(null, 0, 0, null);

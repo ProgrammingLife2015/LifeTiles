@@ -80,6 +80,7 @@ public class TileView {
         root = new Group();
         nodes = new Group();
         edges = new Group();
+
         lanes = new ArrayList<Long>();
 
         for (SequenceSegment segment : segments) {
