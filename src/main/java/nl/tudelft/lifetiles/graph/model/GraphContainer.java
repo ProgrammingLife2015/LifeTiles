@@ -58,7 +58,7 @@ public class GraphContainer {
                 .getSources().iterator().next();
 
         alignGraph();
-        findMutations(reference);
+        // findMutations(reference);
 
         segmentBuckets = new BucketCache(NUMBER_OF_BUCKETS, this.graph);
     }
@@ -89,7 +89,7 @@ public class GraphContainer {
         }
         new ReferencePositionTraverser(reference).referenceMapGraph(graph);
         new MutationIndicationTraverser(reference)
-                .indicateGraphMutations(graph);
+        .indicateGraphMutations(graph);
 
     }
 
@@ -139,6 +139,16 @@ public class GraphContainer {
      */
     public final BucketCache getBucketCache() {
         return segmentBuckets;
+    }
+
+    /**
+     * Set the graph that this model must be holding.
+     *
+     * @param gr
+     *            graph to be set
+     */
+    public final void setGraph(final Graph<SequenceSegment> gr) {
+        graph = gr;
     }
 
 }
