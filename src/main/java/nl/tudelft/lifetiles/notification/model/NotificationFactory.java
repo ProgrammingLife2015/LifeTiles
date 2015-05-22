@@ -9,6 +9,22 @@ package nl.tudelft.lifetiles.notification.model;
 public class NotificationFactory {
 
     /**
+     * Notification error type.
+     */
+    public static final String ERROR = "error";
+
+    /**
+     * Notification warning type.
+     */
+    public static final String WARNING = "warning";
+
+    /**
+     * Notification info type.
+     */
+    public static final String INFO = "info";
+
+
+    /**
      * Create a new notification factory.
      */
     public NotificationFactory() {
@@ -20,32 +36,30 @@ public class NotificationFactory {
      *
      * @param message
      *            the error message
+     * @param type
+     *            the notification type
      * @return the notification
      */
-    public final Notification error(final String message) {
-        return new ErrorNotification(message);
-    }
+    public final Notification getNotification(final String message,
+            final String type) {
+        Notification res;
 
-    /**
-     * Create a warning notification.
-     *
-     * @param message
-     *            the warning message
-     * @return the notification
-     */
-    public final Notification warning(final String message) {
-        return new WarningNotification(message);
-    }
+        switch (type) {
+        case ERROR:
+            res = new ErrorNotification(message);
+            break;
+        case WARNING:
+            res = new WarningNotification(message);
+            break;
+        case INFO:
+            res = new InfoNotification(message);
+            break;
+        default:
+            throw new IllegalArgumentException("unknown notification type: "
+                    + type);
+        }
 
-    /**
-     * Create an info notification.
-     *
-     * @param message
-     *            the info message
-     * @return the notification
-     */
-    public final Notification info(final String message) {
-        return new InfoNotification(message);
+        return res;
     }
 
 }
