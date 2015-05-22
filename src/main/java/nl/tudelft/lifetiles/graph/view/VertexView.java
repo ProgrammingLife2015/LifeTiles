@@ -20,10 +20,6 @@ public class VertexView extends Group {
      * this will hold text in the right place.
      */
     private Rectangle clip;
-    /**
-     * The fontsize of the string.
-     */
-    private static final double FONTSIZE = 16;
 
     /**
      * this is the region coloring the text.
@@ -31,25 +27,24 @@ public class VertexView extends Group {
     private Rectangle rectangle;
 
     /**
-     * this value is to make sure that when this vertex has to be resized, it
-     * will be the new resized width.
-     */
-    private double resizeWidth = -1;
-
-    /**
      * Horizontal and vertical spacing between rectangles.
      */
-    private static final double SPACING = 3;
+    private static final double SPACING = 2;
 
     /**
      * Horizontal scale for each coordinate.
      */
-    private static final double HORIZONTALSCALE = 15;
+    private static final double HORIZONTALSCALE = 11;
 
     /**
      * Vertical scale for each coordinate.
      */
     private static final double VERTICALSCALE = 40;
+
+    /**
+     * Name of the font used in the Vertex View.
+     */
+    private static final String FONTNAME = "Oxygen Mono";
 
     /**
      * this is the DNA strain the display on the vertex.
@@ -77,26 +72,25 @@ public class VertexView extends Group {
     public VertexView(final String string, final double initX,
             final double initY, final double width, final double height,
             final Color color) {
-        this.text = new Text(string);
+        text = new Text(string);
         text.setTextOrigin(VPos.CENTER);
         text.setFill(Color.WHITE);
         text.setFontSmoothingType(FontSmoothingType.LCD);
-        text.setFont(Font.font("Open Sans", FONTSIZE));
+        text.setFont(Font.font("Oxygen Mono", HORIZONTALSCALE));
 
-        this.rectangle = new Rectangle(width * HORIZONTALSCALE, height
+        rectangle = new Rectangle(width * HORIZONTALSCALE, height
                 * VERTICALSCALE);
         rectangle.setFill(color);
-        this.clip = new Rectangle(width * HORIZONTALSCALE, height
-                * VERTICALSCALE);
+        clip = new Rectangle(width * HORIZONTALSCALE, height * VERTICALSCALE);
         text.setClip(clip);
 
-        this.setLayoutX(initX * HORIZONTALSCALE);
-        this.setLayoutY(initY * VERTICALSCALE);
+        setLayoutX(initX * HORIZONTALSCALE);
+        setLayoutY(initY * VERTICALSCALE);
 
-        this.setHeight(height * VERTICALSCALE - SPACING);
-        this.setWidth(width * HORIZONTALSCALE - SPACING);
+        setHeight(height * VERTICALSCALE - SPACING);
+        setWidth(width * HORIZONTALSCALE - SPACING);
 
-        this.getChildren().addAll(rectangle, text);
+        getChildren().addAll(rectangle, text);
 
     }
 
@@ -122,16 +116,14 @@ public class VertexView extends Group {
     protected final void layoutChildren() {
         double width = rectangle.getWidth();
         double height = rectangle.getHeight();
+
+        double fontWidth = text.getLayoutBounds().getWidth();
+        text.setFont(Font.font(FONTNAME, (HORIZONTALSCALE) * width / fontWidth));
+
         clip.setWidth(width);
         clip.setHeight(height);
         clip.setLayoutX(0);
         clip.setLayoutY(-height / 2);
-
-        if (resizeWidth == -1) {
-            rectangle.setWidth(text.getLayoutBounds().getWidth());
-        } else {
-            rectangle.setWidth(resizeWidth);
-        }
 
         text.setLayoutX(width / 2 - text.getLayoutBounds().getWidth() / 2);
         text.setLayoutY(height / 2);
@@ -168,7 +160,6 @@ public class VertexView extends Group {
     public final void setWidth(final double width) {
         rectangle.setWidth(width);
         clip.setWidth(width);
-        resizeWidth = width;
         layoutChildren();
     }
 }
