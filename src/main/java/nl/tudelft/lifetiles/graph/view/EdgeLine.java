@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.graph.view;
 
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Circle;
@@ -63,9 +64,9 @@ public class EdgeLine extends Group {
      *            Point 1 of the second line
      * @return y intersection point
      */
-    private double calculateYIntersection(final DataPair line0source,
-            final DataPair line0destination, final DataPair line1source,
-            final DataPair line1destination) {
+    private double calculateYIntersection(final Point2D line0source,
+            final Point2D line0destination, final Point2D line1source,
+            final Point2D line1destination) {
 
         double s10x = line0destination.getX() - line0source.getX();
         double s10y = line0destination.getY() - line0source.getY();
@@ -182,10 +183,10 @@ public class EdgeLine extends Group {
             final double startY = minYRight + boundTo.getHeight() / 2;
             drawLine(startX, startY, minXRight, startY);
         } else {
-            DataPair line0source = new DataPair(maxXLeft, minYLeft);
-            DataPair line0destination = new DataPair(minXRight, maxYRight);
-            DataPair line1source = new DataPair(maxXLeft, maxYLeft);
-            DataPair line1destination = new DataPair(minXRight, minYRight);
+            Point2D line0source = new Point2D(maxXLeft, minYLeft);
+            Point2D line0destination = new Point2D(minXRight, maxYRight);
+            Point2D line1source = new Point2D(maxXLeft, maxYLeft);
+            Point2D line1destination = new Point2D(minXRight, minYRight);
 
             double intersect = calculateYIntersection(line0source,
                     line0destination, line1source, line1destination);
