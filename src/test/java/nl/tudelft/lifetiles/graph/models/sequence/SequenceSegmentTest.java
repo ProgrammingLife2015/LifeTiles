@@ -13,8 +13,14 @@ public class SequenceSegmentTest {
     @Before
     public void setUp() throws Exception {
         v1 = new SequenceSegment(null, 1, 10, new SegmentString("AAAAAAAAAA"));
+        v1.setUnifiedStart(1);
+        v1.setUnifiedEnd(10);
         v2 = new SequenceSegment(null, 11, 20, new SegmentEmpty(10));
+        v2.setUnifiedStart(11);
+        v2.setUnifiedEnd(20);
         v3 = new SequenceSegment(null, 21, 30, new SegmentString("AAAAAAAAAA"));
+        v3.setUnifiedStart(21);
+        v3.setUnifiedEnd(30);
     }
 
     @Test

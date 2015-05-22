@@ -9,6 +9,7 @@ import java.util.TreeSet;
 
 import nl.tudelft.lifetiles.graph.models.Edge;
 import nl.tudelft.lifetiles.graph.models.Graph;
+import nl.tudelft.lifetiles.graph.models.GraphFactory;
 
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
@@ -229,6 +230,25 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
     }
 
     /**
+     * Returns a copy of the graph including edges and vertices.
+     *
+     * @param gfact
+     *            Factory which is used to copy the graph.
+     * @return copy of the Graph.
+     */
+    @Override
+    public final Graph<V> copy(final GraphFactory<V> gfact) {
+        Graph<V> graph = gfact.getGraph();
+        for (V vertex : getAllVertices()) {
+            graph.addVertex(vertex);
+        }
+        for (Edge<V> edge : getAllEdges()) {
+            graph.addEdge(getSource(edge), getDestination(edge));
+        }
+        return graph;
+    }
+
+    /**
      * @author Rutger van den Berg
      *         Compares two edges by their target vertex.
      */
@@ -242,7 +262,6 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
             }
             return candidate;
         }
-
     }
 
 }
