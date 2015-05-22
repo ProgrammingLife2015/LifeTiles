@@ -2,10 +2,12 @@ package nl.tudelft.lifetiles.core.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Observable;
+import java.util.Scanner;
 import java.util.Set;
 
 import javafx.stage.Stage;
@@ -16,12 +18,15 @@ import nl.tudelft.lifetiles.graph.models.GraphFactory;
 import nl.tudelft.lifetiles.graph.models.GraphParser;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeParser;
+import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
 /**
  * Controls what the view modules display.
  *
  * @author Rutger van den Berg
  * @author Joren Hammudoglu
+ * @author Albert Smit
  */
 public final class ViewController extends Observable {
 
@@ -42,6 +47,10 @@ public final class ViewController extends Observable {
      * The currently loaded graph.
      */
     private Graph<SequenceSegment> graph;
+    /**
+     * The currently loaded tree.
+     */
+    private PhylogeneticTreeItem tree;
 
     /**
      * The main stage.
@@ -169,6 +178,14 @@ public final class ViewController extends Observable {
     }
 
     /**
+     * Check if the tree is loaded.
+     * @return true if the tree is loaded
+     */
+    public boolean treeIsLoaded() {
+        return tree != null;
+    }
+
+    /**
      * Display an error.
      *
      * @param message
@@ -176,6 +193,36 @@ public final class ViewController extends Observable {
      */
     public void displayError(final String message) {
         System.out.println("[ERROR] " + message);
+
+    }
+    /**
+     *
+     * @return the tree
+     */
+    public PhylogeneticTreeItem getTree() {
+        return tree;
+
+    }
+
+    /**
+     * Loads the tree located in the file.
+     *
+     * @param treeFile The .nwk file
+     * @throws FileNotFoundException when the file is not found
+     */
+    public void loadTree(final File treeFile) throws FileNotFoundException {
+        //convert the file to a single string
+        String fileString = null;
+        try (Scanner sc = new Scanner(treeFile).useDelimiter("\\Z")) {
+            fileString = sc.next();
+        } catch (FileNotFoundException e) {
+            throw e;
+        }
+
+        //parse the string into a tree
+        tree = PhylogeneticTreeParser.parse(fileString);
+
+        notifyChanged();
     }
 
     /**
