@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
  *
  */
 
-public class PhylogeneticTreeFactory {
+public class PhylogeneticTreeParser {
     /**
      * The root node of the created tree.
      */
@@ -22,13 +22,13 @@ public class PhylogeneticTreeFactory {
     private String treeFile;
 
     /**
-     * Creates a new PhylogeneticTreeFactory that parses the String containing
+     * Creates a new PhylogeneticTreeParser that parses the String containing
      * a single tree and creates a tree of PhylogeneticTreeItems.
      *
      * @param tree
      *            a String specifying a single tree in newick format.
      */
-    public PhylogeneticTreeFactory(final String tree) {
+    public PhylogeneticTreeParser(final String tree) {
         treeFile = tree;
         root = new PhylogeneticTreeItem();
 
