@@ -1,8 +1,10 @@
 package nl.tudelft.lifetiles.graph.view;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javafx.scene.Group;
@@ -30,7 +32,7 @@ public class TileView {
     /**
      * The nodes contains all Vertices to be displayed.
      */
-    private Group nodes;
+    private Map<SequenceSegment, VertexView> nodemap;
 
     private Group root;
     /**
@@ -77,8 +79,10 @@ public class TileView {
      */
     public final Group drawGraph(final Set<SequenceSegment> segments,
             final Graph<SequenceSegment> graph) {
-        root = new Group();
-        nodes = new Group();
+        Group root = new Group();
+
+        nodemap = new HashMap<SequenceSegment, VertexView>();
+
         edges = new Group();
 
         lanes = new ArrayList<Long>();
@@ -86,37 +90,32 @@ public class TileView {
         for (SequenceSegment segment : segments) {
             drawVertexLane(segment);
         }
+        // drawEdges(gr);
+        Group nodes = new Group();
 
-        drawAllEdges(graph);
+        drawEdges(graph);
+
+        for (Entry<SequenceSegment, VertexView> entry : nodemap.entrySet()) {
+            nodes.getChildren().add(entry.getValue());
+        }
 
         root.getChildren().addAll(edges, nodes);
+
         return root;
     }
 
-    private void drawAllEdges(final Graph<SequenceSegment> gr) {
-        Set<Edge<SequenceSegment>> edges = gr.getAllEdges();
-
-        for (Edge<SequenceSegment> edge : edges) {
+    /**
+     * @param gr
+     *            graph to draw the edges from
+     */
+    private void drawEdges(final Graph<SequenceSegment> gr) {
+        for (Edge<SequenceSegment> edge : gr.getAllEdges()) {
             SequenceSegment from = gr.getSource(edge);
             SequenceSegment to = gr.getDestination(edge);
-            VertexView f = findVertex(from);
-            VertexView t = findVertex(to);
-
+            VertexView f = nodemap.get(from);
+            VertexView t = nodemap.get(to);
             drawEdge(f, t);
-
         }
-    }
-
-    private VertexView findVertex(SequenceSegment segment) {
-        Iterator<Node> it = nodes.getChildren().iterator();
-
-        while (it.hasNext()) {
-            VertexView v = (VertexView) it.next();
-
-            return v;
-
-        }
-        return null;
     }
 
     /**
@@ -177,10 +176,11 @@ public class TileView {
     private void drawVertex(final SequenceSegment segment, final double xcoord,
             final double ycoord, final double width, final double height,
             final Color color) {
+
         VertexView vertex = new VertexView(segment.getContent().toString(),
                 xcoord, ycoord, width, height, color);
-        nodes.getChildren().add(vertex);
 
+        nodemap.put(segment, vertex);
         vertex.setOnMouseClicked(event -> controller.clicked(segment));
         // Hovering
         vertex.setOnMouseEntered(event -> controller.hovered(segment, true));
@@ -188,6 +188,14 @@ public class TileView {
 
     }
 
+    /**
+     * Create an Edge that can be displayed on the screen.
+     *
+     * @param source
+     *            Node to draw from
+     * @param destination
+     *            Node to draw to
+     */
     private void drawEdge(final Node source, final Node destination) {
         EdgeLine e = new EdgeLine(source, destination);
         edges.getChildren().add(e);
