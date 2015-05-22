@@ -90,7 +90,7 @@ public class TileView {
         for (SequenceSegment segment : segments) {
             drawVertexLane(segment);
         }
-        // drawEdges(gr);
+        drawEdges(graph);
         Group nodes = new Group();
 
         drawEdges(graph);

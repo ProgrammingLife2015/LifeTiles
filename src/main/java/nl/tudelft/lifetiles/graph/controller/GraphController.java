@@ -43,10 +43,14 @@ public class GraphController extends AbstractController {
 
     /**
      * <<<<<<< HEAD
+     * <<<<<<< HEAD
      * The model of the graph.
      * =======
      * The currently loaded graph.
      * >>>>>>> First run on drawing Edges
+     * =======
+     * The model of the graph.
+     * >>>>>>> Fixed nullpointer test and removed unnecessary DataPair
      */
     private GraphContainer model;
 
@@ -103,7 +107,6 @@ public class GraphController extends AbstractController {
     }
 
     /**
-     * <<<<<<< HEAD
      *
      * @return the currently loaded graph.
      */
