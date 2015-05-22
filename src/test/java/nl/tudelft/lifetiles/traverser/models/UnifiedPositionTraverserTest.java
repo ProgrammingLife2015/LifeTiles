@@ -20,7 +20,7 @@ import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 public class UnifiedPositionTraverserTest {
     GraphFactory<SequenceSegment> gf;
     static FactoryProducer<SequenceSegment> fp;
-    static Traverser upt;
+    static UnifiedPositionTraverser upt;
     static Set<Sequence> s1;
     SequenceSegment v1, v2;
     Graph<SequenceSegment> gr;
@@ -29,10 +29,9 @@ public class UnifiedPositionTraverserTest {
     public static void runOnce() {
         fp = new FactoryProducer<SequenceSegment>();
 
-        TraverserFactory tf = new TraverserFactory();
         Sequence ss1 = new DefaultSequence("reference");
 
-        upt = tf.getTraverser("UnifiedPosition");
+        upt = new UnifiedPositionTraverser();
 
         s1 = new HashSet<Sequence>();
         s1.add(ss1);
@@ -51,7 +50,7 @@ public class UnifiedPositionTraverserTest {
     
     @Test
     public void traverseGapTest() {
-        upt.traverseGraph(gr);
+        upt.unifyGraph(gr);
         assertEquals(1, v1.getUnifiedStart());
         assertEquals(11, v1.getUnifiedEnd());
         assertEquals(11, v2.getUnifiedStart());

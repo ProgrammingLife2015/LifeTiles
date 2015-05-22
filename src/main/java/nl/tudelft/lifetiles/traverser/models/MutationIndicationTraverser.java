@@ -10,7 +10,7 @@ import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
  * @author Jos
  *
  */
-public class MutationIndicationTraverser implements Traverser {
+public class MutationIndicationTraverser {
 
     /**
      * Reference which is compared to determine the mutation types.
@@ -39,7 +39,7 @@ public class MutationIndicationTraverser implements Traverser {
      *            The graph to traverse.
      * @return the traversed graph.
      */
-    public final Graph<SequenceSegment> traverseGraph(
+    public final Graph<SequenceSegment> indicateGraphMutations(
             final Graph<SequenceSegment> graph) {
         graphVar = graph;
         indicateGraphMutations();

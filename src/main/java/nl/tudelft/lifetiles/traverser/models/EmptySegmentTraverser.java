@@ -17,7 +17,7 @@ import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
  * @author Jos
  *
  */
-public class EmptySegmentTraverser implements Traverser {
+public class EmptySegmentTraverser {
     /**
      * Traverser's graph.
      */
@@ -38,7 +38,7 @@ public class EmptySegmentTraverser implements Traverser {
      *            the graph to traverse.
      * @return the traversed of the graph.
      */
-    public final Graph<SequenceSegment> traverseGraph(
+    public final Graph<SequenceSegment> addEmptySegmentsGraph(
             final Graph<SequenceSegment> graph) {
         graphVar = graph;
         addEmptySegmentsGraph();

@@ -3,8 +3,10 @@ package nl.tudelft.lifetiles.graph.view;
 import nl.tudelft.lifetiles.graph.models.Graph;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
-import nl.tudelft.lifetiles.traverser.models.Traverser;
-import nl.tudelft.lifetiles.traverser.models.TraverserFactory;
+import nl.tudelft.lifetiles.traverser.models.EmptySegmentTraverser;
+import nl.tudelft.lifetiles.traverser.models.MutationIndicationTraverser;
+import nl.tudelft.lifetiles.traverser.models.ReferencePositionTraverser;
+import nl.tudelft.lifetiles.traverser.models.UnifiedPositionTraverser;
 
 /**
  * The Tile holds the graph and will be transformed to this modelgraph so
@@ -30,22 +32,18 @@ public class Tile {
         // TODO: Temporary line until sequence selection is implemented.
         Sequence reference = graph.getSources().iterator().next().getSources()
                 .iterator().next();
-
-        TraverserFactory tfact = new TraverserFactory();
-        alignGraph(tfact);
-        findMutations(tfact, reference);
+        
+        alignGraph();
+        findMutations(reference);
     }
 
     /**
      * Align the graph.
-     *
-     * @param tfact
-     *            Traverser factory is being used to produce the traversers.
      */
-    private void alignGraph(final TraverserFactory tfact) {
-        Traverser upt = tfact.getTraverser("UnifiedPosition");
-        Traverser est = tfact.getTraverser("EmptySegment");
-        graph = est.traverseGraph(upt.traverseGraph(graph));
+    private void alignGraph() {
+        UnifiedPositionTraverser upt = new UnifiedPositionTraverser();
+        EmptySegmentTraverser est = new EmptySegmentTraverser();
+        graph = est.addEmptySegmentsGraph(upt.unifyGraph(graph));
     }
 
     /**
@@ -53,14 +51,11 @@ public class Tile {
      *
      * @param reference
      *            Reference of the graph which is used to indicate mutations.
-     * @param tfact
-     *            Traverser factory is being used to produce the traversers.
      */
-    private void findMutations(final TraverserFactory tfact,
-            final Sequence reference) {
-        Traverser rmt = tfact.getTraverser("ReferencePosition", reference);
-        Traverser mt = tfact.getTraverser("MutationIndication", reference);
-        graph = mt.traverseGraph(rmt.traverseGraph(graph));
+    private void findMutations(final Sequence reference) {
+        ReferencePositionTraverser rmt = new ReferencePositionTraverser(reference);
+        MutationIndicationTraverser mt = new MutationIndicationTraverser(reference);
+        graph = mt.indicateGraphMutations(rmt.referenceMapGraph(graph));
     }
 
     /**

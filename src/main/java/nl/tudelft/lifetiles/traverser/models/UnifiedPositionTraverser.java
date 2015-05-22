@@ -16,7 +16,7 @@ import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
  * @author Jos
  *
  */
-public class UnifiedPositionTraverser implements Traverser {
+public class UnifiedPositionTraverser {
     /**
      * Graph which is being traversed.
      */
@@ -37,7 +37,7 @@ public class UnifiedPositionTraverser implements Traverser {
      *            Graph to be traversed, calculate unified positions.
      * @return traversed graph.
      */
-    public final Graph<SequenceSegment> traverseGraph(
+    public final Graph<SequenceSegment> unifyGraph(
             final Graph<SequenceSegment> graph) {
         this.graphVar = graph;
         unifyGraph();
