@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.sequence.controller;
 
 import java.net.URL;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
@@ -53,9 +54,8 @@ public class SequenceController implements Initializable, Observer {
      */
     public static String rgbaFormat(final Color color) {
         final int colorRange = 255;
-        return String.format("%d,%d,%d,%f",
-                (int) (color.getRed() * colorRange),
-                (int) (color.getGreen() * colorRange),
+        return String.format(Locale.ENGLISH, "%d,%d,%d,%f", (int) (color
+                .getRed() * colorRange), (int) (color.getGreen() * colorRange),
                 (int) (color.getBlue() * colorRange), color.getOpacity());
     }
 

@@ -8,7 +8,7 @@
 }
 
 #sequenceList {
-    -fx-box-border: 0.0;
+    -fx-background-insets: 0.0;
 }
 
 #sequenceList .list-cell {
