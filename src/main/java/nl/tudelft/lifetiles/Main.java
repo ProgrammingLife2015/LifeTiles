@@ -34,14 +34,14 @@ public class Main extends Application {
     private static final double FONT_SIZE = 12;
 
     /**
-     * The directory of the GUI font.
+     * The location of the GUI font.
      */
-    private static final String GUI_FONT_DIRECTORY = "fonts/Open_Sans/OpenSans-Light.ttf";
+    private static final String GUI_FONT_LOCATION = "fonts/Open_Sans/OpenSans-Light.ttf";
 
     /**
-     * The directory of the mono space nucleotide font.
+     * The location of the mono space nucleotide font.
      */
-    private static final String MONO_FONT_DIRECTORY = "fonts/Oxygen_Mono/OxygenMono-Regular.ttf";
+    private static final String MONO_FONT_LOCATION = "fonts/Oxygen_Mono/OxygenMono-Regular.ttf";
 
     /**
      * Launch LifeTiles.
@@ -78,9 +78,9 @@ public class Main extends Application {
      */
     private void loadFonts() {
         URL openSansFontFile = getClass().getClassLoader().getResource(
-                GUI_FONT_DIRECTORY);
+                GUI_FONT_LOCATION);
         URL oxygenFontFile = getClass().getClassLoader().getResource(
-                MONO_FONT_DIRECTORY);
+                MONO_FONT_LOCATION);
 
         Font.loadFont(openSansFontFile.toExternalForm(), FONT_SIZE);
         Font.loadFont(oxygenFontFile.toExternalForm(), FONT_SIZE);
