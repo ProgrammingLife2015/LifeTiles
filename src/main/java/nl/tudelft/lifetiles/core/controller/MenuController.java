@@ -70,7 +70,7 @@ public class MenuController implements Initializable {
         }
 
         String graphFileName = null;
-        File vertexfile, edgefile;
+        File vertexfile, edgefile, treeFile;
         String treeFileName = null;
         try {
             graphFileName = directory.getCanonicalPath();
@@ -83,6 +83,8 @@ public class MenuController implements Initializable {
             treeFileName = directory.getCanonicalPath();
             treeFileName += "/" + collectTreeFileName(directory);
 
+            treeFile = new File(treeFileName);
+
 
         } catch (IOException e) {
             ViewController.getInstance().displayError(e.getMessage());
@@ -91,12 +93,10 @@ public class MenuController implements Initializable {
 
         try {
             controller.loadGraph(vertexfile, edgefile);
+            controller.loadTree(treeFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        controller.loadTree(treeFileName);
-
     }
 
     /**
@@ -151,9 +151,8 @@ public class MenuController implements Initializable {
     /**
      * Find the file name of the newick file in the directory.
      *
-     * @param dir
-     *            the directory in which the .nwk file is located
-     * @return the name of the nwk file without its extension
+     * @param dir the directory in which the .nwk file is located
+     * @return the name of the .nwk file without its extension
      * @throws IOException
      *             throws an exception when no, or too many files have been
      *             found

@@ -207,19 +207,19 @@ public final class ViewController extends Observable {
     /**
      * Loads the tree located in the file.
      *
-     * @param fileName The filename of the .nwk file
+     * @param treeFile The .nwk file
+     * @throws FileNotFoundException when the file is not found
      */
-    public void loadTree(final String fileName) {
-        File file;
-        Scanner sc = null;
-        try {
-            file = new File(fileName);
-            sc = new Scanner(file).useDelimiter("\\Z");
+    public void loadTree(final File treeFile) throws FileNotFoundException {
+        //convert the file to a single string
+        String fileString = null;
+        try (Scanner sc = new Scanner(treeFile).useDelimiter("\\Z")) {
+            fileString = sc.next();
         } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            throw e;
         }
-        String fileString = sc.next();
+
+        //parse the string into a tree
         PhylogeneticTreeFactory np = new PhylogeneticTreeFactory(fileString);
         tree = np.getRoot();
 
