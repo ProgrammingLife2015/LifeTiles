@@ -3,6 +3,8 @@ package nl.tudelft.lifetiles.notification.controller;
 import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.ResourceBundle;
 
 import javafx.animation.KeyFrame;
@@ -37,6 +39,16 @@ public class NotificationController implements Initializable, Observer {
     private Label label;
 
     /**
+     * The notifications to display.
+     */
+    private Queue<Notification> notifications;
+
+    /**
+     * A notification is displaying.
+     */
+    private boolean displaying;
+
+    /**
      * The view controller.
      */
     private ViewController vc;
@@ -47,42 +59,44 @@ public class NotificationController implements Initializable, Observer {
         vc = ViewController.getInstance();
         vc.addObserver(this);
 
+        final int initialCapacity = 10;
+        this.notifications = new PriorityQueue<>(initialCapacity,
+                (n1, n2) -> n1.getPriority() - n2.getPriority());
+
         hide();
     }
 
     @Override
     public final void update(final Observable o, final Object arg) {
         if (arg instanceof Notification) {
-            displayNotification((Notification) arg);
+            Notification notification = (Notification) arg;
+            notifications.add(notification);
+            if (!displaying) {
+                displayNext();
+            }
         }
     }
 
     /**
-     * Display a notification.
-     *
-     * @param notification
-     *            the notification
+     * Display the next notification if there is any, otherwise hide the view.
      */
-    public final void displayNotification(final Notification notification) {
-        show();
+    private void displayNext() {
+        final Notification next = notifications.poll();
+        if (next == null) {
+            hide();
+            return;
+        } else {
+            show();
+        }
 
-        label.setText(notification.getMessage());
-        String color = toRGBCode(notification.getColor());
+        label.setText(next.getMessage());
+        String color = toRGBCode(next.getColor());
         wrapper.setStyle("-fx-background-color: " + color);
 
-        hideAfter(notification.getDuration());
-    }
-
-    /**
-     * Hide the notification view after some seconds.
-     *
-     * @param seconds
-     *            the number of seconds
-     */
-    public final void hideAfter(final int seconds) {
         Timeline timeline = new Timeline();
         timeline.getKeyFrames().add(
-                new KeyFrame(Duration.seconds(seconds), event -> hide()));
+                new KeyFrame(Duration.seconds(next.getDuration()),
+                        event -> displayNext()));
         timeline.play();
     }
 
@@ -91,12 +105,14 @@ public class NotificationController implements Initializable, Observer {
      */
     private void hide() {
         wrapper.visibleProperty().set(false);
+        displaying = false;
     }
 
     /**
      * Show the notification.
      */
     private void show() {
+        displaying = true;
         wrapper.visibleProperty().set(true);
     }
 

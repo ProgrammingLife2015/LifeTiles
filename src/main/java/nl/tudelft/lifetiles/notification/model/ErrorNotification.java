@@ -23,11 +23,18 @@ public class ErrorNotification extends Notification {
      */
     public ErrorNotification(final String message) {
         super(PREFIX + message);
+        setDuration(Integer.MAX_VALUE);
     }
 
     @Override
     public final Color getColor() {
         return Color.ORANGERED;
+    }
+
+    @Override
+    public final int getPriority() {
+        final int priority = 10;
+        return priority;
     }
 
 }

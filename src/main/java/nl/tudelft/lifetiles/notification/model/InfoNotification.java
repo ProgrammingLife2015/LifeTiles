@@ -23,11 +23,19 @@ public class InfoNotification extends Notification {
      */
     public InfoNotification(final String message) {
         super(PREFIX + message);
+        final int defaultDuration = 5;
+        setDuration(defaultDuration);
     }
 
     @Override
     public final Color getColor() {
         return Color.AQUA;
+    }
+
+    @Override
+    public final int getPriority() {
+        final int priority = 30;
+        return priority;
     }
 
 }
