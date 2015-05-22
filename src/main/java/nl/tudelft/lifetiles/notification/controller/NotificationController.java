@@ -70,7 +70,7 @@ public class NotificationController implements Initializable, Observer {
         String color = toRGBCode(notification.getColor());
         wrapper.setStyle("-fx-background-color: " + color);
 
-        hideAfter(notification.displayDuration());
+        hideAfter(notification.getDuration());
     }
 
     /**

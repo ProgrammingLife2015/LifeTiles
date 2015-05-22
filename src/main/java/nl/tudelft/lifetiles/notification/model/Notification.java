@@ -16,6 +16,11 @@ public abstract class Notification {
     private String messageVar;
 
     /**
+     * The number of seconds to display the notification.
+     */
+    private int duration;
+
+    /**
      * Create a new notification.
      *
      * @param message
@@ -39,9 +44,18 @@ public abstract class Notification {
      *
      * @return the seconds
      */
-    public final int displayDuration() {
-        final int seconds = 3;
-        return seconds;
+    public final int getDuration() {
+        return duration;
+    }
+
+    /**
+     * Set the notification duration time in seconds.
+     *
+     * @param seconds
+     *            the duration time.
+     */
+    public final void setDuration(final int seconds) {
+        this.duration = seconds;
     }
 
     /**
