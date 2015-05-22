@@ -46,6 +46,8 @@ public class NotificationController implements Initializable, Observer {
             final ResourceBundle resources) {
         vc = ViewController.getInstance();
         vc.addObserver(this);
+
+        hide();
     }
 
     @Override
@@ -62,6 +64,8 @@ public class NotificationController implements Initializable, Observer {
      *            the notification
      */
     public final void displayNotification(final Notification notification) {
+        show();
+
         label.setText(notification.getMessage());
         String color = toRGBCode(notification.getColor());
         wrapper.setStyle("-fx-background-color: " + color);
@@ -79,9 +83,22 @@ public class NotificationController implements Initializable, Observer {
     public final void hideAfter(final int seconds) {
         Timeline timeline = new Timeline();
         timeline.getKeyFrames().add(
-                new KeyFrame(Duration.seconds(seconds), event -> wrapper
-                        .visibleProperty().set(false)));
+                new KeyFrame(Duration.seconds(seconds), event -> hide()));
         timeline.play();
+    }
+
+    /**
+     * Hide the notification.
+     */
+    private void hide() {
+        wrapper.visibleProperty().set(false);
+    }
+
+    /**
+     * Show the notification.
+     */
+    private void show() {
+        wrapper.visibleProperty().set(true);
     }
 
     /**
