@@ -38,4 +38,12 @@ public class SegmentString implements SegmentContent {
         return contentVar;
     }
 
+    /**
+     * @return that the segment content is not an empty node.
+     */
+    @Override
+    public final boolean isEmpty() {
+        return false;
+    }
+
 }
