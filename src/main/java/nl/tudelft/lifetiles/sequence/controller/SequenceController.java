@@ -90,7 +90,7 @@ public class SequenceController implements Initializable, Observer {
         for (final Sequence sequence : vc.getSequences().values()) {
             String id = sequence.getIdentifier();
             Label label = new Label(id);
-            Color color = (new SequenceColor(sequence)).getColor();
+            Color color = SequenceColor.getColor(sequence);
 
             label.setStyle("-fx-background-color: rgba(" + rgbaFormat(color)
                     + ")");
@@ -104,11 +104,11 @@ public class SequenceController implements Initializable, Observer {
                 Set<Sequence> visibleSequences = vc.getVisible();
 
                 if (label.getStyleClass().contains(styleClassFilter)) {
-                    // remove from filter
+                    // hide
                     visibleSequences.remove(sequence);
                     label.getStyleClass().remove(styleClassFilter);
                 } else {
-                    // add to filter
+                    // show
                     visibleSequences.add(sequence);
                     label.getStyleClass().add(styleClassFilter);
                 }
