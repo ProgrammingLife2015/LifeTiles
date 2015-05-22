@@ -110,7 +110,9 @@ public class MenuController implements Initializable {
      */
     private String collectGraphFileName(final File directory)
             throws IOException {
-        assert (directory.isDirectory());
+        if (!directory.isDirectory()) {
+            throw new IOException("Not a directory");
+        }
 
         final String suffixCommon = ".graph";
         final String suffixNodeFile = ".node.graph";
@@ -158,7 +160,9 @@ public class MenuController implements Initializable {
      *             found
      */
     private String collectTreeFileName(final File dir) throws IOException {
-        assert (dir.isDirectory());
+        if (!dir.isDirectory()) {
+            throw new IOException("Not a directory");
+        }
 
         final String suffix = ".nwk";
 
