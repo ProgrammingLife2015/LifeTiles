@@ -21,7 +21,8 @@ import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 public class EmptySegmentTraverserTest {
     GraphFactory<SequenceSegment> gf;
     static FactoryProducer<SequenceSegment> fp;
-    static Traverser at, pt;
+    static EmptySegmentTraverser at;
+    static UnifiedPositionTraverser pt;
     static Set<Sequence> s1, s2, s3;
     SequenceSegment v1, v2, v3;
     Graph<SequenceSegment> gr;
@@ -29,9 +30,8 @@ public class EmptySegmentTraverserTest {
     @BeforeClass
     public static void runOnce() {
         fp = new FactoryProducer<SequenceSegment>();
-        TraverserFactory tf = new TraverserFactory();
-        pt = tf.getTraverser("UnifiedPosition");
-        at = tf.getTraverser("EmptySegment");
+        pt = new UnifiedPositionTraverser();
+        at = new EmptySegmentTraverser();
 
         Sequence ss1 = new DefaultSequence("reference");
         Sequence ss2 = new DefaultSequence("mutation");
@@ -65,7 +65,7 @@ public class EmptySegmentTraverserTest {
         gr.addVertex(v4);
         gr.addEdge(v1, v3);
         gr.addEdge(v4, v3);
-        at.traverseGraph(pt.traverseGraph(gr));
+        at.addEmptySegmentsGraph(pt.unifyGraph(gr));
         assertEquals(3, gr.getAllVertices().size());
     }
 
@@ -76,21 +76,21 @@ public class EmptySegmentTraverserTest {
         gr.addVertex(v4);
         gr.addEdge(v1, v3);
         gr.addEdge(v1, v4);
-        at.traverseGraph(pt.traverseGraph(gr));
+        at.addEmptySegmentsGraph(pt.unifyGraph(gr));
         assertEquals(3, gr.getAllVertices().size());
     }
 
     @Test
     public void testTraverseGapGraph() {
         gr.addEdge(v1, v3);
-        at.traverseGraph(pt.traverseGraph(gr));
+        at.addEmptySegmentsGraph(pt.unifyGraph(gr));
         assertEquals(2, gr.getAllVertices().size());
     }
 
     @Test
     public void testTraverseGapCoordinatesGraph() {
         gr.addEdge(v1, v3);
-        at.traverseGraph(pt.traverseGraph(gr));
+        at.addEmptySegmentsGraph(pt.unifyGraph(gr));
         assertEquals(11, gr.getSource(gr.getIncoming(v3).iterator().next())
                 .getEnd());
         assertEquals(1, gr.getSource(gr.getIncoming(v3).iterator().next())
@@ -102,8 +102,8 @@ public class EmptySegmentTraverserTest {
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
         gr.addEdge(v2, v3);
-        at.traverseGraph(pt.traverseGraph(gr));
-        assertEquals(3, at.traverseGraph(gr).getAllVertices().size());
+        at.addEmptySegmentsGraph(pt.unifyGraph(gr));
+        assertEquals(3, at.addEmptySegmentsGraph(gr).getAllVertices().size());
     }
 
     @Test
@@ -114,8 +114,8 @@ public class EmptySegmentTraverserTest {
         gr.addEdge(v1, v3);
         gr.addEdge(v1, v4);
         gr.addEdge(v4, v3);
-        at.traverseGraph(pt.traverseGraph(gr));
-        assertEquals(4, at.traverseGraph(gr).getAllVertices().size());
+        at.addEmptySegmentsGraph(pt.unifyGraph(gr));
+        assertEquals(4, at.addEmptySegmentsGraph(gr).getAllVertices().size());
     }
 
 }

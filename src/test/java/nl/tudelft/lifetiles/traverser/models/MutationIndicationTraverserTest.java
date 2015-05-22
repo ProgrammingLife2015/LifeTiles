@@ -23,7 +23,8 @@ import nl.tudelft.lifetiles.graph.view.Mutation;
 public class MutationIndicationTraverserTest {
     GraphFactory<SequenceSegment> gf;
     static FactoryProducer<SequenceSegment> fp;
-    static Traverser rpt, mit;
+    static ReferencePositionTraverser rpt;
+    static MutationIndicationTraverser mit;
     static Set<Sequence> s1, s2, s3;
     SequenceSegment v1, v4;
     Graph<SequenceSegment> gr;
@@ -31,12 +32,11 @@ public class MutationIndicationTraverserTest {
     @BeforeClass
     public static void runOnce() {
         fp = new FactoryProducer<SequenceSegment>();
-        TraverserFactory tf = new TraverserFactory();
         Sequence ss1 = new DefaultSequence("reference");
         Sequence ss2 = new DefaultSequence("mutation");
 
-        rpt = tf.getTraverser("ReferencePosition", ss1);
-        mit = tf.getTraverser("MutationIndication", ss1);
+        rpt = new ReferencePositionTraverser(ss1);
+        mit = new MutationIndicationTraverser(ss1);
 
         s1 = new HashSet<Sequence>();
         s1.add(ss1);
@@ -71,8 +71,8 @@ public class MutationIndicationTraverserTest {
         gr.addEdge(v1, v6);
         gr.addEdge(v5, v4);
         gr.addEdge(v6, v4);
-        rpt.traverseGraph(gr);
-        mit.traverseGraph(gr);
+        rpt.referenceMapGraph(gr);
+        mit.indicateGraphMutations(gr);
         assertNull(v1.getMutation());
         assertNull(v5.getMutation());
         assertNull(v4.getMutation());
@@ -91,8 +91,8 @@ public class MutationIndicationTraverserTest {
         gr.addEdge(v1, v3);
         gr.addEdge(v2, v4);
         gr.addEdge(v3, v4);
-        rpt.traverseGraph(gr);
-        mit.traverseGraph(gr);
+        rpt.referenceMapGraph(gr);
+        mit.indicateGraphMutations(gr);
         assertNull(v1.getMutation());
         assertNull(v2.getMutation());
         assertNull(v4.getMutation());
@@ -111,8 +111,8 @@ public class MutationIndicationTraverserTest {
         gr.addEdge(v1, v6);
         gr.addEdge(v2, v4);
         gr.addEdge(v6, v4);
-        rpt.traverseGraph(gr);
-        mit.traverseGraph(gr);
+        rpt.referenceMapGraph(gr);
+        mit.indicateGraphMutations(gr);
         assertNull(v1.getMutation());
         assertNull(v2.getMutation());
         assertNull(v4.getMutation());

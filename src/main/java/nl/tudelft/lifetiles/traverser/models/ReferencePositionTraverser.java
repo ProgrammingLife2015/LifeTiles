@@ -13,7 +13,7 @@ import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
  * @author Jos
  *
  */
-public class ReferencePositionTraverser implements Traverser {
+public class ReferencePositionTraverser {
 
     /**
      * Reference sequence which segments are compared to.
@@ -44,7 +44,7 @@ public class ReferencePositionTraverser implements Traverser {
      *            Graph to be traversed.
      * @return Traversed graph with reference positions.
      */
-    public final Graph<SequenceSegment> traverseGraph(
+    public final Graph<SequenceSegment> referenceMapGraph(
             final Graph<SequenceSegment> graph) {
         graphVar = graph;
         referenceMapGraph();
