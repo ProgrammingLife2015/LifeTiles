@@ -129,6 +129,11 @@ public class MenuController implements Initializable {
             fileNames.add(fileName);
         }
 
+        if (fileNames.size() != 2) {
+            throw new IOException("Expected a " + suffixNodeFile + " and a "
+                    + suffixEdgeFile + " file.");
+        }
+
         // check if the filenames are equal
         if (!fileNames.get(0).equals(fileNames.get(1))) {
             throw new IOException(
