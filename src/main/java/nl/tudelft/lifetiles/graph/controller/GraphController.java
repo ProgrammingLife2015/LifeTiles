@@ -103,6 +103,8 @@ public class GraphController extends AbstractController {
     }
 
     /**
+     * <<<<<<< HEAD
+     *
      * @return the currently loaded graph.
      */
     public final Graph<SequenceSegment> getGraph() {
@@ -240,7 +242,7 @@ public class GraphController extends AbstractController {
      */
     public final void hovered(final SequenceSegment segment,
             final Boolean hovering) {
-
+        // System.out.println("Hovered over element " + segment);
     }
 
 }
