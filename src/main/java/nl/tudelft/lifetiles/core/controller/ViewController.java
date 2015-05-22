@@ -1,25 +1,32 @@
 package nl.tudelft.lifetiles.core.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Observable;
+import java.util.Scanner;
 import java.util.Set;
 
+import javafx.stage.Stage;
 import nl.tudelft.lifetiles.graph.models.DefaultGraphParser;
 import nl.tudelft.lifetiles.graph.models.FactoryProducer;
 import nl.tudelft.lifetiles.graph.models.Graph;
 import nl.tudelft.lifetiles.graph.models.GraphFactory;
 import nl.tudelft.lifetiles.graph.models.GraphParser;
 import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceGenerator;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeParser;
+import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
 /**
  * Controls what the view modules display.
  *
  * @author Rutger van den Berg
  * @author Joren Hammudoglu
+ * @author Albert Smit
  */
 public final class ViewController extends Observable {
 
@@ -40,6 +47,15 @@ public final class ViewController extends Observable {
      * The currently loaded graph.
      */
     private Graph<SequenceSegment> graph;
+    /**
+     * The currently loaded tree.
+     */
+    private PhylogeneticTreeItem tree;
+
+    /**
+     * The main stage.
+     */
+    private Stage stageVar;
 
     /**
      * Creates a new viewcontroller.
@@ -97,19 +113,23 @@ public final class ViewController extends Observable {
     /**
      * Load a new graph from the specified file.
      *
-     * @param filename
-     *            The name of the file to load.
+     * @param vertexfile
+     *            The file to get vertices for.
+     * @param edgefile
+     *            The file to get edges for.
+     * @throws IOException
+     *             When an IO error occurs while reading one of the files.
      */
-    public void loadGraph(final String filename) {
+    public void loadGraph(final File vertexfile, final File edgefile)
+            throws IOException {
         // create the graph
         FactoryProducer<SequenceSegment> fp = new FactoryProducer<>();
         GraphFactory<SequenceSegment> gf = fp.getFactory("JGraphT");
         GraphParser gp = new DefaultGraphParser();
-        graph = gp.parseFile(filename, gf);
+        graph = gp.parseGraph(vertexfile, edgefile, gf);
 
         // obtain the sequences
-        SequenceGenerator sg = new SequenceGenerator(graph);
-        setSequences(sg.generateSequences());
+        setSequences(gp.getSequences());
 
         notifyChanged();
     }
@@ -126,18 +146,18 @@ public final class ViewController extends Observable {
     }
 
     /**
-     * Set a new graph.
-     *
-     * @param newGraph
-     *            the new graph
+     * @return the stage
      */
-    public void setGraph(final Graph<SequenceSegment> newGraph) {
-        graph = newGraph;
+    public Stage getStage() {
+        return stageVar;
+    }
 
-        SequenceGenerator sg = new SequenceGenerator(graph);
-        setSequences(sg.generateSequences());
-
-        notifyChanged();
+    /**
+     * @param stage
+     *            the stage to set
+     */
+    public void setStage(final Stage stage) {
+        this.stageVar = stage;
     }
 
     /**
@@ -158,6 +178,54 @@ public final class ViewController extends Observable {
     }
 
     /**
+     * Check if the tree is loaded.
+     * @return true if the tree is loaded
+     */
+    public boolean treeIsLoaded() {
+        return tree != null;
+    }
+
+    /**
+     * Display an error.
+     *
+     * @param message
+     *            the error message
+     */
+    public void displayError(final String message) {
+        System.out.println("[ERROR] " + message);
+
+    }
+    /**
+     *
+     * @return the tree
+     */
+    public PhylogeneticTreeItem getTree() {
+        return tree;
+
+    }
+
+    /**
+     * Loads the tree located in the file.
+     *
+     * @param treeFile The .nwk file
+     * @throws FileNotFoundException when the file is not found
+     */
+    public void loadTree(final File treeFile) throws FileNotFoundException {
+        //convert the file to a single string
+        String fileString = null;
+        try (Scanner sc = new Scanner(treeFile).useDelimiter("\\Z")) {
+            fileString = sc.next();
+        } catch (FileNotFoundException e) {
+            throw e;
+        }
+
+        //parse the string into a tree
+        tree = PhylogeneticTreeParser.parse(fileString);
+
+        notifyChanged();
+    }
+
+    /**
      * Set the sequences.
      *
      * @param sequences
@@ -173,7 +241,7 @@ public final class ViewController extends Observable {
      *
      * @return the ViewController
      */
-    public static ViewController getInstance() {
+    public static synchronized ViewController getInstance() {
         if (instance == null) {
             instance = new ViewController();
         }

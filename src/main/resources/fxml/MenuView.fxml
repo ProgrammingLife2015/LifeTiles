@@ -14,10 +14,7 @@
 		<Menu text="" id="logo" />
 		<Menu text="File">
 			<items>
-				<MenuItem text="Open" />
-				<MenuItem text="Import" />
-				<SeparatorMenuItem />
-				<MenuItem text="Exit" />
+				<MenuItem text="Open" onAction="#openAction" />
 			</items>
 		</Menu>
 		<Menu text="View">

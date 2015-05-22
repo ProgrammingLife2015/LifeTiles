@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import nl.tudelft.lifetiles.core.controller.ViewController;
 
 /**
  * The main class / launcher.
@@ -29,6 +30,21 @@ public class Main extends Application {
     private static final int WINDOW_WIDTH = 1280;
 
     /**
+     * The font size used at font load.
+     */
+    private static final double FONT_SIZE = 12;
+
+    /**
+     * The location of the GUI font.
+     */
+    private static final String GUI_FONT_LOCATION = "fonts/Open_Sans/OpenSans-Light.ttf";
+
+    /**
+     * The location of the mono space nucleotide font.
+     */
+    private static final String MONO_FONT_LOCATION = "fonts/Oxygen_Mono/OxygenMono-Regular.ttf";
+
+    /**
      * Launch LifeTiles.
      *
      * @param args
@@ -41,25 +57,35 @@ public class Main extends Application {
     @Override
     public final void start(final Stage stage) {
         try {
+            loadFonts();
             stage.initStyle(StageStyle.UNDECORATED);
 
             URL mainView = getClass().getClassLoader().getResource(
                     "fxml/MainView.fxml");
-            URL fontFile = getClass().getClassLoader().getResource(
-                    "fonts/Open_Sans/OpenSans-Light.ttf");
 
             Parent root = FXMLLoader.load(mainView);
-
             Scene scene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
-
-            final int fontSize = 12;
-            Font.loadFont(fontFile.toExternalForm(), fontSize);
 
             stage.setTitle("LifeTiles");
             stage.setScene(scene);
             stage.show();
+
+            ViewController.getInstance().setStage(stage);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Loads Open Sans and Oxygen Mono font into the application.
+     */
+    private void loadFonts() {
+        URL openSansFontFile = getClass().getClassLoader().getResource(
+                GUI_FONT_LOCATION);
+        URL oxygenFontFile = getClass().getClassLoader().getResource(
+                MONO_FONT_LOCATION);
+
+        Font.loadFont(openSansFontFile.toExternalForm(), FONT_SIZE);
+        Font.loadFont(oxygenFontFile.toExternalForm(), FONT_SIZE);
     }
 }
