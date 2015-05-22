@@ -1,9 +1,11 @@
 package nl.tudelft.lifetiles.sequence.controller;
 
 import java.net.URL;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -53,9 +55,8 @@ public class SequenceController implements Initializable, Observer {
      */
     public static String rgbaFormat(final Color color) {
         final int colorRange = 255;
-        return String.format("%d,%d,%d,%f",
-                (int) (color.getRed() * colorRange),
-                (int) (color.getGreen() * colorRange),
+        return String.format(Locale.ENGLISH, "%d,%d,%d,%f", (int) (color
+                .getRed() * colorRange), (int) (color.getGreen() * colorRange),
                 (int) (color.getBlue() * colorRange), color.getOpacity());
     }
 
@@ -68,25 +69,57 @@ public class SequenceController implements Initializable, Observer {
      * Fills the sequence view and removes the old content.
      */
     private void repaint() {
-        ViewController vc = ViewController.getInstance();
-        ObservableList<Label> sequenceItems = FXCollections
-                .observableArrayList();
+        final ViewController vc = ViewController.getInstance();
 
         if (vc.isLoaded()) {
-            for (Sequence item : vc.getVisible()) {
-                String id = item.getIdentifier();
-                Label label = new Label(id);
-
-                Color color = (new SequenceColor(item)).getColor();
-
-                label.setStyle("-fx-background-color: rgba("
-                        + rgbaFormat(color) + ")");
-
-                sequenceItems.add(label);
-            }
+            sequenceList.setItems(generateLabels());
         }
 
-        sequenceList.setItems(sequenceItems);
+    }
+
+    /**
+     * Generates the sequence labels.
+     *
+     * @return a list of the labels
+     */
+    private ObservableList<Label> generateLabels() {
+        ViewController vc = ViewController.getInstance();
+
+        ObservableList<Label> sequenceItems = FXCollections
+                .observableArrayList();
+        for (final Sequence sequence : vc.getSequences().values()) {
+            String id = sequence.getIdentifier();
+            Label label = new Label(id);
+            Color color = SequenceColor.getColor(sequence);
+
+            label.setStyle("-fx-background-color: rgba(" + rgbaFormat(color)
+                    + ")");
+
+            String styleClassFilter = "filtered";
+            if (vc.getVisible().contains(sequence)) {
+                label.getStyleClass().add(styleClassFilter);
+            }
+
+            label.setOnMouseClicked((mouseEvent) -> {
+                Set<Sequence> visibleSequences = vc.getVisible();
+
+                if (label.getStyleClass().contains(styleClassFilter)) {
+                    // hide
+                    visibleSequences.remove(sequence);
+                    label.getStyleClass().remove(styleClassFilter);
+                } else {
+                    // show
+                    visibleSequences.add(sequence);
+                    label.getStyleClass().add(styleClassFilter);
+                }
+
+                vc.setVisible(visibleSequences);
+            });
+
+            sequenceItems.add(label);
+        }
+
+        return sequenceItems;
     }
 
 }

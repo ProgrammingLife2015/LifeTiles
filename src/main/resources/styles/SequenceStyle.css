@@ -8,7 +8,7 @@
 }
 
 #sequenceList {
-    -fx-box-border: 0.0;
+    -fx-background-insets: 0.0;
 }
 
 #sequenceList .list-cell {
@@ -20,6 +20,6 @@
     -fx-padding: 5.0
 }
 
-#sequenceList .list-cell .label:hover {
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+.filtered {
+    -fx-underline: true;
 }
