@@ -99,14 +99,13 @@ public class GraphContainer {
      * @param visibleSequences
      *            the sequences to display
      */
-    public final void changeGraph(final Set<Sequence> visibleSequences,
-            final Graph<SequenceSegment> currgraph) {
+    public final void changeGraph(final Set<Sequence> visibleSequences) {
         GraphFactory<SequenceSegment> factory = FactoryProducer.getFactory();
 
         // Find out which vertices are visible now
+
         Set<SequenceSegment> vertices = new TreeSet<SequenceSegment>();
         for (Sequence seq : visibleSequences) {
-
             Iterator<SequenceSegment> it = seq.getSegments().iterator();
             while (it.hasNext()) {
                 vertices.add(it.next());
@@ -115,14 +114,11 @@ public class GraphContainer {
 
         // Create a new subgraph based on visible vertices and update the
         // sources to only the visibleSequences
-        /*
-         * Graph<SequenceSegment> subgr = gf.getSubGraph(currgraph, vertices);
-         * Graph<SequenceSegment> copy = subgr.deepcopy(gf);
-         * for (SequenceSegment vertex : copy.getAllVertices()) {
-         * vertex.getSources().retainAll(visibleSequences);
-         * }
-         * graph = copy;
-         */
+        Graph<SequenceSegment> subgr = factory.getSubGraph(graph, vertices);
+        for (SequenceSegment vertex : subgr.getAllVertices()) {
+            vertex.getSources().retainAll(visibleSequences);
+        }
+
     }
 
     /**

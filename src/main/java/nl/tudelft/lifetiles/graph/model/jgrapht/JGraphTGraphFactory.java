@@ -45,4 +45,5 @@ GraphFactory<V> {
             final Set<V> vertexSubSet) {
         return new JGraphTSubGraphAdapter<V>(base, vertexSubSet, edgeFact);
     }
+
 }
