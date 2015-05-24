@@ -28,6 +28,15 @@ public class DefaultGraphParser implements GraphParser {
      * Index of starting position in the vertex descriptor.
      */
     private static final int START_POS = 2;
+    /**
+     * Index of identifier in the vertex descriptor.
+     */
+    private static final int IDENT_POS = 0;
+
+    /**
+     * Index of sources in the vertex descriptor.
+     */
+    private static final int SOURCES_POS = 1;
 
     /**
      * Map containing all sequences.
@@ -54,7 +63,7 @@ public class DefaultGraphParser implements GraphParser {
             throw new IllegalArgumentException();
         }
         String[] desc = descriptor.split("\\|");
-        String[] sources = desc[1].split(",");
+        String[] sources = desc[SOURCES_POS].split(",");
         Set<Sequence> currentSequences = new HashSet<>();
         for (String sequencename : sources) {
             sequencename = sequencename.trim();
