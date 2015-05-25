@@ -1,12 +1,12 @@
-package nl.tudelft.lifetiles.traverser.models;
+package nl.tudelft.lifetiles.traverser.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import nl.tudelft.lifetiles.graph.models.Edge;
-import nl.tudelft.lifetiles.graph.models.Graph;
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.graph.model.Edge;
+import nl.tudelft.lifetiles.graph.model.Graph;
+import nl.tudelft.lifetiles.graph.model.sequence.SequenceSegment;
 
 /**
  * UnifiedPositionTraverser which generates unified positions for each graph so

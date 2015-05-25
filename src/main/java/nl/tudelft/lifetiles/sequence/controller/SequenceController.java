@@ -16,7 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.core.controller.Controller;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
-import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
+import nl.tudelft.lifetiles.graph.model.sequence.Sequence;
 import nl.tudelft.lifetiles.graph.view.SequenceColor;
 
 /**

@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph.models;
+package nl.tudelft.lifetiles.graph.model;
 
 import java.util.SortedSet;
 

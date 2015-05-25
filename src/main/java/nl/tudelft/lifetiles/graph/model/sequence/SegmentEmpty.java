@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph.models.sequence;
+package nl.tudelft.lifetiles.graph.model.sequence;
 
 /**
  * Segment content with empty content.

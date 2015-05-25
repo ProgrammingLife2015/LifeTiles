@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph.models.sequence;
+package nl.tudelft.lifetiles.graph.model.sequence;
 
 import java.util.Iterator;
 import java.util.Set;

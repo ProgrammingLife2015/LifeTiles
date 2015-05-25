@@ -3,5 +3,5 @@
  *
  * @author Jos Winter
  */
-package nl.tudelft.lifetiles.traverser.models;
+package nl.tudelft.lifetiles.traverser.model;
 

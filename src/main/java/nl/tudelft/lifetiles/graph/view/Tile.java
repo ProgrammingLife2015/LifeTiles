@@ -1,12 +1,12 @@
 package nl.tudelft.lifetiles.graph.view;
 
-import nl.tudelft.lifetiles.graph.models.Graph;
-import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
-import nl.tudelft.lifetiles.traverser.models.EmptySegmentTraverser;
-import nl.tudelft.lifetiles.traverser.models.MutationIndicationTraverser;
-import nl.tudelft.lifetiles.traverser.models.ReferencePositionTraverser;
-import nl.tudelft.lifetiles.traverser.models.UnifiedPositionTraverser;
+import nl.tudelft.lifetiles.graph.model.Graph;
+import nl.tudelft.lifetiles.graph.model.sequence.Sequence;
+import nl.tudelft.lifetiles.graph.model.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.traverser.model.EmptySegmentTraverser;
+import nl.tudelft.lifetiles.traverser.model.MutationIndicationTraverser;
+import nl.tudelft.lifetiles.traverser.model.ReferencePositionTraverser;
+import nl.tudelft.lifetiles.traverser.model.UnifiedPositionTraverser;
 
 /**
  * The Tile holds the graph and will be transformed to this modelgraph so
