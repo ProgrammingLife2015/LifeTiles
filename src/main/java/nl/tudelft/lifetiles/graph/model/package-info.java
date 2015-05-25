@@ -3,5 +3,5 @@
  *
  * @author Rutger van den Berg
  */
-package nl.tudelft.lifetiles.graph.models;
+package nl.tudelft.lifetiles.graph.model;
 

@@ -1,8 +1,8 @@
-package nl.tudelft.lifetiles.traverser.models;
+package nl.tudelft.lifetiles.traverser.model;
 
-import nl.tudelft.lifetiles.graph.models.Graph;
-import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.graph.model.Graph;
+import nl.tudelft.lifetiles.graph.model.sequence.Sequence;
+import nl.tudelft.lifetiles.graph.model.sequence.SequenceSegment;
 
 /**
  * Indicates mutations by traversing over all the vertices.

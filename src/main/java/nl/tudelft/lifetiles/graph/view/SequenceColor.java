@@ -4,7 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import javafx.scene.paint.Color;
-import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
+import nl.tudelft.lifetiles.graph.model.sequence.Sequence;
 
 /**
  * Helper class for calculating the color of a sequence.

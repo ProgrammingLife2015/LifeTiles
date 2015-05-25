@@ -1,15 +1,15 @@
-package nl.tudelft.lifetiles.traverser.models;
+package nl.tudelft.lifetiles.traverser.model;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import nl.tudelft.lifetiles.graph.models.Edge;
-import nl.tudelft.lifetiles.graph.models.Graph;
-import nl.tudelft.lifetiles.graph.models.sequence.SegmentEmpty;
-import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.graph.model.Edge;
+import nl.tudelft.lifetiles.graph.model.Graph;
+import nl.tudelft.lifetiles.graph.model.sequence.SegmentEmpty;
+import nl.tudelft.lifetiles.graph.model.sequence.Sequence;
+import nl.tudelft.lifetiles.graph.model.sequence.SequenceSegment;
 
 /**
  * Places empty vertices in the graph where there are unified gaps.

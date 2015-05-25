@@ -2,12 +2,13 @@ package nl.tudelft.lifetiles.graph.models.jgrapht;
 
 import java.util.HashSet;
 
-import nl.tudelft.lifetiles.graph.models.FactoryProducer;
-import nl.tudelft.lifetiles.graph.models.Graph;
-import nl.tudelft.lifetiles.graph.models.GraphFactory;
-import nl.tudelft.lifetiles.graph.models.sequence.SegmentEmpty;
-import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.graph.model.FactoryProducer;
+import nl.tudelft.lifetiles.graph.model.Graph;
+import nl.tudelft.lifetiles.graph.model.GraphFactory;
+import nl.tudelft.lifetiles.graph.model.jgrapht.JGraphTGraphAdapter;
+import nl.tudelft.lifetiles.graph.model.sequence.SegmentEmpty;
+import nl.tudelft.lifetiles.graph.model.sequence.Sequence;
+import nl.tudelft.lifetiles.graph.model.sequence.SequenceSegment;
 
 import org.junit.Before;
 import org.junit.BeforeClass;

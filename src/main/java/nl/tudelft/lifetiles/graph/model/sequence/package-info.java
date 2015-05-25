@@ -3,5 +3,5 @@
  *
  * @author Joren Hammudoglu
  */
-package nl.tudelft.lifetiles.graph.models.sequence;
+package nl.tudelft.lifetiles.graph.model.sequence;
 

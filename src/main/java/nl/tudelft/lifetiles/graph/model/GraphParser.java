@@ -1,11 +1,11 @@
-package nl.tudelft.lifetiles.graph.models;
+package nl.tudelft.lifetiles.graph.model;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.graph.model.sequence.Sequence;
+import nl.tudelft.lifetiles.graph.model.sequence.SequenceSegment;
 
 /**
  * Interface for Graph Parser.

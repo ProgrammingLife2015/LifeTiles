@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph.models.jgrapht;
+package nl.tudelft.lifetiles.graph.model.jgrapht;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -7,9 +7,9 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import nl.tudelft.lifetiles.graph.models.Edge;
-import nl.tudelft.lifetiles.graph.models.Graph;
-import nl.tudelft.lifetiles.graph.models.GraphFactory;
+import nl.tudelft.lifetiles.graph.model.Edge;
+import nl.tudelft.lifetiles.graph.model.Graph;
+import nl.tudelft.lifetiles.graph.model.GraphFactory;
 
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;

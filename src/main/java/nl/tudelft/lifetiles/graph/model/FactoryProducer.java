@@ -1,6 +1,6 @@
-package nl.tudelft.lifetiles.graph.models;
+package nl.tudelft.lifetiles.graph.model;
 
-import nl.tudelft.lifetiles.graph.models.jgrapht.JGraphTGraphFactory;
+import nl.tudelft.lifetiles.graph.model.jgrapht.JGraphTGraphFactory;
 
 /**
  * Produces the various factories used.

@@ -10,15 +10,17 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import nl.tudelft.lifetiles.graph.models.FactoryProducer;
-import nl.tudelft.lifetiles.graph.models.Graph;
-import nl.tudelft.lifetiles.graph.models.GraphFactory;
-import nl.tudelft.lifetiles.graph.models.sequence.DefaultSequence;
-import nl.tudelft.lifetiles.graph.models.sequence.SegmentEmpty;
-import nl.tudelft.lifetiles.graph.models.sequence.SegmentString;
-import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.graph.model.FactoryProducer;
+import nl.tudelft.lifetiles.graph.model.Graph;
+import nl.tudelft.lifetiles.graph.model.GraphFactory;
+import nl.tudelft.lifetiles.graph.model.sequence.DefaultSequence;
+import nl.tudelft.lifetiles.graph.model.sequence.SegmentEmpty;
+import nl.tudelft.lifetiles.graph.model.sequence.SegmentString;
+import nl.tudelft.lifetiles.graph.model.sequence.Sequence;
+import nl.tudelft.lifetiles.graph.model.sequence.SequenceSegment;
 import nl.tudelft.lifetiles.graph.view.Mutation;
+import nl.tudelft.lifetiles.traverser.model.MutationIndicationTraverser;
+import nl.tudelft.lifetiles.traverser.model.ReferencePositionTraverser;
 
 public class MutationIndicationTraverserTest {
     GraphFactory<SequenceSegment> gf;
