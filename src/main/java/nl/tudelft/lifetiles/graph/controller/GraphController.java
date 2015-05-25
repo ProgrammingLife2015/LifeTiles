@@ -1,19 +1,23 @@
 package nl.tudelft.lifetiles.graph.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
-import nl.tudelft.lifetiles.core.controller.ViewController;
+import nl.tudelft.lifetiles.core.controller.Controller;
+import nl.tudelft.lifetiles.graph.models.DefaultGraphParser;
+import nl.tudelft.lifetiles.graph.models.FactoryProducer;
 import nl.tudelft.lifetiles.graph.models.Graph;
+import nl.tudelft.lifetiles.graph.models.GraphFactory;
+import nl.tudelft.lifetiles.graph.models.GraphParser;
 import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
 import nl.tudelft.lifetiles.graph.view.Tile;
 import nl.tudelft.lifetiles.graph.view.TileView;
+import nl.tudelft.lifetiles.sequence.controller.SequenceController;
 
 /**
  * The controller of the graph view.
@@ -21,7 +25,7 @@ import nl.tudelft.lifetiles.graph.view.TileView;
  * @author Joren Hammudoglu
  *
  */
-public class GraphController implements Initializable, Observer {
+public class GraphController extends Controller {
 
     /**
      * The wrapper element.
@@ -30,35 +34,75 @@ public class GraphController implements Initializable, Observer {
     private ScrollPane wrapper;
 
     /**
-     * The view controller.
+     * The currently loaded graph.
      */
-    private ViewController controller;
+    private Graph<SequenceSegment> graph;
 
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        controller = ViewController.getInstance();
-        controller.addObserver(this);
+        register(Controller.GRAPH);
     }
 
     /**
-     * Fills the graph view and removes the old content.
-     *
-     * @param graph the graph
+     * @return the currently loaded graph.
      */
-    private void repaint(final Graph<SequenceSegment> graph) {
-        Tile model = new Tile(graph);
-        TileView view = new TileView();
-        TileController tc = new TileController(view, model);
+    public final Graph<SequenceSegment> getGraph() {
+        if (!isLoaded()) {
+            throw new UnsupportedOperationException("Graph not loaded.");
+        }
+        return graph;
+    }
 
-        Group root = tc.drawGraph();
-        wrapper.setContent(root);
+    /**
+     * Load a new graph from the specified file.
+     *
+     * @param vertexfile
+     *            The file to get vertices for.
+     * @param edgefile
+     *            The file to get edges for.
+     * @throws IOException
+     *             When an IO error occurs while reading one of the files.
+     */
+    public final void loadGraph(final File vertexfile, final File edgefile)
+            throws IOException {
+        // create the graph
+        FactoryProducer<SequenceSegment> fp = new FactoryProducer<>();
+        GraphFactory<SequenceSegment> gf = fp.getFactory("JGraphT");
+        GraphParser gp = new DefaultGraphParser();
+        graph = gp.parseGraph(vertexfile, edgefile, gf);
+
+        // obtain the sequences
+        SequenceController sequenceController = (SequenceController) getController(Controller.SEQUENCE);
+        sequenceController.setSequences(gp.getSequences());
+    }
+
+    /**
+     * Unload the graph and sequences.
+     */
+    public final void unloadGraph() {
+        graph = null;
+    }
+
+    /**
+     * Check if the graph is loaded.
+     *
+     * @return true if the graph is loaded
+     */
+    public final boolean isLoaded() {
+        return graph != null;
     }
 
     @Override
-    public final void update(final Observable o, final Object arg) {
-        if (controller.isLoaded()) {
-            repaint(controller.getGraph());
+    public final void repaint() {
+        if (isLoaded()) {
+            System.out.println("repainting graph...");
+            Tile model = new Tile(graph);
+            TileView view = new TileView();
+            TileController tc = new TileController(view, model);
+
+            Group root = tc.drawGraph();
+            wrapper.setContent(root);
         }
     }
 

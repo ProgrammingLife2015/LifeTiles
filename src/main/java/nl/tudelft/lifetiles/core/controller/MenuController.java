@@ -10,12 +10,13 @@ import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.MouseButton;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
+import nl.tudelft.lifetiles.graph.controller.GraphController;
+import nl.tudelft.lifetiles.tree.controller.TreeController;
 
 /**
  * The controller of the menu bar.
@@ -23,7 +24,7 @@ import javafx.stage.Window;
  * @author Joren Hammudoglu
  *
  */
-public class MenuController implements Initializable {
+public class MenuController extends Controller {
     /**
      * The initial x-coordinate of the window.
      */
@@ -39,11 +40,6 @@ public class MenuController implements Initializable {
      */
     @FXML
     private MenuBar menuBar;
-
-    /**
-     * The view controller.
-     */
-    private ViewController controller;
 
     /**
      * Handle action related to "Open" menu item.
@@ -85,18 +81,22 @@ public class MenuController implements Initializable {
 
             treeFile = new File(treeFileName);
 
-
         } catch (IOException e) {
-            ViewController.getInstance().displayError(e.getMessage());
+            e.printStackTrace();
             return;
         }
 
+        GraphController graphController = (GraphController) getController(Controller.GRAPH);
+        TreeController treeController = (TreeController) getController(Controller.TREE);
+
         try {
-            controller.loadGraph(vertexfile, edgefile);
-            controller.loadTree(treeFile);
+            graphController.loadGraph(vertexfile, edgefile);
+            treeController.loadTree(treeFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        repaintAll();
     }
 
     /**
@@ -153,7 +153,8 @@ public class MenuController implements Initializable {
     /**
      * Find the file name of the newick file in the directory.
      *
-     * @param dir the directory in which the .nwk file is located
+     * @param dir
+     *            the directory in which the .nwk file is located
      * @return the name of the .nwk file without its extension
      * @throws IOException
      *             throws an exception when no, or too many files have been
@@ -207,8 +208,8 @@ public class MenuController implements Initializable {
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        addDraggableNode(menuBar);
+        super.register(Controller.MENU);
 
-        controller = ViewController.getInstance();
+        addDraggableNode(menuBar);
     }
 }
