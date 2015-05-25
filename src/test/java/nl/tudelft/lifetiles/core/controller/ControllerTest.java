@@ -3,8 +3,6 @@ package nl.tudelft.lifetiles.core.controller;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -32,7 +30,6 @@ public class ControllerTest {
 
     @Test
     public void testRegistrationFail() {
-        Controller stub = Mockito.mock(Controller.class, Mockito.CALLS_REAL_METHODS);
         final String name = "Behemoth";
 
         thrown.expect(IllegalArgumentException.class);
@@ -42,7 +39,6 @@ public class ControllerTest {
     @Test
     public void testMultipleRegistration() {
         final int numControllers = 9;
-        List<Controller> controllers = new ArrayList<>(numControllers);
         for (String name = ""; name.length() < numControllers; name += "6") {
             Controller stub = Mockito.mock(Controller.class, Mockito.CALLS_REAL_METHODS);
             stub.register(name);
