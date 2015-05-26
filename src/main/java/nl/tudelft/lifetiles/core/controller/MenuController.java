@@ -15,8 +15,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.input.MouseButton;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
-import nl.tudelft.lifetiles.graph.controller.GraphController;
-import nl.tudelft.lifetiles.tree.controller.TreeController;
 
 /**
  * The controller of the menu bar.
@@ -86,15 +84,8 @@ public class MenuController extends Controller {
             return;
         }
 
-        GraphController graphController = (GraphController) getController(Controller.GRAPH);
-        TreeController treeController = (TreeController) getController(Controller.TREE);
-
-        try {
-            graphController.loadGraph(vertexfile, edgefile);
-            treeController.loadTree(treeFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        getController(Controller.GRAPH).loadModel(vertexfile, edgefile);
+        getController(Controller.TREE).loadModel(treeFile);
 
         repaintAll();
     }

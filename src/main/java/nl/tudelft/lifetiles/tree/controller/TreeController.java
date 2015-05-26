@@ -19,7 +19,7 @@ import nl.tudelft.lifetiles.tree.view.SunburstView;
  * @author Albert Smit
  *
  */
-public class TreeController extends Controller {
+public class TreeController extends Controller<PhylogeneticTreeItem> {
 
     /**
      * The wrapper element.
@@ -34,27 +34,11 @@ public class TreeController extends Controller {
     @FXML
     private SunburstView view;
 
-    /**
-     * The currently loaded tree.
-     */
-    private PhylogeneticTreeItem tree;
-
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
         super.register(Controller.TREE);
         view = new SunburstView();
-    }
-
-    /**
-     *
-     * @return the tree
-     */
-    public final PhylogeneticTreeItem getTree() {
-        if (tree == null) {
-            throw new IllegalStateException("Tree not loaded.");
-        }
-        return tree;
     }
 
     /**
@@ -75,22 +59,29 @@ public class TreeController extends Controller {
         }
 
         // parse the string into a tree
-        tree = PhylogeneticTreeParser.parse(fileString);
-    }
-
-    /**
-     * Check if the tree is loaded.
-     *
-     * @return true if the tree is loaded
-     */
-    public final boolean isLoaded() {
-        return tree != null;
+        setModel(PhylogeneticTreeParser.parse(fileString));
     }
 
     @Override
     public final void repaint() {
-        if (isLoaded()) {
-            view.setRoot(tree);
+        if (isModelLoaded()) {
+            view.setRoot(getModel());
+        }
+    }
+
+    @Override
+    public final void loadModel(final Object... args) {
+        if (args.length != 1) {
+            throw new IllegalArgumentException("Expected 1 argument");
+        }
+        if (!(args[0] instanceof File)) {
+            throw new IllegalArgumentException("Wrong argument type.");
+        }
+        try {
+            loadTree((File) args[0]);
+        } catch (FileNotFoundException e) {
+            // TODO Display error in the GUI
+            e.printStackTrace();
         }
     }
 
