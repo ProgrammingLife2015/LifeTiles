@@ -63,7 +63,7 @@ public class GraphController extends Controller<Graph<SequenceSegment>> {
      * @throws IOException
      *             When an IO error occurs while reading one of the files.
      */
-    private final void loadGraph(final File vertexfile, final File edgefile)
+    private void loadGraph(final File vertexfile, final File edgefile)
             throws IOException {
         // create the graph
         FactoryProducer<SequenceSegment> fp = new FactoryProducer<>();
