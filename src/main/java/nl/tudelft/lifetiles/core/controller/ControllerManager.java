@@ -13,7 +13,7 @@ public final class ControllerManager {
     /**
      * The controllers.
      */
-    private static ConcurrentHashMap<String, Controller> controllers = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, Controller<?>> controllers = new ConcurrentHashMap<>();
 
     /**
      * Uninstantiable.
@@ -31,7 +31,7 @@ public final class ControllerManager {
      *            the controller
      */
     public static void registerController(final String name,
-            final Controller controller) {
+            final Controller<?> controller) {
         controllers.putIfAbsent(name, controller);
     }
 
@@ -42,8 +42,8 @@ public final class ControllerManager {
      *            the name of the controller
      * @return the controller
      */
-    public static Controller getController(final String name) {
-        Controller controller = controllers.get(name);
+    public static Controller<?> getController(final String name) {
+        Controller<?> controller = controllers.get(name);
         if (controller == null) {
             throw new IllegalArgumentException("Unknow controller " + name);
         }
@@ -55,7 +55,7 @@ public final class ControllerManager {
      *
      * @return the controllers.
      */
-    public static Collection<Controller> getControllers() {
+    public static Collection<Controller<?>> getControllers() {
         return controllers.values();
     }
 
