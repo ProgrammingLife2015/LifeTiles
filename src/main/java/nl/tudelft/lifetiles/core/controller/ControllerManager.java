@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class ControllerManager {
 
     /**
-     * The singelton of ControllerManager.
+     * The controllers.
      */
     private static ConcurrentHashMap<String, Controller> controllers = new ConcurrentHashMap<>();
 
