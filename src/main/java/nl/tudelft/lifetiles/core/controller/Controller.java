@@ -6,9 +6,11 @@ import javafx.fxml.Initializable;
  * A controller. Able to register
  *
  * @author Joren Hammudoglu
+ * @param <M>
+ *            the model type.
  *
  */
-public abstract class Controller implements Initializable {
+public abstract class Controller<M> implements Initializable {
 
     /**
      * Name of the main controller.
@@ -36,6 +38,11 @@ public abstract class Controller implements Initializable {
     public static final String SEQUENCE = "sequence";
 
     /**
+     * The model.
+     */
+    private M model;
+
+    /**
      * Register this controller to the controller manager.
      *
      * @param name
@@ -57,6 +64,13 @@ public abstract class Controller implements Initializable {
     }
 
     /**
+     * Repaint the view.
+     */
+    protected void repaint() {
+        // noop by default
+    }
+
+    /**
      * Repaint all controllers.
      */
     protected final void repaintAll() {
@@ -64,10 +78,58 @@ public abstract class Controller implements Initializable {
     }
 
     /**
-     * Repaint the view.
+     * Load the model.
+     *
+     * @param args
+     *            the arguments
      */
-    public void repaint() {
-        //noop;
+    public void loadModel(final Object... args) {
+        // noop by default
+    }
+
+    /**
+     * Unload the model.
+     */
+    public void unloadModel() {
+        if (model == null) {
+            throw new IllegalStateException("Model not loaded.");
+        }
+        model = null;
+    }
+
+    /**
+     * Check whether the model is loaded.
+     *
+     * @return <code>true</code> if the model is loaded, <code>false</code>
+     *         otherwise
+     */
+    public boolean isModelLoaded() {
+        return model != null;
+    }
+
+    /**
+     * Set the model.
+     *
+     * @param newModel
+     *            the new model.
+     */
+    public void setModel(final M newModel) {
+        if (model != null) {
+            throw new IllegalStateException("Model already loaded.");
+        }
+        model = newModel;
+    }
+
+    /**
+     * Retrieve the model.
+     *
+     * @return the model.
+     */
+    public M getModel() {
+        if (model == null) {
+            throw new IllegalStateException("Model not loaded yet.");
+        }
+        return model;
     }
 
 }

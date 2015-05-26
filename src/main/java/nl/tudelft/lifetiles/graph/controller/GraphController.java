@@ -17,7 +17,6 @@ import nl.tudelft.lifetiles.graph.model.GraphParser;
 import nl.tudelft.lifetiles.graph.model.sequence.SequenceSegment;
 import nl.tudelft.lifetiles.graph.view.Tile;
 import nl.tudelft.lifetiles.graph.view.TileView;
-import nl.tudelft.lifetiles.sequence.controller.SequenceController;
 
 /**
  * The controller of the graph view.
@@ -25,7 +24,7 @@ import nl.tudelft.lifetiles.sequence.controller.SequenceController;
  * @author Joren Hammudoglu
  *
  */
-public class GraphController extends Controller {
+public class GraphController extends Controller<Graph<SequenceSegment>> {
 
     /**
      * The wrapper element.
@@ -64,7 +63,7 @@ public class GraphController extends Controller {
      * @throws IOException
      *             When an IO error occurs while reading one of the files.
      */
-    public final void loadGraph(final File vertexfile, final File edgefile)
+    private final void loadGraph(final File vertexfile, final File edgefile)
             throws IOException {
         // create the graph
         FactoryProducer<SequenceSegment> fp = new FactoryProducer<>();
@@ -73,8 +72,7 @@ public class GraphController extends Controller {
         graph = gp.parseGraph(vertexfile, edgefile, gf);
 
         // obtain the sequences
-        SequenceController sequenceController = (SequenceController) getController(Controller.SEQUENCE);
-        sequenceController.setSequences(gp.getSequences());
+        getController(Controller.SEQUENCE).setModel(gp.getSequences());
     }
 
     /**
@@ -103,6 +101,23 @@ public class GraphController extends Controller {
 
             Group root = tc.drawGraph();
             wrapper.setContent(root);
+        }
+    }
+
+    @Override
+    public final void loadModel(final Object... args) {
+        if (args.length != 2) {
+            throw new IllegalArgumentException("Expected 2 arguments.");
+        }
+        if (!(args[0] instanceof File && args[1] instanceof File)) {
+            throw new IllegalArgumentException("Wrong argument type.");
+        }
+
+        try {
+            loadGraph((File) args[0], (File) args[1]);
+        } catch (IOException e) {
+            // TODO Display error in the GUI
+            e.printStackTrace();
         }
     }
 

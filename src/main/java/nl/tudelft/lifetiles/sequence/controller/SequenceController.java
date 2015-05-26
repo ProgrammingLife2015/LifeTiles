@@ -15,7 +15,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.core.controller.Controller;
-import nl.tudelft.lifetiles.graph.controller.GraphController;
 import nl.tudelft.lifetiles.graph.model.sequence.Sequence;
 import nl.tudelft.lifetiles.graph.view.SequenceColor;
 
@@ -25,7 +24,7 @@ import nl.tudelft.lifetiles.graph.view.SequenceColor;
  * @author Joren Hammudoglu
  *
  */
-public class SequenceController extends Controller {
+public class SequenceController extends Controller<Map<String, Sequence>> {
 
     /**
      * The wrapper element.
@@ -38,10 +37,6 @@ public class SequenceController extends Controller {
     @FXML
     private ListView<Label> sequenceList;
 
-    /**
-     * Map of all sequences currently loaded.
-     */
-    private Map<String, Sequence> sequenceMap;
     /**
      * Set containing the currently visible sequences.
      */
@@ -72,23 +67,10 @@ public class SequenceController extends Controller {
      */
     public final void setVisible(final Set<Sequence> sequences) {
         visibleSequences = new HashSet<>(sequences);
-        if (visibleSequences.retainAll(getSequences().values())) {
+        if (visibleSequences.retainAll(getModel().values())) {
             throw new IllegalArgumentException(
                     "Attempted to set a non-existant sequence to visible");
         }
-    }
-
-    /**
-     * Get all sequences, wether they are visible or not.
-     *
-     * @return A Map containing all sequences.
-     */
-    public final Map<String, Sequence> getSequences() {
-        GraphController graphController = (GraphController) getController(Controller.GRAPH);
-        if (!graphController.isLoaded()) {
-            throw new UnsupportedOperationException("Graph not loaded.");
-        }
-        return sequenceMap;
     }
 
     /**
@@ -97,33 +79,19 @@ public class SequenceController extends Controller {
      * @param sequences
      *            the sequences to set
      */
-    public final void setSequences(final Map<String, Sequence> sequences) {
-        if (sequenceMap != null) {
-            throw new IllegalStateException("Sequences already set.");
-        }
-        sequenceMap = sequences;
+    @Override
+    public final void setModel(final Map<String, Sequence> sequences) {
+        super.setModel(sequences);
         visibleSequences = new HashSet<>(sequences.values());
     }
 
     /**
      * Unload the sequences.
      */
-    public final void unloadSequences() {
-        if (sequenceMap == null || visibleSequences == null) {
-            throw new IllegalStateException("Sequences not set.");
-        }
-        sequenceMap = null;
+    @Override
+    public final void unloadModel() {
+        super.unloadModel();
         visibleSequences = null;
-    }
-
-    /**
-     * Check if the sequences are loaded.
-     *
-     * @return <code>true</code> if the sequences are loaded, otherwise
-     *         <code>false</code>.
-     */
-    public final boolean isLoaded() {
-        return sequenceMap != null;
     }
 
     /**
@@ -146,7 +114,7 @@ public class SequenceController extends Controller {
      */
     @Override
     public final void repaint() {
-        if (isLoaded()) {
+        if (isModelLoaded()) {
             sequenceList.setItems(generateLabels());
         }
     }
@@ -159,7 +127,7 @@ public class SequenceController extends Controller {
     private ObservableList<Label> generateLabels() {
         ObservableList<Label> sequenceItems = FXCollections
                 .observableArrayList();
-        for (final Sequence sequence : getSequences().values()) {
+        for (final Sequence sequence : getModel().values()) {
             String id = sequence.getIdentifier();
             Label label = new Label(id);
             Color color = SequenceColor.getColor(sequence);
