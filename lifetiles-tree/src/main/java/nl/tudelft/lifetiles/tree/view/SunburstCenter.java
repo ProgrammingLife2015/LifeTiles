@@ -33,10 +33,12 @@ public class SunburstCenter extends AbstractSunburstNode {
      *
      * @param value
      *            the node that this will represent
+     * @param scale
+     *            a scaling factor
      */
-    public SunburstCenter(final PhylogeneticTreeItem value) {
+    public SunburstCenter(final PhylogeneticTreeItem value, final double scale) {
         setValue(value);
-        setDisplay(new Circle(CENTER_RADIUS, createColor()));
+        setDisplay(new Circle(scale * CENTER_RADIUS,  createColor()));
         setName(new Text(getValue().getName()));
         this.getChildren().addAll(getDisplay(), getName());
     }
@@ -55,5 +57,4 @@ public class SunburstCenter extends AbstractSunburstNode {
             return SequenceColor.getColor(sequence);
         }
     }
-
 }

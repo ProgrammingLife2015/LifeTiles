@@ -26,15 +26,20 @@ public class SunburstView extends Control {
     /**
      * the center X coordinate of the view.
      */
-    private final double centerX;
+    private double centerX;
     /**
      * the center Y coordinate of the view.
      */
-    private final double centerY;
+    private double centerY;
     /**
      * the {@link TreeController} controlling this SunburstView.
      */
-    private TreeController controller;
+     private TreeController controller;
+     /**
+     * the scaling factor to calculate coordinates, starts at 1.
+     */
+    private double scale = 1d;
+
 
     /**
      * Creates a new SunburstView.
@@ -43,6 +48,11 @@ public class SunburstView extends Control {
         super();
         centerX = getWidth() / 2d;
         centerY = getHeight() / 2d;
+        this.setOnScroll((scrollEvent) -> {
+            double zoomFactor = 1d / scrollEvent.getDeltaY();
+            scale = scale + zoomFactor;
+            update();
+        });
     }
 
     /**
@@ -58,6 +68,12 @@ public class SunburstView extends Control {
         centerY = getHeight() / 2d;
         rootItem = root;
         selectNode(rootItem);
+
+        this.setOnScroll((scrollEvent) -> {
+            double zoomFactor = 1d / scrollEvent.getDeltaY();
+            scale = scale + zoomFactor;
+            update();
+        });
 
     }
 
@@ -100,9 +116,11 @@ public class SunburstView extends Control {
     private void update() {
         // remove the old elements
         getChildren().clear();
+        centerX = getWidth() / 2d;
+        centerY = getHeight() / 2d;
 
         // add a center unit
-        SunburstCenter center = new SunburstCenter(currentItem);
+        SunburstCenter center = new SunburstCenter(currentItem, scale);
         center.setOnMouseClicked((mouseEvent) -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 selectNode(currentItem.getParent());
@@ -142,7 +160,7 @@ public class SunburstView extends Control {
             final int layer, final double degreeStart, final double degreeEnd) {
         // generate ring
         SunburstRingSegment ringUnit = new SunburstRingSegment(node, layer,
-                degreeStart, degreeEnd, centerX, centerY);
+                degreeStart, degreeEnd, centerX, centerY, scale);
         ringUnit.setOnMouseClicked((mouseEvent) -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 selectNode(node);
