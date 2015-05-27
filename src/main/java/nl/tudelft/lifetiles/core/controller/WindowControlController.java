@@ -15,8 +15,14 @@ import javafx.stage.Stage;
  */
 public class WindowControlController extends Controller {
 
+    /**
+     * The minimize window shout message.
+     */
     public static final String MINIMIZE_WINDOW = "minimizeWindow";
 
+    /**
+     * The resize window shout message.
+     */
     public static final String RESIZE_WINDOW = "resizeWindow";
 
     /**
