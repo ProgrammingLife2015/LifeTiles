@@ -2,48 +2,62 @@ package nl.tudelft.lifetiles.core.controller;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.File;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.mockito.Mockito;
 
 public class ControllerTest {
 
-    static final String testGraphFilename = "/data/test_set/simple_graph";
-    static final int[] windowSize = new int[] {
-        1280, 720
-    };
-    File edgefile, vertexfile;
+    private Controller stub1, stub2;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    @Test
-    public void testRegistration() {
-        Controller stub = Mockito.mock(Controller.class, Mockito.CALLS_REAL_METHODS);
-        final String name = "Leviathan";
-        stub.register(name);
-        assertEquals(stub, ControllerManager.getController(name));
+    private AtomicReference<Object> inbox;
+
+    @Before
+    public void setUp() {
+        stub1 = new ControllerStub();
+        stub2 = new ControllerStub();
+        inbox = new AtomicReference<>();
     }
 
     @Test
-    public void testRegistrationFail() {
-        final String name = "Behemoth";
+    public void testShoutSelf() {
+        final String message = "Leviathan";
+        final String content = "hail santa";
 
-        thrown.expect(IllegalArgumentException.class);
-        ControllerManager.getController(name);
+        stub1.listen(message, (controller, args) -> {
+            inbox.set(args[0]);
+        });
+        stub1.shout(message, content);
+
+        assertEquals(content, inbox.get());
     }
 
     @Test
-    public void testMultipleRegistration() {
-        final int numControllers = 9;
-        for (String name = ""; name.length() < numControllers; name += "6") {
-            Controller stub = Mockito.mock(Controller.class, Mockito.CALLS_REAL_METHODS);
-            stub.register(name);
-        }
-        assertEquals(numControllers, ControllerManager.getControllers().size());
-    }
+    public void testShoutOther() {
+        final String message = "Behemoth";
+        final String content = "hail satan";
 
+        stub2.listen(message, (controller, args) -> {
+            System.out.println("Testother shout");
+            inbox.set(args[0]);
+        });
+        stub1.shout(message, content);
+
+        assertEquals(content, inbox.get());
+    }
+}
+
+final class ControllerStub extends Controller {
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // noop
+    }
 }

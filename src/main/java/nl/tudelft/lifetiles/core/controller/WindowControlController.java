@@ -15,6 +15,10 @@ import javafx.stage.Stage;
  */
 public class WindowControlController extends Controller {
 
+    public static final String MINIMIZE_WINDOW = "minimizeWindow";
+
+    public static final String RESIZE_WINDOW = "resizeWindow";
+
     /**
      * The window close button.
      */
@@ -45,7 +49,7 @@ public class WindowControlController extends Controller {
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        super.register(Controller.MENU);
+        // noop
     }
 
     /**
@@ -55,6 +59,8 @@ public class WindowControlController extends Controller {
     private void minimizeWindowAction() {
         Stage stage = (Stage) windowMinimize.getScene().getWindow();
         stage.toBack();
+
+        shout(MINIMIZE_WINDOW);
     }
 
     /**
@@ -64,5 +70,7 @@ public class WindowControlController extends Controller {
     private void resizeWindowAction() {
         Stage stage = (Stage) windowResize.getScene().getWindow();
         stage.setMaximized(!stage.isMaximized());
+
+        shout(RESIZE_WINDOW);
     }
 }

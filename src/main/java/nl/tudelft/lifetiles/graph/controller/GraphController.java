@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import nl.tudelft.lifetiles.core.controller.Controller;
+import nl.tudelft.lifetiles.core.controller.MenuController;
 import nl.tudelft.lifetiles.graph.model.DefaultGraphParser;
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
 import nl.tudelft.lifetiles.graph.model.Graph;
@@ -24,7 +25,12 @@ import nl.tudelft.lifetiles.graph.view.TileView;
  * @author Joren Hammudoglu
  *
  */
-public class GraphController extends Controller<Graph<SequenceSegment>> {
+public class GraphController extends Controller {
+
+    /**
+     * The shout message indicating the graph model has been loaded.
+     */
+    public static final String GRAPH_LOADED = "graphLoaded";
 
     /**
      * The wrapper element.
@@ -40,15 +46,24 @@ public class GraphController extends Controller<Graph<SequenceSegment>> {
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        register(Controller.GRAPH);
+        listen(MenuController.FILES_OPENED, (controller, args) -> {
+            assert (controller instanceof MenuController);
+            assert (args[0] instanceof File && args[1] instanceof File);
+            try {
+                loadGraph((File) args[0], (File) args[1]);
+            } catch (Exception e) {
+                // TODO: notify the user that the file was not found
+                e.printStackTrace();
+            }
+        });
     }
 
     /**
      * @return the currently loaded graph.
      */
     public final Graph<SequenceSegment> getGraph() {
-        if (!isLoaded()) {
-            throw new UnsupportedOperationException("Graph not loaded.");
+        if (graph == null) {
+            throw new IllegalStateException("Graph not loaded.");
         }
         return graph;
     }
@@ -71,29 +86,16 @@ public class GraphController extends Controller<Graph<SequenceSegment>> {
         GraphParser gp = new DefaultGraphParser();
         graph = gp.parseGraph(vertexfile, edgefile, gf);
 
-        // obtain the sequences
-        getController(Controller.SEQUENCE).setModel(gp.getSequences());
+        shout(GRAPH_LOADED, graph);
+
+        repaint();
     }
 
     /**
-     * Unload the graph and sequences.
+     * Repaints the view.
      */
-    public final void unloadGraph() {
-        graph = null;
-    }
-
-    /**
-     * Check if the graph is loaded.
-     *
-     * @return true if the graph is loaded
-     */
-    public final boolean isLoaded() {
-        return graph != null;
-    }
-
-    @Override
-    public final void repaint() {
-        if (isLoaded()) {
+    private void repaint() {
+        if (graph != null) {
             System.out.println("repainting graph...");
             Tile model = new Tile(graph);
             TileView view = new TileView();
@@ -101,23 +103,6 @@ public class GraphController extends Controller<Graph<SequenceSegment>> {
 
             Group root = tc.drawGraph();
             wrapper.setContent(root);
-        }
-    }
-
-    @Override
-    public final void loadModel(final Object... args) {
-        if (args.length != 2) {
-            throw new IllegalArgumentException("Expected 2 arguments.");
-        }
-        if (!(args[0] instanceof File && args[1] instanceof File)) {
-            throw new IllegalArgumentException("Wrong argument type.");
-        }
-
-        try {
-            loadGraph((File) args[0], (File) args[1]);
-        } catch (IOException e) {
-            // TODO Display error in the GUI
-            e.printStackTrace();
         }
     }
 

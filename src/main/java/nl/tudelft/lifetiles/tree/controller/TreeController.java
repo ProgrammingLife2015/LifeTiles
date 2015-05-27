@@ -9,6 +9,7 @@ import java.util.Scanner;
 import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import nl.tudelft.lifetiles.core.controller.Controller;
+import nl.tudelft.lifetiles.core.controller.MenuController;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeParser;
 import nl.tudelft.lifetiles.tree.view.SunburstView;
@@ -19,7 +20,12 @@ import nl.tudelft.lifetiles.tree.view.SunburstView;
  * @author Albert Smit
  *
  */
-public class TreeController extends Controller<PhylogeneticTreeItem> {
+public class TreeController extends Controller {
+
+    /**
+     * The shout message indicating the graph model has been loaded.
+     */
+    public static final String TREE_LOADED = "treeLoaded";
 
     /**
      * The wrapper element.
@@ -28,17 +34,33 @@ public class TreeController extends Controller<PhylogeneticTreeItem> {
     private BorderPane wrapper;
 
     /**
-     * the diagram.
-     *
+     * The diagram.
      */
     @FXML
     private SunburstView view;
 
+    /**
+     * The tree model.
+     */
+    private PhylogeneticTreeItem tree;
+
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        super.register(Controller.TREE);
         view = new SunburstView();
+
+        listen(MenuController.FILES_OPENED, (controller, args) -> {
+            assert (controller instanceof MenuController);
+            final int expectedArgsLength = 3;
+            assert (args.length == expectedArgsLength);
+            assert (args[2] instanceof File);
+            try {
+                loadTree((File) args[2]);
+            } catch (Exception e) {
+                // TODO: notify the user that the file was not found
+                e.printStackTrace();
+            }
+        });
     }
 
     /**
@@ -49,7 +71,7 @@ public class TreeController extends Controller<PhylogeneticTreeItem> {
      * @throws FileNotFoundException
      *             when the file is not found
      */
-    public final void loadTree(final File file) throws FileNotFoundException {
+    private void loadTree(final File file) throws FileNotFoundException {
         // convert the file to a single string
         String fileString = null;
         try (Scanner sc = new Scanner(file).useDelimiter("\\Z")) {
@@ -59,29 +81,17 @@ public class TreeController extends Controller<PhylogeneticTreeItem> {
         }
 
         // parse the string into a tree
-        setModel(PhylogeneticTreeParser.parse(fileString));
+        tree = PhylogeneticTreeParser.parse(fileString);
+
+        shout(TREE_LOADED, tree);
     }
 
-    @Override
-    public final void repaint() {
-        if (isModelLoaded()) {
-            view.setRoot(getModel());
-        }
-    }
-
-    @Override
-    public final void loadModel(final Object... args) {
-        if (args.length != 1) {
-            throw new IllegalArgumentException("Expected 1 argument");
-        }
-        if (!(args[0] instanceof File)) {
-            throw new IllegalArgumentException("Wrong argument type.");
-        }
-        try {
-            loadTree((File) args[0]);
-        } catch (FileNotFoundException e) {
-            // TODO Display error in the GUI
-            e.printStackTrace();
+    /**
+     * Repaints the view.
+     */
+    private void repaint() {
+        if (tree != null) {
+            view.setRoot(tree);
         }
     }
 
