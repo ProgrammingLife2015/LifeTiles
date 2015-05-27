@@ -10,6 +10,7 @@ import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import nl.tudelft.lifetiles.core.controller.Controller;
 import nl.tudelft.lifetiles.core.controller.MenuController;
+import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.graph.model.DefaultGraphParser;
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
 import nl.tudelft.lifetiles.graph.model.Graph;
@@ -28,11 +29,6 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 public class GraphController extends Controller {
 
     /**
-     * The shout message indicating the graph model has been loaded.
-     */
-    public static final String GRAPH_LOADED = "graphLoaded";
-
-    /**
      * The wrapper element.
      */
     @FXML
@@ -46,7 +42,7 @@ public class GraphController extends Controller {
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        listen(MenuController.FILES_OPENED, (controller, args) -> {
+        listen(Message.OPENED, (controller, args) -> {
             assert (controller instanceof MenuController);
             assert (args[0] instanceof File && args[1] instanceof File);
             try {
@@ -86,7 +82,7 @@ public class GraphController extends Controller {
         GraphParser gp = new DefaultGraphParser();
         graph = gp.parseGraph(vertexfile, edgefile, gf);
 
-        shout(GRAPH_LOADED, graph);
+        shout(Message.LOADED, graph);
 
         repaint();
     }

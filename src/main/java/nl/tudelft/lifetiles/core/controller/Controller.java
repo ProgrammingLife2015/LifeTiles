@@ -8,6 +8,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
 
 import javafx.fxml.Initializable;
+import nl.tudelft.lifetiles.core.util.Message;
 
 /**
  * The base controller.
@@ -25,7 +26,7 @@ public abstract class Controller implements Initializable {
     /**
      * The listeners for messages.
      */
-    private Map<String, List<BiConsumer<Controller, Object[]>>> listeners;
+    private Map<Message, List<BiConsumer<Controller, Object[]>>> listeners;
 
     /**
      * Create a new controller and register it.
@@ -43,7 +44,7 @@ public abstract class Controller implements Initializable {
      * @param args
      *            the arguments of the message
      */
-    protected final void shout(final String message, final Object... args) {
+    protected final void shout(final Message message, final Object... args) {
         for (Controller c : controllers) {
             List<BiConsumer<Controller, Object[]>> listenersOther = c
                     .getListeners(message);
@@ -61,7 +62,7 @@ public abstract class Controller implements Initializable {
      * @param action
      *            the action to perform when recieving the message
      */
-    protected final void listen(final String message,
+    protected final void listen(final Message message,
             final BiConsumer<Controller, Object[]> action) {
         if (listeners.containsKey(message)) {
             listeners.get(message).add(action);
@@ -81,7 +82,7 @@ public abstract class Controller implements Initializable {
      * @return a map of listeners for messages
      */
     private List<BiConsumer<Controller, Object[]>> getListeners(
-            final String message) {
+            final Message message) {
         return listeners.get(message);
     }
 

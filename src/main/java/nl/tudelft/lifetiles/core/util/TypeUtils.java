@@ -1,6 +1,11 @@
 package nl.tudelft.lifetiles.core.util;
 
-public class TypeUtils {
+/**
+ * Utility functions for primitive types.
+ *
+ * @author Joren Hammudoglu
+ */
+public final class TypeUtils {
 
     /**
      * Uninstantiable class.

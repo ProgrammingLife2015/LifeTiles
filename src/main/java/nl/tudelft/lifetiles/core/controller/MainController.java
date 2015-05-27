@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import nl.tudelft.lifetiles.core.util.Message;
 
 /**
  * The controller of the main view.
@@ -41,7 +42,7 @@ public class MainController extends Controller {
 
         repaint(true);
 
-        listen(MenuController.FILES_OPENED, (controller, args) -> {
+        listen(Message.OPENED, (controller, args) -> {
             repaint(false);
         });
     }
