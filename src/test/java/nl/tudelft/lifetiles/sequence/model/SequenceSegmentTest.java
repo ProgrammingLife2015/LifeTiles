@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph.models.sequence;
+package nl.tudelft.lifetiles.sequence.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

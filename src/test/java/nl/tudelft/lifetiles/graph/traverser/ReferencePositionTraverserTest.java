@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.traverser.models;
+package nl.tudelft.lifetiles.graph.traverser;
 
 import static org.junit.Assert.assertEquals;
 
