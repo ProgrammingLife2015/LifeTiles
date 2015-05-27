@@ -3,6 +3,7 @@
 <?import java.net.URL?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
 
 <HBox fx:id="wrapper" id="wrapper" prefHeight="26" prefWidth="1280"
 	maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
@@ -10,7 +11,9 @@
 	fx:controller="nl.tudelft.lifetiles.notification.controller.NotificationController"
 	alignment="CENTER">
 
-	<Label fx:id="label" id="message" />
+	<Label fx:id="label" id="message" HBox.hgrow="ALWAYS" />
+	
+	<Button fx:id="close" id="close" text="X" onMouseClicked="#closeAction" />
 	
 	<stylesheets>
         <URL value="@../styles/NotificationStyle.css" />
