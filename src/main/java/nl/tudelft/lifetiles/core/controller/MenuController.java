@@ -23,6 +23,12 @@ import javafx.stage.Window;
  *
  */
 public class MenuController extends Controller {
+
+    /**
+     * The shout message indicating the data resources are loaded.
+     */
+    public static final String FILES_OPENED = "filesOpened";
+
     /**
      * The initial x-coordinate of the window.
      */
@@ -64,7 +70,7 @@ public class MenuController extends Controller {
         }
 
         String graphFileName = null;
-        File vertexfile, edgefile, treeFile;
+        File vertexfile, edgefile, treeFile; // TODO: fix inconsistent naming
         String treeFileName = null;
         try {
             graphFileName = directory.getCanonicalPath();
@@ -84,10 +90,7 @@ public class MenuController extends Controller {
             return;
         }
 
-        getController(Controller.GRAPH).loadModel(vertexfile, edgefile);
-        getController(Controller.TREE).loadModel(treeFile);
-
-        repaintAll();
+        shout(FILES_OPENED, vertexfile, edgefile, treeFile);
     }
 
     /**
@@ -199,8 +202,6 @@ public class MenuController extends Controller {
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        super.register(Controller.MENU);
-
         addDraggableNode(menuBar);
     }
 }

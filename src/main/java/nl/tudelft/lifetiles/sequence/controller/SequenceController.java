@@ -24,7 +24,7 @@ import nl.tudelft.lifetiles.graph.view.SequenceColor;
  * @author Joren Hammudoglu
  *
  */
-public class SequenceController extends Controller<Map<String, Sequence>> {
+public class SequenceController extends Controller {
 
     /**
      * The wrapper element.
@@ -38,6 +38,11 @@ public class SequenceController extends Controller<Map<String, Sequence>> {
     private ListView<Label> sequenceList;
 
     /**
+     * The model of sequences.
+     */
+    private Map<String, Sequence> sequences;
+
+    /**
      * Set containing the currently visible sequences.
      */
     private Set<Sequence> visibleSequences;
@@ -45,7 +50,6 @@ public class SequenceController extends Controller<Map<String, Sequence>> {
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        super.register(Controller.SEQUENCE);
         repaint();
     }
 
@@ -62,12 +66,12 @@ public class SequenceController extends Controller<Map<String, Sequence>> {
     /**
      * Sets the visible sequences in all views to the provided sequences.
      *
-     * @param sequences
+     * @param newVisibleSequences
      *            The sequences to set to visible.
      */
-    public final void setVisible(final Set<Sequence> sequences) {
-        visibleSequences = new HashSet<>(sequences);
-        if (visibleSequences.retainAll(getModel().values())) {
+    private void setVisible(final Set<Sequence> newVisibleSequences) {
+        visibleSequences = new HashSet<>(newVisibleSequences);
+        if (visibleSequences.retainAll(sequences.values())) {
             throw new IllegalArgumentException(
                     "Attempted to set a non-existant sequence to visible");
         }
@@ -76,22 +80,12 @@ public class SequenceController extends Controller<Map<String, Sequence>> {
     /**
      * Set the sequences.
      *
-     * @param sequences
+     * @param newSequences
      *            the sequences to set
      */
-    @Override
-    public final void setModel(final Map<String, Sequence> sequences) {
-        super.setModel(sequences);
+    public final void setSequences(final Map<String, Sequence> newSequences) {
+        sequences = newSequences;
         visibleSequences = new HashSet<>(sequences.values());
-    }
-
-    /**
-     * Unload the sequences.
-     */
-    @Override
-    public final void unloadModel() {
-        super.unloadModel();
-        visibleSequences = null;
     }
 
     /**
@@ -112,9 +106,8 @@ public class SequenceController extends Controller<Map<String, Sequence>> {
     /**
      * Fills the sequence view and removes the old content.
      */
-    @Override
-    public final void repaint() {
-        if (isModelLoaded()) {
+    private void repaint() {
+        if (sequences != null) {
             sequenceList.setItems(generateLabels());
         }
     }
@@ -127,7 +120,7 @@ public class SequenceController extends Controller<Map<String, Sequence>> {
     private ObservableList<Label> generateLabels() {
         ObservableList<Label> sequenceItems = FXCollections
                 .observableArrayList();
-        for (final Sequence sequence : getModel().values()) {
+        for (final Sequence sequence : sequences.values()) {
             String id = sequence.getIdentifier();
             Label label = new Label(id);
             Color color = SequenceColor.getColor(sequence);

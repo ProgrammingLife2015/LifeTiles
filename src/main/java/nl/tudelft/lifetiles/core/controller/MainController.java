@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import nl.tudelft.lifetiles.graph.controller.GraphController;
 
 /**
  * The controller of the main view.
@@ -38,18 +37,23 @@ public class MainController extends Controller {
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        super.register(Controller.MAIN);
-
         mainSplitPane.setVisible(false);
+
+        repaint(true);
+
+        listen(MenuController.FILES_OPENED, (observer, args) -> {
+            repaint(false);
+        });
     }
 
-    @Override
-    public final void repaint() {
-        GraphController graphController = (GraphController) getController(Controller.GRAPH);
-        boolean loaded = graphController.isLoaded();
-
-        mainSplitPane.setVisible(loaded);
-        splashPane.setVisible(!loaded);
+    /**
+     * Repaint the main view, showing or hiding the splash screen.
+     *
+     * @param splash show the splash
+     */
+    private void repaint(final boolean splash) {
+        mainSplitPane.setVisible(!splash);
+        splashPane.setVisible(splash);
     }
 
 }
