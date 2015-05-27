@@ -1,5 +1,6 @@
 package nl.tudelft.lifetiles.graph.traverser;
 
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,9 +42,13 @@ public class EmptySegmentTraverser {
      * used to indicate mutations on.
      */
     private void addEmptySegmentsGraph() {
+        long startTime = Calendar.getInstance().getTimeInMillis();
         for (SequenceSegment vertex : graphVar.getAllVertices()) {
             addEmptySegmentsVertex(vertex);
         }
+        System.out.println("Empty segments added. Took "
+                + (Calendar.getInstance().getTimeInMillis() - startTime)
+                + " ms.");
     }
 
     /**
@@ -61,7 +66,8 @@ public class EmptySegmentTraverser {
                     destination.getSources());
             sources.retainAll(buffer);
             if (vertex.distanceTo(destination) > 0) {
-                graphVar.splitEdge(edge, bridgeSequence(vertex, destination, sources));
+                graphVar.splitEdge(edge,
+                        bridgeSequence(vertex, destination, sources));
             }
             buffer.removeAll(sources);
         }
