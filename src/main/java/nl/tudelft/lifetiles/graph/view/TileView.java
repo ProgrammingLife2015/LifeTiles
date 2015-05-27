@@ -18,7 +18,7 @@ public class TileView {
     /**
      * Default color of a tile element.
      */
-    private static Color defaultColor = Color.web("a1d3ff");;
+    private static Color defaultColor = Color.web("a1d3ff");
     /**
      * The edges contains all EdgeLines to be displayed.
      */
