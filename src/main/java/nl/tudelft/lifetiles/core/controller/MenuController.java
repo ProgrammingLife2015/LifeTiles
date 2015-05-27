@@ -17,6 +17,9 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 import nl.tudelft.lifetiles.core.util.FileUtils;
 import nl.tudelft.lifetiles.core.util.Message;
+import nl.tudelft.lifetiles.notification.controller.NotificationController;
+import nl.tudelft.lifetiles.notification.model.Notification;
+import nl.tudelft.lifetiles.notification.model.NotificationFactory;
 
 /**
  * The controller of the menu bar.
@@ -47,6 +50,11 @@ public class MenuController extends Controller {
     private MenuBar menuBar;
 
     /**
+     * The notification factory.
+     */
+    private NotificationFactory nf;
+
+    /**
      * Handle action related to "Open" menu item.
      *
      * @param event
@@ -57,8 +65,8 @@ public class MenuController extends Controller {
         try {
             loadDataFiles();
         } catch (IOException e) {
-            // TODO: display what went wrong to the user and log the exception
-            e.printStackTrace();
+            Notification notification = nf.getNotification(e);
+            shout(NotificationController.NOTIFY, notification);
         }
     }
 
@@ -83,14 +91,13 @@ public class MenuController extends Controller {
         List<File> dataFiles = new ArrayList<>();
         List<String> exts = Arrays.asList(".node.graph", ".edge.graph", ".nwk");
         for (String ext : exts) {
-            File dataFile;
             List<File> hits = FileUtils.findByExtension(directory, ext);
-            if (hits.size() == 1) {
-                dataFile = hits.get(0);
-            } else {
-                throw new IOException("Expected 1 " + ext + " file.");
+            if (hits.size() != 1) {
+                throw new IOException("Expected 1 " + ext + " file intead of "
+                        + hits.size());
             }
-            dataFiles.add(dataFile);
+
+            dataFiles.add(hits.get(0));
         }
 
         shout(Message.OPENED, dataFiles.get(0), dataFiles.get(1),
@@ -128,5 +135,6 @@ public class MenuController extends Controller {
     public final void initialize(final URL location,
             final ResourceBundle resources) {
         addDraggableNode(menuBar);
+        nf = new NotificationFactory();
     }
 }
