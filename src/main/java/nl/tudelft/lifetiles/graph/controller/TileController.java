@@ -1,7 +1,7 @@
 package nl.tudelft.lifetiles.graph.controller;
 
 import javafx.scene.Group;
-import nl.tudelft.lifetiles.graph.view.Tile;
+import nl.tudelft.lifetiles.graph.model.Tile;
 import nl.tudelft.lifetiles.graph.view.TileView;
 
 /**

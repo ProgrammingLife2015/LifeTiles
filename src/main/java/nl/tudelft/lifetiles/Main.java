@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import nl.tudelft.lifetiles.core.controller.ViewController;
 
 /**
  * The main class / launcher.
@@ -69,8 +68,6 @@ public class Main extends Application {
             stage.setTitle("LifeTiles");
             stage.setScene(scene);
             stage.show();
-
-            ViewController.getInstance().setStage(stage);
         } catch (Exception e) {
             e.printStackTrace();
         }

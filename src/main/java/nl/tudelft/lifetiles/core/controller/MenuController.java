@@ -10,12 +10,13 @@ import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.MouseButton;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
+import nl.tudelft.lifetiles.core.util.FileUtils;
+import nl.tudelft.lifetiles.core.util.Message;
 
 /**
  * The controller of the menu bar.
@@ -23,7 +24,8 @@ import javafx.stage.Window;
  * @author Joren Hammudoglu
  *
  */
-public class MenuController implements Initializable {
+public class MenuController extends Controller {
+
     /**
      * The initial x-coordinate of the window.
      */
@@ -41,11 +43,6 @@ public class MenuController implements Initializable {
     private MenuBar menuBar;
 
     /**
-     * The view controller.
-     */
-    private ViewController controller;
-
-    /**
      * Handle action related to "Open" menu item.
      *
      * @param event
@@ -53,128 +50,47 @@ public class MenuController implements Initializable {
      */
     @FXML
     private void openAction(final ActionEvent event) {
-        openFunctionality();
-    }
-
-    /**
-     * Perform functionality associated with opening a file.
-     */
-    private void openFunctionality() {
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        directoryChooser.setTitle("Open folder containing data files");
-        Window window = menuBar.getScene().getWindow();
-        File directory = directoryChooser.showDialog(window);
-        // user aborted
-        if (directory == null) {
-            return;
-        }
-
-        String graphFileName = null;
-        File vertexfile, edgefile, treeFile;
-        String treeFileName = null;
         try {
-            graphFileName = directory.getCanonicalPath();
-            graphFileName += "/";
-            graphFileName += collectGraphFileName(directory);
-
-            vertexfile = new File(graphFileName + ".node.graph");
-            edgefile = new File(graphFileName + ".edge.graph");
-
-            treeFileName = directory.getCanonicalPath();
-            treeFileName += "/" + collectTreeFileName(directory);
-
-            treeFile = new File(treeFileName);
-
-
+            loadDataFiles();
         } catch (IOException e) {
-            ViewController.getInstance().displayError(e.getMessage());
-            return;
-        }
-
-        try {
-            controller.loadGraph(vertexfile, edgefile);
-            controller.loadTree(treeFile);
-        } catch (IOException e) {
+            // TODO: display what went wrong to the user and log the exception
             e.printStackTrace();
         }
     }
 
     /**
-     * Collect the graph filename from a directory.
+     * Perform functionality associated with opening a file.
      *
-     * @param directory
-     *            the directory
-     * @return the filename of the graph files
      * @throws IOException
-     *             throw an exception when files are not found.
-     */
-    private String collectGraphFileName(final File directory)
-            throws IOException {
-        if (!directory.isDirectory()) {
-            throw new IOException("Not a directory");
-        }
-
-        final String suffixCommon = ".graph";
-        final String suffixNodeFile = ".node.graph";
-        final String suffixEdgeFile = ".edge.graph";
-
-        // check if there are 2 .graph files
-        final File[] listFiles = directory.listFiles((dir, name) -> name
-                .endsWith(suffixCommon));
-        if (listFiles == null) {
-            throw new IOException("No " + suffixCommon + " files found.");
-        }
-
-        List<File> graphFiles = Arrays.asList(listFiles);
-
-        // check if these are the .node.graph and .edge.graph files
-        List<String> fileNames = new ArrayList<String>();
-        for (File file : graphFiles) {
-            String fileName = file.getName();
-            if (!(fileName.endsWith(suffixNodeFile) || fileName
-                    .endsWith(suffixEdgeFile))) {
-                throw new IOException("Expected a " + suffixNodeFile
-                        + " and a " + suffixEdgeFile + " file.");
-            }
-            fileName = fileName.replaceAll(suffixNodeFile, "").replaceAll(
-                    suffixEdgeFile, "");
-            fileNames.add(fileName);
-        }
-
-        // check if the filenames are equal
-        if (!fileNames.get(0).equals(fileNames.get(1))) {
-            throw new IOException(
-                    "Expected equal filename of the node and edge files.");
-        }
-
-        return fileNames.get(0);
-    }
-
-    /**
-     * Find the file name of the newick file in the directory.
-     *
-     * @param dir the directory in which the .nwk file is located
-     * @return the name of the .nwk file without its extension
-     * @throws IOException
-     *             throws an exception when no, or too many files have been
+     *             throws <code>IOException</code> if any of the files were not
      *             found
      */
-    private String collectTreeFileName(final File dir) throws IOException {
-        if (!dir.isDirectory()) {
-            throw new IOException("Not a directory");
+    private void loadDataFiles() throws IOException {
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Open folder containing data files");
+        Window window = menuBar.getScene().getWindow();
+        File directory = directoryChooser.showDialog(window);
+
+        // user aborted
+        if (directory == null) {
+            return;
         }
 
-        final String suffix = ".nwk";
-
-        final File[] listFiles = dir.listFiles((directory, name) -> name
-                .endsWith(suffix));
-        if (listFiles == null) {
-            throw new IOException("No " + suffix + " files found.");
-        } else if (listFiles.length > 1) {
-            throw new IOException("Multiple " + suffix + " files found.");
+        List<File> dataFiles = new ArrayList<>();
+        List<String> exts = Arrays.asList(".node.graph", ".edge.graph", ".nwk");
+        for (String ext : exts) {
+            File dataFile;
+            List<File> hits = FileUtils.findByExtension(directory, ext);
+            if (hits.size() == 1) {
+                dataFile = hits.get(0);
+            } else {
+                throw new IOException("Expected 1 " + ext + " file.");
+            }
+            dataFiles.add(dataFile);
         }
 
-        return listFiles[0].getName();
+        shout(Message.OPENED, dataFiles.get(0), dataFiles.get(1),
+                dataFiles.get(2));
     }
 
     /**
@@ -208,7 +124,5 @@ public class MenuController implements Initializable {
     public final void initialize(final URL location,
             final ResourceBundle resources) {
         addDraggableNode(menuBar);
-
-        controller = ViewController.getInstance();
     }
 }
