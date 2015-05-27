@@ -23,7 +23,6 @@ public class NotificationFactory {
      */
     public static final String INFO = "info";
 
-
     /**
      * Create a new notification factory.
      */
@@ -32,7 +31,7 @@ public class NotificationFactory {
     }
 
     /**
-     * Create an error notification.
+     * Create a notification.
      *
      * @param message
      *            the error message
@@ -60,6 +59,17 @@ public class NotificationFactory {
         }
 
         return res;
+    }
+
+    /**
+     * Create a notification.
+     *
+     * @param e
+     *            the exception to create the notification from
+     * @return the notification
+     */
+    public final Notification getNotification(final Exception e) {
+        return getNotification(e.getLocalizedMessage(), ERROR);
     }
 
 }
