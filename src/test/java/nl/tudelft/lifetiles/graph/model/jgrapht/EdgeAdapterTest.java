@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph.models.jgrapht;
+package nl.tudelft.lifetiles.graph.model.jgrapht;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

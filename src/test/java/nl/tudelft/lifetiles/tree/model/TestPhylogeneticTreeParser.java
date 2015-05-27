@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.tree.models;
+package nl.tudelft.lifetiles.tree.model;
 
 import static org.junit.Assert.*;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeParser;
