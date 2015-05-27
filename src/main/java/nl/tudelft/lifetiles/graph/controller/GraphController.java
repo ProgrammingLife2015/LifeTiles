@@ -15,9 +15,9 @@ import nl.tudelft.lifetiles.graph.model.FactoryProducer;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
 import nl.tudelft.lifetiles.graph.model.GraphParser;
-import nl.tudelft.lifetiles.graph.model.sequence.SequenceSegment;
 import nl.tudelft.lifetiles.graph.view.Tile;
 import nl.tudelft.lifetiles.graph.view.TileView;
+import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
  * The controller of the graph view.

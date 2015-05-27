@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.traverser.model;
+package nl.tudelft.lifetiles.graph.traverser;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,9 +7,9 @@ import java.util.Map.Entry;
 
 import nl.tudelft.lifetiles.graph.model.Edge;
 import nl.tudelft.lifetiles.graph.model.Graph;
-import nl.tudelft.lifetiles.graph.model.sequence.SegmentEmpty;
-import nl.tudelft.lifetiles.graph.model.sequence.Sequence;
-import nl.tudelft.lifetiles.graph.model.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.sequence.model.SegmentEmpty;
+import nl.tudelft.lifetiles.sequence.model.Sequence;
+import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
  * Places empty vertices in the graph where there are unified gaps.

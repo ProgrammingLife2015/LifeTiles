@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.traverser.model;
+package nl.tudelft.lifetiles.graph.traverser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 
 import nl.tudelft.lifetiles.graph.model.Edge;
 import nl.tudelft.lifetiles.graph.model.Graph;
-import nl.tudelft.lifetiles.graph.model.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
  * UnifiedPositionTraverser which generates unified positions for each graph so

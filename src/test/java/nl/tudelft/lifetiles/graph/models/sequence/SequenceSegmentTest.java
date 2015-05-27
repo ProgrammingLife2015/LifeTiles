@@ -7,11 +7,11 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-import nl.tudelft.lifetiles.graph.model.sequence.SegmentEmpty;
-import nl.tudelft.lifetiles.graph.model.sequence.SegmentString;
-import nl.tudelft.lifetiles.graph.model.sequence.Sequence;
-import nl.tudelft.lifetiles.graph.model.sequence.SequenceSegment;
 import nl.tudelft.lifetiles.graph.view.Mutation;
+import nl.tudelft.lifetiles.sequence.model.SegmentEmpty;
+import nl.tudelft.lifetiles.sequence.model.SegmentString;
+import nl.tudelft.lifetiles.sequence.model.Sequence;
+import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 import org.junit.Before;
 import org.junit.Test;

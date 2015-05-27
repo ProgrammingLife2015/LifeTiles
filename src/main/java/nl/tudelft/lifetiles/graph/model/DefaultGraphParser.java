@@ -10,10 +10,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import nl.tudelft.lifetiles.graph.model.sequence.DefaultSequence;
-import nl.tudelft.lifetiles.graph.model.sequence.SegmentString;
-import nl.tudelft.lifetiles.graph.model.sequence.Sequence;
-import nl.tudelft.lifetiles.graph.model.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.sequence.model.DefaultSequence;
+import nl.tudelft.lifetiles.sequence.model.SegmentString;
+import nl.tudelft.lifetiles.sequence.model.Sequence;
+import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
  * @author Rutger van den Berg

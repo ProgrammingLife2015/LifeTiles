@@ -7,7 +7,7 @@ import java.util.PriorityQueue;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.graph.model.Graph;
-import nl.tudelft.lifetiles.graph.model.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
  * The TileView is responsible for displaying the graph given from
