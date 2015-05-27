@@ -34,4 +34,19 @@ public final class ColorUtils {
                 (int) (color.getBlue() * colorRange), color.getOpacity());
     }
 
+    /**
+     * Format the color into web hex color format.
+     *
+     * @param color
+     *            the color
+     * @return a string of the hex code
+     */
+    public static String webCode(final Color color) {
+        final int colorRange = 255;
+        return String.format(Locale.ENGLISH, "#%02X%02X%02X",
+                (int) (color.getRed() * colorRange),
+                (int) (color.getGreen() * colorRange),
+                (int) (color.getBlue() * colorRange));
+    }
+
 }
