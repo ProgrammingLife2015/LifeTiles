@@ -2,7 +2,6 @@ package nl.tudelft.lifetiles.graph.view;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.PriorityQueue;
 
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -72,9 +71,7 @@ public class TileView {
      * @return the elements that must be displayed on the screen
      */
     public final Group drawGraph(final Graph<SequenceSegment> graph) {
-        PriorityQueue<SequenceSegment> iterator = sortStartVar(graph);
-        while (!iterator.isEmpty()) {
-            SequenceSegment segment = iterator.poll();
+        for (SequenceSegment segment : graph.getAllVertices()) {
             drawVertexLane(segment);
         }
         root.getChildren().addAll(edges, nodes);
@@ -182,26 +179,4 @@ public class TileView {
             }
         }
     }
-
-    /**
-     * This will sort the nodes based on the
-     * starting position.
-     * Beware: temporary code which will be obsolete with #56 Internal
-     * sorting of edges on destination starting position
-     *
-     * @param graph
-     *            the graph that contains the to be sorted nodes
-     * @return Iterator of the sorted list
-     */
-    @Deprecated
-    private PriorityQueue<SequenceSegment> sortStartVar(
-            final Graph<SequenceSegment> graph) {
-        PriorityQueue<SequenceSegment> iterator;
-        iterator = new PriorityQueue<SequenceSegment>();
-        for (SequenceSegment segment : graph.getAllVertices()) {
-            iterator.add(segment);
-        }
-        return iterator;
-    }
-
 }
