@@ -2,7 +2,6 @@ package nl.tudelft.lifetiles.sequence.controller;
 
 import java.net.URL;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -15,6 +14,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.core.controller.Controller;
+import nl.tudelft.lifetiles.core.util.ColorUtils;
 import nl.tudelft.lifetiles.graph.view.SequenceColor;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 
@@ -107,21 +107,6 @@ public class SequenceController extends Controller {
     }
 
     /**
-     * Format the color into r,g,b,a format. TODO: move this somewhere central.
-     *
-     * @param color
-     *            the color
-     * @return the web color code of the color
-     */
-    public static String rgbaFormat(final Color color) {
-        final int colorRange = 255;
-        return String.format(Locale.ENGLISH, "%d,%d,%d,%f",
-                (int) (color.getRed() * colorRange),
-                (int) (color.getGreen() * colorRange),
-                (int) (color.getBlue() * colorRange), color.getOpacity());
-    }
-
-    /**
      * Fills the sequence view and removes the old content.
      */
     private void repaint() {
@@ -143,8 +128,8 @@ public class SequenceController extends Controller {
             Label label = new Label(id);
             Color color = SequenceColor.getColor(sequence);
 
-            label.setStyle("-fx-background-color: rgba(" + rgbaFormat(color)
-                    + ")");
+            label.setStyle("-fx-background-color: rgba("
+                    + ColorUtils.rgbaFormat(color) + ")");
 
             String styleClassFilter = "filtered";
             if (getVisible().contains(sequence)) {
