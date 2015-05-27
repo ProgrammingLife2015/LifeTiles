@@ -4,7 +4,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import javafx.scene.paint.Color;
-import nl.tudelft.lifetiles.graph.models.sequence.Sequence;
+import nl.tudelft.lifetiles.core.util.TypeUtils;
+import nl.tudelft.lifetiles.sequence.model.Sequence;
 
 /**
  * Helper class for calculating the color of a sequence.
@@ -33,8 +34,9 @@ public final class SequenceColor {
         byte[] hash = md5(sequence);
 
         final double opacity = 0.5;
-        return Color.rgb(ubyteValue(hash[0]), ubyteValue(hash[1]),
-                ubyteValue(hash[2]), opacity);
+        return Color.rgb(TypeUtils.unsignedByteValue(hash[0]),
+                TypeUtils.unsignedByteValue(hash[1]),
+                TypeUtils.unsignedByteValue(hash[2]), opacity);
     }
 
     /**
@@ -55,16 +57,4 @@ public final class SequenceColor {
         }
     }
 
-    /**
-     * Returns the value of an unsigned byte.
-     *
-     * @param b
-     *            the unsigned byte
-     * @return the integer value of the unsigned byte
-     */
-    private static int ubyteValue(final byte b) {
-        final int mask = 0xFF;
-        final int value = b & mask;
-        return value;
-    }
 }

@@ -1,19 +1,24 @@
 package nl.tudelft.lifetiles.graph.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
-import nl.tudelft.lifetiles.core.controller.ViewController;
-import nl.tudelft.lifetiles.graph.models.Graph;
-import nl.tudelft.lifetiles.graph.models.sequence.SequenceSegment;
-import nl.tudelft.lifetiles.graph.view.Tile;
+import nl.tudelft.lifetiles.core.controller.Controller;
+import nl.tudelft.lifetiles.core.controller.MenuController;
+import nl.tudelft.lifetiles.core.util.Message;
+import nl.tudelft.lifetiles.graph.model.DefaultGraphParser;
+import nl.tudelft.lifetiles.graph.model.FactoryProducer;
+import nl.tudelft.lifetiles.graph.model.Graph;
+import nl.tudelft.lifetiles.graph.model.GraphFactory;
+import nl.tudelft.lifetiles.graph.model.GraphParser;
+import nl.tudelft.lifetiles.graph.model.Tile;
 import nl.tudelft.lifetiles.graph.view.TileView;
+import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
  * The controller of the graph view.
@@ -21,7 +26,7 @@ import nl.tudelft.lifetiles.graph.view.TileView;
  * @author Joren Hammudoglu
  *
  */
-public class GraphController implements Initializable, Observer {
+public class GraphController extends Controller {
 
     /**
      * The wrapper element.
@@ -30,35 +35,70 @@ public class GraphController implements Initializable, Observer {
     private ScrollPane wrapper;
 
     /**
-     * The view controller.
+     * The currently loaded graph.
      */
-    private ViewController controller;
+    private Graph<SequenceSegment> graph;
 
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        controller = ViewController.getInstance();
-        controller.addObserver(this);
+        listen(Message.OPENED, (controller, args) -> {
+            assert (controller instanceof MenuController);
+            assert (args[0] instanceof File && args[1] instanceof File);
+            try {
+                loadGraph((File) args[0], (File) args[1]);
+            } catch (Exception e) {
+                // TODO: notify the user that the file was not found
+                e.printStackTrace();
+            }
+        });
     }
 
     /**
-     * Fills the graph view and removes the old content.
-     *
-     * @param graph the graph
+     * @return the currently loaded graph.
      */
-    private void repaint(final Graph<SequenceSegment> graph) {
-        Tile model = new Tile(graph);
-        TileView view = new TileView();
-        TileController tc = new TileController(view, model);
-
-        Group root = tc.drawGraph();
-        wrapper.setContent(root);
+    public final Graph<SequenceSegment> getGraph() {
+        if (graph == null) {
+            throw new IllegalStateException("Graph not loaded.");
+        }
+        return graph;
     }
 
-    @Override
-    public final void update(final Observable o, final Object arg) {
-        if (controller.isLoaded()) {
-            repaint(controller.getGraph());
+    /**
+     * Load a new graph from the specified file.
+     *
+     * @param vertexfile
+     *            The file to get vertices for.
+     * @param edgefile
+     *            The file to get edges for.
+     * @throws IOException
+     *             When an IO error occurs while reading one of the files.
+     */
+    private void loadGraph(final File vertexfile, final File edgefile)
+            throws IOException {
+        // create the graph
+        FactoryProducer<SequenceSegment> fp = new FactoryProducer<>();
+        GraphFactory<SequenceSegment> gf = fp.getFactory("JGraphT");
+        GraphParser gp = new DefaultGraphParser();
+        graph = gp.parseGraph(vertexfile, edgefile, gf);
+
+        shout(Message.LOADED, graph);
+
+        repaint();
+    }
+
+    /**
+     * Repaints the view.
+     */
+    private void repaint() {
+        if (graph != null) {
+            System.out.println("repainting graph...");
+            Tile model = new Tile(graph);
+            TileView view = new TileView();
+            TileController tc = new TileController(view, model);
+
+            Group root = tc.drawGraph();
+            wrapper.setContent(root);
         }
     }
 

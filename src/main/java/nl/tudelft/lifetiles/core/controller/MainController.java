@@ -1,15 +1,13 @@
 package nl.tudelft.lifetiles.core.controller;
 
 import java.net.URL;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import nl.tudelft.lifetiles.core.util.Message;
 
 /**
  * The controller of the main view.
@@ -17,7 +15,7 @@ import javafx.scene.layout.HBox;
  * @author Joren Hammudoglu
  *
  */
-public class MainController implements Initializable, Observer {
+public class MainController extends Controller {
 
     /**
      * The wrapper element.
@@ -37,26 +35,26 @@ public class MainController implements Initializable, Observer {
     @FXML
     private HBox splashPane;
 
-    /**
-     * The view controller.
-     */
-    private ViewController vc;
-
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        vc = ViewController.getInstance();
-        vc.addObserver(this);
-
         mainSplitPane.setVisible(false);
+
+        repaint(true);
+
+        listen(Message.OPENED, (controller, args) -> {
+            repaint(false);
+        });
     }
 
-    @Override
-    public final void update(final Observable o, final Object arg) {
-        if (vc.isLoaded()) {
-            splashPane.setVisible(false);
-            mainSplitPane.setVisible(true);
-        }
+    /**
+     * Repaint the main view, showing or hiding the splash screen.
+     *
+     * @param splash show the splash
+     */
+    private void repaint(final boolean splash) {
+        mainSplitPane.setVisible(!splash);
+        splashPane.setVisible(splash);
     }
 
 }
