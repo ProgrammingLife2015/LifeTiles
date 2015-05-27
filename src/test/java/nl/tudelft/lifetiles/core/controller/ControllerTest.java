@@ -6,6 +6,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
 
+import nl.tudelft.lifetiles.core.util.Message;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -30,7 +32,7 @@ public class ControllerTest {
 
     @Test
     public void testShoutSelf() {
-        final String message = "Leviathan";
+        final Message message = Message.create("Leviathan");
         final String content = "hail santa";
 
         stub1.listen(message, (controller, args) -> inbox1.set(args[0]));
@@ -41,7 +43,7 @@ public class ControllerTest {
 
     @Test
     public void testShoutOther() {
-        final String message = "Behemoth";
+        final Message message =  Message.create("Behemoth");
         final String content = "hail satan";
 
         stub2.listen(message, (controller, args) -> inbox1.set(args[0]));
@@ -52,7 +54,7 @@ public class ControllerTest {
 
     @Test
     public void testDoubleListener() {
-        final String message = "Ziz";
+        final Message message =  Message.create("Ziz");
         final String content = "abyssum abyssus invocat";
 
         stub2.listen(message, (controller, args) -> inbox1.set(args[0]));

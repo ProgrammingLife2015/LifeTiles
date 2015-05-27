@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.core.controller.Controller;
 import nl.tudelft.lifetiles.core.util.ColorUtils;
+import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.graph.view.SequenceColor;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 
@@ -25,11 +26,6 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
  *
  */
 public class SequenceController extends Controller {
-
-    /**
-     * The shout message indicating the sequences have been filtered.
-     */
-    public static final String FILTERED = "filtered";
 
     /**
      * The wrapper element.
@@ -57,7 +53,7 @@ public class SequenceController extends Controller {
             final ResourceBundle resources) {
         repaint();
 
-        listen(FILTERED, (controller, args) -> {
+        listen(Message.FILTERED, (controller, args) -> {
             assert (args.length == 1);
             if (!(args[0] instanceof Set<?>)) {
                 throw new IllegalArgumentException(
@@ -91,7 +87,7 @@ public class SequenceController extends Controller {
                     "Attempted to set a non-existant sequence to visible");
         }
         if (shout) {
-            shout(FILTERED, visible);
+            shout(Message.FILTERED, visible);
         }
     }
 

@@ -16,6 +16,7 @@ import javafx.scene.input.MouseButton;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
 import nl.tudelft.lifetiles.core.util.FileUtils;
+import nl.tudelft.lifetiles.core.util.Message;
 
 /**
  * The controller of the menu bar.
@@ -24,11 +25,6 @@ import nl.tudelft.lifetiles.core.util.FileUtils;
  *
  */
 public class MenuController extends Controller {
-
-    /**
-     * The shout message indicating the data resources are loaded.
-     */
-    public static final String FILES_OPENED = "filesOpened";
 
     /**
      * The initial x-coordinate of the window.
@@ -93,7 +89,7 @@ public class MenuController extends Controller {
             dataFiles.add(dataFile);
         }
 
-        shout(FILES_OPENED, dataFiles.get(0), dataFiles.get(1),
+        shout(Message.OPENED, dataFiles.get(0), dataFiles.get(1),
                 dataFiles.get(2));
     }
 

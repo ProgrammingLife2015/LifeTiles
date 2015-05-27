@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import nl.tudelft.lifetiles.core.util.Message;
 
 /**
  * The controller of the window controls.
@@ -18,12 +19,12 @@ public class WindowControlController extends Controller {
     /**
      * The minimize window shout message.
      */
-    public static final String MINIMIZE_WINDOW = "minimizeWindow";
+    public static final Message MINIMIZE = Message.create("minimize");
 
     /**
      * The resize window shout message.
      */
-    public static final String RESIZE_WINDOW = "resizeWindow";
+    public static final Message RESIZE = Message.create("resize");
 
     /**
      * The window close button.
@@ -66,7 +67,7 @@ public class WindowControlController extends Controller {
         Stage stage = (Stage) windowMinimize.getScene().getWindow();
         stage.toBack();
 
-        shout(MINIMIZE_WINDOW);
+        shout(MINIMIZE);
     }
 
     /**
@@ -77,6 +78,6 @@ public class WindowControlController extends Controller {
         Stage stage = (Stage) windowResize.getScene().getWindow();
         stage.setMaximized(!stage.isMaximized());
 
-        shout(RESIZE_WINDOW);
+        shout(RESIZE);
     }
 }

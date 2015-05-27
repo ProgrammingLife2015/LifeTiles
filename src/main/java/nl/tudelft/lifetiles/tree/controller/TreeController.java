@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.scene.layout.BorderPane;
 import nl.tudelft.lifetiles.core.controller.Controller;
 import nl.tudelft.lifetiles.core.controller.MenuController;
+import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeParser;
 import nl.tudelft.lifetiles.tree.view.SunburstView;
@@ -21,11 +22,6 @@ import nl.tudelft.lifetiles.tree.view.SunburstView;
  *
  */
 public class TreeController extends Controller {
-
-    /**
-     * The shout message indicating the graph model has been loaded.
-     */
-    public static final String TREE_LOADED = "treeLoaded";
 
     /**
      * The wrapper element.
@@ -49,7 +45,8 @@ public class TreeController extends Controller {
             final ResourceBundle resources) {
         view = new SunburstView();
 
-        listen(MenuController.FILES_OPENED, (controller, args) -> {
+        // load the tree when the files are opened
+        listen(Message.OPENED, (controller, args) -> {
             assert (controller instanceof MenuController);
             final int expectedArgsLength = 3;
             assert (args.length == expectedArgsLength);
@@ -83,7 +80,9 @@ public class TreeController extends Controller {
         // parse the string into a tree
         tree = PhylogeneticTreeParser.parse(fileString);
 
-        shout(TREE_LOADED, tree);
+        repaint();
+
+        shout(Message.LOADED, tree);
     }
 
     /**
