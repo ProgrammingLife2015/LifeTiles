@@ -34,7 +34,8 @@ public class Tile {
                 .iterator().next();
         
         alignGraph();
-        findMutations(reference);
+        // TODO: Improve reference position traversal. Currently disabled for implementing filtering.
+        // findMutations(reference);
     }
 
     /**
