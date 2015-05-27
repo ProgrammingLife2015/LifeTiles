@@ -1,8 +1,6 @@
 package nl.tudelft.lifetiles.traverser.models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map.Entry;
 
 import nl.tudelft.lifetiles.graph.models.Edge;
 import nl.tudelft.lifetiles.graph.models.Graph;
@@ -21,13 +19,6 @@ public class UnifiedPositionTraverser {
      * Graph which is being traversed.
      */
     private Graph<SequenceSegment> graphVar;
-
-    /**
-     * Map which maps sequence segments to unifiedPositions, used to make
-     * modifications on during traversal. Inserted into graph at end of
-     * traversal to avoid concurrent modification-like exceptions.
-     */
-    private HashMap<SequenceSegment, Long> unifiedPositions;
 
     /**
      * Traverses the graph, calculates the unified position. Unified positions
@@ -49,16 +40,10 @@ public class UnifiedPositionTraverser {
      * are needed to visualize a comprehensible model of the graph.
      */
     private void unifyGraph() {
-        unifiedPositions = new HashMap<SequenceSegment, Long>();
         for (SequenceSegment vertex : graphVar.getSources()) {
-            unifiedPositions.put(vertex, (long) 1);
+            vertex.setUnifiedStart(1);
+            vertex.setUnifiedEnd(1 + vertex.getContent().getLength());
             unifyVertex(vertex);
-        }
-        for (Entry<SequenceSegment, Long> entry : unifiedPositions.entrySet()) {
-            SequenceSegment vertex = entry.getKey();
-            Long position = entry.getValue();
-            vertex.setUnifiedStart(position);
-            vertex.setUnifiedEnd(position + vertex.getContent().getLength());
         }
     }
 
@@ -69,14 +54,14 @@ public class UnifiedPositionTraverser {
      *            Vertex to be traversed.
      */
     private void unifyVertex(final SequenceSegment vertex) {
-        long vertexPosition = unifiedPositions.get(vertex)
+        long vertexPosition = vertex.getUnifiedStart()
                 + vertex.getContent().getLength();
         for (Edge<SequenceSegment> edge : new ArrayList<Edge<SequenceSegment>>(
                 graphVar.getOutgoing(vertex))) {
             SequenceSegment destination = graphVar.getDestination(edge);
-            if (!unifiedPositions.containsKey(destination)
-                    || unifiedPositions.get(destination) < vertexPosition) {
-                unifiedPositions.put(destination, vertexPosition);
+            if (destination.getUnifiedStart() < vertexPosition) {
+                destination.setUnifiedStart(vertexPosition);
+                destination.setUnifiedEnd(vertexPosition + destination.getContent().getLength());
                 unifyVertex(destination);
             }
         }
