@@ -115,8 +115,11 @@ public class GraphController extends AbstractController {
             Group root = new Group();
             Rectangle clip = new Rectangle(getMaxUnifiedEnd(graph)
                     * VertexView.HORIZONTALSCALE, 0);
+            graphNode = new Group();
+            graphNode.getChildren().add(tileController.drawGraph(0));
             root.getChildren().add(graphNode);
             root.getChildren().add(clip);
+            
             repaintPosition(tileController, root, wrapper.hvalueProperty()
                     .doubleValue());
             wrapper.hvalueProperty().addListener(
