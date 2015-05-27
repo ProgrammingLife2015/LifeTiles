@@ -34,10 +34,12 @@ public class TileController {
 
     /**
      * Creates a drawable object of the graph from the model.
-     *
+     * 
+     * @param position
+     *            Position in the scrollPane.
      * @return Group object to be drawn on the screen
      */
-    public final Group drawGraph() {
+    public final Group drawGraph(double position) {
         return viewVar.drawGraph(modelVar.getGraph());
     }
 

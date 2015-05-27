@@ -22,7 +22,7 @@ public final class FactoryProducer<V extends Comparable<V>> {
     /**
      * Do not instantiate.
      */
-    private FactoryProducer() {
+    public FactoryProducer() {
 
     }
 
