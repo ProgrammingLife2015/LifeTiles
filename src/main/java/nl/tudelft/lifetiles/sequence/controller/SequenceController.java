@@ -27,6 +27,11 @@ import nl.tudelft.lifetiles.graph.view.SequenceColor;
 public class SequenceController extends Controller {
 
     /**
+     * The shout message indicating the sequences have been filtered.
+     */
+    public static final String FILTERED = "filtered";
+
+    /**
      * The wrapper element.
      */
     @FXML
@@ -51,6 +56,15 @@ public class SequenceController extends Controller {
     public final void initialize(final URL location,
             final ResourceBundle resources) {
         repaint();
+
+        listen(FILTERED, (controller, args) -> {
+            assert (args.length == 1);
+            if (!(args[0] instanceof Set<?>)) {
+                throw new IllegalArgumentException(
+                        "Argument not of type Set<Sequence>");
+            }
+            setVisible((Set<Sequence>) args[0], false);
+        });
     }
 
     /**
@@ -68,12 +82,18 @@ public class SequenceController extends Controller {
      *
      * @param newVisibleSequences
      *            The sequences to set to visible.
+     * @param shout
+     *            shout that the seqeunces have been filtered
      */
-    private void setVisible(final Set<Sequence> newVisibleSequences) {
+    private void setVisible(final Set<Sequence> newVisibleSequences,
+            final boolean shout) {
         visibleSequences = new HashSet<>(newVisibleSequences);
         if (visibleSequences.retainAll(sequences.values())) {
             throw new IllegalArgumentException(
                     "Attempted to set a non-existant sequence to visible");
+        }
+        if (shout) {
+            shout(FILTERED, newVisibleSequences);
         }
     }
 
@@ -146,7 +166,7 @@ public class SequenceController extends Controller {
                     label.getStyleClass().add(styleClassFilter);
                 }
 
-                setVisible(visible);
+                setVisible(visible, true);
             });
 
             sequenceItems.add(label);
