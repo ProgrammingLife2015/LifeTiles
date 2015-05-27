@@ -80,20 +80,18 @@ public class SequenceController extends Controller {
     /**
      * Sets the visible sequences in all views to the provided sequences.
      *
-     * @param newVisibleSequences
+     * @param visible
      *            The sequences to set to visible.
      * @param shout
      *            shout that the seqeunces have been filtered
      */
-    private void setVisible(final Set<Sequence> newVisibleSequences,
-            final boolean shout) {
-        visibleSequences = new HashSet<>(newVisibleSequences);
-        if (visibleSequences.retainAll(sequences.values())) {
+    private void setVisible(final Set<Sequence> visible, final boolean shout) {
+        if (!visible.containsAll(sequences.values())) {
             throw new IllegalArgumentException(
                     "Attempted to set a non-existant sequence to visible");
         }
         if (shout) {
-            shout(FILTERED, newVisibleSequences);
+            shout(FILTERED, visible);
         }
     }
 
