@@ -15,6 +15,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.input.MouseButton;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
+import nl.tudelft.lifetiles.core.util.FileUtils;
 
 /**
  * The controller of the menu bar.
@@ -53,123 +54,47 @@ public class MenuController extends Controller {
      */
     @FXML
     private void openAction(final ActionEvent event) {
-        openFunctionality();
+        try {
+            loadDataFiles();
+        } catch (IOException e) {
+            // TODO: display what went wrong to the user and log the exception
+            e.printStackTrace();
+        }
     }
 
     /**
      * Perform functionality associated with opening a file.
+     *
+     * @throws IOException
+     *             throws <code>IOException</code> if any of the files were not
+     *             found
      */
-    private void openFunctionality() {
+    private void loadDataFiles() throws IOException {
         DirectoryChooser directoryChooser = new DirectoryChooser();
         directoryChooser.setTitle("Open folder containing data files");
         Window window = menuBar.getScene().getWindow();
         File directory = directoryChooser.showDialog(window);
+
         // user aborted
         if (directory == null) {
             return;
         }
 
-        String graphFileName, treeFileName;
-        File vertexFile, edgeFile, treeFile;
-
-        try {
-            graphFileName = directory.getCanonicalPath();
-            graphFileName += "/";
-            graphFileName += collectGraphFileName(directory);
-
-            vertexFile = new File(graphFileName + ".node.graph");
-            edgeFile = new File(graphFileName + ".edge.graph");
-
-            treeFileName = directory.getCanonicalPath();
-            treeFileName += "/" + collectTreeFileName(directory);
-
-            treeFile = new File(treeFileName);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return;
-        }
-
-        shout(FILES_OPENED, vertexFile, edgeFile, treeFile);
-    }
-
-    /**
-     * Collect the graph filename from a directory.
-     *
-     * @param directory
-     *            the directory
-     * @return the filename of the graph files
-     * @throws IOException
-     *             throw an exception when files are not found.
-     */
-    private String collectGraphFileName(final File directory)
-            throws IOException {
-        if (!directory.isDirectory()) {
-            throw new IOException("Not a directory");
-        }
-
-        final String suffixCommon = ".graph";
-        final String suffixNodeFile = ".node.graph";
-        final String suffixEdgeFile = ".edge.graph";
-
-        // check if there are 2 .graph files
-        final File[] listFiles = directory.listFiles((dir, name) -> name
-                .endsWith(suffixCommon));
-        if (listFiles == null) {
-            throw new IOException("No " + suffixCommon + " files found.");
-        }
-
-        List<File> graphFiles = Arrays.asList(listFiles);
-
-        // check if these are the .node.graph and .edge.graph files
-        List<String> fileNames = new ArrayList<String>();
-        for (File file : graphFiles) {
-            String fileName = file.getName();
-            if (!(fileName.endsWith(suffixNodeFile) || fileName
-                    .endsWith(suffixEdgeFile))) {
-                throw new IOException("Expected a " + suffixNodeFile
-                        + " and a " + suffixEdgeFile + " file.");
+        List<File> dataFiles = new ArrayList<>();
+        List<String> exts = Arrays.asList(".node.graph", ".edge.graph", ".nwk");
+        for (String ext : exts) {
+            File dataFile;
+            List<File> hits = FileUtils.findByExtension(directory, ext);
+            if (hits.size() == 1) {
+                dataFile = hits.get(0);
+            } else {
+                throw new IOException("Expected 1 " + ext + " file.");
             }
-            fileName = fileName.replaceAll(suffixNodeFile, "").replaceAll(
-                    suffixEdgeFile, "");
-            fileNames.add(fileName);
+            dataFiles.add(dataFile);
         }
 
-        // check if the filenames are equal
-        if (!fileNames.get(0).equals(fileNames.get(1))) {
-            throw new IOException(
-                    "Expected equal filename of the node and edge files.");
-        }
-
-        return fileNames.get(0);
-    }
-
-    /**
-     * Find the file name of the newick file in the directory.
-     *
-     * @param dir
-     *            the directory in which the .nwk file is located
-     * @return the name of the .nwk file without its extension
-     * @throws IOException
-     *             throws an exception when no, or too many files have been
-     *             found
-     */
-    private String collectTreeFileName(final File dir) throws IOException {
-        if (!dir.isDirectory()) {
-            throw new IOException("Not a directory");
-        }
-
-        final String suffix = ".nwk";
-
-        final File[] listFiles = dir.listFiles((directory, name) -> name
-                .endsWith(suffix));
-        if (listFiles == null) {
-            throw new IOException("No " + suffix + " files found.");
-        } else if (listFiles.length > 1) {
-            throw new IOException("Multiple " + suffix + " files found.");
-        }
-
-        return listFiles[0].getName();
+        shout(FILES_OPENED, dataFiles.get(0), dataFiles.get(1),
+                dataFiles.get(2));
     }
 
     /**
