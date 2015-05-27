@@ -1,5 +1,9 @@
 package nl.tudelft.lifetiles.graph.model;
 
+import java.util.SortedSet;
+
+import nl.tudelft.lifetiles.bucket.model.BucketCache;
+import nl.tudelft.lifetiles.bucket.model.BucketCacheFactory;
 import nl.tudelft.lifetiles.graph.traverser.EmptySegmentTraverser;
 import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
 import nl.tudelft.lifetiles.graph.traverser.ReferencePositionTraverser;
@@ -20,6 +24,11 @@ public class GraphContainer {
     private Graph<SequenceSegment> graph;
 
     /**
+     * The Current graph that this model is holding in bucket cache form.
+     */
+    private BucketCache segmentBuckets;
+
+    /**
      * create a new Tile.
      *
      * @param graph
@@ -29,6 +38,7 @@ public class GraphContainer {
         this.graph = graph;
 
         // TODO: Temporary line until sequence selection is implemented.
+<<<<<<< HEAD:src/main/java/nl/tudelft/lifetiles/graph/model/GraphContainer.java
         Sequence reference = this.graph.getSources().iterator().next()
                 .getSources().iterator().next();
 
@@ -36,6 +46,16 @@ public class GraphContainer {
         // TODO: Improve reference position traversal. Currently disabled for
         // implementing filtering.
         // findMutations(reference);
+=======
+        Sequence reference = graph.getSources().iterator().next().getSources()
+                .iterator().next();
+
+        alignGraph();
+        findMutations(reference);
+
+        BucketCacheFactory bcf = new BucketCacheFactory();
+        segmentBuckets = bcf.getBucketCache(10000, graph);
+>>>>>>> Integrated BucketCache into Tile:src/main/java/nl/tudelft/lifetiles/graph/model/Tile.java
     }
 
     /**
@@ -54,18 +74,37 @@ public class GraphContainer {
      *            Reference of the graph which is used to indicate mutations.
      */
     private void findMutations(final Sequence reference) {
+<<<<<<< HEAD:src/main/java/nl/tudelft/lifetiles/graph/model/GraphContainer.java
         new ReferencePositionTraverser(reference).referenceMapGraph(graph);
         new MutationIndicationTraverser(reference)
                 .indicateGraphMutations(graph);
+=======
+        ReferencePositionTraverser rmt = new ReferencePositionTraverser(
+                reference);
+        MutationIndicationTraverser mt = new MutationIndicationTraverser(
+                reference);
+        graph = mt.indicateGraphMutations(rmt.referenceMapGraph(graph));
+>>>>>>> Integrated BucketCache into Tile:src/main/java/nl/tudelft/lifetiles/graph/model/Tile.java
     }
 
     /**
      * Get the graph that this model is holding.
-     *
+     * 
+     * @param position
+     *            bucket position in the scrollPane.
      * @return graph
      */
-    public final Graph<SequenceSegment> getGraph() {
-        return graph;
+    public final SortedSet<SequenceSegment> getSegments(int position) {
+        return segmentBuckets.getSegments(position);
+    }
+
+    /**
+     * Returns the bucketCache to check the current position.
+     * 
+     * @return the bucketCache of the graph.
+     */
+    public BucketCache getBucketCache() {
+        return segmentBuckets;
     }
 
 }
