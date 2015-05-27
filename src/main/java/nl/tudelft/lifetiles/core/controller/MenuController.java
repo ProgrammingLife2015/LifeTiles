@@ -69,16 +69,16 @@ public class MenuController extends Controller {
             return;
         }
 
-        String graphFileName = null;
-        File vertexfile, edgefile, treeFile; // TODO: fix inconsistent naming
-        String treeFileName = null;
+        String graphFileName, treeFileName;
+        File vertexFile, edgeFile, treeFile;
+
         try {
             graphFileName = directory.getCanonicalPath();
             graphFileName += "/";
             graphFileName += collectGraphFileName(directory);
 
-            vertexfile = new File(graphFileName + ".node.graph");
-            edgefile = new File(graphFileName + ".edge.graph");
+            vertexFile = new File(graphFileName + ".node.graph");
+            edgeFile = new File(graphFileName + ".edge.graph");
 
             treeFileName = directory.getCanonicalPath();
             treeFileName += "/" + collectTreeFileName(directory);
@@ -90,7 +90,7 @@ public class MenuController extends Controller {
             return;
         }
 
-        shout(FILES_OPENED, vertexfile, edgefile, treeFile);
+        shout(FILES_OPENED, vertexFile, edgeFile, treeFile);
     }
 
     /**

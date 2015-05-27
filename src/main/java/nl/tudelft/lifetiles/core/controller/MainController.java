@@ -41,7 +41,7 @@ public class MainController extends Controller {
 
         repaint(true);
 
-        listen(MenuController.FILES_OPENED, (observer, args) -> {
+        listen(MenuController.FILES_OPENED, (controller, args) -> {
             repaint(false);
         });
     }
