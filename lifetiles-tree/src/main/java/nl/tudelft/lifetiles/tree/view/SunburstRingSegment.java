@@ -44,17 +44,21 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      *            the X coordinate of the center of the circle
      * @param centerY
      *            the Y coordinate of the center of the circle
+     * @param scale
+     *            the scaling factor
      */
     public SunburstRingSegment(final PhylogeneticTreeItem value, final int layer,
             final double degreeStart, final double degreeEnd,
-            final double centerX, final double centerY) {
+            final double centerX, final double centerY, final double scale) {
         // set the value, and create the text and semi-circle
         setValue(value);
         setName(new Text(getValue().getName()));
-        setDisplay(createRing(layer, degreeStart, degreeEnd, centerX, centerY));
+        setDisplay(createRing(layer, degreeStart, degreeEnd
+                   , centerX, centerY, scale));
 
         // calculate the positon of the text
-        double radius = CENTER_RADIUS + (layer * RING_WIDTH) + (RING_WIDTH / 2);
+        double radius = scale * (CENTER_RADIUS + (layer * RING_WIDTH)
+                      + (RING_WIDTH / 2));
 
         double degreeCenter = degreeStart
                 + AbstractSunburstNode.calculateAngle(degreeStart, degreeEnd) / 2;
@@ -87,10 +91,13 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      *            the X coordinate of the center of the circle
      * @param centerY
      *            the Y coordinate of the center of the circle
+     * @param scale
+     *            the scaling factor
      * @return a semi-circle with the specified dimensions
      */
     private Shape createRing(final int layer, final double degreeStart,
             final double degreeEnd, final double centerX, final double centerY) {
+            final double centerY, final double scale) {
         Path result = new Path();
 
         result.setFill(createColor());
@@ -101,8 +108,8 @@ public class SunburstRingSegment extends AbstractSunburstNode {
         boolean largeArc = arcSize > (AbstractSunburstNode.CIRCLEDEGREES / 2);
 
         // calculate the radii of the two arcs
-        double innerRadius = CENTER_RADIUS + (layer * RING_WIDTH);
-        double outerRadius = innerRadius + RING_WIDTH;
+        double innerRadius = scale * (CENTER_RADIUS + (layer * RING_WIDTH));
+        double outerRadius = innerRadius + scale * RING_WIDTH;
 
         // convert degrees to radians for Math.sin and Math.cos
         double angleAlpha = Math.toRadians(degreeStart);
