@@ -1,9 +1,7 @@
 package nl.tudelft.lifetiles.graph.traverser;
 
-import java.util.HashMap;
+import java.util.Calendar;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import nl.tudelft.lifetiles.graph.model.Edge;
@@ -25,13 +23,6 @@ public class EmptySegmentTraverser {
     private Graph<SequenceSegment> graphVar;
 
     /**
-     * Map which maps edges to sequence segments, used to make
-     * modifications on during traversal. Inserted into graph at end of
-     * traversal to avoid concurrent modification-like exceptions.
-     */
-    private Map<Edge<SequenceSegment>, SequenceSegment> emptySegments;
-
-    /**
      * Traverses the graph. Adds empty vertices to the graph which are being
      * used to indicate mutations on.
      *
@@ -51,16 +42,13 @@ public class EmptySegmentTraverser {
      * used to indicate mutations on.
      */
     private void addEmptySegmentsGraph() {
-        emptySegments = new HashMap<Edge<SequenceSegment>, SequenceSegment>();
+        long startTime = Calendar.getInstance().getTimeInMillis();
         for (SequenceSegment vertex : graphVar.getAllVertices()) {
             addEmptySegmentsVertex(vertex);
         }
-        for (Entry<Edge<SequenceSegment>, SequenceSegment> entry : emptySegments
-                .entrySet()) {
-            Edge<SequenceSegment> edge = entry.getKey();
-            SequenceSegment vertex = entry.getValue();
-            graphVar.splitEdge(edge, vertex);
-        }
+        System.out.println("Empty segments added. Took "
+                + (Calendar.getInstance().getTimeInMillis() - startTime)
+                + " ms.");
     }
 
     /**
@@ -78,7 +66,7 @@ public class EmptySegmentTraverser {
                     destination.getSources());
             sources.retainAll(buffer);
             if (vertex.distanceTo(destination) > 0) {
-                emptySegments.put(edge,
+                graphVar.splitEdge(edge,
                         bridgeSequence(vertex, destination, sources));
             }
             buffer.removeAll(sources);
