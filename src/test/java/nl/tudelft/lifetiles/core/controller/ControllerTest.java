@@ -18,13 +18,14 @@ public class ControllerTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private AtomicReference<Object> inbox;
+    private AtomicReference<Object> inbox1, inbox2;
 
     @Before
     public void setUp() {
         stub1 = new ControllerStub();
         stub2 = new ControllerStub();
-        inbox = new AtomicReference<>();
+        inbox1 = new AtomicReference<>();
+        inbox2 = new AtomicReference<>();
     }
 
     @Test
@@ -32,12 +33,10 @@ public class ControllerTest {
         final String message = "Leviathan";
         final String content = "hail santa";
 
-        stub1.listen(message, (controller, args) -> {
-            inbox.set(args[0]);
-        });
+        stub1.listen(message, (controller, args) -> inbox1.set(args[0]));
         stub1.shout(message, content);
 
-        assertEquals(content, inbox.get());
+        assertEquals(content, inbox1.get());
     }
 
     @Test
@@ -45,14 +44,25 @@ public class ControllerTest {
         final String message = "Behemoth";
         final String content = "hail satan";
 
-        stub2.listen(message, (controller, args) -> {
-            System.out.println("Testother shout");
-            inbox.set(args[0]);
-        });
+        stub2.listen(message, (controller, args) -> inbox1.set(args[0]));
         stub1.shout(message, content);
 
-        assertEquals(content, inbox.get());
+        assertEquals(content, inbox1.get());
     }
+
+    @Test
+    public void testDoubleListener() {
+        final String message = "Ziz";
+        final String content = "abyssum abyssus invocat";
+
+        stub2.listen(message, (controller, args) -> inbox1.set(args[0]));
+        stub2.listen(message, (controller, args) -> inbox2.set(args[0]));
+        stub1.shout(message, content);
+
+        assertEquals(content, inbox1.get());
+        assertEquals(content, inbox2.get());
+    }
+
 }
 
 final class ControllerStub extends Controller {
