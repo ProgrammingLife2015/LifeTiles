@@ -1,6 +1,5 @@
-package nl.tudelft.lifetiles.graph.view;
+package nl.tudelft.lifetiles.graph.model;
 
-import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.traverser.EmptySegmentTraverser;
 import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
 import nl.tudelft.lifetiles.graph.traverser.ReferencePositionTraverser;
