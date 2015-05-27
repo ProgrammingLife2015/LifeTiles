@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.traverser.models;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import nl.tudelft.lifetiles.graph.models.Edge;
 import nl.tudelft.lifetiles.graph.models.Graph;
@@ -40,11 +41,15 @@ public class UnifiedPositionTraverser {
      * are needed to visualize a comprehensible model of the graph.
      */
     private void unifyGraph() {
+        long startTime = Calendar.getInstance().getTimeInMillis();
         for (SequenceSegment vertex : graphVar.getSources()) {
             vertex.setUnifiedStart(1);
             vertex.setUnifiedEnd(1 + vertex.getContent().getLength());
             unifyVertex(vertex);
         }
+        System.out.println("Graph unified. Took "
+                + (Calendar.getInstance().getTimeInMillis() - startTime)
+                + " ms.");
     }
 
     /**
@@ -61,7 +66,8 @@ public class UnifiedPositionTraverser {
             SequenceSegment destination = graphVar.getDestination(edge);
             if (destination.getUnifiedStart() < vertexPosition) {
                 destination.setUnifiedStart(vertexPosition);
-                destination.setUnifiedEnd(vertexPosition + destination.getContent().getLength());
+                destination.setUnifiedEnd(vertexPosition
+                        + destination.getContent().getLength());
                 unifyVertex(destination);
             }
         }

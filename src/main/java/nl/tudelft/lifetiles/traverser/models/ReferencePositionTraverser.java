@@ -1,5 +1,7 @@
 package nl.tudelft.lifetiles.traverser.models;
 
+import java.util.Calendar;
+
 import nl.tudelft.lifetiles.graph.models.Edge;
 import nl.tudelft.lifetiles.graph.models.Graph;
 import nl.tudelft.lifetiles.graph.models.sequence.SegmentString;
@@ -57,8 +59,12 @@ public class ReferencePositionTraverser {
      * mutations.
      */
     private void referenceMapGraph() {
+        long startTime = Calendar.getInstance().getTimeInMillis();
         referenceMapGraphForward();
         referenceMapGraphBackward();
+        System.out.println("Mapped graph onto reference. Took "
+                + (Calendar.getInstance().getTimeInMillis() - startTime)
+                + " ms.");
     }
 
     /**
