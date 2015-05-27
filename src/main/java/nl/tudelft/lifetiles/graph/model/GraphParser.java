@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import nl.tudelft.lifetiles.graph.model.sequence.Sequence;
-import nl.tudelft.lifetiles.graph.model.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.sequence.model.Sequence;
+import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
  * Interface for Graph Parser.

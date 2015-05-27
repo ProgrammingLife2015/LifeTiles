@@ -15,8 +15,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.core.controller.Controller;
-import nl.tudelft.lifetiles.graph.model.sequence.Sequence;
 import nl.tudelft.lifetiles.graph.view.SequenceColor;
+import nl.tudelft.lifetiles.sequence.model.Sequence;
 
 /**
  * The controller of the data view.

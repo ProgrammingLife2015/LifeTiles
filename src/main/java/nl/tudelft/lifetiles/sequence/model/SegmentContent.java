@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph.model.sequence;
+package nl.tudelft.lifetiles.sequence.model;
 
 /**
  * Interface for the content in a sequence segment.

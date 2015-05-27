@@ -8,7 +8,7 @@ import nl.tudelft.lifetiles.graph.model.DefaultGraphParser;
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
-import nl.tudelft.lifetiles.graph.model.sequence.SequenceSegment;
+import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 import org.junit.Test;
 
