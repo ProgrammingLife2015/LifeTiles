@@ -13,7 +13,7 @@ import nl.tudelft.lifetiles.graph.view.Mutation;
 /**
  * @author Rutger van den Berg Contains a partial sequence.
  */
-public class SequenceSegment implements Comparable<SequenceSegment> {
+public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
     /**
      * Keep track of already used ID's.
      */
@@ -327,7 +327,8 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      *
      * @return a copy
      */
-    public final SequenceSegment copy() {
+    @Override
+    public final SequenceSegment clone() {
         SequenceSegment seg = new SequenceSegment(copySources(this), this
                 .getStart(), this.getEnd(), this.getContent());
 

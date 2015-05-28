@@ -11,8 +11,8 @@ import nl.tudelft.lifetiles.graph.model.GraphFactory;
  * @param <V>
  *            The type of Vertex to use.
  */
-public class JGraphTGraphFactory<V extends Comparable<V>> implements
-GraphFactory<V> {
+public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
+        implements GraphFactory<V> {
     /**
      * The edgefactory associated with this graph factory.
      */
