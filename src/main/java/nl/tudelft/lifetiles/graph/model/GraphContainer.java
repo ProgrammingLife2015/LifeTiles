@@ -57,23 +57,27 @@ public class GraphContainer {
         Sequence reference = this.graph.getSources().iterator().next()
                 .getSources().iterator().next();
 
-        alignGraph();
+        alignGraph(graph);
         // findMutations(reference);
 
         segmentBuckets = new BucketCache(NUMBER_OF_BUCKETS, this.graph);
+
     }
 
     /**
      * Align the graph.
      */
-    private void alignGraph() {
+    private void alignGraph(Graph<SequenceSegment> gr) {
+
         UnifiedPositionTraverser upt = new UnifiedPositionTraverser();
+
         graph = upt.unifyGraph(graph);
 
         if (Settings.getBoolean(SETTING_EMPTY)) {
             EmptySegmentTraverser est = new EmptySegmentTraverser();
             graph = est.addEmptySegmentsGraph(graph);
         }
+
     }
 
     /**
@@ -103,7 +107,6 @@ public class GraphContainer {
         GraphFactory<SequenceSegment> factory = FactoryProducer.getFactory();
 
         // Find out which vertices are visible now
-
         Set<SequenceSegment> vertices = new TreeSet<SequenceSegment>();
         for (Sequence seq : visibleSequences) {
             Iterator<SequenceSegment> it = seq.getSegments().iterator();
@@ -139,16 +142,6 @@ public class GraphContainer {
      */
     public final BucketCache getBucketCache() {
         return segmentBuckets;
-    }
-
-    /**
-     * Set the graph that this model must be holding.
-     *
-     * @param gr
-     *            graph to be set
-     */
-    public final void setGraph(final Graph<SequenceSegment> gr) {
-        graph = gr;
     }
 
 }

@@ -116,4 +116,13 @@ public interface Graph<V> {
      */
     DirectedGraph<V, DefaultEdge> getInternalGraph();
 
+    /**
+     * Returns a new deepcopy of the graph.
+     *
+     * @param gfact
+     *            Factory used to create the copy of the graph.
+     * @return a deep copy of the graph
+     */
+    Graph<V> deepcopy(GraphFactory<V> gfact);
+
 }
