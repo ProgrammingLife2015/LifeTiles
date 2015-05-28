@@ -13,7 +13,7 @@
 
 	<Label fx:id="label" id="message" HBox.hgrow="ALWAYS" />
 	
-	<Button fx:id="close" id="close" text="X" onMouseClicked="#closeAction" />
+	<Button fx:id="close" id="close" text="[X]" onMouseClicked="#closeAction" />
 	
 	<stylesheets>
         <URL value="@../styles/NotificationStyle.css" />
