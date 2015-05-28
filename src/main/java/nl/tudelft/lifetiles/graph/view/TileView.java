@@ -64,7 +64,7 @@ public class TileView {
         nodes = new Group();
         edges = new Group();
         lanes = new LinkedList<Long>();
-        
+
         for (SequenceSegment segment : segments) {
             drawVertexLane(segment);
         }
