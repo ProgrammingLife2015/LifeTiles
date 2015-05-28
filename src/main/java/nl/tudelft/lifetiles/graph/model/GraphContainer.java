@@ -103,7 +103,8 @@ public class GraphContainer {
      * @param visibleSequences
      *            the sequences to display
      */
-    public final void changeGraph(final Set<Sequence> visibleSequences) {
+    public final void changeGraph(final Set<Sequence> visibleSequences,
+            final Graph<SequenceSegment> curgr) {
         GraphFactory<SequenceSegment> factory = FactoryProducer.getFactory();
 
         // Find out which vertices are visible now
@@ -117,11 +118,12 @@ public class GraphContainer {
 
         // Create a new subgraph based on visible vertices and update the
         // sources to only the visibleSequences
-        Graph<SequenceSegment> subgr = factory.getSubGraph(graph, vertices);
-        for (SequenceSegment vertex : subgr.getAllVertices()) {
+        Graph<SequenceSegment> subgr = factory.getSubGraph(curgr, vertices);
+        Graph<SequenceSegment> copy = subgr.deepcopy(factory);
+        for (SequenceSegment vertex : copy.getAllVertices()) {
             vertex.getSources().retainAll(visibleSequences);
         }
-
+        graph = copy;
     }
 
     /**

@@ -102,7 +102,8 @@ public class GraphController extends AbstractController {
                         "Argument not of type Set<Sequence>");
             }
 
-            model.changeGraph((Set<Sequence>) args[0]);
+            model.changeGraph((Set<Sequence>) args[0], graph);
+            repaint();
         });
 
     }
@@ -230,10 +231,8 @@ public class GraphController extends AbstractController {
      *            The selected segment
      */
     public final void clicked(final SequenceSegment segment) {
-
-        System.out.println("Clicked on segments:" + segment.getSources());
-        // ViewController.getInstance().setVisible(segment.getSources());
-
+        System.out.println("Clicked");
+        shout(Message.FILTERED, segment.getSources());
     }
 
     /**
