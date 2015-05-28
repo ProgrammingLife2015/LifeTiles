@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.sequence.model;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +29,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
     /**
      * Contains the sources containing this segment.
      */
-    private final Set<Sequence> sources;
+    private Set<Sequence> sources;
 
     /**
      * The start position for this segment.
@@ -65,26 +66,21 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      */
     private static final List<ToIntBiFunction<SequenceSegment, SequenceSegment>> COMPARATORS = Arrays
             .asList((left, right) -> {
-                return Long.compare(left.getUnifiedStart(),
-                        right.getUnifiedStart());
-            },
-                    (left, right) -> {
-                        return Long.compare(left.getStart(), right.getStart());
-                    },
-                    (left, right) -> {
-                        return Long.compare(left.getUnifiedEnd(),
-                                right.getUnifiedEnd());
-                    },
-                    (left, right) -> {
-                        return Long.compare(left.getEnd(), right.getEnd());
-                    },
-                    (left, right) -> {
-                        return left.getContent().toString()
-                                .compareTo(right.getContent().toString());
-                    }, (left, right) -> {
-                        return left.getSources().size()
-                                - right.getSources().size();
-                    });
+                return Long.compare(left.getUnifiedStart(), right
+                        .getUnifiedStart());
+            }, (left, right) -> {
+                return Long.compare(left.getStart(), right.getStart());
+            }, (left, right) -> {
+                return Long
+                        .compare(left.getUnifiedEnd(), right.getUnifiedEnd());
+            }, (left, right) -> {
+                return Long.compare(left.getEnd(), right.getEnd());
+            }, (left, right) -> {
+                return left.getContent().toString().compareTo(
+                        right.getContent().toString());
+            }, (left, right) -> {
+                return left.getSources().size() - right.getSources().size();
+            });
 
     /**
      * @param sources
@@ -125,6 +121,16 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      */
     public final Set<Sequence> getSources() {
         return sources;
+    }
+
+    /**
+     * Change the current sources to the new sources.
+     *
+     * @param set
+     *            new sources
+     */
+    public final void setSources(final Set<Sequence> set) {
+        sources = set;
     }
 
     /**
@@ -212,8 +218,8 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
         Iterator<Sequence> thisIt = this.getSources().iterator();
         Iterator<Sequence> otherIt = other.getSources().iterator();
         while (thisIt.hasNext()) {
-            candidateComp = thisIt.next().getIdentifier()
-                    .compareTo(otherIt.next().getIdentifier());
+            candidateComp = thisIt.next().getIdentifier().compareTo(
+                    otherIt.next().getIdentifier());
             if (candidateComp != 0) {
                 return candidateComp;
             }
@@ -315,4 +321,61 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
         }
         return mutation;
     }
+
+    /**
+     * Create a new deep copy of this SequenceSegment.
+     *
+     * @return a copy
+     */
+    public final SequenceSegment copy() {
+        SequenceSegment seg = new SequenceSegment(copySources(this), this
+                .getStart(), this.getEnd(), this.getContent());
+
+        seg.setUnifiedStart(this.getUnifiedStart());
+        seg.setUnifiedEnd(this.getUnifiedEnd());
+        seg.setMutation(this.getMutation());
+        seg.setReferenceStart(this.getReferenceStart());
+        seg.setReferenceEnd(this.getReferenceEnd());
+
+        return seg;
+    }
+
+    /**
+     * Helper function to deep copy the source Sequences.
+     *
+     * @param segment
+     *            Segment to copy
+     * @return new set of sequences
+     */
+    private Set<Sequence> copySources(final SequenceSegment segment) {
+        Set<Sequence> sequencescopy = new HashSet<Sequence>();
+
+        for (Sequence sequence : segment.getSources()) {
+            Sequence copy = copySequence(sequence);
+
+            sequencescopy.add(copy);
+        }
+
+        return sequencescopy;
+    }
+
+    /**
+     * Helper function to a copy a single sequence.
+     *
+     * @param sequence
+     *            to be copied
+     * @return new copy
+     */
+    private Sequence copySequence(final Sequence sequence) {
+        String string = new String();
+        string += sequence.getIdentifier();
+        Sequence copy = new DefaultSequence(string);
+
+        for (SequenceSegment segment : sequence.getSegments()) {
+            copy.appendSegment(segment);
+        }
+
+        return copy;
+    }
+
 }
