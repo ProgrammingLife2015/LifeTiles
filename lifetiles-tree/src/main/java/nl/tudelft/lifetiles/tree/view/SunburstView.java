@@ -1,9 +1,12 @@
 package nl.tudelft.lifetiles.tree.view;
 
+
+import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
+import javafx.geometry.Bounds;
 import javafx.scene.control.Control;
 import javafx.scene.input.MouseButton;
 import nl.tudelft.lifetiles.tree.controller.TreeController;
-import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
+
 
 /**
  * A View to display a tree.
@@ -119,6 +122,7 @@ public class SunburstView extends Control {
         centerX = getWidth() / 2d;
         centerY = getHeight() / 2d;
 
+        scale = calculateScale();
         // add a center unit
         SunburstCenter center = new SunburstCenter(currentItem, scale);
         center.setOnMouseClicked((mouseEvent) -> {
@@ -184,6 +188,31 @@ public class SunburstView extends Control {
             start = end;
         }
 
+    }
+
+    private double calculateScale(){
+        int depth = rootItem.maxDepth();
+        updateBounds();
+        Bounds bounds = getLayoutBounds();
+        System.out.println(bounds);
+
+        double minSize = Math.min(bounds.getWidth(), bounds.getHeight());
+
+        double maxRadius = AbstractSunburstNode.CENTER_RADIUS;
+        maxRadius += (depth * AbstractSunburstNode.RING_WIDTH);
+        maxRadius += AbstractSunburstNode.RING_WIDTH;
+
+        double scale = minSize / maxRadius;
+        if (scale > 1) {
+            scale = 1d;
+        } else  if (scale <= 0) {
+            scale = 1d;
+        }
+        System.out.println("depth = " + depth);
+        System.out.println("maxradius = " + maxRadius);
+        System.out.println("minSize = " + minSize);
+        System.out.println("scale = " + scale);
+        return scale;
     }
 
 }
