@@ -245,7 +245,8 @@ public class GraphController extends AbstractController {
      */
     public final void hovered(final SequenceSegment segment,
             final Boolean hovering) {
-        // System.out.println("Hovered over element " + segment);
+        // TODO: Message to say that a segment is hovered over
+
     }
 
 }

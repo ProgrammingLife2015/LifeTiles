@@ -57,7 +57,7 @@ public class GraphContainer {
         Sequence reference = this.graph.getSources().iterator().next()
                 .getSources().iterator().next();
 
-        alignGraph(graph);
+        alignGraph();
         // findMutations(reference);
 
         segmentBuckets = new BucketCache(NUMBER_OF_BUCKETS, this.graph);
@@ -67,10 +67,9 @@ public class GraphContainer {
     /**
      * Align the graph.
      */
-    private void alignGraph(Graph<SequenceSegment> gr) {
+    private void alignGraph() {
 
         UnifiedPositionTraverser upt = new UnifiedPositionTraverser();
-
         graph = upt.unifyGraph(graph);
 
         if (Settings.getBoolean(SETTING_EMPTY)) {
@@ -93,18 +92,23 @@ public class GraphContainer {
         }
         new ReferencePositionTraverser(reference).referenceMapGraph(graph);
         new MutationIndicationTraverser(reference)
-        .indicateGraphMutations(graph);
+                .indicateGraphMutations(graph);
 
     }
 
     /**
      * Change the graph by selecting the sequences to draw.
+     * The current graph is needed, tt will base the new graph on a subgraph of
+     * the current graph.
      *
      * @param visibleSequences
      *            the sequences to display
+     * @param currentgraph
+     *            the complete graph to base the new graph on
      */
     public final void changeGraph(final Set<Sequence> visibleSequences,
-            final Graph<SequenceSegment> curgr) {
+
+    final Graph<SequenceSegment> curgr) {
         GraphFactory<SequenceSegment> factory = FactoryProducer.getFactory();
 
         // Find out which vertices are visible now
@@ -118,6 +122,7 @@ public class GraphContainer {
 
         // Create a new subgraph based on visible vertices and update the
         // sources to only the visibleSequences
+
         Graph<SequenceSegment> subgr = factory.getSubGraph(curgr, vertices);
         Graph<SequenceSegment> copy = subgr.deepcopy(factory);
         for (SequenceSegment vertex : copy.getAllVertices()) {
