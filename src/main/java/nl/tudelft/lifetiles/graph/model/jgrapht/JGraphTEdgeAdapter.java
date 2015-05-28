@@ -18,16 +18,15 @@ public class JGraphTEdgeAdapter<V> implements Edge<V> {
     private DefaultEdge internalEdge;
 
     /**
-     * @param e
+     * @param edge
      *            The internal edge to use.
      */
-    public JGraphTEdgeAdapter(final DefaultEdge e) {
-        internalEdge = e;
+    public JGraphTEdgeAdapter(final DefaultEdge edge) {
+        internalEdge = edge;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public final boolean equals(final Object obj) {
@@ -58,9 +57,8 @@ public class JGraphTEdgeAdapter<V> implements Edge<V> {
         return internalEdge;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#hashCode()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public final int hashCode() {

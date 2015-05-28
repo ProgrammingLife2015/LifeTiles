@@ -28,10 +28,6 @@ public class DefaultGraphParser implements GraphParser {
      * Index of starting position in the vertex descriptor.
      */
     private static final int START_POS = 2;
-    /**
-     * Index of identifier in the vertex descriptor.
-     */
-    private static final int IDENT_POS = 0;
 
     /**
      * Index of sources in the vertex descriptor.
@@ -41,7 +37,7 @@ public class DefaultGraphParser implements GraphParser {
     /**
      * Map containing all sequences.
      */
-    private Map<String, Sequence> sequences;
+    private final Map<String, Sequence> sequences;
 
     /**
      * Creates a new graph parser.
@@ -59,7 +55,7 @@ public class DefaultGraphParser implements GraphParser {
      */
     private SequenceSegment createSegment(final String descriptor,
             final String content) {
-        if (!descriptor.startsWith(">")) {
+        if (descriptor.charAt(0) != '>') {
             throw new IllegalArgumentException();
         }
         String[] desc = descriptor.split("\\|");
@@ -106,10 +102,10 @@ public class DefaultGraphParser implements GraphParser {
     private void parseEdges(final File edgefile,
             final Graph<SequenceSegment> graph) throws IOException {
 
-        Iterator<String> it = Files.lines(edgefile.toPath()).iterator();
+        Iterator<String> iterator = Files.lines(edgefile.toPath()).iterator();
         String line;
-        while (it.hasNext()) {
-            line = it.next();
+        while (iterator.hasNext()) {
+            line = iterator.next();
             String[] edge = line.split(" ");
             graph.addEdge(Integer.parseInt(edge[0]), Integer.parseInt(edge[1]));
         }
@@ -152,9 +148,9 @@ public class DefaultGraphParser implements GraphParser {
     private void parseVertices(final File vertexfile,
             final Graph<SequenceSegment> graph) throws IOException {
 
-        Iterator<String> it = Files.lines(vertexfile.toPath()).iterator();
-        while (it.hasNext()) {
-            graph.addVertex(createSegment(it.next(), it.next()));
+        Iterator<String> iterator = Files.lines(vertexfile.toPath()).iterator();
+        while (iterator.hasNext()) {
+            graph.addVertex(createSegment(iterator.next(), iterator.next()));
         }
 
     }

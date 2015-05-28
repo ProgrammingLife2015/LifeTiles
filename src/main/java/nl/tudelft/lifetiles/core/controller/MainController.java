@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.SplitPane;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import nl.tudelft.lifetiles.core.util.Message;
 
@@ -15,13 +14,7 @@ import nl.tudelft.lifetiles.core.util.Message;
  * @author Joren Hammudoglu
  *
  */
-public class MainController extends Controller {
-
-    /**
-     * The wrapper element.
-     */
-    @FXML
-    private AnchorPane wrapper;
+public class MainController extends AbstractController {
 
     /**
      * The main grid element.
@@ -35,6 +28,9 @@ public class MainController extends Controller {
     @FXML
     private HBox splashPane;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
@@ -50,7 +46,8 @@ public class MainController extends Controller {
     /**
      * Repaint the main view, showing or hiding the splash screen.
      *
-     * @param splash show the splash
+     * @param splash
+     *            show the splash
      */
     private void repaint(final boolean splash) {
         mainSplitPane.setVisible(!splash);

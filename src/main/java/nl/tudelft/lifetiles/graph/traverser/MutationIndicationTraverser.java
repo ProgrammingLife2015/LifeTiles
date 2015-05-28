@@ -15,7 +15,7 @@ public class MutationIndicationTraverser {
     /**
      * Reference which is compared to determine the mutation types.
      */
-    private Sequence referenceVar;
+    private final Sequence reference;
 
     /**
      * Constructs a MutationIndicationTraverser.
@@ -24,38 +24,22 @@ public class MutationIndicationTraverser {
      *            Reference which is compared to determine the mutation types.
      */
     public MutationIndicationTraverser(final Sequence reference) {
-        referenceVar = reference;
-    }
-
-    /**
-     * Graph which is being traversed.
-     */
-    private Graph<SequenceSegment> graphVar;
-
-    /**
-     * Traverses the graph and indicates the mutation types.
-     *
-     * @param graph
-     *            The graph to traverse.
-     * @return the traversed graph.
-     */
-    public final Graph<SequenceSegment> indicateGraphMutations(
-            final Graph<SequenceSegment> graph) {
-        graphVar = graph;
-        indicateGraphMutations();
-        return graphVar;
+        this.reference = reference;
     }
 
     /**
      * Traverse the graph and indicates the mutation types.
      *
+     * @param graph
+     *            The graph to use.
      * @return traversed graph.
      */
-    private Graph<SequenceSegment> indicateGraphMutations() {
-        for (SequenceSegment vertex : graphVar.getAllVertices()) {
+    public final Graph<SequenceSegment> indicateGraphMutations(
+            final Graph<SequenceSegment> graph) {
+        for (SequenceSegment vertex : graph.getAllVertices()) {
             indicateVertexMutations(vertex);
         }
-        return graphVar;
+        return graph;
     }
 
     /**
@@ -66,7 +50,7 @@ public class MutationIndicationTraverser {
      *            Vertex in the graph to be traversed.
      */
     private void indicateVertexMutations(final SequenceSegment vertex) {
-        if (!vertex.getSources().contains(referenceVar)) {
+        if (!vertex.getSources().contains(reference)) {
             vertex.setMutation(vertex.determineMutation());
         }
     }

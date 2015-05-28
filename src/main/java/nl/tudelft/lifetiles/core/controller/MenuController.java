@@ -24,7 +24,7 @@ import nl.tudelft.lifetiles.core.util.Message;
  * @author Joren Hammudoglu
  *
  */
-public class MenuController extends Controller {
+public class MenuController extends AbstractController {
 
     /**
      * The initial x-coordinate of the window.

@@ -8,15 +8,14 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
-import nl.tudelft.lifetiles.core.controller.Controller;
+import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.controller.MenuController;
 import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.graph.model.DefaultGraphParser;
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
 import nl.tudelft.lifetiles.graph.model.Graph;
+import nl.tudelft.lifetiles.graph.model.GraphContainer;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
-import nl.tudelft.lifetiles.graph.model.GraphParser;
-import nl.tudelft.lifetiles.graph.model.Tile;
 import nl.tudelft.lifetiles.graph.view.TileView;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
@@ -26,7 +25,7 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
  * @author Joren Hammudoglu
  *
  */
-public class GraphController extends Controller {
+public class GraphController extends AbstractController {
 
     /**
      * The wrapper element.
@@ -39,18 +38,23 @@ public class GraphController extends Controller {
      */
     private Graph<SequenceSegment> graph;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
         listen(Message.OPENED, (controller, args) -> {
-            assert (controller instanceof MenuController);
-            assert (args[0] instanceof File && args[1] instanceof File);
+            assert controller instanceof MenuController;
+            assert args[0] instanceof File && args[1] instanceof File;
+
             try {
                 loadGraph((File) args[0], (File) args[1]);
-            } catch (Exception e) {
-                // TODO: notify the user that the file was not found
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+
         });
     }
 
@@ -77,12 +81,12 @@ public class GraphController extends Controller {
     private void loadGraph(final File vertexfile, final File edgefile)
             throws IOException {
         // create the graph
-        FactoryProducer<SequenceSegment> fp = new FactoryProducer<>();
-        GraphFactory<SequenceSegment> gf = fp.getFactory("JGraphT");
-        GraphParser gp = new DefaultGraphParser();
-        graph = gp.parseGraph(vertexfile, edgefile, gf);
+        GraphFactory<SequenceSegment> gfact = new FactoryProducer<SequenceSegment>()
+                .getFactory("JGraphT");
+        DefaultGraphParser graphParser = new DefaultGraphParser();
+        graph = graphParser.parseGraph(vertexfile, edgefile, gfact);
 
-        shout(Message.LOADED, graph, gp.getSequences());
+        shout(Message.LOADED, graph, graphParser.getSequences());
         repaint();
     }
 
@@ -92,11 +96,11 @@ public class GraphController extends Controller {
     private void repaint() {
         if (graph != null) {
             System.out.println("repainting graph...");
-            Tile model = new Tile(graph);
+            GraphContainer model = new GraphContainer(graph);
             TileView view = new TileView();
-            TileController tc = new TileController(view, model);
+            TileController tileController = new TileController(view, model);
 
-            Group root = tc.drawGraph();
+            Group root = tileController.drawGraph();
             wrapper.setContent(root);
         }
     }

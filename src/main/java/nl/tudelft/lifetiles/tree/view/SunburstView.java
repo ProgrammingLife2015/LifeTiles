@@ -1,12 +1,13 @@
 package nl.tudelft.lifetiles.tree.view;
 
-import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 import javafx.scene.control.Control;
 import javafx.scene.input.MouseButton;
+import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
 /**
  * A View to display a tree.
  * The tree will be displayed in a circle.
+ *
  * @author Albert Smit
  *
  */
@@ -24,11 +25,11 @@ public class SunburstView extends Control {
     /**
      * the center X coordinate of the view.
      */
-    private double centerX;
+    private final double centerX;
     /**
      * the center Y coordinate of the view.
      */
-    private double centerY;
+    private final double centerY;
 
     /**
      * Creates a new SunburstView.
@@ -71,7 +72,9 @@ public class SunburstView extends Control {
 
     /**
      * Changes the displayed tree.
-     * @param root the new root
+     *
+     * @param root
+     *            the new root
      */
     public final void setRoot(final PhylogeneticTreeItem root) {
         rootItem = root;
@@ -101,7 +104,7 @@ public class SunburstView extends Control {
             double sectorSize = (child.numberDescendants() + 1)
                     / totalDescendants;
             double degreeEnd = degreeStart
-                    + (SunburstNode.CIRCLEDEGREES * sectorSize);
+                    + (AbstractSunburstNode.CIRCLEDEGREES * sectorSize);
 
             drawRingRecursive(child, 0, degreeStart, degreeEnd);
             degreeStart = degreeEnd;
@@ -135,8 +138,8 @@ public class SunburstView extends Control {
 
         double totalDescendants = node.numberDescendants();
         double start = degreeStart;
-        double sectorAngle = SunburstNode
-                .calculateAngle(degreeStart, degreeEnd);
+        double sectorAngle = AbstractSunburstNode.calculateAngle(degreeStart,
+                degreeEnd);
 
         // generate rings for child nodes
         for (PhylogeneticTreeItem child : node.getChildren()) {

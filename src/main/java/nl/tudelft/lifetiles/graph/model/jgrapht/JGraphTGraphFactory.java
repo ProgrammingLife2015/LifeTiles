@@ -14,7 +14,7 @@ public class JGraphTGraphFactory<V extends Comparable<V>> implements
     /**
      * The edgefactory associated with this graph factory.
      */
-    private JGraphTEdgeFactory<V> edgeFact;
+    private final JGraphTEdgeFactory<V> edgeFact;
 
     /**
      * Create a new graph factory.

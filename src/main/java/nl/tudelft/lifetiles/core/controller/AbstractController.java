@@ -16,22 +16,22 @@ import nl.tudelft.lifetiles.core.util.Message;
  * @author Joren Hammudoglu
  *
  */
-public abstract class Controller implements Initializable {
+public abstract class AbstractController implements Initializable {
 
     /**
      * All registered controllers.
      */
-    private static List<Controller> controllers = new CopyOnWriteArrayList<>();
+    private static List<AbstractController> controllers = new CopyOnWriteArrayList<>();
 
     /**
      * The listeners for messages.
      */
-    private Map<Message, List<BiConsumer<Controller, Object[]>>> listeners;
+    private final Map<Message, List<BiConsumer<AbstractController, Object[]>>> listeners;
 
     /**
      * Create a new controller and register it.
      */
-    public Controller() {
+    public AbstractController() {
         listeners = new HashMap<>();
         controllers.add(this);
     }
@@ -45,11 +45,11 @@ public abstract class Controller implements Initializable {
      *            the arguments of the message
      */
     protected final void shout(final Message message, final Object... args) {
-        for (Controller c : controllers) {
-            List<BiConsumer<Controller, Object[]>> listenersOther = c
+        for (AbstractController c : controllers) {
+            List<BiConsumer<AbstractController, Object[]>> listenersOther = c
                     .getListeners(message);
             if (listenersOther != null) {
-                listenersOther.stream().forEach(l -> l.accept(this, args));
+                listenersOther.stream().forEach(listener -> listener.accept(this, args));
             }
         }
     }
@@ -63,11 +63,11 @@ public abstract class Controller implements Initializable {
      *            the action to perform when recieving the message
      */
     protected final void listen(final Message message,
-            final BiConsumer<Controller, Object[]> action) {
+            final BiConsumer<AbstractController, Object[]> action) {
         if (listeners.containsKey(message)) {
             listeners.get(message).add(action);
         } else {
-            List<BiConsumer<Controller, Object[]>> newListeners;
+            List<BiConsumer<AbstractController, Object[]>> newListeners;
             newListeners = new ArrayList<>();
             newListeners.add(action);
             listeners.put(message, newListeners);
@@ -81,7 +81,7 @@ public abstract class Controller implements Initializable {
      *            the message
      * @return a map of listeners for messages
      */
-    private List<BiConsumer<Controller, Object[]>> getListeners(
+    private List<BiConsumer<AbstractController, Object[]>> getListeners(
             final Message message) {
         return listeners.get(message);
     }

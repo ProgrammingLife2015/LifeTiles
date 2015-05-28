@@ -11,7 +11,7 @@ public class SegmentEmpty implements SegmentContent {
     /**
      * length of the segment content.
      */
-    private long lengthVar;
+    private final long length;
 
     /**
      * Constructs a sequence segment with given string as content.
@@ -20,7 +20,7 @@ public class SegmentEmpty implements SegmentContent {
      *            Length of the empty content of the segment.
      */
     public SegmentEmpty(final long length) {
-        lengthVar = length;
+        this.length = length;
     }
 
     /**
@@ -28,14 +28,15 @@ public class SegmentEmpty implements SegmentContent {
      */
     @Override
     public final long getLength() {
-        return lengthVar;
+        return this.length;
     }
 
     /**
      * @return string representation of the empty segment.
      */
+    @Override
     public final String toString() {
-        return new String(new char[(int) lengthVar]).replace("\0", "_");
+        return new String(new char[(int) this.length]).replace("\0", "_");
     }
 
     /**

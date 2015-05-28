@@ -19,12 +19,12 @@ public class VertexView extends Group {
     /**
      * this will hold text in the right place.
      */
-    private Rectangle clip;
+    private final Rectangle clip;
 
     /**
      * this is the region coloring the text.
      */
-    private Rectangle rectangle;
+    private final Rectangle rectangle;
 
     /**
      * Horizontal and vertical spacing between rectangles.
@@ -49,7 +49,7 @@ public class VertexView extends Group {
     /**
      * this is the DNA strain the display on the vertex.
      */
-    private Text text;
+    private final Text text;
 
     /**
      * Creates a new Block to be displayed on the screen. The width is already
@@ -112,6 +112,9 @@ public class VertexView extends Group {
         return rectangle.getLayoutBounds().getWidth();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected final void layoutChildren() {
         double width = rectangle.getWidth();

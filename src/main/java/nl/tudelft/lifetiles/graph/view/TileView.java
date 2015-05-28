@@ -22,23 +22,23 @@ public class TileView {
     /**
      * The edges contains all EdgeLines to be displayed.
      */
-    private Group edges;
+    private final Group edges;
     /**
      * The nodes contains all Vertices to be displayed.
      */
-    private Group nodes;
+    private final Group nodes;
 
     /**
      * The root contains all the to be displayed
      * elements.
      */
-    private Group root;
+    private final Group root;
 
     /**
      * The lanes list which contains the occupation of the lanes inside the
      * tileview.
      */
-    private List<Long> lanes;
+    private final List<Long> lanes;
 
     /**
      * Create the TileView by initializing the groups where the to be drawn
@@ -54,26 +54,27 @@ public class TileView {
     /**
      * Change Vertex colour.
      *
-     * @param v
+     * @param vertex
      *            vertex to be changed.
      * @param color
      *            the new colour
      */
-    public final void changeVertexColor(final VertexView v, final Color color) {
-        v.setColor(color);
+    public final void changeVertexColor(final VertexView vertex,
+            final Color color) {
+        vertex.setColor(color);
     }
 
     /**
      * Draw the given graph.
      *
-     * @param gr
+     * @param graph
      *            Graph to be drawn
      * @return the elements that must be displayed on the screen
      */
-    public final Group drawGraph(final Graph<SequenceSegment> gr) {
-        PriorityQueue<SequenceSegment> it = sortStartVar(gr);
-        while (!it.isEmpty()) {
-            SequenceSegment segment = it.poll();
+    public final Group drawGraph(final Graph<SequenceSegment> graph) {
+        PriorityQueue<SequenceSegment> iterator = sortStartVar(graph);
+        while (!iterator.isEmpty()) {
+            SequenceSegment segment = iterator.poll();
             drawVertexLane(segment);
         }
         root.getChildren().addAll(edges, nodes);
@@ -124,9 +125,9 @@ public class TileView {
      *
      * @param text
      *            text of the dna segment
-     * @param x
+     * @param xcoord
      *            top left x coordinate
-     * @param y
+     * @param ycoord
      *            top left y coordinate
      * @param width
      *            the width of the vertex
@@ -135,10 +136,12 @@ public class TileView {
      * @param color
      *            the colour of the vertex
      */
-    private void drawVertex(final String text, final double x, final double y,
-            final double width, final double height, final Color color) {
-        VertexView v = new VertexView(text, x, y, width, height, color);
-        nodes.getChildren().add(v);
+    private void drawVertex(final String text, final double xcoord,
+            final double ycoord, final double width, final double height,
+            final Color color) {
+        VertexView vertex = new VertexView(text, xcoord, ycoord, width, height,
+                color);
+        nodes.getChildren().add(vertex);
     }
 
     /**
@@ -153,8 +156,8 @@ public class TileView {
     private boolean segmentFree(final int ind, final SequenceSegment segment) {
         for (int height = 0; height < segment.getSources().size(); height++) {
             int position = ind + height;
-            if ((position < lanes.size())
-                    && (lanes.get(position) > segment.getUnifiedStart())) {
+            if (position < lanes.size()
+                    && lanes.get(position) > segment.getUnifiedStart()) {
                 return false;
             }
         }
@@ -186,19 +189,19 @@ public class TileView {
      * Beware: temporary code which will be obsolete with #56 Internal
      * sorting of edges on destination starting position
      *
-     * @param gr
+     * @param graph
      *            the graph that contains the to be sorted nodes
      * @return Iterator of the sorted list
      */
     @Deprecated
     private PriorityQueue<SequenceSegment> sortStartVar(
-            final Graph<SequenceSegment> gr) {
-        PriorityQueue<SequenceSegment> it;
-        it = new PriorityQueue<SequenceSegment>();
-        for (SequenceSegment segment : gr.getAllVertices()) {
-            it.add(segment);
+            final Graph<SequenceSegment> graph) {
+        PriorityQueue<SequenceSegment> iterator;
+        iterator = new PriorityQueue<SequenceSegment>();
+        for (SequenceSegment segment : graph.getAllVertices()) {
+            iterator.add(segment);
         }
-        return it;
+        return iterator;
     }
 
 }

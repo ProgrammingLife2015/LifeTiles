@@ -31,7 +31,7 @@ public final class FileUtils {
      */
     public static List<File> findByExtension(final File directory,
             final String extension) {
-        assert (directory.isDirectory());
+        assert directory.isDirectory();
 
         File[] res = directory.listFiles(fileName -> fileName.getName()
                 .endsWith(extension));
