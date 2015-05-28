@@ -43,8 +43,6 @@ public class TreeController extends Controller {
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        view = new SunburstView();
-
         // load the tree when the files are opened
         listen(Message.OPENED, (controller, args) -> {
             assert (controller instanceof MenuController);
