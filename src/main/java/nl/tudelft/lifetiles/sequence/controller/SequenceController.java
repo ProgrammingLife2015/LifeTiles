@@ -93,7 +93,7 @@ public class SequenceController extends Controller {
      *            shout that the seqeunces have been filtered
      */
     private void setVisible(final Set<Sequence> visible, final boolean shout) {
-        if (!visible.containsAll(sequences.values())) {
+        if (!sequences.values().containsAll(visible)) {
             throw new IllegalArgumentException(
                     "Attempted to set a non-existant sequence to visible");
         }
