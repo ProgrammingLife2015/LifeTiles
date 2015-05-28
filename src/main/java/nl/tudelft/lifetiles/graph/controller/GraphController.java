@@ -40,20 +40,23 @@ public class GraphController extends AbstractController {
     private Graph<SequenceSegment> graph;
 
     /**
-     * {@inheritDoc}
+     * The notification factory.
      */
+    private NotificationFactory nf;
+
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
+        this.nf = new NotificationFactory();
+
         listen(Message.OPENED, (controller, args) -> {
             assert controller instanceof MenuController;
             assert args[0] instanceof File && args[1] instanceof File;
 
             try {
                 loadGraph((File) args[0], (File) args[1]);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            } catch (Exception e) {
+                shout(NotificationController.NOTIFY, nf.getNotification(e));
             }
 
         });
@@ -82,11 +85,16 @@ public class GraphController extends AbstractController {
     private void loadGraph(final File vertexfile, final File edgefile)
             throws IOException {
         // create the graph
-        GraphFactory<SequenceSegment> gfact = FactoryProducer.getFactory();
-        GraphParser graphParser = new DefaultGraphParser();
-        graph = graphParser.parseGraph(vertexfile, edgefile, gfact);
+        FactoryProducer<SequenceSegment> fp = new FactoryProducer<>();
+        GraphFactory<SequenceSegment> gf = fp.getFactory("JGraphT");
+        GraphParser gp = new DefaultGraphParser();
+        try {
+            graph = gp.parseGraph(vertexfile, edgefile, gf);
+        } catch (IOException e) {
+            throw new IOException("Graph file not found.");
+        }
 
-        shout(Message.LOADED, graph, graphParser.getSequences());
+        shout(Message.LOADED, graph, gp.getSequences());
         repaint();
     }
 
