@@ -25,7 +25,8 @@ import org.jgrapht.graph.SimpleDirectedGraph;
  * @param <V>
  *            The type of vertex to use.
  */
-public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
+public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
+implements Graph<V> {
     /**
      * The edgefactory to use to create the edges for this graph.
      */
@@ -283,7 +284,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
         for (V vertex : this.getAllVertices()) {
             try {
                 Method method;
-                method = vertex.getClass().getMethod("copy");
+                method = vertex.getClass().getMethod("clone");
                 Object copy = method.invoke(vertex);
                 copygraph.addVertex((V) copy);
                 convertVertices.put(vertex, copy);

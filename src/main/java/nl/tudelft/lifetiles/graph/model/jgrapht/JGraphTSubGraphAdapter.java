@@ -14,8 +14,9 @@ import org.jgrapht.graph.DirectedSubgraph;
  * @param <V>
  *            type of vertex to use
  */
-public class JGraphTSubGraphAdapter<V extends Comparable<V>> extends
-JGraphTGraphAdapter<V> {
+
+public class JGraphTSubGraphAdapter<V extends Comparable<V> & Cloneable>
+extends JGraphTGraphAdapter<V> {
 
     /**
      * Create a SubGraph based on the base graph.
