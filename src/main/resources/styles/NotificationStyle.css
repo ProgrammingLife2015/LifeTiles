@@ -15,3 +15,7 @@
     -fx-background-radius: 0;
     -fx-background-image: url("/images/notification_close.png");
 }
+
+#close:hover {
+    -fx-cursor: HAND;
+}
