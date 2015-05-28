@@ -31,8 +31,8 @@ public class GraphContainer {
     /**
      * The amount of buckets the graph is cached in.
      */
-    private final static int NUMBEROFBUCKETS = 1000;
-    
+    private static final int NUMBEROFBUCKETS = 1000;
+
     /**
      * create a new Tile.
      *
