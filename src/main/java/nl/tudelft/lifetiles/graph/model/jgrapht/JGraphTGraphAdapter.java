@@ -1,8 +1,12 @@
 package nl.tudelft.lifetiles.graph.model.jgrapht;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -235,13 +239,19 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
     }
 
     @Override
-    public DirectedGraph<V, DefaultEdge> getInternalGraph() {
+    public final DirectedGraph<V, DefaultEdge> getInternalGraph() {
         return internalGraph;
     }
 
-    protected void setInternalGraph(
-            DirectedGraph<V, DefaultEdge> directedSubgraph) {
-        internalGraph = directedSubgraph;
+    /**
+     * Set the internal graph to a new one.
+     *
+     * @param directedGraph
+     *            new (sub)graph
+     */
+    protected final void setInternalGraph(
+            final DirectedGraph<V, DefaultEdge> directedGraph) {
+        internalGraph = directedGraph;
 
     }
 
@@ -262,6 +272,41 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
             graph.addEdge(getSource(edge), getDestination(edge));
         }
         return graph;
+    }
+
+    @Override
+    public final Graph<V> deepcopy(final GraphFactory<V> gfact) {
+        Graph<V> copygraph = gfact.getGraph();
+
+        Map<Object, Object> convertVertices = new HashMap<Object, Object>();
+
+        for (V vertex : this.getAllVertices()) {
+            try {
+                Method method;
+                method = vertex.getClass().getMethod("copy");
+                Object copy = method.invoke(vertex);
+                copygraph.addVertex((V) copy);
+                convertVertices.put(vertex, copy);
+
+            } catch (NoSuchMethodException | SecurityException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (Edge<V> edge : this.getAllEdges()) {
+            Object from = convertVertices.get(this.getSource(edge));
+            Object to = convertVertices.get(this.getDestination(edge));
+
+            copygraph.addEdge((V) from, (V) to);
+        }
+
+        return copygraph;
     }
 
     /**

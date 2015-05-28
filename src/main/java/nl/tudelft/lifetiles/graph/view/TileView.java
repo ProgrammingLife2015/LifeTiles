@@ -89,7 +89,9 @@ public class TileView {
 
         for (SequenceSegment segment : segments) {
             drawVertexLane(segment);
+
         }
+
         drawEdges(graph);
         Group nodes = new Group();
 
@@ -99,7 +101,7 @@ public class TileView {
             nodes.getChildren().add(entry.getValue());
         }
 
-        root.getChildren().addAll(edges, nodes);
+        root.getChildren().addAll(nodes, edges);
 
         return root;
     }
@@ -239,4 +241,5 @@ public class TileView {
             }
         }
     }
+
 }
