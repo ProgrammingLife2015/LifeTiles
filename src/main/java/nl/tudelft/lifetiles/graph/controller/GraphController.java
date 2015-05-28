@@ -50,7 +50,13 @@ public class GraphController extends AbstractController {
     private Group graphNode;
 
     /**
-     * {@inheritDoc}
+     * currentPosition of the view in the scrollPane, should only redraw if
+     * position has changed.
+     */
+    private int currentPosition = -1;
+
+    /**
+     * <<<<<<< HEAD {@inheritDoc}
      */
     @Override
     public final void initialize(final URL location,
@@ -133,21 +139,24 @@ public class GraphController extends AbstractController {
 
     /**
      * Repaints the view indicated by the bucket in the given postion
-     * 
-     * @param tc
+     *
+     * @param tileController
      *            Tilecontroller used to draw the graph.
      * @param root
      *            Root group used to store the visualized graph in.
      * @param position
      *            Position in the scrollPane.
      */
-
     private void repaintPosition(TileController tileController, Group root,
             double position) {
-        graphNode = new Group();
-        graphNode.getChildren().add(tileController.drawGraph(position));
-        root.getChildren().add(graphNode);
-        wrapper.setContent(root);
+        int nextPosition = tileController.getBucketPosition(position);
+        if (currentPosition != nextPosition) {
+            graphNode = new Group();
+            graphNode.getChildren().add(tileController.drawGraph(nextPosition));
+            root.getChildren().add(graphNode);
+            wrapper.setContent(root);
+            currentPosition = nextPosition;
+        }
     }
 
     /**

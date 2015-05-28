@@ -138,7 +138,7 @@ public class BucketCache {
     /**
      * Returns the position in the bucketCache given the percentage position in
      * the GraphController.
-     * 
+     *
      * @param position
      *            Percentage position in the GraphController
      * @return position in the bucketCache.

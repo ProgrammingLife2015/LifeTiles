@@ -2,7 +2,6 @@ package nl.tudelft.lifetiles.graph.controller;
 
 import javafx.scene.Group;
 import nl.tudelft.lifetiles.graph.model.GraphContainer;
-import nl.tudelft.lifetiles.bucket.model.BucketCache;
 import nl.tudelft.lifetiles.graph.view.TileView;
 
 /**
@@ -15,22 +14,12 @@ public class TileController {
      * the model.
      */
     private final GraphContainer modelVar;
+    
     /**
      * The view.
      */
     private final TileView viewVar;
-
-    /**
-     * currentPosition of the view in the scrollPane, should only redraw if
-     * position has changed.
-     */
-    private int currentPosition = -1;
-
-    /**
-     * cached group of the currently drawn location.
-     */
-    private Group currentGroup = new Group();
-
+    
     /**
      * Creates a TileController which controls the dataflow.
      *
@@ -46,20 +35,24 @@ public class TileController {
 
     /**
      * Creates a drawable object of the graph from the model.
-     * 
+     *
      * @param position
-     *            Position in the scrollPane.
+     *            Bucket position of the scrollPane.
      * @return Group object to be drawn on the screen
      */
-    public final Group drawGraph(final double position) {
-        BucketCache bucketCache = modelVar.getBucketCache();
-        int nextPosition = bucketCache.bucketPosition(position);
-        if (currentPosition != nextPosition) {
-            currentGroup = viewVar
-                    .drawGraph(modelVar.getSegments(nextPosition));
-            currentPosition = nextPosition;
-        }
-        return currentGroup;
+    public final Group drawGraph(final int position) {
+        return viewVar.drawGraph(modelVar.getSegments(position));
+    }
+
+    /**
+     * Return the position in the bucket.
+     *
+     * @param position
+     *            Position in the scrollPane.
+     * @return position in the bucket.
+     */
+    public final int getBucketPosition(final double position) {
+        return modelVar.getBucketCache().bucketPosition(position);
     }
 
 }
