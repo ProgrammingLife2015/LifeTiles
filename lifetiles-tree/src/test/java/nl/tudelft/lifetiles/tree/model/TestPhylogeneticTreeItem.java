@@ -123,6 +123,37 @@ public class TestPhylogeneticTreeItem {
 	}
 	
 	/**
+     * Test for maxDepth
+     */
+    @Test
+    public void testMaxDepth() {
+        // create the test tree
+        // (A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5)F;
+        PhylogeneticTreeItem root = new PhylogeneticTreeItem();
+        // add 3 child nodes
+        PhylogeneticTreeItem test2 = new PhylogeneticTreeItem();
+        test2.setParent(root);
+        test2.setDistance(0.1);
+        PhylogeneticTreeItem current = new PhylogeneticTreeItem();
+        current.setDistance(0.2);
+        current.setParent(root);
+        current = new PhylogeneticTreeItem();
+        current.setParent(root);
+        current.setDistance(0.5);
+        // add 2 child nodes to the third node
+        PhylogeneticTreeItem current2 = new PhylogeneticTreeItem();
+        current2.setParent(current);
+        current2.setDistance(0.4);
+        current2 = new PhylogeneticTreeItem();
+        current2.setParent(current);
+        current2.setDistance(0.3);
+        
+        assertEquals("maxDepth did not match for full tree",2,root.maxDepth());
+        assertEquals("maxDepth did not match for sub tree",1, current.maxDepth());        
+        assertEquals("maxDepth did not match for childless tree",0,test2.maxDepth());
+    }
+	
+	/**
 	 * Test for equals.
 	 * tests equals between 2 empty nodes
 	 */

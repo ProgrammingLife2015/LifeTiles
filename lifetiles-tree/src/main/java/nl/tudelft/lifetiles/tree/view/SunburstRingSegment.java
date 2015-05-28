@@ -96,8 +96,8 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      * @return a semi-circle with the specified dimensions
      */
     private Shape createRing(final int layer, final double degreeStart,
-            final double degreeEnd, final double centerX, final double centerY) {
-            final double centerY, final double scale) {
+            final double degreeEnd, final double centerX, final double centerY,
+            final double scale) {
         Path result = new Path();
 
         result.setFill(createColor());
