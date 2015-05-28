@@ -82,7 +82,7 @@ public class GraphController extends Controller {
         GraphParser gp = new DefaultGraphParser();
         graph = gp.parseGraph(vertexfile, edgefile, gf);
 
-        shout(Message.LOADED, graph);
+        shout(Message.LOADED, graph, gp);
 
         repaint();
     }
