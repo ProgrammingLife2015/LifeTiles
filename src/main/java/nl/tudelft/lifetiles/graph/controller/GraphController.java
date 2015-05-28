@@ -113,23 +113,34 @@ public class GraphController extends AbstractController {
             TileController tileController = new TileController(view, model);
 
             Group root = new Group();
-            Rectangle clip = new Rectangle(getMaxUnifiedEnd(graph)
-                    * VertexView.HORIZONTALSCALE, 0);
-            graphNode = new Group();
-            graphNode.getChildren().add(tileController.drawGraph(0));
-            root.getChildren().add(graphNode);
-            root.getChildren().add(clip);
-            
+
             repaintPosition(tileController, root, wrapper.hvalueProperty()
                     .doubleValue());
             wrapper.hvalueProperty().addListener(
-                    (ChangeListener<? super Number>) (ov, oldVal, newVal) -> {
+                    (ChangeListener<Number>) (ov, oldVal, newVal) -> {
                         repaintPosition(tileController, root,
                                 newVal.doubleValue());
                     });
-            wrapper.setContent(root);
+
+            Rectangle clip = new Rectangle(getMaxUnifiedEnd(graph)
+                    * VertexView.HORIZONTALSCALE, 0);
+            root.getChildren().add(clip);
+
+            repaintPosition(tileController, root, wrapper.hvalueProperty()
+                    .doubleValue());
         }
     }
+
+    /**
+     * Repaints the view indicated by the bucket in the given postion
+     * 
+     * @param tc
+     *            Tilecontroller used to draw the graph.
+     * @param root
+     *            Root group used to store the visualized graph in.
+     * @param position
+     *            Position in the scrollPane.
+     */
 
     private void repaintPosition(TileController tileController, Group root,
             double position) {
