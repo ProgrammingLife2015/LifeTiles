@@ -95,7 +95,8 @@ public class SequenceController extends AbstractController {
             throw new IllegalArgumentException(
                     "Attempted to set a non-existant sequence to visible");
         }
-
+        // Limit the visible segquences of this class to the visible set given
+        // from someone
         getVisible().retainAll(visible);
         repaint();
 

@@ -7,7 +7,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
-import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
  * A Vertex is the equivalent of a node from the graph datastructure but this is
@@ -17,8 +16,6 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
  *
  */
 public class VertexView extends Group {
-
-    public SequenceSegment seg;
 
     /**
      * this will hold text in the right place.
