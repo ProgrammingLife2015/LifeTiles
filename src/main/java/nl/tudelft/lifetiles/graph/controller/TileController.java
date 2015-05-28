@@ -19,7 +19,7 @@ public class TileController {
      * The view.
      */
     private final TileView viewVar;
-    
+
     /**
      * Creates a TileController which controls the dataflow.
      *
