@@ -14,7 +14,7 @@ import nl.tudelft.lifetiles.core.util.Message;
  * @author Joren Hammudoglu
  *
  */
-public class WindowControlController extends Controller {
+public class WindowControlController extends AbstractController {
 
     /**
      * The minimize window shout message.
@@ -48,11 +48,14 @@ public class WindowControlController extends Controller {
      * Close the window.
      */
     @FXML
-    private void closeWindowAction() {
+    public final void closeWindowAction() {
         Stage stage = (Stage) windowClose.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
@@ -63,7 +66,7 @@ public class WindowControlController extends Controller {
      * Minimize the window.
      */
     @FXML
-    private void minimizeWindowAction() {
+    public final void minimizeWindowAction() {
         Stage stage = (Stage) windowMinimize.getScene().getWindow();
         stage.toBack();
 
@@ -74,7 +77,7 @@ public class WindowControlController extends Controller {
      * Resize the window.
      */
     @FXML
-    private void resizeWindowAction() {
+    public final void resizeWindowAction() {
         Stage stage = (Stage) windowResize.getScene().getWindow();
         stage.setMaximized(!stage.isMaximized());
 

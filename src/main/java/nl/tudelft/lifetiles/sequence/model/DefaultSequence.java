@@ -12,11 +12,11 @@ public class DefaultSequence implements Sequence {
     /**
      * Identifier for this sequence.
      */
-    private String ident;
+    private final String ident;
     /**
      * List of sequence segments related to this sequence.
      */
-    private List<SequenceSegment> sequenceList;
+    private final List<SequenceSegment> sequenceList;
 
     /**
      * @param identifier
@@ -27,24 +27,32 @@ public class DefaultSequence implements Sequence {
         sequenceList = new ArrayList<>();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final void appendSegment(final SequenceSegment segment) {
         sequenceList.add(segment);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final String getIdentifier() {
         return ident;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final List<SequenceSegment> getSegments() {
         return sequenceList;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#hashCode()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public final int hashCode() {
@@ -57,9 +65,8 @@ public class DefaultSequence implements Sequence {
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public final boolean equals(final Object other) {

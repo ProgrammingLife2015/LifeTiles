@@ -48,11 +48,11 @@ public interface Graph<V> {
     SortedSet<V> getAllVertices();
 
     /**
-     * @param e
+     * @param edge
      *            The edge for which the destination is to be retrieved.
      * @return The destination vertex.
      */
-    V getDestination(Edge<V> e);
+    V getDestination(Edge<V> edge);
 
     /**
      * Get all incoming edges connecting to the given vertex.
@@ -77,11 +77,11 @@ public interface Graph<V> {
     SortedSet<V> getSources();
 
     /**
-     * @param e
+     * @param edge
      *            THe edge for which the source is to be retrieved.
      * @return The source vertex.
      */
-    V getSource(Edge<V> e);
+    V getSource(Edge<V> edge);
 
     /**
      * @return A Set of sink nodes. Sink being a node that has no outgoing

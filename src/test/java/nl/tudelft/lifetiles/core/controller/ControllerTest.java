@@ -15,7 +15,7 @@ import org.junit.rules.ExpectedException;
 
 public class ControllerTest {
 
-    private Controller stub1, stub2;
+    private AbstractController stub1, stub2;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -67,7 +67,7 @@ public class ControllerTest {
 
 }
 
-final class ControllerStub extends Controller {
+final class ControllerStub extends AbstractController {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // noop

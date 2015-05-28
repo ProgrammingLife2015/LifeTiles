@@ -11,7 +11,7 @@ public class SegmentString implements SegmentContent {
     /**
      * content of the segment content.
      */
-    private String contentVar;
+    private final String content;
 
     /**
      * Constructs a sequence segment with given string as content.
@@ -20,7 +20,7 @@ public class SegmentString implements SegmentContent {
      *            + * String to be set as content of the sequence segment.
      */
     public SegmentString(final String content) {
-        contentVar = content;
+        this.content = content;
     }
 
     /**
@@ -28,14 +28,15 @@ public class SegmentString implements SegmentContent {
      */
     @Override
     public final long getLength() {
-        return contentVar.length();
+        return this.content.length();
     }
 
     /**
      * @return string representation of the empty segment.
      */
+    @Override
     public final String toString() {
-        return contentVar;
+        return this.content;
     }
 
     /**

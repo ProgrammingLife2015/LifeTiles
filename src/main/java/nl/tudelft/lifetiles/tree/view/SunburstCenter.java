@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
  * @author Albert Smit
  *
  */
-public class SunburstCenter extends SunburstNode {
+public class SunburstCenter extends AbstractSunburstNode {
 
 
     /**
@@ -23,10 +23,10 @@ public class SunburstCenter extends SunburstNode {
 
     /**
      * Generates a SunburstCenter for the node.
-     * @param v the node that this will represent
+     * @param vertex the node that this will represent
      */
-    public SunburstCenter(final PhylogeneticTreeItem v) {
-        setValue(v);
+    public SunburstCenter(final PhylogeneticTreeItem vertex) {
+        setValue(vertex);
         setDisplay(new Circle(CENTER_RADIUS, Color.BLUE));
         setName(new Text(getValue().getName()));
         this.getChildren().addAll(getDisplay(), getName());

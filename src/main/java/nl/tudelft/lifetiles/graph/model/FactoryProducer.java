@@ -31,7 +31,7 @@ public class FactoryProducer<V extends Comparable<V>> {
      * @return A new factory of the desired type.
      */
     public final GraphFactory<V> getFactory(final String graphLibrary) {
-        if (graphLibrary.equalsIgnoreCase("JGraphT")) {
+        if ("JGraphT".equalsIgnoreCase(graphLibrary)) {
             return new JGraphTGraphFactory<V>();
         }
         // Specified an invalid Graph library.
