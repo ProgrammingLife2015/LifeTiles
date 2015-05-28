@@ -16,6 +16,8 @@ import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.core.controller.Controller;
 import nl.tudelft.lifetiles.core.util.ColorUtils;
 import nl.tudelft.lifetiles.core.util.Message;
+import nl.tudelft.lifetiles.graph.controller.GraphController;
+import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.view.SequenceColor;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 
@@ -52,6 +54,15 @@ public class SequenceController extends Controller {
     public final void initialize(final URL location,
             final ResourceBundle resources) {
         repaint();
+
+        listen(Message.LOADED, (controller, args) -> {
+            if (controller instanceof GraphController) {
+                assert (args[0] instanceof Graph);
+                assert (args[1] instanceof Map<?, ?>);
+                setSequences((Map<String, Sequence>) args[1]);
+                repaint();
+            }
+        });
 
         listen(Message.FILTERED, (controller, args) -> {
             assert (args.length == 1);
