@@ -83,6 +83,7 @@ public class GraphController extends AbstractController {
             final ResourceBundle resources) {
 
         NotificationFactory notFact = new NotificationFactory();
+
         listen(Message.OPENED, (controller, args) -> {
             assert (controller instanceof MenuController);
             assert (args[0] instanceof File && args[1] instanceof File);
