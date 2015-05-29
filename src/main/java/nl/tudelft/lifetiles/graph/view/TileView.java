@@ -58,6 +58,7 @@ public class TileView {
     }
 
     /**
+     * <<<<<<< HEAD
      * Change Vertex colour.
      *
      * @param vertex
@@ -101,7 +102,7 @@ public class TileView {
             nodes.getChildren().add(entry.getValue());
         }
 
-        root.getChildren().addAll(nodes, edges);
+        root.getChildren().addAll(edges, nodes);
 
         return root;
     }
