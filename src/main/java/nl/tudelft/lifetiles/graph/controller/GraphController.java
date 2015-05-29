@@ -82,8 +82,7 @@ public class GraphController extends AbstractController {
     private void loadGraph(final File vertexfile, final File edgefile)
             throws IOException {
         // create the graph
-        GraphFactory<SequenceSegment> gfact = FactoryProducer
-                .getFactory("JGraphT");
+        GraphFactory<SequenceSegment> gfact = FactoryProducer.getFactory();
         GraphParser graphParser = new DefaultGraphParser();
         graph = graphParser.parseGraph(vertexfile, edgefile, gfact);
 
