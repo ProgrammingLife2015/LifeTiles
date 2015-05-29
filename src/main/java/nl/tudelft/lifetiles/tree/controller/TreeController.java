@@ -1,16 +1,18 @@
 package nl.tudelft.lifetiles.tree.controller;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.ResourceBundle;
+import java.util.Scanner;
 
-import nl.tudelft.lifetiles.core.controller.ViewController;
-import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
-import nl.tudelft.lifetiles.tree.view.SunburstView;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.layout.BorderPane;
+import nl.tudelft.lifetiles.core.controller.AbstractController;
+import nl.tudelft.lifetiles.core.controller.MenuController;
+import nl.tudelft.lifetiles.core.util.Message;
+import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
+import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeParser;
+import nl.tudelft.lifetiles.tree.view.SunburstView;
 
 /**
  * The controller of the tree view.
@@ -18,53 +20,71 @@ import javafx.scene.layout.BorderPane;
  * @author Albert Smit
  *
  */
-public class TreeController implements Initializable, Observer {
+public class TreeController extends AbstractController {
 
     /**
-     * The wrapper element.
-     */
-    @FXML
-    private BorderPane wrapper;
-
-    /**
-     * the diagram.
-     *
+     * The diagram.
      */
     @FXML
     private SunburstView view;
 
     /**
-     * the tree to display.
+     * The tree model.
      */
-    private PhylogeneticTreeItem root;
+    private PhylogeneticTreeItem tree;
 
     /**
-     * the ViewController that links this view to the sequence and graph.
+     * {@inheritDoc}
      */
-    private ViewController controller;
-
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        controller = ViewController.getInstance();
-        controller.addObserver(this);
-    }
-
-
-    @Override
-    public final void update(final Observable o, final Object arg) {
-        if (controller.treeIsLoaded()) {
-            repaint();
-        }
+        // load the tree when the files are opened
+        listen(Message.OPENED, (controller, args) -> {
+            assert controller instanceof MenuController;
+            final int expectedLength = 3;
+            assert args.length == expectedLength;
+            assert args[2] instanceof File;
+            try {
+                loadTree((File) args[2]);
+            } catch (FileNotFoundException e) {
+                // TODO: notify the user that the file was not found
+                e.printStackTrace();
+            }
+        });
     }
 
     /**
-     * Redraw the tree.
+     * Loads the tree located in the file.
+     *
+     * @param file
+     *            The .nwk file
+     * @throws FileNotFoundException
+     *             when the file is not found
+     */
+    private void loadTree(final File file) throws FileNotFoundException {
+        // convert the file to a single string
+        String fileString = null;
+        Scanner scanner = new Scanner(file);
+        scanner.useDelimiter("\\Z");
+        fileString = scanner.next();
+        scanner.close();
+
+        // parse the string into a tree
+        tree = PhylogeneticTreeParser.parse(fileString);
+
+        repaint();
+
+        shout(Message.LOADED, tree);
+    }
+
+    /**
+     * Repaints the view.
      */
     private void repaint() {
-        root = controller.getTree();
-        view.setRoot(root);
-        // view = new SunburstView(root);
+        if (tree != null) {
+            view.setRoot(tree);
+        }
     }
 
 }

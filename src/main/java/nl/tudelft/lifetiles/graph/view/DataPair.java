@@ -8,22 +8,22 @@ public final class DataPair {
     /**
      * X Coordinate in 2D space.
      */
-    private double x;
+    private final double xcoord;
     /**
      * Y Coordinate in 2D space.
      */
-    private double y;
+    private final double ycoord;
 
     /**
      *
-     * @param xC
+     * @param xCoord
      *            x coordinate
-     * @param yC
+     * @param yCoord
      *            y coordinate
      */
-    public DataPair(final double xC, final double yC) {
-        this.x = xC;
-        this.y = yC;
+    public DataPair(final double xCoord, final double yCoord) {
+        this.xcoord = xCoord;
+        this.ycoord = yCoord;
     }
 
     /**
@@ -31,7 +31,7 @@ public final class DataPair {
      * @return x coordinate
      */
     public double getX() {
-        return x;
+        return xcoord;
     }
 
     /**
@@ -39,6 +39,6 @@ public final class DataPair {
      * @return the y coordinate
      */
     public double getY() {
-        return y;
+        return ycoord;
     }
 }

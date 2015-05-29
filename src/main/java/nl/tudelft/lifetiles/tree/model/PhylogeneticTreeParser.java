@@ -24,7 +24,8 @@ public final class PhylogeneticTreeParser {
      * the String is first tokenized,
      * after which the method iterates over all tokens.
      *
-     * @param tree The string describing the tree
+     * @param tree
+     *            The string describing the tree
      * @return The parsed tree.
      */
     public static PhylogeneticTreeItem parse(final String tree) {
@@ -33,24 +34,24 @@ public final class PhylogeneticTreeParser {
         // split the string into tokens, and keep the delimiters in the list so
         // we have
         // information about the next token.
-        StringTokenizer st = new StringTokenizer(tree, "(:,);", true);
+        StringTokenizer tokenizer = new StringTokenizer(tree, "(:,);", true);
 
         PhylogeneticTreeItem currentNode = root;
         // loop over all tokens
-        while (st.hasMoreTokens()) {
-            String currentToken = st.nextToken();
+        while (tokenizer.hasMoreTokens()) {
+            String currentToken = tokenizer.nextToken();
             // this starts a list of child nodes, add a child node and make it
             // our current node
-            if (currentToken.equals("(")) {
+            if ("(".equals(currentToken)) {
                 PhylogeneticTreeItem newChild = new PhylogeneticTreeItem();
                 newChild.setParent(currentNode);
                 currentNode = newChild;
-            } else if (currentToken.equals(":")) {
+            } else if (":".equals(currentToken)) {
                 // next token is a distance, add it to the current node
-                String distanceToken = st.nextToken();
+                String distanceToken = tokenizer.nextToken();
                 double distance = Double.parseDouble(distanceToken);
                 currentNode.setDistance(distance);
-            } else if (currentToken.equals(",")) {
+            } else if (",".equals(currentToken)) {
                 // next token is another child, add a new child to the list and
                 // make it the current node
                 currentNode = currentNode.getParent();
@@ -58,12 +59,12 @@ public final class PhylogeneticTreeParser {
                 newChild.setParent(currentNode);
                 currentNode = newChild;
 
-            } else if (currentToken.equals(")")) {
+            } else if (")".equals(currentToken)) {
                 // list of children ends, go up 1 level so we can add a name and
                 // distance to this node
                 // if they are specified
                 currentNode = currentNode.getParent();
-            } else if (currentToken.equals(";")) {
+            } else if (";".equals(currentToken)) {
                 // tree is done, nothing special needs to be done
                 break;
             } else {
@@ -76,5 +77,4 @@ public final class PhylogeneticTreeParser {
 
         return root;
     }
-
 }

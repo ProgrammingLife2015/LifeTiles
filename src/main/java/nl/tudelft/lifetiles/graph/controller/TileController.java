@@ -1,7 +1,7 @@
 package nl.tudelft.lifetiles.graph.controller;
 
 import javafx.scene.Group;
-import nl.tudelft.lifetiles.graph.view.Tile;
+import nl.tudelft.lifetiles.graph.model.GraphContainer;
 import nl.tudelft.lifetiles.graph.view.TileView;
 
 /**
@@ -13,11 +13,11 @@ public class TileController {
     /**
      * the model.
      */
-    private Tile modelVar;
+    private final GraphContainer modelVar;
     /**
      * The view.
      */
-    private TileView viewVar;
+    private final TileView viewVar;
 
     /**
      * Creates a TileController which controls the dataflow.
@@ -27,7 +27,7 @@ public class TileController {
      * @param model
      *            the model that holds the data
      */
-    public TileController(final TileView view, final Tile model) {
+    public TileController(final TileView view, final GraphContainer model) {
         this.viewVar = view;
         this.modelVar = model;
     }
