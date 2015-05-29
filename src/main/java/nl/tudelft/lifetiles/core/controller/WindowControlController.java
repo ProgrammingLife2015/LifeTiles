@@ -48,7 +48,7 @@ public class WindowControlController extends AbstractController {
      * Close the window.
      */
     @FXML
-    public final void closeWindowAction() {
+    private void closeWindowAction() {
         Stage stage = (Stage) windowClose.getScene().getWindow();
         stage.close();
     }
@@ -77,7 +77,7 @@ public class WindowControlController extends AbstractController {
      * Resize the window.
      */
     @FXML
-    public final void resizeWindowAction() {
+    private void resizeWindowAction() {
         Stage stage = (Stage) windowResize.getScene().getWindow();
         stage.setMaximized(!stage.isMaximized());
 
