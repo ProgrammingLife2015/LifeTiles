@@ -1,7 +1,9 @@
 package nl.tudelft.lifetiles.tree.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import nl.tudelft.lifetiles.sequence.model.Sequence;
@@ -65,6 +67,17 @@ public class PhylogeneticTreeItem {
             result += child.numberDescendants() + 1;
         }
 
+        return result;
+    }
+
+    public Set<Sequence> getSequences(){
+        Set<Sequence> result = new HashSet<Sequence>();
+        if (sequence != null) {
+            result.add(sequence);
+        }
+        for (PhylogeneticTreeItem child : children){
+            result.addAll(child.getSequences());
+        }
         return result;
     }
 
