@@ -12,7 +12,7 @@ import nl.tudelft.lifetiles.graph.model.GraphFactory;
  *            The type of Vertex to use.
  */
 public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
-        implements GraphFactory<V> {
+implements GraphFactory<V> {
     /**
      * The edgefactory associated with this graph factory.
      */
@@ -43,7 +43,7 @@ public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
     @Override
     public final Graph<V> getSubGraph(final Graph<V> base,
             final Set<V> vertexSubSet) {
-        return new JGraphTSubGraphAdapter<V>(base, vertexSubSet, edgeFact);
+        return new JGraphTGraphAdapter<V>(base, vertexSubSet, edgeFact);
     }
 
 }
