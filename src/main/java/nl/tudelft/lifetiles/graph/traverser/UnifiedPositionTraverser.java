@@ -2,6 +2,7 @@ package nl.tudelft.lifetiles.graph.traverser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import nl.tudelft.lifetiles.graph.model.Edge;
@@ -27,7 +28,7 @@ public class UnifiedPositionTraverser {
      * modifications on during traversal. Inserted into graph at end of
      * traversal to avoid concurrent modification-like exceptions.
      */
-    private HashMap<SequenceSegment, Long> unifiedPositions;
+    private Map<SequenceSegment, Long> unifiedPositions;
 
     /**
      * Traverses the graph, calculates the unified position. Unified positions

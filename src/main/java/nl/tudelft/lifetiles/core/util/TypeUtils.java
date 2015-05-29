@@ -17,14 +17,13 @@ public final class TypeUtils {
     /**
      * Returns the value of an unsigned byte.
      *
-     * @param b
+     * @param input
      *            the unsigned byte
      * @return the integer value of the unsigned byte
      */
-    public static int unsignedByteValue(final byte b) {
+    public static int unsignedByteValue(final byte input) {
         final int mask = 0xFF;
-        final int value = b & mask;
-        return value;
+        return input & mask;
     }
 
 }

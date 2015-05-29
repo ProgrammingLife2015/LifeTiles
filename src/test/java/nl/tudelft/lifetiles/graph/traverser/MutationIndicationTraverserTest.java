@@ -6,15 +6,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
-import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
-import nl.tudelft.lifetiles.graph.traverser.ReferencePositionTraverser;
 import nl.tudelft.lifetiles.graph.view.Mutation;
 import nl.tudelft.lifetiles.sequence.model.DefaultSequence;
 import nl.tudelft.lifetiles.sequence.model.SegmentEmpty;
@@ -22,9 +16,12 @@ import nl.tudelft.lifetiles.sequence.model.SegmentString;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 public class MutationIndicationTraverserTest {
     GraphFactory<SequenceSegment> gf;
-    static FactoryProducer<SequenceSegment> fp;
     static ReferencePositionTraverser rpt;
     static MutationIndicationTraverser mit;
     static Set<Sequence> s1, s2, s3;
@@ -33,7 +30,6 @@ public class MutationIndicationTraverserTest {
 
     @BeforeClass
     public static void runOnce() {
-        fp = new FactoryProducer<SequenceSegment>();
         Sequence ss1 = new DefaultSequence("reference");
         Sequence ss2 = new DefaultSequence("mutation");
 
@@ -53,7 +49,7 @@ public class MutationIndicationTraverserTest {
 
     @Before
     public void setUp() throws Exception {
-        gf = fp.getFactory("JGraphT");
+        gf = FactoryProducer.getFactory("JGraphT");
         v1 = new SequenceSegment(s1, 1, 11, new SegmentString("AAAAAAAAAA"));
         v4 = new SequenceSegment(s1, 21, 31, new SegmentString("AAAAAAAAAA"));
         gr = gf.getGraph();

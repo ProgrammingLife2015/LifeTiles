@@ -1,8 +1,11 @@
 package nl.tudelft.lifetiles.sequence.model;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.ToIntBiFunction;
 
 import nl.tudelft.lifetiles.graph.view.Mutation;
 
@@ -17,24 +20,24 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
     /**
      * Identifier for this segment.
      */
-    private int identifier;
+    private final int identifier;
     /**
      * The content of this segment.
      */
-    private SegmentContent contentVar;
+    private final SegmentContent content;
     /**
      * Contains the sources containing this segment.
      */
-    private Set<Sequence> sourcesVar;
+    private final Set<Sequence> sources;
 
     /**
      * The start position for this segment.
      */
-    private long startVar;
+    private final long start;
     /**
      * The end position for this segment.
      */
-    private long endVar;
+    private final long endVar;
     /**
      * The unified start position for this segment.
      */
@@ -58,6 +61,32 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
     private Mutation mutationVar;
 
     /**
+     * Used for compareTo.
+     */
+    private static final List<ToIntBiFunction<SequenceSegment, SequenceSegment>> COMPARATORS = Arrays
+            .asList((left, right) -> {
+                return Long.compare(left.getUnifiedStart(),
+                        right.getUnifiedStart());
+            },
+                    (left, right) -> {
+                        return Long.compare(left.getStart(), right.getStart());
+                    },
+                    (left, right) -> {
+                        return Long.compare(left.getUnifiedEnd(),
+                                right.getUnifiedEnd());
+                    },
+                    (left, right) -> {
+                        return Long.compare(left.getEnd(), right.getEnd());
+                    },
+                    (left, right) -> {
+                        return left.getContent().toString()
+                                .compareTo(right.getContent().toString());
+                    }, (left, right) -> {
+                        return left.getSources().size()
+                                - right.getSources().size();
+                    });
+
+    /**
      * @param sources
      *            The sources containing this segment.
      * @param startPosition
@@ -70,10 +99,11 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
     public SequenceSegment(final Set<Sequence> sources,
             final long startPosition, final long endPosition,
             final SegmentContent content) {
-        sourcesVar = sources;
-        startVar = startPosition;
-        endVar = endPosition;
-        contentVar = content;
+        this.sources = sources;
+        this.start = startPosition;
+        this.endVar = endPosition;
+        this.content = content;
+
         identifier = nextId.incrementAndGet();
     }
 
@@ -81,7 +111,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      * @return the content
      */
     public final SegmentContent getContent() {
-        return contentVar;
+        return content;
     }
 
     /**
@@ -95,14 +125,14 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      * @return the sources
      */
     public final Set<Sequence> getSources() {
-        return sourcesVar;
+        return sources;
     }
 
     /**
      * @return the start position
      */
     public final long getStart() {
-        return startVar;
+        return start;
     }
 
     /**
@@ -173,36 +203,23 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      */
     @Override
     public final int compareTo(final SequenceSegment other) {
-        int candidateComp = Long.compare(this.getUnifiedStart(),
-                other.getUnifiedStart());
-        if (candidateComp == 0) {
-            candidateComp = Long.compare(this.getStart(), other.getStart());
-        }
-        if (candidateComp == 0) {
-            candidateComp = Long.compare(this.getUnifiedEnd(),
-                    other.getUnifiedEnd());
-        }
-        if (candidateComp == 0) {
-            candidateComp = Long.compare(this.getEnd(), other.getEnd());
-        }
-        if (candidateComp == 0) {
-            candidateComp = this.getContent().toString()
-                    .compareTo(other.getContent().toString());
-        }
-        if (candidateComp == 0) {
-            candidateComp = this.getSources().size()
-                    - other.getSources().size();
-        }
-        if (candidateComp == 0) {
-            Iterator<Sequence> thisIt = this.getSources().iterator();
-            Iterator<Sequence> otherIt = other.getSources().iterator();
-            while (thisIt.hasNext()) {
-                if (candidateComp == 0) {
-                    candidateComp = thisIt.next().getIdentifier()
-                            .compareTo(otherIt.next().getIdentifier());
-                }
+        for (ToIntBiFunction<SequenceSegment, SequenceSegment> comp : COMPARATORS) {
+            int result = comp.applyAsInt(this, other);
+            if (result != 0) {
+                return result;
             }
         }
+        int candidateComp = 0;
+        Iterator<Sequence> thisIt = this.getSources().iterator();
+        Iterator<Sequence> otherIt = other.getSources().iterator();
+        while (thisIt.hasNext()) {
+            candidateComp = thisIt.next().getIdentifier()
+                    .compareTo(otherIt.next().getIdentifier());
+            if (candidateComp != 0) {
+                return candidateComp;
+            }
+        }
+
         if (this.getIdentifier() == other.getIdentifier()) {
             candidateComp = 0;
         }
@@ -247,9 +264,8 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
         referenceEndVar = referenceEnd;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#hashCode()
+    /**
+     * {@inheritDoc}
      */
     @Override
     public final int hashCode() {
@@ -259,9 +275,8 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
         return result;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see java.lang.Object#equals(java.lang.Object)
+    /**
+     * {@inheritDoc}
      */
     @Override
     public final boolean equals(final Object obj) {
@@ -294,7 +309,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      */
     public final Mutation determineMutation() {
         Mutation mutation;
-        if (contentVar.isEmpty()) {
+        if (content.isEmpty()) {
             mutation = Mutation.DELETION;
         } else if (referenceStartVar > referenceEndVar) {
             mutation = Mutation.INSERTION;

@@ -21,27 +21,27 @@ public class EdgeLine extends Group {
     /**
      * The line that this edge draws.
      */
-    private Line line;
+    private final Line line;
 
     /**
      * Create a new line from a vertex to another vertex. It tries to create a
      * straight line but if it fails then the line will be drawn from the middle
      * of the vertex to the middle of the other vertex.
      *
-     * @param from
+     * @param source
      *            Vertex to draw from
-     * @param to
+     * @param destination
      *            Vertex to draw to
      */
-    public EdgeLine(final VertexView from, final VertexView to) {
+    public EdgeLine(final VertexView source, final VertexView destination) {
         this.line = new Line();
-        Bounds boundFrom = from.getBoundsInParent();
-        Bounds boundTo = to.getBoundsInParent();
+        Bounds boundFrom = source.getBoundsInParent();
+        Bounds boundTo = destination.getBoundsInParent();
 
-        if (!outofboundsY(boundFrom, boundTo)) {
-            drawStraightLine(from, to, boundFrom, boundTo);
+        if (outofboundsY(boundFrom, boundTo)) {
+            drawCrossLine(source, destination, boundFrom, boundTo);
         } else {
-            drawCrossLine(from, to, boundFrom, boundTo);
+            drawStraightLine(boundFrom, boundTo);
         }
 
     }
@@ -52,67 +52,69 @@ public class EdgeLine extends Group {
      * product. See: http://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
      * for more information.
      *
-     * @param p0
+     * @param line0source
      *            Point 0 of the first line
-     * @param t0
+     * @param line0destination
      *            Point 1 of the first line
-     * @param p1
+     * @param line1source
      *            Point 0 of the second line
-     * @param t1
+     * @param line1destination
      *            Point 1 of the second line
      * @return y intersection point
      */
-    private double calculateYIntersection(final DataPair p0, final DataPair t0,
-            final DataPair p1, final DataPair t1) {
+    private double calculateYIntersection(final DataPair line0source,
+            final DataPair line0destination, final DataPair line1source,
+            final DataPair line1destination) {
 
-        double s10x = t0.getX() - p0.getX();
-        double s10y = t0.getY() - p0.getY();
-        double s32x = t1.getX() - p1.getX();
-        double s32y = t1.getY() - p1.getY();
+        double s10x = line0destination.getX() - line0source.getX();
+        double s10y = line0destination.getY() - line0source.getY();
+        double s32x = line1destination.getX() - line1source.getX();
+        double s32y = line1destination.getY() - line1source.getY();
 
         double denom = s10x * s32y - s32x * s10y;
         boolean denomPositive = denom > 0;
 
-        double s02x = p0.getX() - p1.getX();
-        double s02y = p0.getY() - p1.getY();
+        double s02x = line0source.getX() - line1source.getX();
+        double s02y = line0source.getY() - line1source.getY();
         double snumer = s10x * s02y - s10y * s02x;
         double tnumer = s32x * s02y - s32y * s02x;
 
         // No collision
-        if ((denom == 0) || (snumer < 0) == denomPositive
+        if (denom == 0 || (snumer < 0) == denomPositive
                 || (tnumer < 0) == denomPositive
-                || ((snumer > denom) == denomPositive)
-                || ((tnumer > denom) == denomPositive)) {
+                || (snumer > denom) == denomPositive
+                || (tnumer > denom) == denomPositive) {
             return -1;
         }
 
         // Collision detected
-        return p0.getY() + ((tnumer / denom) * s10y);
+        return line0source.getY() + ((tnumer / denom) * s10y);
     }
 
     /**
      * Draw a Crossed line between two Vertices.
      *
-     * @param from
+     * @param source
      *            Start Vertex
-     * @param to
+     * @param destination
      *            Destination Vertex
      * @param boundFrom
      *            The Bounds of the start Vertex
      * @param boundTo
      *            The Bounds of the end Vertex
      */
-    private void drawCrossLine(final VertexView from, final VertexView to,
-            final Bounds boundFrom, final Bounds boundTo) {
+    private void drawCrossLine(final VertexView source,
+            final VertexView destination, final Bounds boundFrom,
+            final Bounds boundTo) {
         Circle head = new Circle();
         head.setRadius(HEAD_RADIUS);
 
-        double fromX = from.getLayoutX() + (boundFrom.getWidth() / 2);
-        double fromY = from.getLayoutY() + (boundFrom.getHeight() / 2);
+        double fromX = source.getLayoutX() + (boundFrom.getWidth() / 2);
+        double fromY = source.getLayoutY() + (boundFrom.getHeight() / 2);
 
         // Draw the line from the middle of the destination
-        double toX = to.getLayoutX();
-        double toY = to.getLayoutY() + (boundTo.getHeight() / 2);
+        double toX = destination.getLayoutX();
+        double toY = destination.getLayoutY() + (boundTo.getHeight() / 2);
 
         drawLine(fromX, fromY, toX, toY);
 
@@ -153,17 +155,14 @@ public class EdgeLine extends Group {
     /**
      * Draw a straight between two vertices.
      *
-     * @param from
-     *            Start Vertex
-     * @param to
-     *            Destination Vertex
+     * Destination Vertex
+     *
      * @param boundFrom
      *            The Bounds of the start Vertex
      * @param boundTo
      *            The Bounds of the end Vertex
      */
-    private void drawStraightLine(final VertexView from, final VertexView to,
-            final Bounds boundFrom, final Bounds boundTo) {
+    private void drawStraightLine(final Bounds boundFrom, final Bounds boundTo) {
         Circle head = new Circle();
         head.setRadius(HEAD_RADIUS);
 
@@ -182,12 +181,13 @@ public class EdgeLine extends Group {
             final double startY = minYRight + boundTo.getHeight() / 2;
             drawLine(startX, startY, minXRight, startY);
         } else {
-            DataPair p0 = new DataPair(maxXLeft, minYLeft);
-            DataPair t0 = new DataPair(minXRight, maxYRight);
-            DataPair p1 = new DataPair(maxXLeft, maxYLeft);
-            DataPair t1 = new DataPair(minXRight, minYRight);
+            DataPair line0source = new DataPair(maxXLeft, minYLeft);
+            DataPair line0destination = new DataPair(minXRight, maxYRight);
+            DataPair line1source = new DataPair(maxXLeft, maxYLeft);
+            DataPair line1destination = new DataPair(minXRight, minYRight);
 
-            double intersect = calculateYIntersection(p0, t0, p1, t1);
+            double intersect = calculateYIntersection(line0source,
+                    line0destination, line1source, line1destination);
 
             final double endX = minXRight + (boundTo.getWidth() / 2);
             drawLine(startX, intersect, endX, intersect);
@@ -211,21 +211,21 @@ public class EdgeLine extends Group {
      * Check if the y coordinates of 'to' lie outside the range of the y
      * coordinates of 'from'.
      *
-     * @param from
+     * @param source
      *            the left bound
-     * @param to
+     * @param destination
      *            the right bound
      * @return true on y coordinate is outside of the range
      */
-    private Boolean outofboundsY(final Bounds from, final Bounds to) {
-        if (from.getMinY() > to.getMinY() && from.getMinY() > to.getMaxY()
-                && from.getMaxY() > to.getMaxY()
-                && from.getMaxY() > to.getMinY()) {
+    private Boolean outofboundsY(final Bounds source, final Bounds destination) {
+        if (source.getMinY() > destination.getMinY() && source.getMinY() > destination.getMaxY()
+                && source.getMaxY() > destination.getMaxY()
+                && source.getMaxY() > destination.getMinY()) {
             return true;
         }
-        if (from.getMinY() < to.getMinY() && from.getMinY() < to.getMaxY()
-                && from.getMaxY() < to.getMaxY()
-                && from.getMaxY() < to.getMinY()) {
+        if (source.getMinY() < destination.getMinY() && source.getMinY() < destination.getMaxY()
+                && source.getMaxY() < destination.getMaxY()
+                && source.getMaxY() < destination.getMinY()) {
             return true;
         }
         return false;

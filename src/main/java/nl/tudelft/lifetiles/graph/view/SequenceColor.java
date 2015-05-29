@@ -47,10 +47,10 @@ public final class SequenceColor {
      * @return the bytes of the hash
      */
     private static byte[] md5(final Sequence sequence) {
-        MessageDigest md;
+        MessageDigest digest;
         try {
-            md = MessageDigest.getInstance("MD5");
-            return md.digest(sequence.getIdentifier().getBytes());
+            digest = MessageDigest.getInstance("MD5");
+            return digest.digest(sequence.getIdentifier().getBytes());
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             return new byte[] {};

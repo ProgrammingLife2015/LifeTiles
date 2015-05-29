@@ -12,7 +12,7 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
  * that the graph can be drawn on the screen.
  *
  */
-public class Tile {
+public class GraphContainer {
 
     /**
      * The Current graph that this model is holding.
@@ -22,16 +22,16 @@ public class Tile {
     /**
      * create a new Tile.
      *
-     * @param gr
+     * @param graph
      *            The initial graph
      */
-    public Tile(final Graph<SequenceSegment> gr) {
-        graph = gr;
+    public GraphContainer(final Graph<SequenceSegment> graph) {
+        this.graph = graph;
 
         // TODO: Temporary line until sequence selection is implemented.
-        Sequence reference = graph.getSources().iterator().next().getSources()
-                .iterator().next();
-        
+        Sequence reference = this.graph.getSources().iterator().next()
+                .getSources().iterator().next();
+
         alignGraph();
         findMutations(reference);
     }
@@ -52,9 +52,9 @@ public class Tile {
      *            Reference of the graph which is used to indicate mutations.
      */
     private void findMutations(final Sequence reference) {
-        ReferencePositionTraverser rmt = new ReferencePositionTraverser(reference);
-        MutationIndicationTraverser mt = new MutationIndicationTraverser(reference);
-        graph = mt.indicateGraphMutations(rmt.referenceMapGraph(graph));
+        new ReferencePositionTraverser(reference).referenceMapGraph(graph);
+        new MutationIndicationTraverser(reference)
+                .indicateGraphMutations(graph);
     }
 
     /**

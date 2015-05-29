@@ -16,7 +16,7 @@ public class JGraphTEdgeFactory<V> implements EdgeFactory<V> {
     /**
      * Internal factory to use.
      */
-    private ClassBasedEdgeFactory<V, DefaultEdge> internalFactory;
+    private final ClassBasedEdgeFactory<V, DefaultEdge> internalFactory;
 
     /**
      * Creates a new edge factory.
@@ -27,24 +27,24 @@ public class JGraphTEdgeFactory<V> implements EdgeFactory<V> {
     }
 
     /**
-     * @param e
+     * @param edge
      *            The internal edge to use.
      * @return a new edge.
      */
-    public final Edge<V> getEdge(final DefaultEdge e) {
-        return new JGraphTEdgeAdapter<V>(e);
+    public final Edge<V> getEdge(final DefaultEdge edge) {
+        return new JGraphTEdgeAdapter<V>(edge);
     }
 
     /**
      * @return A new edge from <code>v1</code> to <code>v2</code>
-     * @param v1
+     * @param source
      *            The source vertex.
-     * @param v2
+     * @param destination
      *            The destination vertex.
      */
     @Override
-    public final Edge<V> getEdge(final V v1, final V v2) {
-        return new JGraphTEdgeAdapter<V>(internalFactory.createEdge(v1, v2));
+    public final Edge<V> getEdge(final V source, final V destination) {
+        return new JGraphTEdgeAdapter<V>(internalFactory.createEdge(source, destination));
 
     }
 

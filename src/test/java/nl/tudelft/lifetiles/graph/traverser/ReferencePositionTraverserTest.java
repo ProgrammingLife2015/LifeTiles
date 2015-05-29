@@ -5,23 +5,21 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
-import nl.tudelft.lifetiles.graph.traverser.ReferencePositionTraverser;
 import nl.tudelft.lifetiles.sequence.model.DefaultSequence;
 import nl.tudelft.lifetiles.sequence.model.SegmentEmpty;
 import nl.tudelft.lifetiles.sequence.model.SegmentString;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 public class ReferencePositionTraverserTest {
     GraphFactory<SequenceSegment> gf;
-    static FactoryProducer<SequenceSegment> fp;
     static ReferencePositionTraverser rpt;
     static Set<Sequence> s1, s2, s3;
     SequenceSegment v1, v4;
@@ -29,7 +27,6 @@ public class ReferencePositionTraverserTest {
 
     @BeforeClass
     public static void runOnce() {
-        fp = new FactoryProducer<SequenceSegment>();
         Sequence ss1 = new DefaultSequence("reference");
         Sequence ss2 = new DefaultSequence("mutation");
 
@@ -48,7 +45,7 @@ public class ReferencePositionTraverserTest {
 
     @Before
     public void setUp() throws Exception {
-        gf = fp.getFactory("JGraphT");
+        gf = FactoryProducer.getFactory("JGraphT");
         v1 = new SequenceSegment(s1, 1, 11, new SegmentString("AAAAAAAAAA"));
         v4 = new SequenceSegment(s1, 21, 31, new SegmentString("AAAAAAAAAA"));
         gr = gf.getGraph();
@@ -68,9 +65,9 @@ public class ReferencePositionTraverserTest {
         gr.addEdge(v1, v6);
         gr.addEdge(v3, v4);
         gr.addEdge(v6, v4);
-        
+
         rpt.referenceMapGraph(gr);
-        
+
         assertEquals(1, v1.getReferenceStart());
         assertEquals(10, v1.getReferenceEnd());
         assertEquals(11, v3.getReferenceStart());
@@ -93,7 +90,7 @@ public class ReferencePositionTraverserTest {
         gr.addEdge(v1, v5);
         gr.addEdge(v2, v4);
         gr.addEdge(v5, v4);
-        
+
         rpt.referenceMapGraph(gr);
 
         assertEquals(1, v1.getReferenceStart());
@@ -118,7 +115,7 @@ public class ReferencePositionTraverserTest {
         gr.addEdge(v1, v6);
         gr.addEdge(v2, v4);
         gr.addEdge(v6, v4);
-        
+
         rpt.referenceMapGraph(gr);
 
         assertEquals(1, v1.getReferenceStart());
