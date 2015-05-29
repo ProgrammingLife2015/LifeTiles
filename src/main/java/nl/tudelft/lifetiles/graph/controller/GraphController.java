@@ -18,6 +18,8 @@ import nl.tudelft.lifetiles.graph.model.GraphContainer;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
 import nl.tudelft.lifetiles.graph.model.GraphParser;
 import nl.tudelft.lifetiles.graph.view.TileView;
+import nl.tudelft.lifetiles.notification.controller.NotificationController;
+import nl.tudelft.lifetiles.notification.model.NotificationFactory;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
@@ -40,26 +42,26 @@ public class GraphController extends AbstractController {
     private Graph<SequenceSegment> graph;
 
     /**
-     * The notification factory.
+     * {@inheritDoc}
      */
-    private NotificationFactory nf;
-
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        this.nf = new NotificationFactory();
+        NotificationFactory notFact = new NotificationFactory();
 
-        listen(Message.OPENED, (controller, args) -> {
-            assert controller instanceof MenuController;
-            assert args[0] instanceof File && args[1] instanceof File;
+        listen(Message.OPENED,
+                (controller, args) -> {
+                    assert controller instanceof MenuController;
+                    assert args[0] instanceof File && args[1] instanceof File;
 
-            try {
-                loadGraph((File) args[0], (File) args[1]);
-            } catch (Exception e) {
-                shout(NotificationController.NOTIFY, nf.getNotification(e));
-            }
+                    try {
+                        loadGraph((File) args[0], (File) args[1]);
+                    } catch (IOException exception) {
+                        shout(NotificationController.NOTIFY,
+                                notFact.getNotification(exception));
+                    }
 
-        });
+                });
     }
 
     /**
@@ -85,16 +87,11 @@ public class GraphController extends AbstractController {
     private void loadGraph(final File vertexfile, final File edgefile)
             throws IOException {
         // create the graph
-        FactoryProducer<SequenceSegment> fp = new FactoryProducer<>();
-        GraphFactory<SequenceSegment> gf = fp.getFactory("JGraphT");
-        GraphParser gp = new DefaultGraphParser();
-        try {
-            graph = gp.parseGraph(vertexfile, edgefile, gf);
-        } catch (IOException e) {
-            throw new IOException("Graph file not found.");
-        }
+        GraphFactory<SequenceSegment> factory = FactoryProducer.getFactory();
+        GraphParser parser = new DefaultGraphParser();
+        graph = parser.parseGraph(vertexfile, edgefile, factory);
 
-        shout(Message.LOADED, graph, gp.getSequences());
+        shout(Message.LOADED, graph, parser.getSequences());
         repaint();
     }
 
@@ -103,7 +100,6 @@ public class GraphController extends AbstractController {
      */
     private void repaint() {
         if (graph != null) {
-            System.out.println("repainting graph...");
             GraphContainer model = new GraphContainer(graph);
             TileView view = new TileView();
             TileController tileController = new TileController(view, model);

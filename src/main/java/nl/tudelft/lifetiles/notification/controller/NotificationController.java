@@ -11,7 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
-import nl.tudelft.lifetiles.core.controller.Controller;
+import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.util.ColorUtils;
 import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.notification.model.AbstractNotification;
@@ -22,7 +22,7 @@ import nl.tudelft.lifetiles.notification.model.AbstractNotification;
  * @author Joren Hammudoglu
  *
  */
-public class NotificationController extends Controller {
+public class NotificationController extends AbstractController {
 
     /**
      * AbstractNotification shout message.
@@ -85,9 +85,6 @@ public class NotificationController extends Controller {
 
     /**
      * Close the notification.
-     *
-     * @param event
-     *            the event
      */
     @FXML
     @SuppressWarnings("PMD.UnusedPrivateMethod")

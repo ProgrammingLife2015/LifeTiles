@@ -27,11 +27,7 @@ import nl.tudelft.lifetiles.notification.model.NotificationFactory;
  * @author Joren Hammudoglu
  *
  */
-<<<<<<< Upstream, based on origin/dev
 public class MenuController extends AbstractController {
-=======
-public class MenuController extends Controller {
->>>>>>> bf0e623 Refactored into new controller structure
 
     /**
      * The initial x-coordinate of the window.
