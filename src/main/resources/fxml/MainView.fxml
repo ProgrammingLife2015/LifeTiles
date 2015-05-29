@@ -47,6 +47,10 @@
 			<Label text="Graph not loaded yet. " />
 		</children>
 	</HBox>
+	
+    <fx:include fx:id="notificationContent" source="NotificationView.fxml"
+        AnchorPane.topAnchor="39.0" AnchorPane.rightAnchor="0.0"
+        AnchorPane.leftAnchor="0.0" />
 
 	<stylesheets>
 		<URL value="@../styles/MainStyle.css" />
