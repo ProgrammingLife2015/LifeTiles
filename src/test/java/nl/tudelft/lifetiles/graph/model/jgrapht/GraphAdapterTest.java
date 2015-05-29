@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import nl.tudelft.lifetiles.graph.model.Edge;
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
@@ -26,8 +27,11 @@ import org.junit.rules.ExpectedException;
  */
 public class GraphAdapterTest {
     GraphFactory<SequenceSegment> gf;
-    SequenceSegment v1, v2;
+
+    SequenceSegment v1, v2, v3, v4;
+
     Graph<SequenceSegment> gr;
+    Graph<SequenceSegment> subgr;
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
@@ -38,6 +42,10 @@ public class GraphAdapterTest {
                 new SegmentEmpty(2));
         v2 = new SequenceSegment(new HashSet<Sequence>(), 0, 0,
                 new SegmentEmpty(3));
+        v3 = new SequenceSegment(new HashSet<Sequence>(), 3, 5,
+                new SegmentEmpty(2));
+        v4 = new SequenceSegment(new HashSet<Sequence>(), 1, 3,
+                new SegmentEmpty(2));
         gr = gf.getGraph();
     }
 
@@ -145,8 +153,8 @@ public class GraphAdapterTest {
                 new SegmentEmpty(0));
         gr.splitEdge(inc.iterator().next(), v3);
         assertEquals(v3, gr.getSource(gr.getIncoming(v2).iterator().next()));
-        assertEquals(v3,
-                gr.getDestination(gr.getOutgoing(v1).iterator().next()));
+        assertEquals(v3, gr
+                .getDestination(gr.getOutgoing(v1).iterator().next()));
     }
 
     @Test
@@ -158,6 +166,97 @@ public class GraphAdapterTest {
         Graph<SequenceSegment> copy = gr.copy(gf);
         assertEquals(2, copy.getAllVertices().size());
         assertEquals(1, copy.getAllEdges().size());
+    }
+
+    @Test
+    public void testSubGraphCreation() {
+        subgr = gf.getSubGraph(gr, null);
+        assertEquals(subgr.getAllVertices().size(), gr.getAllVertices().size());
+        assertEquals(subgr.getAllEdges().size(), gr.getAllEdges().size());
+    }
+
+    @Test
+    public void testSubGraphVertices() {
+        gr.addVertex(v1);
+        gr.addVertex(v2);
+        subgr = gf.getSubGraph(gr, null);
+        assertEquals(subgr.getAllVertices().size(), gr.getAllVertices().size());
+    }
+
+    @Test
+    public void testSubGraphEdges() {
+        gr.addVertex(v1);
+        gr.addVertex(v2);
+        gr.addEdge(v1, v2);
+        subgr = gf.getSubGraph(gr, null);
+        assertEquals(subgr.getAllEdges().size(), gr.getAllEdges().size());
+    }
+
+    @Test
+    public void testSubGraphSubsetVertices() {
+        gr.addVertex(v1);
+        gr.addVertex(v2);
+        gr.addVertex(v3);
+
+        Set<SequenceSegment> cpy = new TreeSet<SequenceSegment>();
+        cpy.addAll(gr.getAllVertices());
+        cpy.remove(v3);
+        cpy.remove(v2);
+
+        subgr = gf.getSubGraph(gr, cpy);
+
+        assertEquals(subgr.getAllVertices().size(),
+                gr.getAllVertices().size() - 2);
+
+    }
+
+    @Test
+    public void testSubGraphSubsetVerticesEdges() {
+        gr.addVertex(v1);
+        gr.addVertex(v2);
+        gr.addVertex(v3);
+        gr.addEdge(v1, v3);
+        gr.addEdge(v2, v3);
+
+        Set<SequenceSegment> cpy = new TreeSet<SequenceSegment>();
+        cpy.addAll(gr.getAllVertices());
+        cpy.remove(v3);
+
+        subgr = gf.getSubGraph(gr, cpy);
+
+        assertEquals(subgr.getAllEdges().size(), gr.getAllEdges().size() - 2);
+    }
+
+    @Test
+    public void testDeepCopyVertices() {
+        gr.addVertex(v1);
+        gr.addVertex(v2);
+        gr.addVertex(v3);
+
+        Set<SequenceSegment> cpy = new TreeSet<SequenceSegment>();
+        cpy.addAll(gr.getAllVertices());
+
+        subgr = gf.getSubGraph(gr, cpy);
+        subgr = subgr.deepcopy(gf);
+
+        assertTrue(gr.getAllVertices().containsAll(subgr.getAllVertices()));
+    }
+
+    @Test
+    public void testDeepCopyEdges() {
+        gr.addVertex(v1);
+        gr.addVertex(v2);
+        gr.addVertex(v3);
+        gr.addEdge(v1, v3);
+        gr.addEdge(v2, v3);
+
+        Set<SequenceSegment> cpy = new TreeSet<SequenceSegment>();
+        cpy.addAll(gr.getAllVertices());
+        subgr = gf.getSubGraph(gr, cpy);
+        subgr = subgr.deepcopy(gf);
+
+        assertTrue(gr.getAllEdges().containsAll(subgr.getAllEdges()));
+
     }
 
 }

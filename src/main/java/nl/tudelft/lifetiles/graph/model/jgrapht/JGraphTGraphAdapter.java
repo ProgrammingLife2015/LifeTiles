@@ -17,6 +17,7 @@ import nl.tudelft.lifetiles.graph.model.GraphFactory;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DirectedSubgraph;
 import org.jgrapht.graph.SimpleDirectedGraph;
 
 /**
@@ -26,7 +27,7 @@ import org.jgrapht.graph.SimpleDirectedGraph;
  *            The type of vertex to use.
  */
 public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
-implements Graph<V> {
+        implements Graph<V> {
     /**
      * The edgefactory to use to create the edges for this graph.
      */
@@ -59,6 +60,30 @@ implements Graph<V> {
         internalGraph = new SimpleDirectedGraph<V, DefaultEdge>(
                 DefaultEdge.class);
         this.edgeFact = edgeFact;
+        sources = new TreeSet<>();
+        sinks = new TreeSet<>();
+        vertexIdentifiers = new ArrayList<>();
+    }
+
+    /**
+     * Create a new graph based on the base graph. It will take the vertexset
+     * and create a graph only containing those vertices and the corresponding
+     * edges.
+     *
+     * @param base
+     *            the graph to base a new graph on
+     * @param vertexSubSet
+     *            the vertices that must be in the new graph. If set to null,
+     *            all vertices will be included.
+     *
+     * @param ef
+     *            The edgefactory to use for this graph
+     */
+    public JGraphTGraphAdapter(final Graph<V> base, final Set<V> vertexSubSet,
+            final JGraphTEdgeFactory<V> ef) {
+        internalGraph = new DirectedSubgraph<V, DefaultEdge>(base
+                .getInternalGraph(), vertexSubSet, null);
+        edgeFact = ef;
         sources = new TreeSet<>();
         sinks = new TreeSet<>();
         vertexIdentifiers = new ArrayList<>();
@@ -245,18 +270,6 @@ implements Graph<V> {
     }
 
     /**
-     * Set the internal graph to a new one.
-     *
-     * @param directedGraph
-     *            new (sub)graph
-     */
-    protected final void setInternalGraph(
-            final DirectedGraph<V, DefaultEdge> directedGraph) {
-        internalGraph = directedGraph;
-
-    }
-
-    /**
      * Returns a copy of the graph including edges and vertices.
      *
      * @param gfact
@@ -302,9 +315,9 @@ implements Graph<V> {
 
         for (Edge<V> edge : this.getAllEdges()) {
             Object from = convertVertices.get(this.getSource(edge));
-            Object to = convertVertices.get(this.getDestination(edge));
+            Object destination = convertVertices.get(this.getDestination(edge));
 
-            copygraph.addEdge((V) from, (V) to);
+            copygraph.addEdge((V) from, (V) destination);
         }
 
         return copygraph;
