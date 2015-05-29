@@ -63,8 +63,13 @@ public class NotificationController extends Controller {
     public final void initialize(final URL location,
             final ResourceBundle resources) {
         final int initialCapacity = 10;
-        this.notifications = new PriorityQueue<>(initialCapacity,
-                (n1, n2) -> n1.getPriority() - n2.getPriority());
+        this.notifications = new PriorityQueue<>(initialCapacity, (n1, n2) -> {
+            if (n1.getPriority() == n2.getPriority()) {
+                return Boolean.compare(n1.equals(n2), true);
+            } else {
+                return n1.getPriority() - n2.getPriority();
+            }
+        });
 
         hide();
 
