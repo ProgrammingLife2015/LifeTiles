@@ -17,7 +17,7 @@ import nl.tudelft.lifetiles.core.util.ColorUtils;
 import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
 import nl.tudelft.lifetiles.graph.model.Graph;
-import nl.tudelft.lifetiles.graph.view.SequenceColor;
+import nl.tudelft.lifetiles.sequence.SequenceColor;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 
 /**
