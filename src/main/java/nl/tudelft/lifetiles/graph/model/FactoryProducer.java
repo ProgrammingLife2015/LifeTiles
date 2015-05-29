@@ -14,6 +14,10 @@ public final class FactoryProducer<V extends Comparable<V>> {
      * The graph library to use when none is specified.
      */
     private static final String DEFAULT_LIBRARY = "JGraphT";
+    /**
+     * Identifier for the JGraphT library.
+     */
+    private static final String JGRAPHT = "JGraphT";
 
     /**
      * Do not instantiate.
@@ -42,7 +46,7 @@ public final class FactoryProducer<V extends Comparable<V>> {
      */
     public static <V extends Comparable<V>> GraphFactory<V> getFactory(
             final String graphLibrary) {
-        if ("JGraphT".equalsIgnoreCase(graphLibrary)) {
+        if (JGRAPHT.equalsIgnoreCase(graphLibrary)) {
             return new JGraphTGraphFactory<V>();
         }
         // Specified an invalid Graph library.
