@@ -9,17 +9,17 @@ package nl.tudelft.lifetiles.notification.model;
 public class NotificationFactory {
 
     /**
-     * Notification error type.
+     * AbstractNotification error type.
      */
     public static final String ERROR = "error";
 
     /**
-     * Notification warning type.
+     * AbstractNotification warning type.
      */
     public static final String WARNING = "warning";
 
     /**
-     * Notification info type.
+     * AbstractNotification info type.
      */
     public static final String INFO = "info";
 
@@ -39,9 +39,9 @@ public class NotificationFactory {
      *            the notification type
      * @return the notification
      */
-    public final Notification getNotification(final String message,
+    public final AbstractNotification getNotification(final String message,
             final String type) {
-        Notification res;
+        AbstractNotification res;
 
         switch (type) {
         case ERROR:
@@ -64,12 +64,12 @@ public class NotificationFactory {
     /**
      * Create a notification.
      *
-     * @param e
+     * @param exception
      *            the exception to create the notification from
      * @return the notification
      */
-    public final Notification getNotification(final Exception e) {
-        return getNotification(e.getLocalizedMessage(), ERROR);
+    public final AbstractNotification getNotification(final Exception exception) {
+        return getNotification(exception.getLocalizedMessage(), ERROR);
     }
 
 }

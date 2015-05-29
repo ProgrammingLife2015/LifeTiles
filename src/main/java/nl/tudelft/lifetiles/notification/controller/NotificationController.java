@@ -8,7 +8,6 @@ import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -16,7 +15,7 @@ import javafx.util.Duration;
 import nl.tudelft.lifetiles.core.controller.Controller;
 import nl.tudelft.lifetiles.core.util.ColorUtils;
 import nl.tudelft.lifetiles.core.util.Message;
-import nl.tudelft.lifetiles.notification.model.Notification;
+import nl.tudelft.lifetiles.notification.model.AbstractNotification;
 
 /**
  * The controller for the notification view.
@@ -27,7 +26,7 @@ import nl.tudelft.lifetiles.notification.model.Notification;
 public class NotificationController extends Controller {
 
     /**
-     * Notification shout message.
+     * AbstractNotification shout message.
      */
     public static final Message NOTIFY = Message.create("notification");
 
@@ -44,38 +43,38 @@ public class NotificationController extends Controller {
     private Label label;
 
     /**
-     * The close label.
+     * The notifications to display. TODO uniqueness of elements in queue
      */
-    @FXML
-    private Button close;
-
-    /**
-     * The notifications to display.
-     */
-    private Queue<Notification> notifications;
+    private Queue<AbstractNotification> notifications;
 
     /**
      * A notification is displaying.
      */
     private boolean displaying;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
         final int initialCapacity = 10;
-        this.notifications = new PriorityQueue<>(initialCapacity, (n1, n2) -> {
-            if (n1.getPriority() == n2.getPriority()) {
-                return Boolean.compare(n1.equals(n2), true);
-            } else {
-                return n1.getPriority() - n2.getPriority();
-            }
-        });
+        this.notifications = new PriorityQueue<>(initialCapacity, (
+                notification1, notification2) -> {
+                    if (notification1.getPriority() == notification2.getPriority()) {
+                        return Boolean.compare(notification1.equals(notification2),
+                                true);
+                    } else {
+                        return notification1.getPriority()
+                                - notification2.getPriority();
+                    }
+                });
 
         hide();
 
         listen(NOTIFY, (controller, args) -> {
-            assert (args.length == 1 && args[0] instanceof Notification);
-            Notification notification = (Notification) args[0];
+            assert args.length == 1 && args[0] instanceof AbstractNotification;
+            AbstractNotification notification = (AbstractNotification) args[0];
             notifications.add(notification);
             if (!displaying) {
                 displayNext();
@@ -90,6 +89,9 @@ public class NotificationController extends Controller {
      *            the event
      */
     @FXML
+    @SuppressWarnings({
+        "PMD.UnusedPrivateMethod", "PMD.UnusedFormalParameter"
+    })
     private void closeAction(final MouseEvent event) {
         displayNext();
     }
@@ -98,7 +100,7 @@ public class NotificationController extends Controller {
      * Display the next notification if there is any, otherwise hide the view.
      */
     private void displayNext() {
-        final Notification next = notifications.poll();
+        final AbstractNotification next = notifications.poll();
         if (next == null) {
             hide();
             return;

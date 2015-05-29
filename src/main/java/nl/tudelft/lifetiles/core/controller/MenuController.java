@@ -18,7 +18,7 @@ import javafx.stage.Window;
 import nl.tudelft.lifetiles.core.util.FileUtils;
 import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.notification.controller.NotificationController;
-import nl.tudelft.lifetiles.notification.model.Notification;
+import nl.tudelft.lifetiles.notification.model.AbstractNotification;
 import nl.tudelft.lifetiles.notification.model.NotificationFactory;
 
 /**
@@ -65,7 +65,7 @@ public class MenuController extends Controller {
         try {
             loadDataFiles();
         } catch (IOException e) {
-            Notification notification = nf.getNotification(e);
+            AbstractNotification notification = nf.getNotification(e);
             shout(NotificationController.NOTIFY, notification);
         }
     }
