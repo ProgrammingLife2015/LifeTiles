@@ -17,13 +17,13 @@ import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
  *
  */
 
-public class SunburstRingSegment extends SunburstNode {
+public class SunburstRingSegment extends AbstractSunburstNode {
 
     /**
      * Creates a SunburstRingSegment.
      *
      *
-     * @param v
+     * @param vertex
      *            the {@link PhylogeneticTreeItem} this part of the ring will
      *            represent
      * @param layer
@@ -38,11 +38,11 @@ public class SunburstRingSegment extends SunburstNode {
      * @param centerY
      *            the Y coordinate of the center of the circle
      */
-    public SunburstRingSegment(final PhylogeneticTreeItem v, final int layer,
+    public SunburstRingSegment(final PhylogeneticTreeItem vertex, final int layer,
             final double degreeStart, final double degreeEnd,
             final double centerX, final double centerY) {
         // set the value, and create the text and semi-circle
-        setValue(v);
+        setValue(vertex);
         setName(new Text(getValue().getName()));
         setDisplay(createRing(layer, degreeStart, degreeEnd, centerX, centerY));
 
@@ -50,7 +50,7 @@ public class SunburstRingSegment extends SunburstNode {
         double radius = CENTER_RADIUS + (layer * RING_WIDTH) + (RING_WIDTH / 2);
 
         double degreeCenter = degreeStart
-                + SunburstNode.calculateAngle(degreeStart, degreeEnd) / 2;
+                + AbstractSunburstNode.calculateAngle(degreeStart, degreeEnd) / 2;
         //convert to radians
         double angle = Math.toRadians(degreeCenter);
 
@@ -91,8 +91,8 @@ public class SunburstRingSegment extends SunburstNode {
         result.setFillRule(FillRule.EVEN_ODD);
 
         // check if this is a large arc
-        double arcSize = SunburstNode.calculateAngle(degreeStart, degreeEnd);
-        boolean largeArc = arcSize > (SunburstNode.CIRCLEDEGREES / 2);
+        double arcSize = AbstractSunburstNode.calculateAngle(degreeStart, degreeEnd);
+        boolean largeArc = arcSize > (AbstractSunburstNode.CIRCLEDEGREES / 2);
 
         // calculate the radii of the two arcs
         double innerRadius = CENTER_RADIUS + (layer * RING_WIDTH);

@@ -4,9 +4,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import nl.tudelft.lifetiles.core.util.Message;
 
 /**
  * The controller of the window controls.
@@ -14,7 +14,17 @@ import javafx.stage.Stage;
  * @author Joren Hammudoglu
  *
  */
-public class WindowControlController implements Initializable {
+public class WindowControlController extends AbstractController {
+
+    /**
+     * The minimize window shout message.
+     */
+    public static final Message MINIMIZE = Message.create("minimize");
+
+    /**
+     * The resize window shout message.
+     */
+    public static final Message RESIZE = Message.create("resize");
 
     /**
      * The window close button.
@@ -43,18 +53,24 @@ public class WindowControlController implements Initializable {
         stage.close();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void initialize(final URL location, final ResourceBundle resources) {
-        // nothing to do here
+    public final void initialize(final URL location,
+            final ResourceBundle resources) {
+        // noop
     }
 
     /**
      * Minimize the window.
      */
     @FXML
-    private void minimizeWindowAction() {
+    public final void minimizeWindowAction() {
         Stage stage = (Stage) windowMinimize.getScene().getWindow();
         stage.toBack();
+
+        shout(MINIMIZE);
     }
 
     /**
@@ -64,5 +80,7 @@ public class WindowControlController implements Initializable {
     private void resizeWindowAction() {
         Stage stage = (Stage) windowResize.getScene().getWindow();
         stage.setMaximized(!stage.isMaximized());
+
+        shout(RESIZE);
     }
 }
