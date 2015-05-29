@@ -128,8 +128,8 @@ public class SequenceController extends AbstractController {
         ObservableList<Label> sequenceItems = FXCollections
                 .observableArrayList();
         for (final Sequence sequence : sequences.values()) {
-            String ident = sequence.getIdentifier();
-            Label label = new Label(ident);
+            String identifier = sequence.getIdentifier();
+            Label label = new Label(identifier);
             Color color = SequenceColor.getColor(sequence);
 
             label.setStyle("-fx-background-color: rgba("

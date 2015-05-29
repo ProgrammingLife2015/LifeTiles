@@ -194,7 +194,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
      */
     private DefaultEdge unpackEdge(final Edge<V> input) {
         if (!(input instanceof JGraphTEdgeAdapter<?>)) {
-            throw new IllegalArgumentException("Wrong edge type!");
+            throw new IllegalArgumentException("Wrong edge type.");
         }
         JGraphTEdgeAdapter<V> edge = (JGraphTEdgeAdapter<V>) input;
         return edge.getInternalEdge();
@@ -262,7 +262,8 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
          */
         @Override
         public int compare(final Edge<V> left, final Edge<V> right) {
-            int candidate = getDestination(left).compareTo(getDestination(right));
+            int candidate = getDestination(left).compareTo(
+                    getDestination(right));
             if (candidate == 0) {
                 candidate = getSource(left).compareTo(getSource(right));
             }
