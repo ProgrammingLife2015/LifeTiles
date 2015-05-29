@@ -16,6 +16,7 @@ import nl.tudelft.lifetiles.graph.model.FactoryProducer;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.model.GraphContainer;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
+import nl.tudelft.lifetiles.graph.model.GraphParser;
 import nl.tudelft.lifetiles.graph.view.TileView;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
@@ -81,9 +82,9 @@ public class GraphController extends AbstractController {
     private void loadGraph(final File vertexfile, final File edgefile)
             throws IOException {
         // create the graph
-        GraphFactory<SequenceSegment> gfact = new FactoryProducer<SequenceSegment>()
+        GraphFactory<SequenceSegment> gfact = FactoryProducer
                 .getFactory("JGraphT");
-        DefaultGraphParser graphParser = new DefaultGraphParser();
+        GraphParser graphParser = new DefaultGraphParser();
         graph = graphParser.parseGraph(vertexfile, edgefile, gfact);
 
         shout(Message.LOADED, graph, graphParser.getSequences());

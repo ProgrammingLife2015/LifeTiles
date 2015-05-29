@@ -16,24 +16,17 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class EdgeAdapterTest {
 
     GraphFactory<SequenceSegment> gf;
-    static FactoryProducer<SequenceSegment> fp;
     SequenceSegment v1, v2, v3, v4;
     Graph<SequenceSegment> gr;
 
-    @BeforeClass
-    public static void runOnce() {
-        fp = new FactoryProducer<SequenceSegment>();
-    }
-
     @Before
     public void setUp() throws Exception {
-        gf = fp.getFactory("JGraphT");
+        gf = FactoryProducer.getFactory("JGraphT");
         v1 = new SequenceSegment(new HashSet<Sequence>(), 0, 1,
                 new SegmentEmpty(0));
         v2 = new SequenceSegment(new HashSet<Sequence>(), 1, 2,
