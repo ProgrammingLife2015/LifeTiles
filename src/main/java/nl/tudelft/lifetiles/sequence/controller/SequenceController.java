@@ -11,9 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import nl.tudelft.lifetiles.core.controller.Controller;
+import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.util.ColorUtils;
 import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
@@ -27,13 +26,8 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
  * @author Joren Hammudoglu
  *
  */
-public class SequenceController extends Controller {
+public class SequenceController extends AbstractController {
 
-    /**
-     * The wrapper element.
-     */
-    @FXML
-    private AnchorPane wrapper;
     /**
      * Contains the sequences.
      */
@@ -50,6 +44,9 @@ public class SequenceController extends Controller {
      */
     private Set<Sequence> visibleSequences;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
@@ -57,7 +54,7 @@ public class SequenceController extends Controller {
 
         listen(Message.LOADED, (controller, args) -> {
             if (controller instanceof GraphController) {
-                assert (args[0] instanceof Graph);
+                assert args[0] instanceof Graph;
                 assert (args[1] instanceof Map<?, ?>);
                 setSequences((Map<String, Sequence>) args[1]);
                 repaint();
@@ -65,7 +62,7 @@ public class SequenceController extends Controller {
         });
 
         listen(Message.FILTERED, (controller, args) -> {
-            assert (args.length == 1);
+            assert args.length == 1;
             if (!(args[0] instanceof Set<?>)) {
                 throw new IllegalArgumentException(
                         "Argument not of type Set<Sequence>");
@@ -131,8 +128,8 @@ public class SequenceController extends Controller {
         ObservableList<Label> sequenceItems = FXCollections
                 .observableArrayList();
         for (final Sequence sequence : sequences.values()) {
-            String id = sequence.getIdentifier();
-            Label label = new Label(id);
+            String identifier = sequence.getIdentifier();
+            Label label = new Label(identifier);
             Color color = SequenceColor.getColor(sequence);
 
             label.setStyle("-fx-background-color: rgba("

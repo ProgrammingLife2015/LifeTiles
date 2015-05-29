@@ -24,39 +24,42 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
     /**
      * The edgefactory to use to create the edges for this graph.
      */
-    private JGraphTEdgeFactory<V> edgeFact;
+    private final JGraphTEdgeFactory<V> edgeFact;
     /**
      * This is the actual graph.
      */
-    private SimpleDirectedGraph<V, DefaultEdge> internalGraph;
+    private final SimpleDirectedGraph<V, DefaultEdge> internalGraph;
     /**
      * Keep track of all vertices that have no incoming edges.
      */
-    private SortedSet<V> sources;
+    private final SortedSet<V> sources;
     /**
      * Keep track of all vertices that have no outgoing edges.
      */
-    private SortedSet<V> sinks;
+    private final SortedSet<V> sinks;
     /**
      * List of vertices. Used to be able to identify nodes by ids.
      */
-    private List<V> vertexIdentifiers;
+    private final List<V> vertexIdentifiers;
 
     /**
      * Creates a new Graph.
      *
-     * @param ef
+     * @param edgeFact
      *            The edgefactory to use for this graph.
      */
-    public JGraphTGraphAdapter(final JGraphTEdgeFactory<V> ef) {
+    public JGraphTGraphAdapter(final JGraphTEdgeFactory<V> edgeFact) {
         internalGraph = new SimpleDirectedGraph<V, DefaultEdge>(
                 DefaultEdge.class);
-        edgeFact = ef;
+        this.edgeFact = edgeFact;
         sources = new TreeSet<>();
         sinks = new TreeSet<>();
         vertexIdentifiers = new ArrayList<>();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final void addEdge(final int source, final int destination) {
         addEdge(vertexIdentifiers.get(source),
@@ -134,13 +137,13 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
     }
 
     /**
-     * @param e
+     * @param edge
      *            The edge to use.
      * @return The destination <code>vertex</code> for <code>e</code>.
      */
     @Override
-    public final V getDestination(final Edge<V> e) {
-        return internalGraph.getEdgeTarget(unpackEdge(e));
+    public final V getDestination(final Edge<V> edge) {
+        return internalGraph.getEdgeTarget(unpackEdge(edge));
     }
 
     /**
@@ -172,14 +175,14 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
     }
 
     /**
-     * @param e
+     * @param edge
      *            The edge to use.
      * @return The source <code>Vertex</code> for <code>e</code>.
      */
     @Override
-    public final V getSource(final Edge<V> e) {
+    public final V getSource(final Edge<V> edge) {
 
-        return internalGraph.getEdgeSource(unpackEdge(e));
+        return internalGraph.getEdgeSource(unpackEdge(edge));
     }
 
     /**
@@ -191,10 +194,10 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
      */
     private DefaultEdge unpackEdge(final Edge<V> input) {
         if (!(input instanceof JGraphTEdgeAdapter<?>)) {
-            throw new IllegalArgumentException("Wrong edge type!");
+            throw new IllegalArgumentException("Wrong edge type.");
         }
-        JGraphTEdgeAdapter<V> ed = (JGraphTEdgeAdapter<V>) input;
-        return ed.getInternalEdge();
+        JGraphTEdgeAdapter<V> edge = (JGraphTEdgeAdapter<V>) input;
+        return edge.getInternalEdge();
     }
 
     /**
@@ -254,11 +257,15 @@ public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
      */
     class EdgeComparatorByVertex implements Comparator<Edge<V>> {
 
+        /**
+         * {@inheritDoc}
+         */
         @Override
-        public int compare(final Edge<V> o1, final Edge<V> o2) {
-            int candidate = getDestination(o1).compareTo(getDestination(o2));
+        public int compare(final Edge<V> left, final Edge<V> right) {
+            int candidate = getDestination(left).compareTo(
+                    getDestination(right));
             if (candidate == 0) {
-                candidate = getSource(o1).compareTo(getSource(o2));
+                candidate = getSource(left).compareTo(getSource(right));
             }
             return candidate;
         }

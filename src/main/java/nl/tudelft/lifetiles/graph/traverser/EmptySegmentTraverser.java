@@ -2,8 +2,9 @@ package nl.tudelft.lifetiles.graph.traverser;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import nl.tudelft.lifetiles.graph.model.Edge;
 import nl.tudelft.lifetiles.graph.model.Graph;
@@ -28,7 +29,7 @@ public class EmptySegmentTraverser {
      * modifications on during traversal. Inserted into graph at end of
      * traversal to avoid concurrent modification-like exceptions.
      */
-    private HashMap<Edge<SequenceSegment>, SequenceSegment> emptySegments;
+    private Map<Edge<SequenceSegment>, SequenceSegment> emptySegments;
 
     /**
      * Traverses the graph. Adds empty vertices to the graph which are being

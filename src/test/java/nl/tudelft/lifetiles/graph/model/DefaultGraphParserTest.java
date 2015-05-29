@@ -4,10 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 
-import nl.tudelft.lifetiles.graph.model.DefaultGraphParser;
-import nl.tudelft.lifetiles.graph.model.FactoryProducer;
-import nl.tudelft.lifetiles.graph.model.Graph;
-import nl.tudelft.lifetiles.graph.model.GraphFactory;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 import org.junit.Test;
@@ -17,8 +13,8 @@ public class DefaultGraphParserTest {
 
     @Test
     public void parseGraphTest() throws Exception {
-        FactoryProducer<SequenceSegment> fp = new FactoryProducer<SequenceSegment>();
-        GraphFactory<SequenceSegment> gf = fp.getFactory("JGraphT");
+        GraphFactory<SequenceSegment> gf = FactoryProducer
+                .getFactory("JGraphT");
         DefaultGraphParser parser = new DefaultGraphParser();
 
         Graph<SequenceSegment> gr;

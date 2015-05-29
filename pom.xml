@@ -63,7 +63,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>nl.tudelft.lifetiles.Main</mainClass>
+							<mainClass>nl.tudelft.lifetiles.Launcher</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -201,6 +201,15 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-pmd-plugin</artifactId>
 				<version>3.4</version>
+				<configuration>
+					<targetJdk>1.8</targetJdk>
+					<linkXRef>false</linkXRef>
+					<failOnViolation>false</failOnViolation>
+					<verbose>true</verbose>
+					<rulesets>
+						<ruleset>pmd.ruleset.xml</ruleset>
+					</rulesets>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -216,8 +225,18 @@
 				<artifactId>findbugs-maven-plugin</artifactId>
 				<version>3.0.1</version>
 				<configuration>
-					<failOnError>false</failOnError>
-				</configuration>
+                    <!-- Enables analysis which takes more memory but finds more bugs. If 
+                        you run out of memory, changes the value of the effort element to 'Low'. -->
+                    <effort>Max</effort>
+                    <!-- Build doesn't fail if problems are found -->
+                    <failOnError>false</failOnError>
+                    <!-- Reports all bugs (other values are medium and max) -->
+                    <threshold>Low</threshold>
+                    <!-- Produces XML report -->
+                    <xmlOutput>true</xmlOutput>
+                    <!-- Configures the directory in which the XML report is created -->
+                    <findbugsXmlOutputDirectory>${project.build.directory}/findbugs</findbugsXmlOutputDirectory>
+                </configuration>
 			</plugin>
 		</plugins>
 	</reporting>

@@ -5,24 +5,21 @@ import static org.junit.Assert.assertEquals;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
-import nl.tudelft.lifetiles.graph.traverser.EmptySegmentTraverser;
-import nl.tudelft.lifetiles.graph.traverser.UnifiedPositionTraverser;
 import nl.tudelft.lifetiles.sequence.model.DefaultSequence;
 import nl.tudelft.lifetiles.sequence.model.SegmentEmpty;
 import nl.tudelft.lifetiles.sequence.model.SegmentString;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 public class EmptySegmentTraverserTest {
     GraphFactory<SequenceSegment> gf;
-    static FactoryProducer<SequenceSegment> fp;
     static EmptySegmentTraverser at;
     static UnifiedPositionTraverser pt;
     static Set<Sequence> s1, s2, s3;
@@ -31,7 +28,6 @@ public class EmptySegmentTraverserTest {
 
     @BeforeClass
     public static void runOnce() {
-        fp = new FactoryProducer<SequenceSegment>();
         pt = new UnifiedPositionTraverser();
         at = new EmptySegmentTraverser();
 
@@ -51,7 +47,7 @@ public class EmptySegmentTraverserTest {
 
     @Before
     public void setUp() throws Exception {
-        gf = fp.getFactory("JGraphT");
+        gf = FactoryProducer.getFactory("JGraphT");
         v1 = new SequenceSegment(s1, 1, 11, new SegmentString("AAAAAAAAAA"));
         v2 = new SequenceSegment(s3, 11, 21, new SegmentEmpty(10));
         v3 = new SequenceSegment(s1, 21, 31, new SegmentString("AAAAAAAAAA"));
@@ -62,8 +58,8 @@ public class EmptySegmentTraverserTest {
 
     @Test
     public void testTraverseForkGraph() {
-        SequenceSegment v4 = new SequenceSegment(s2, 1, 11,
-                new SegmentString("AAAAAAAAAA"));
+        SequenceSegment v4 = new SequenceSegment(s2, 1, 11, new SegmentString(
+                "AAAAAAAAAA"));
         gr.addVertex(v4);
         gr.addEdge(v1, v3);
         gr.addEdge(v4, v3);
@@ -73,8 +69,8 @@ public class EmptySegmentTraverserTest {
 
     @Test
     public void testTraverseBranchGraph() {
-        SequenceSegment v4 = new SequenceSegment(s2, 21, 31,
-                new SegmentString("AAAAAAAAAA"));
+        SequenceSegment v4 = new SequenceSegment(s2, 21, 31, new SegmentString(
+                "AAAAAAAAAA"));
         gr.addVertex(v4);
         gr.addEdge(v1, v3);
         gr.addEdge(v1, v4);

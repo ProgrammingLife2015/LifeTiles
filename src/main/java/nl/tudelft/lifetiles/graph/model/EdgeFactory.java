@@ -9,10 +9,10 @@ package nl.tudelft.lifetiles.graph.model;
 public interface EdgeFactory<V> {
     /**
      * @return A new edge from <code>v1</code> to <code>v2</code>
-     * @param v1
+     * @param source
      *            The source vertex.
-     * @param v2
+     * @param destination
      *            The destination vertex.
      */
-    Edge<V> getEdge(final V v1, final V v2);
+    Edge<V> getEdge(final V source, final V destination);
 }

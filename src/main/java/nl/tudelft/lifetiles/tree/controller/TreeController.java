@@ -7,8 +7,7 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 
 import javafx.fxml.FXML;
-import javafx.scene.layout.BorderPane;
-import nl.tudelft.lifetiles.core.controller.Controller;
+import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.controller.MenuController;
 import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
@@ -21,13 +20,7 @@ import nl.tudelft.lifetiles.tree.view.SunburstView;
  * @author Albert Smit
  *
  */
-public class TreeController extends Controller {
-
-    /**
-     * The wrapper element.
-     */
-    @FXML
-    private BorderPane wrapper;
+public class TreeController extends AbstractController {
 
     /**
      * The diagram.
@@ -40,18 +33,21 @@ public class TreeController extends Controller {
      */
     private PhylogeneticTreeItem tree;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
         // load the tree when the files are opened
         listen(Message.OPENED, (controller, args) -> {
-            assert (controller instanceof MenuController);
-            final int expectedArgsLength = 3;
-            assert (args.length == expectedArgsLength);
-            assert (args[2] instanceof File);
+            assert controller instanceof MenuController;
+            final int expectedLength = 3;
+            assert args.length == expectedLength;
+            assert args[2] instanceof File;
             try {
                 loadTree((File) args[2]);
-            } catch (Exception e) {
+            } catch (FileNotFoundException e) {
                 // TODO: notify the user that the file was not found
                 e.printStackTrace();
             }
@@ -69,11 +65,10 @@ public class TreeController extends Controller {
     private void loadTree(final File file) throws FileNotFoundException {
         // convert the file to a single string
         String fileString = null;
-        try (Scanner sc = new Scanner(file).useDelimiter("\\Z")) {
-            fileString = sc.next();
-        } catch (FileNotFoundException e) {
-            throw e;
-        }
+        Scanner scanner = new Scanner(file);
+        scanner.useDelimiter("\\Z");
+        fileString = scanner.next();
+        scanner.close();
 
         // parse the string into a tree
         tree = PhylogeneticTreeParser.parse(fileString);
