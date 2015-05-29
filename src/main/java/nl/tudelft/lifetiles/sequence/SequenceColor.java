@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph.view;
+package nl.tudelft.lifetiles.sequence;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
