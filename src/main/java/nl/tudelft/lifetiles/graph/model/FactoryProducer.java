@@ -9,28 +9,39 @@ import nl.tudelft.lifetiles.graph.model.jgrapht.JGraphTGraphFactory;
  * @param <V>
  *            The type of vertex to use.
  */
-public class FactoryProducer<V extends Comparable<V>> {
+public final class FactoryProducer<V extends Comparable<V>> {
     /**
      * The graph library to use when none is specified.
      */
     private static final String DEFAULT_LIBRARY = "JGraphT";
 
     /**
-     * Produce a new GraphFactory using the
-     * {@value FactoryProducer#DEFAULT_LIBRARY} library.
-     *
-     * @return A new factory using {@value FactoryProducer#DEFAULT_LIBRARY}.
+     * Do not instantiate.
      */
-    public final GraphFactory<V> getFactory() {
+    private FactoryProducer() {
+
+    }
+
+    /**
+     * Produce a new GraphFactory using the default library.
+     *
+     * @param <V>
+     *            the type of vertex the new factory should use.
+     * @return A new factory using the default library.
+     */
+    public static <V extends Comparable<V>> GraphFactory<V> getFactory() {
         return getFactory(DEFAULT_LIBRARY);
     }
 
     /**
      * @param graphLibrary
      *            The graph library to use.
+     * @param <V>
+     *            the type of vertex the new factory should use.
      * @return A new factory of the desired type.
      */
-    public final GraphFactory<V> getFactory(final String graphLibrary) {
+    public static <V extends Comparable<V>> GraphFactory<V> getFactory(
+            final String graphLibrary) {
         if ("JGraphT".equalsIgnoreCase(graphLibrary)) {
             return new JGraphTGraphFactory<V>();
         }

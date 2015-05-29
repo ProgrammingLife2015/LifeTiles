@@ -16,7 +16,6 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -27,20 +26,14 @@ import org.junit.rules.ExpectedException;
  */
 public class GraphAdapterTest {
     GraphFactory<SequenceSegment> gf;
-    static FactoryProducer<SequenceSegment> fp;
     SequenceSegment v1, v2;
     Graph<SequenceSegment> gr;
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    @BeforeClass
-    public static void runOnce() {
-        fp = new FactoryProducer<SequenceSegment>();
-    }
-
     @Before
     public void setUp() throws Exception {
-        gf = fp.getFactory("JGraphT");
+        gf = FactoryProducer.getFactory("JGraphT");
         v1 = new SequenceSegment(new HashSet<Sequence>(), 0, 2,
                 new SegmentEmpty(2));
         v2 = new SequenceSegment(new HashSet<Sequence>(), 0, 0,
@@ -155,13 +148,13 @@ public class GraphAdapterTest {
         assertEquals(v3,
                 gr.getDestination(gr.getOutgoing(v1).iterator().next()));
     }
-    
+
     @Test
     public void testCopy() {
         gr.addVertex(v1);
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
-        
+
         Graph<SequenceSegment> copy = gr.copy(gf);
         assertEquals(2, copy.getAllVertices().size());
         assertEquals(1, copy.getAllEdges().size());
