@@ -43,7 +43,7 @@ public class NotificationController extends Controller {
     private Label label;
 
     /**
-     * The notifications to display. TODO uniqueness of elements in queue
+     * The notifications to display.
      */
     private Queue<AbstractNotification> notifications;
 
@@ -75,7 +75,9 @@ public class NotificationController extends Controller {
         listen(NOTIFY, (controller, args) -> {
             assert args.length == 1 && args[0] instanceof AbstractNotification;
             AbstractNotification notification = (AbstractNotification) args[0];
-            notifications.add(notification);
+            if (!notifications.contains(notification)) {
+                notifications.add(notification);
+            }
             if (!displaying) {
                 displayNext();
             }

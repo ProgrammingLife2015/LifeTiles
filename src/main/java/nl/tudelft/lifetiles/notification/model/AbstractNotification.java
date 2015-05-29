@@ -73,4 +73,44 @@ public abstract class AbstractNotification {
      */
     public abstract int getPriority();
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final int hashCode() {
+        final int prime = 31;
+        int result = 1 + prime;
+        if (message == null) {
+            result += 0;
+        } else {
+            result += message.hashCode();
+        }
+        return result;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof AbstractNotification)) {
+            return false;
+        }
+        AbstractNotification other = (AbstractNotification) obj;
+        if (message == null) {
+            if (other.message != null) {
+                return false;
+            }
+        } else if (!message.equals(other.message)) {
+            return false;
+        }
+        return true;
+    }
+
 }
