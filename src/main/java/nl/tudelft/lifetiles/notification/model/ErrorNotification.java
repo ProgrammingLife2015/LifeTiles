@@ -8,12 +8,17 @@ import javafx.scene.paint.Color;
  * @author Joren Hammudoglu
  *
  */
-public class ErrorNotification extends Notification {
+public class ErrorNotification extends AbstractNotification {
 
     /**
      * The prefix of the message.
      */
     private static final String PREFIX = "Error: ";
+
+    /**
+     * The priority.
+     */
+    private static final int PRIORITY = 10;
 
     /**
      * Create a new error notification.
@@ -26,15 +31,20 @@ public class ErrorNotification extends Notification {
         setDuration(Integer.MAX_VALUE);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final Color getColor() {
         return Color.ORANGERED;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final int getPriority() {
-        final int priority = 10;
-        return priority;
+        return PRIORITY;
     }
 
 }

@@ -8,12 +8,12 @@ import javafx.scene.paint.Color;
  * @author Joren Hammudoglu
  *
  */
-public abstract class Notification {
+public abstract class AbstractNotification {
 
     /**
      * The message.
      */
-    private String messageVar;
+    private final String message;
 
     /**
      * The number of seconds to display the notification.
@@ -26,8 +26,8 @@ public abstract class Notification {
      * @param message
      *            the message
      */
-    Notification(final String message) {
-        this.messageVar = message;
+    AbstractNotification(final String message) {
+        this.message = message;
     }
 
     /**
@@ -36,7 +36,7 @@ public abstract class Notification {
      * @return the message
      */
     public final String getMessage() {
-        return messageVar;
+        return message;
     }
 
     /**

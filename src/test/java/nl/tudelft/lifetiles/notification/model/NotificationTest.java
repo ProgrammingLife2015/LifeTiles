@@ -10,7 +10,7 @@ import org.junit.Test;
 public class NotificationTest {
 
     private NotificationFactory nf;
-    private Notification error, warning, info, exception;
+    private AbstractNotification error, warning, info, exception;
 
     @Before
     public void setUp() {

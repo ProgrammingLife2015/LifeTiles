@@ -8,12 +8,17 @@ import javafx.scene.paint.Color;
  * @author Joren Hammudoglu
  *
  */
-public class InfoNotification extends Notification {
+public class InfoNotification extends AbstractNotification {
 
     /**
      * The prefix of the message.
      */
     private static final String PREFIX = "Info: ";
+
+    /**
+     * The priority.
+     */
+    private static final int PRIORITY = 30;
 
     /**
      * Create a new info notification.
@@ -27,15 +32,20 @@ public class InfoNotification extends Notification {
         setDuration(defaultDuration);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final Color getColor() {
         return Color.AQUA;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final int getPriority() {
-        final int priority = 30;
-        return priority;
+        return PRIORITY;
     }
 
 }

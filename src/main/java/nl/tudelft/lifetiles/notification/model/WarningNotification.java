@@ -8,12 +8,17 @@ import javafx.scene.paint.Color;
  * @author Joren Hammudoglu
  *
  */
-public class WarningNotification extends Notification {
+public class WarningNotification extends AbstractNotification {
 
     /**
      * The prefix of the message.
      */
     private static final String PREFIX = "Warning: ";
+
+    /**
+     * The priority.
+     */
+    private static final int PRIORITY = 20;
 
     /**
      * Create a new warning notification.
@@ -26,15 +31,20 @@ public class WarningNotification extends Notification {
         setDuration(Integer.MAX_VALUE);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final Color getColor() {
         return Color.ORANGE;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final int getPriority() {
-        final int priority = 20;
-        return priority;
+        return PRIORITY;
     }
 
 }
