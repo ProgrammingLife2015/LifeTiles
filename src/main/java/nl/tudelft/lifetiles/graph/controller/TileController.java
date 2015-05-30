@@ -52,7 +52,7 @@ public class TileController {
      * @return position in the bucket.
      */
     public final int getBucketPosition(final double position) {
-        return model.getBucketCache().bucketPosition(position);
+        return model.getBucketCache().bucketPercentagePosition(position);
     }
 
 }
