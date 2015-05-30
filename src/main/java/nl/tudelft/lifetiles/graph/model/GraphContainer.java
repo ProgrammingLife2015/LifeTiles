@@ -43,14 +43,14 @@ public class GraphContainer {
         this.graph = graph;
 
         // TODO: Temporary line until sequence selection is implemented.
-        Sequence reference = graph.getSources().iterator().next().getSources()
+        Sequence reference = this.graph.getSources().iterator().next().getSources()
                 .iterator().next();
 
         alignGraph();
         findMutations(reference);
 
         BucketCacheFactory bcf = new BucketCacheFactory();
-        segmentBuckets = bcf.getBucketCache(NUMBEROFBUCKETS, graph);
+        segmentBuckets = bcf.getBucketCache(NUMBEROFBUCKETS, this.graph);
     }
 
     /**
