@@ -1,6 +1,6 @@
 package nl.tudelft.lifetiles.graph.view;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -63,7 +63,7 @@ public class TileView {
         root = new Group();
         nodes = new Group();
         edges = new Group();
-        lanes = new LinkedList<Long>();
+        lanes = new ArrayList<Long>();
 
         for (SequenceSegment segment : segments) {
             drawVertexLane(segment);
