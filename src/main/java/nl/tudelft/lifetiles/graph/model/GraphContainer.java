@@ -1,6 +1,6 @@
 package nl.tudelft.lifetiles.graph.model;
 
-import java.util.SortedSet;
+import java.util.Set;
 
 import nl.tudelft.lifetiles.graph.traverser.EmptySegmentTraverser;
 import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
@@ -78,7 +78,7 @@ public class GraphContainer {
      *            bucket position in the scrollPane.
      * @return graph
      */
-    public final SortedSet<SequenceSegment> getSegments(final int position) {
+    public final Set<SequenceSegment> getSegments(final int position) {
         return segmentBuckets.getSegments(position);
     }
 

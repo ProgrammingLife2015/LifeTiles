@@ -3,6 +3,7 @@ package nl.tudelft.lifetiles.graph.model;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -31,7 +32,7 @@ public class BucketCache {
     /**
      * Buckets used to store the sequenceSegments.
      */
-    private ArrayList<SortedSet<SequenceSegment>> buckets;
+    private List<SortedSet<SequenceSegment>> buckets;
 
     /**
      * Width of a bucket based on the width of the graph and the number of
@@ -136,7 +137,7 @@ public class BucketCache {
      *            Position of the domain.
      * @return set of sequence segments on the domain.
      */
-    public final SortedSet<SequenceSegment> getSegments(final int position) {
+    public final Set<SequenceSegment> getSegments(final int position) {
         return buckets.get(position);
     }
 
