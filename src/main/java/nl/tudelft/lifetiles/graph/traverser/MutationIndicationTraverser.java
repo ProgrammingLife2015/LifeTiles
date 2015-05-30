@@ -1,5 +1,7 @@
 package nl.tudelft.lifetiles.graph.traverser;
 
+import java.util.Calendar;
+
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
@@ -36,9 +38,13 @@ public class MutationIndicationTraverser {
      */
     public final Graph<SequenceSegment> indicateGraphMutations(
             final Graph<SequenceSegment> graph) {
+        long startTime = Calendar.getInstance().getTimeInMillis();
         for (SequenceSegment vertex : graph.getAllVertices()) {
             indicateVertexMutations(vertex);
         }
+        System.out.println("Mutations indicated. Took "
+                + (Calendar.getInstance().getTimeInMillis() - startTime)
+                + " ms.");
         return graph;
     }
 

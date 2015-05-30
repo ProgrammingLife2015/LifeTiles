@@ -1,5 +1,7 @@
 package nl.tudelft.lifetiles.graph.traverser;
 
+import java.util.Calendar;
+
 import nl.tudelft.lifetiles.graph.model.Edge;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.sequence.model.SegmentString;
@@ -39,8 +41,12 @@ public class ReferencePositionTraverser {
      *            Graph to be traversed.
      */
     public final void referenceMapGraph(final Graph<SequenceSegment> graph) {
+        long startTime = Calendar.getInstance().getTimeInMillis();
         referenceMapGraphForward(graph);
         referenceMapGraphBackward(graph);
+        System.out.println("Mapped graph onto reference. Took "
+                + (Calendar.getInstance().getTimeInMillis() - startTime)
+                + " ms.");
     }
 
     /**
