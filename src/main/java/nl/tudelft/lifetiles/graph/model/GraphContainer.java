@@ -29,7 +29,7 @@ public class GraphContainer {
     /**
      * The amount of buckets the graph is cached in.
      */
-    private static final int NUMBEROFBUCKETS = 1000;
+    private static final int NUMBER_OF_BUCKETS = 1000;
 
     /**
      * create a new Tile.
@@ -47,7 +47,7 @@ public class GraphContainer {
         alignGraph();
         findMutations(reference);
 
-        segmentBuckets = new BucketCache(NUMBEROFBUCKETS, this.graph);
+        segmentBuckets = new BucketCache(NUMBER_OF_BUCKETS, this.graph);
     }
 
     /**
