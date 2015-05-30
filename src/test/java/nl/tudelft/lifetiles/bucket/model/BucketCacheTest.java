@@ -12,25 +12,16 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class BucketCacheTest {
     GraphFactory<SequenceSegment> gf;
-    static FactoryProducer<SequenceSegment> fp;
-    static BucketCacheFactory bcf;
     SequenceSegment v1, v2;
     Graph<SequenceSegment> gr;
 
-    @BeforeClass
-    public static void runOnce() {
-        fp = new FactoryProducer<SequenceSegment>();
-        bcf = new BucketCacheFactory();
-    }
-
     @Before
     public void setUp() {
-        gf = fp.getFactory("JGraphT");
+        gf = FactoryProducer.getFactory("JGraphT");
         gr = gf.getGraph();
 
         v1 = new SequenceSegment(new HashSet<Sequence>(), 1, 11,
@@ -49,7 +40,7 @@ public class BucketCacheTest {
         gr.addVertex(v1);
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
-        BucketCache bc = bcf.getBucketCache(1, gr);
+        BucketCache bc = new BucketCache(1, gr);
         assertEquals(2, bc.getBuckets().get(0).size());
     }
 
@@ -58,20 +49,20 @@ public class BucketCacheTest {
         gr.addVertex(v1);
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
-        BucketCache bc = bcf.getBucketCache(2, gr);
+        BucketCache bc = new BucketCache(2, gr);
         assertEquals(1, bc.getBuckets().get(0).size());
         assertEquals(1, bc.getBuckets().get(1).size());
     }
 
     @Test
     public void testEmptyBucketCache() {
-        BucketCache bc = bcf.getBucketCache(1, gr);
+        BucketCache bc = new BucketCache(1, gr);
         assertEquals(0, bc.getBuckets().get(0).size());
     }
 
     @Test
     public void testEmptyNumberBuckets() {
-        BucketCache bc = bcf.getBucketCache(1, gr);
+        BucketCache bc = new BucketCache(1, gr);
         assertEquals(1, bc.getNumberBuckets());
     }
 
