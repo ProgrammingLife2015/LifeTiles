@@ -39,7 +39,7 @@ public final class Logging {
     /**
      * Initialize the LOGGER.
      */
-    public static void initialize() {
+    static {
         try {
             filehandler = new FileHandler(LOG_FILE, false);
         } catch (SecurityException | IOException e) {
