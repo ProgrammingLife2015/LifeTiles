@@ -122,11 +122,13 @@ public class GraphController extends AbstractController {
 
             repaintPosition(tileController, root, wrapper.hvalueProperty()
                     .doubleValue());
-            wrapper.hvalueProperty().addListener(
-                    (ChangeListener<Number>) (ov, oldVal, newVal) -> {
-                        repaintPosition(tileController, root,
-                                newVal.doubleValue());
-                    });
+            wrapper.hvalueProperty()
+                    .addListener(
+                            (ChangeListener<Number>) (observable, oldValue,
+                                    newValue) -> {
+                                repaintPosition(tileController, root,
+                                        newValue.doubleValue());
+                            });
 
             Rectangle clip = new Rectangle(getMaxUnifiedEnd(graph)
                     * VertexView.HORIZONTALSCALE, 0);
@@ -138,17 +140,17 @@ public class GraphController extends AbstractController {
     }
 
     /**
-     * Repaints the view indicated by the bucket in the given postion
+     * Repaints the view indicated by the bucket in the given position.
      *
      * @param tileController
-     *            Tilecontroller used to draw the graph.
+     *            TileController used to draw the graph.
      * @param root
      *            Root group used to store the visualized graph in.
      * @param position
      *            Position in the scrollPane.
      */
-    private void repaintPosition(TileController tileController, Group root,
-            double position) {
+    private void repaintPosition(final TileController tileController,
+            final Group root, final double position) {
         int nextPosition = tileController.getBucketPosition(position);
         if (currentPosition != nextPosition) {
             graphNode = new Group();

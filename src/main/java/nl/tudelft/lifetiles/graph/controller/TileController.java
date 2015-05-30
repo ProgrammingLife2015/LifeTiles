@@ -14,7 +14,7 @@ public class TileController {
      * the model.
      */
     private final GraphContainer modelVar;
-    
+
     /**
      * The view.
      */
