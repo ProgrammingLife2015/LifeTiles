@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
@@ -22,12 +21,12 @@ public class BucketCache {
     /**
      * Graph that has been inserted into the bucket cache.
      */
-    private Graph<SequenceSegment> graphVar;
+    private final Graph<SequenceSegment> graph;
 
     /**
      * Number of buckets the graph is divided in.
      */
-    private int numberBuckets;
+    private final int numberBuckets;
 
     /**
      * Buckets used to store the sequenceSegments.
@@ -38,27 +37,28 @@ public class BucketCache {
      * Width of a bucket based on the width of the graph and the number of
      * buckets being cached.
      */
-    private long bucketWidth;
+    private final long bucketWidth;
 
     /**
      * Max unified end coordinate position in the graph, should be stored
      * because it is called on every view update.
      */
-    private long maxUnifiedEnd;
+    private final long maxUnifiedEnd;
 
     /**
      * Constructs a bucket cache and divides the graph into n buckets.
      *
-     * @param n
+     * @param numberBuckets
      *            Number of buckets the graph is divided in.
      * @param graph
      *            Graph that needs to be divided.
      */
-    public BucketCache(final int n, final Graph<SequenceSegment> graph) {
-        numberBuckets = n;
-        graphVar = graph;
+    public BucketCache(final int numberBuckets,
+            final Graph<SequenceSegment> graph) {
+        this.numberBuckets = numberBuckets;
+        this.graph = graph;
         maxUnifiedEnd = getMaxUnifiedEnd();
-        bucketWidth = maxUnifiedEnd / numberBuckets + 1;
+        bucketWidth = maxUnifiedEnd / this.numberBuckets + 1;
         cacheGraph();
     }
 
@@ -72,7 +72,7 @@ public class BucketCache {
         for (int index = 0; index < numberBuckets; index++) {
             buckets.add(index, new TreeSet<SequenceSegment>());
         }
-        for (SequenceSegment vertex : graphVar.getAllVertices()) {
+        for (SequenceSegment vertex : graph.getAllVertices()) {
             cacheVertex(vertex);
         }
         System.out.println("Graph caching. Took "
@@ -104,7 +104,7 @@ public class BucketCache {
      */
     private long getMaxUnifiedEnd() {
         long max = 0;
-        for (SequenceSegment vertex : graphVar.getSinks()) {
+        for (SequenceSegment vertex : graph.getSinks()) {
             if (max < vertex.getUnifiedEnd()) {
                 max = vertex.getUnifiedEnd();
             }
@@ -133,12 +133,12 @@ public class BucketCache {
     /**
      * Returns the set of sequence segments on a certain domain.
      *
-     * @param position
-     *            Position of the domain.
+     * @param bucketPosition
+     *            Bucket position of the domain.
      * @return set of sequence segments on the domain.
      */
-    public final Set<SequenceSegment> getSegments(final int position) {
-        return buckets.get(position);
+    public final Set<SequenceSegment> getSegments(final int bucketPosition) {
+        return buckets.get(bucketPosition);
     }
 
     /**

@@ -24,7 +24,7 @@ public class GraphContainer {
     /**
      * The Current graph that this model is holding in bucket cache form.
      */
-    private BucketCache segmentBuckets;
+    private final BucketCache segmentBuckets;
 
     /**
      * The amount of buckets the graph is cached in.
