@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.bucket.model;
+package nl.tudelft.lifetiles.graph.model;
 
 import java.util.ArrayList;
 import java.util.Calendar;
