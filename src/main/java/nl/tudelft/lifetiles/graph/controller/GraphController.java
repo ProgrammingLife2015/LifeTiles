@@ -122,13 +122,11 @@ public class GraphController extends AbstractController {
 
             repaintPosition(tileController, root, wrapper.hvalueProperty()
                     .doubleValue());
-            wrapper.hvalueProperty()
-                    .addListener(
-                            (ChangeListener<Number>) (observable, oldValue,
-                                    newValue) -> {
-                                repaintPosition(tileController, root,
-                                        newValue.doubleValue());
-                            });
+            wrapper.hvalueProperty().addListener(
+                    (observable, oldValue, newValue) -> {
+                        repaintPosition(tileController, root,
+                                newValue.doubleValue());
+                    });
 
             Rectangle clip = new Rectangle(getMaxUnifiedEnd(graph)
                     * VertexView.HORIZONTALSCALE, 0);
