@@ -43,7 +43,7 @@ public final class Logging {
         try {
             filehandler = new FileHandler(LOG_FILE, false);
         } catch (SecurityException | IOException e) {
-            getLogger().log(Level.SEVERE, "An exception was thrown.", e);
+            exception(e);
         }
 
         getLogger().addHandler(filehandler);
