@@ -88,12 +88,12 @@ public class BucketCache {
      *            The vertex to cache in the buckets in the cache.
      */
     private void cacheVertex(final SequenceSegment vertex) {
-        int startBucket = (int) Math.floor((double) vertex.getUnifiedStart()
-                / bucketWidth);
-        int endBucket = (int) Math.floor((double) vertex.getUnifiedEnd()
-                / bucketWidth);
-        for (int bucket = startBucket; bucket <= endBucket; bucket++) {
-            buckets.get(bucket).add(vertex);
+        int startBucket = bucketPosition(vertex.getUnifiedStart());
+        int endBucket = 1 + bucketPosition(vertex.getUnifiedEnd());
+
+        for (SortedSet<SequenceSegment> bucket : buckets.subList(startBucket,
+                endBucket)) {
+            bucket.add(vertex);
         }
     }
 
@@ -149,7 +149,19 @@ public class BucketCache {
      *            Percentage position in the GraphController
      * @return position in the bucketCache.
      */
-    public final int bucketPosition(final double position) {
-        return (int) Math.floor((position * maxUnifiedEnd) / bucketWidth);
+    public final int bucketPercentagePosition(final double position) {
+        return (int) ((position * maxUnifiedEnd) / bucketWidth);
+    }
+
+    /**
+     * Returns the position in the bucketCache given the long position in
+     * the GraphController.
+     *
+     * @param position
+     *            Long position in the GraphController
+     * @return position in the bucketCache.
+     */
+    public final int bucketPosition(final long position) {
+        return (int) (position / bucketWidth);
     }
 }
