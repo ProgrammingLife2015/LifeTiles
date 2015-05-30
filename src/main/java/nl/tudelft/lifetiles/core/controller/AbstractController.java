@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
+import java.util.logging.Level;
 
 import javafx.fxml.Initializable;
+import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.core.util.Message;
 
 /**
@@ -52,6 +54,7 @@ public abstract class AbstractController implements Initializable {
                 listenersOther.stream().forEach(listener -> listener.accept(this, args));
             }
         }
+        Logging.getLogger().log(Level.INFO, "Shout: " + message.getValue(), args);
     }
 
     /**
