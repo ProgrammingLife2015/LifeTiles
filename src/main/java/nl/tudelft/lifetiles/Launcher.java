@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import nl.tudelft.lifetiles.core.util.Logging;
 
 /**
  * The main class / launcher.
@@ -50,7 +51,7 @@ public class Launcher extends Application {
      * @param args
      *            The program arguments
      */
-    public static void main(final String[] args) {
+    public static void main(final String... args) {
         launch(args);
     }
 
@@ -59,6 +60,7 @@ public class Launcher extends Application {
      */
     @Override
     public final void start(final Stage stage) {
+        Logging.initialize();
 
         loadFonts();
         stage.initStyle(StageStyle.UNDECORATED);
@@ -76,8 +78,7 @@ public class Launcher extends Application {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            Logging.exception(e);
         }
 
     }
