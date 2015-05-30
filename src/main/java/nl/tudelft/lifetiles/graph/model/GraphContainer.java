@@ -2,7 +2,6 @@ package nl.tudelft.lifetiles.graph.model;
 
 import java.util.SortedSet;
 
-import nl.tudelft.lifetiles.bucket.model.BucketCache;
 import nl.tudelft.lifetiles.graph.traverser.EmptySegmentTraverser;
 import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
 import nl.tudelft.lifetiles.graph.traverser.ReferencePositionTraverser;
