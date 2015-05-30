@@ -60,8 +60,6 @@ public class Launcher extends Application {
      */
     @Override
     public final void start(final Stage stage) {
-        Logging.initialize();
-
         loadFonts();
         stage.initStyle(StageStyle.UNDECORATED);
 
