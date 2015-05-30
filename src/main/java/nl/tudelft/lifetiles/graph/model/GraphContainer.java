@@ -3,7 +3,6 @@ package nl.tudelft.lifetiles.graph.model;
 import java.util.SortedSet;
 
 import nl.tudelft.lifetiles.bucket.model.BucketCache;
-import nl.tudelft.lifetiles.bucket.model.BucketCacheFactory;
 import nl.tudelft.lifetiles.graph.traverser.EmptySegmentTraverser;
 import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
 import nl.tudelft.lifetiles.graph.traverser.ReferencePositionTraverser;
@@ -49,8 +48,7 @@ public class GraphContainer {
         alignGraph();
         findMutations(reference);
 
-        BucketCacheFactory bcf = new BucketCacheFactory();
-        segmentBuckets = bcf.getBucketCache(NUMBEROFBUCKETS, this.graph);
+        segmentBuckets = new BucketCache(NUMBEROFBUCKETS, this.graph);
     }
 
     /**

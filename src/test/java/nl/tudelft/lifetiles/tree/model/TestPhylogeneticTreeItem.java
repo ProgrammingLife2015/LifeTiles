@@ -1,7 +1,6 @@
 package nl.tudelft.lifetiles.tree.model;
 
 import static org.junit.Assert.*;
-import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeParser;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
 import org.junit.Test;
