@@ -3,13 +3,13 @@ package nl.tudelft.lifetiles.graph.model;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import nl.tudelft.lifetiles.core.util.Timer;
 import nl.tudelft.lifetiles.sequence.model.DefaultSequence;
 import nl.tudelft.lifetiles.sequence.model.SegmentString;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
@@ -126,14 +126,15 @@ public class DefaultGraphParser implements GraphParser {
     @Override
     public final Graph<SequenceSegment> parseGraph(final File vertexfile,
             final File edgefile, final GraphFactory<SequenceSegment> gfact)
-            throws IOException {
-        long startTime = Calendar.getInstance().getTimeInMillis();
+                    throws IOException {
+        Timer timer = Timer.getAndStart();
+
         Graph<SequenceSegment> graph = gfact.getGraph();
         parseVertices(vertexfile, graph);
         parseEdges(edgefile, graph);
-        System.out.println("Graph parsed. Took "
-                + (Calendar.getInstance().getTimeInMillis() - startTime)
-                + " ms.");
+
+        timer.stopAndLog("Graph parsing");
+
         return graph;
     }
 
