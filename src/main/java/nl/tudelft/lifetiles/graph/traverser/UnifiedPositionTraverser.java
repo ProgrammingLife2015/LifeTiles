@@ -1,8 +1,8 @@
 package nl.tudelft.lifetiles.graph.traverser;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
+import nl.tudelft.lifetiles.core.util.Timer;
 import nl.tudelft.lifetiles.graph.model.Edge;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
@@ -41,15 +41,15 @@ public class UnifiedPositionTraverser {
      * are needed to visualize a comprehensible model of the graph.
      */
     private void unifyGraph() {
-        long startTime = Calendar.getInstance().getTimeInMillis();
+        Timer timer = Timer.getAndStart();
+
         for (SequenceSegment vertex : graphVar.getSources()) {
             vertex.setUnifiedStart(1);
             vertex.setUnifiedEnd(1 + vertex.getContent().getLength());
             unifyVertex(vertex);
         }
-        System.out.println("Graph unified. Took "
-                + (Calendar.getInstance().getTimeInMillis() - startTime)
-                + " ms.");
+
+        timer.stopAndLog("Graph unification");
     }
 
     /**
