@@ -44,7 +44,7 @@ public class TileView {
     /**
      * Controller for the View.
      */
-    private GraphController controller;
+    private final GraphController controller;
 
     /**
      * Create the TileView by initializing the groups where the to be drawn
@@ -55,20 +55,6 @@ public class TileView {
      */
     public TileView(final GraphController control) {
         controller = control;
-    }
-
-    /**
-     * <<<<<<< HEAD
-     * Change Vertex colour.
-     *
-     * @param vertex
-     *            vertex to be changed.
-     * @param color
-     *            the new colour
-     */
-    public final void changeVertexColor(final VertexView vertex,
-            final Color color) {
-        vertex.setColor(color);
     }
 
     /**
@@ -96,8 +82,6 @@ public class TileView {
         drawEdges(graph);
         Group nodes = new Group();
 
-        drawEdges(graph);
-
         for (Entry<SequenceSegment, VertexView> entry : nodemap.entrySet()) {
             nodes.getChildren().add(entry.getValue());
         }
@@ -108,16 +92,14 @@ public class TileView {
     }
 
     /**
-     * @param gr
+     * @param graph
      *            graph to draw the edges from
      */
-    private void drawEdges(final Graph<SequenceSegment> gr) {
-        for (Edge<SequenceSegment> edge : gr.getAllEdges()) {
-            SequenceSegment from = gr.getSource(edge);
-            SequenceSegment to = gr.getDestination(edge);
-            VertexView f = nodemap.get(from);
-            VertexView t = nodemap.get(to);
-            drawEdge(f, t);
+    private void drawEdges(final Graph<SequenceSegment> graph) {
+        for (Edge<SequenceSegment> edge : graph.getAllEdges()) {
+            VertexView source = nodemap.get(graph.getSource(edge));
+            VertexView destination = nodemap.get(graph.getDestination(edge));
+            drawEdge(source, destination);
         }
     }
 

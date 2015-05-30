@@ -110,7 +110,7 @@ public class EdgeLine extends Group {
         Circle head = new Circle();
         head.setRadius(HEAD_RADIUS);
 
-        double fromX = source.getLayoutX() + (boundFrom.getWidth() / 2);
+        double fromX = source.getLayoutX() + boundFrom.getWidth();
         double fromY = source.getLayoutY() + (boundFrom.getHeight() / 2);
 
         // Draw the line from the middle of the destination
@@ -168,32 +168,37 @@ public class EdgeLine extends Group {
         Circle head = new Circle();
         head.setRadius(HEAD_RADIUS);
 
-        double startX = boundFrom.getMinX() + (boundFrom.getWidth() / 2);
+        double startX = boundFrom.getMinX() + boundFrom.getWidth();
 
-        // The line be drawn from the middle of the vertex to be drawn to
-        final double minYLeft = boundFrom.getMinY();
-        final double maxYLeft = boundFrom.getMaxY();
-        final double maxXLeft = boundFrom.getMaxX();
+        final double minYFrom = boundFrom.getMinY();
+        final double maxYFrom = boundFrom.getMaxY();
+        final double maxXFrom = boundFrom.getMaxX();
 
-        final double maxYRight = boundTo.getMaxY();
-        final double minYRight = boundTo.getMinY();
-        final double minXRight = boundTo.getMinX();
+        final double maxYTo = boundTo.getMaxY();
+        final double minYTo = boundTo.getMinY();
+        final double minXTo = boundTo.getMinX();
 
-        if (minYLeft <= minYRight && maxYLeft >= maxYRight) {
-            final double startY = minYRight + boundTo.getHeight() / 2;
-            drawLine(startX, startY, minXRight, startY);
+        // If the node to draw to lies between lower and upper y-axis
+        // of the 'from' node, then draw a straight line which stays on the
+        // half of the height of the 'to' node.
+        if (minYFrom <= minYTo && maxYFrom >= maxYTo) {
+            final double startY = minYTo + boundTo.getHeight() / 2;
+            drawLine(startX, startY, minXTo, startY);
         } else {
-            Point2D line0source = new Point2D(maxXLeft, minYLeft);
-            Point2D line0destination = new Point2D(minXRight, maxYRight);
-            Point2D line1source = new Point2D(maxXLeft, maxYLeft);
-            Point2D line1destination = new Point2D(minXRight, minYRight);
+
+            Point2D line0source = new Point2D(maxXFrom, minYFrom);
+            Point2D line0destination = new Point2D(minXTo, maxYTo);
+            Point2D line1source = new Point2D(maxXFrom, maxYFrom);
+            Point2D line1destination = new Point2D(minXTo, minYTo);
 
             double intersect = calculateYIntersection(line0source,
                     line0destination, line1source, line1destination);
 
-            final double endX = minXRight + (boundTo.getWidth() / 2);
+            final double endX = minXTo;
+
             drawLine(startX, intersect, endX, intersect);
         }
+
         head.setCenterX(line.getEndX() - head.getRadius());
         head.setCenterY(line.getEndY());
 
