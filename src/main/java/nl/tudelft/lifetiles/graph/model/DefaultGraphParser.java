@@ -28,10 +28,6 @@ public class DefaultGraphParser implements GraphParser {
      * Index of starting position in the vertex descriptor.
      */
     private static final int START_POS = 2;
-    /**
-     * Index of identifier in the vertex descriptor.
-     */
-    private static final int IDENT_POS = 0;
 
     /**
      * Index of sources in the vertex descriptor.
