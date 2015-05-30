@@ -56,7 +56,7 @@ public class GraphController extends AbstractController {
     private int currentPosition = -1;
 
     /**
-     * <<<<<<< HEAD {@inheritDoc}
+     * {@inheritDoc}
      */
     @Override
     public final void initialize(final URL location,
