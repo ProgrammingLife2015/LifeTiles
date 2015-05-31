@@ -77,16 +77,16 @@ public final class Timer {
      */
     private static String formatNanos(final long nanos) {
         final long hours = TimeUnit.NANOSECONDS.toHours(nanos);
-        final long miutesn = TimeUnit.NANOSECONDS.toMinutes(nanos
+        final long minutes = TimeUnit.NANOSECONDS.toMinutes(nanos
                 - TimeUnit.HOURS.toNanos(hours));
         final long seconds = TimeUnit.NANOSECONDS.toSeconds(nanos
                 - TimeUnit.HOURS.toNanos(hours)
-                - TimeUnit.MINUTES.toNanos(miutesn));
+                - TimeUnit.MINUTES.toNanos(minutes));
         final long millis = TimeUnit.NANOSECONDS.toMillis(nanos
                 - TimeUnit.HOURS.toNanos(hours)
-                - TimeUnit.MINUTES.toNanos(miutesn)
+                - TimeUnit.MINUTES.toNanos(minutes)
                 - TimeUnit.SECONDS.toNanos(seconds));
-        return String.format("%02d:%02d:%02d.%03d", hours, miutesn, seconds,
+        return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds,
                 millis);
     }
 
