@@ -1,6 +1,6 @@
 package nl.tudelft.lifetiles.core.util;
 
-import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A timer utility class.
@@ -34,7 +34,7 @@ public final class Timer {
         if (startTime != null) {
             throw new IllegalStateException("Timer already started.");
         }
-        startTime = Calendar.getInstance().getTimeInMillis();
+        startTime = System.nanoTime();
     }
 
     /**
@@ -44,13 +44,13 @@ public final class Timer {
         if (stopTime != null) {
             throw new IllegalStateException("Timer already stopped.");
         }
-        stopTime = Calendar.getInstance().getTimeInMillis();
+        stopTime = System.nanoTime();
     }
 
     /**
      * Get the elapsed time.
      *
-     * @return the elapsed time in milleseconds.
+     * @return the elapsed time in nanoseconds.
      */
     public long getElapsed() {
         return stopTime - startTime;
@@ -65,7 +65,29 @@ public final class Timer {
     public void stopAndLog(final String timee) {
         stop();
         long elapsed = getElapsed();
-        Logging.info(timee + " took " + elapsed + " ms");
+        Logging.info(timee + " took " + formatNanos(elapsed));
+    }
+
+    /**
+     * Format number of nanoseconds to a more readable h:m:s.ms format.
+     *
+     * @param nanos
+     *            the nanoseconds
+     * @return a formatted string
+     */
+    private static String formatNanos(final long nanos) {
+        final long hours = TimeUnit.NANOSECONDS.toHours(nanos);
+        final long miutesn = TimeUnit.NANOSECONDS.toMinutes(nanos
+                - TimeUnit.HOURS.toNanos(hours));
+        final long seconds = TimeUnit.NANOSECONDS.toSeconds(nanos
+                - TimeUnit.HOURS.toNanos(hours)
+                - TimeUnit.MINUTES.toNanos(miutesn));
+        final long millis = TimeUnit.NANOSECONDS.toMillis(nanos
+                - TimeUnit.HOURS.toNanos(hours)
+                - TimeUnit.MINUTES.toNanos(miutesn)
+                - TimeUnit.SECONDS.toNanos(seconds));
+        return String.format("%02d:%02d:%02d.%03d", hours, miutesn, seconds,
+                millis);
     }
 
     /**
