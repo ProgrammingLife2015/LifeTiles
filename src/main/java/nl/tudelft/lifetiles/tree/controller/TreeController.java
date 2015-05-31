@@ -9,6 +9,7 @@ import java.util.Scanner;
 import javafx.fxml.FXML;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.controller.MenuController;
+import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeParser;
@@ -48,8 +49,7 @@ public class TreeController extends AbstractController {
             try {
                 loadTree((File) args[2]);
             } catch (FileNotFoundException e) {
-                // TODO: notify the user that the file was not found
-                e.printStackTrace();
+                Logging.exception(e);
             }
         });
     }
