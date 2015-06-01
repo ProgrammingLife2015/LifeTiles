@@ -65,4 +65,16 @@ public final class Settings {
         return Boolean.valueOf(get(setting));
     }
 
+    /**
+     * (over)write a setting.
+     *
+     * @param key
+     *            the key
+     * @param value
+     *            the value
+     */
+    public static void set(final Object key, final Object value) {
+        PROPERTIES.put(key, value);
+    }
+
 }
