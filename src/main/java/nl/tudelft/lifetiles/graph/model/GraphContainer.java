@@ -52,8 +52,8 @@ public class GraphContainer {
         this.graph = graph;
 
         // TODO: Temporary line until sequence selection is implemented.
-        Sequence reference = this.graph.getSources().iterator().next().getSources()
-                .iterator().next();
+        Sequence reference = this.graph.getSources().iterator().next()
+                .getSources().iterator().next();
 
         alignGraph();
         findMutations(reference);
@@ -66,11 +66,11 @@ public class GraphContainer {
      */
     private void alignGraph() {
         UnifiedPositionTraverser upt = new UnifiedPositionTraverser();
+        graph = upt.unifyGraph(graph);
+
         if (Settings.getBoolean(SETTING_EMPTY)) {
             EmptySegmentTraverser est = new EmptySegmentTraverser();
-            graph = est.addEmptySegmentsGraph(upt.unifyGraph(graph));
-        } else {
-            graph = upt.unifyGraph(graph);
+            graph = est.addEmptySegmentsGraph(graph);
         }
     }
 
