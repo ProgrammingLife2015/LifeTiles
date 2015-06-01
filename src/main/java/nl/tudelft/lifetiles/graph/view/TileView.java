@@ -86,7 +86,7 @@ public class TileView {
             nodes.getChildren().add(entry.getValue());
         }
 
-        root.getChildren().addAll(edges, nodes);
+        root.getChildren().addAll(nodes, edges);
 
         return root;
     }
@@ -97,6 +97,7 @@ public class TileView {
      */
     private void drawEdges(final Graph<SequenceSegment> graph) {
         for (Edge<SequenceSegment> edge : graph.getAllEdges()) {
+
             VertexView source = nodemap.get(graph.getSource(edge));
             VertexView destination = nodemap.get(graph.getDestination(edge));
             drawEdge(source, destination);
@@ -144,8 +145,8 @@ public class TileView {
     /**
      * Create a Vertex that can be displayed on the screen.
      *
-     * @param text
-     *            text of the dna segment
+     * @param segment
+     *            the segment to draw an object for
      * @param xcoord
      *            top left x coordinate
      * @param ycoord
@@ -182,8 +183,8 @@ public class TileView {
      *            Node to draw to
      */
     private void drawEdge(final Node source, final Node destination) {
-        EdgeLine e = new EdgeLine(source, destination);
-        edges.getChildren().add(e);
+        EdgeLine edge = new EdgeLine(source, destination);
+        edges.getChildren().add(edge);
     }
 
     /**
