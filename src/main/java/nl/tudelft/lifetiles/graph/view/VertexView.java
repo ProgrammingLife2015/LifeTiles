@@ -34,7 +34,7 @@ public class VertexView extends Group {
     /**
      * Horizontal scale for each coordinate.
      */
-    private static final double HORIZONTALSCALE = 11;
+    public static final double HORIZONTALSCALE = 11;
 
     /**
      * Vertical scale for each coordinate.
