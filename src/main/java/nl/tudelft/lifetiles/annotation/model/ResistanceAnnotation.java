@@ -1,5 +1,10 @@
 package nl.tudelft.lifetiles.annotation.model;
 
+import java.util.List;
+
+import nl.tudelft.lifetiles.sequence.model.Sequence;
+import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
+
 /**
  * Resistance annotation which annotates a drug resistant mutation onto a
  * sequence.
@@ -7,7 +12,7 @@ package nl.tudelft.lifetiles.annotation.model;
  * @author Jos
  *
  */
-public class ResistanceAnnotation extends Annotation {
+public class ResistanceAnnotation extends AbstractAnnotation {
 
     /**
      * Name of the gene.
@@ -95,6 +100,23 @@ public class ResistanceAnnotation extends Annotation {
      */
     public String getGeneName() {
         return geneName;
+    }
+
+    /**
+     * TODO: Figure out a way to map resistance annotations onto a graph or list
+     * of segments.
+     * Method which maps this annotation to a sequence.
+     *
+     * @param segments
+     *            Segments to map the annotation to.
+     * @param reference
+     *            The current reference used in the list of segments.
+     * @return segment which annotation should be mapped to.
+     */
+    @Override
+    public SequenceSegment mapOntoSequence(
+            final List<SequenceSegment> segments, final Sequence reference) {
+        return null;
     }
 
 }
