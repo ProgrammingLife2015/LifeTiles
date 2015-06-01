@@ -36,7 +36,7 @@ public class ResistanceAnnotation extends Annotation {
 
     /**
      * Construct a resistance annotation.
-     * 
+     *
      * @param geneName
      *            Name of the gene.
      * @param typeOfMutation
@@ -60,6 +60,41 @@ public class ResistanceAnnotation extends Annotation {
         this.change = change;
         this.filter = filter;
         this.drugResistance = drugResistance;
+    }
+
+    /**
+     * @return the drugResistance
+     */
+    public String getDrugResistance() {
+        return drugResistance;
+    }
+
+    /**
+     * @return the filter
+     */
+    public String getFilter() {
+        return filter;
+    }
+
+    /**
+     * @return the change
+     */
+    public String getChange() {
+        return change;
+    }
+
+    /**
+     * @return the typeOfMutation
+     */
+    public String getTypeOfMutation() {
+        return typeOfMutation;
+    }
+
+    /**
+     * @return the geneName
+     */
+    public String getGeneName() {
+        return geneName;
     }
 
 }
