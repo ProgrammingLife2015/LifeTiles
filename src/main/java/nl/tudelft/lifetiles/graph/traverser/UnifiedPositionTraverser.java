@@ -46,7 +46,7 @@ public class UnifiedPositionTraverser {
     private void unifyGraph() {
         Timer timer = Timer.getAndStart();
 
-        // a stack for depth-first
+        // a queue for breadth-first
         Queue<SequenceSegment> queue = new ArrayDeque<>();
         Map<SequenceSegment, Integer> waiting = new HashMap<>();
 
