@@ -14,7 +14,7 @@ public class ResistanceAnnotationParserTest {
 
     @Before
     public void setUp() throws Exception {
-        ResistanceAnnotationParser parser = new ResistanceAnnotationParser();
+        ResistanceAnnotationParser parser = ResistanceAnnotationParser.getResistanceAnnotationParser();
         File annotationFile = new File(this.getClass()
                 .getResource(testAnnotationFilename + ".txt").toURI());
         
