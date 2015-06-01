@@ -40,9 +40,21 @@ public class TreeController extends AbstractController {
     private PhylogeneticTreeItem tree;
 
     /**
+     * The visible tree model.
+     */
+    private PhylogeneticTreeItem visibleTree;
+
+    /**
      * The model of sequences.
      */
+
     private Map<String, Sequence> sequences;
+
+    /**
+     * the visible sequences.
+     */
+
+    private Set<Sequence> visibleSequences;
 
     /**
      * {@inheritDoc}
@@ -72,6 +84,18 @@ public class TreeController extends AbstractController {
             }
         });
 
+        listen(Message.FILTERED, (controller, args) -> {
+            // check the message is correct
+            assert args.length == 1;
+            if (!(args[0] instanceof Set<?>)) {
+                throw new IllegalArgumentException(
+                        "Argument not of type Set<Sequence>");
+            }
+            if (!(controller instanceof TreeController)) {
+                // create the new tree
+                setVisible((Set<Sequence>) args[0]);
+            }
+        });
         view.setController(this);
     }
 
@@ -95,6 +119,7 @@ public class TreeController extends AbstractController {
         tree = PhylogeneticTreeParser.parse(fileString);
         linkSequence(sequences, tree);
         populateChildSequences(tree);
+        visibleTree = tree;
 
         repaint();
 
@@ -105,8 +130,8 @@ public class TreeController extends AbstractController {
      * Repaints the view.
      */
     private void repaint() {
-        if (tree != null) {
-            view.setRoot(tree);
+        if (visibleTree != null) {
+            view.setRoot(visibleTree);
         }
     }
 
@@ -125,5 +150,45 @@ public class TreeController extends AbstractController {
             populateChildSequences(child);
         }
         node.setChildSequences();
+    }
+
+    private void setVisible(Set<Sequence> visible){
+        visibleSequences = visible;
+        visibleTree = subTree(tree);
+        repaint();
+    }
+
+    private PhylogeneticTreeItem subTree(PhylogeneticTreeItem node){
+        // copy the node
+        PhylogeneticTreeItem result = new PhylogeneticTreeItem();
+        if(visibleSequences.contains(node.getSequence())) {
+            result.setName(node.getName());
+            result.setDistance(node.getDistance());
+        }
+        else if(node.getChildren().isEmpty()) {
+            return null;
+        }
+        // copy the children when they are needed
+        for( PhylogeneticTreeItem child: node.getChildren()){
+            // check if this child is needed
+            //TODO loop order?
+            for(Sequence sequence : node.getChildSequences()){
+                if(visibleSequences.contains(sequence)){
+                    PhylogeneticTreeItem subtree = subTree(child);
+                    if (subtree != null) {
+                        subtree.setParent(result);
+                    }
+                    break;
+                }
+            }
+        }
+        // remove useless nodes(nodes with at single child can be removed from the subtree)
+        if (result.getChildren().size() == 1) {
+            result = result.getChildren().get(0);
+        }
+        //fix sequences
+        linkSequence(sequences, result);
+        populateChildSequences(result);
+        return result;
     }
 }
