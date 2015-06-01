@@ -39,8 +39,9 @@ public final class ResistanceAnnotationParser {
      *            The annotation file to be parsed.
      * @throws IOException
      *             When there is an error reading the specified file.
+     * @return list of parsed resistance annotations.
      */
-    public final List<ResistanceAnnotation> parseAnnotations(final File annotationFile)
+    public List<ResistanceAnnotation> parseAnnotations(final File annotationFile)
             throws IOException {
         List<ResistanceAnnotation> annotations = new ArrayList<ResistanceAnnotation>();
         Iterator<String> iterator = Files.lines(annotationFile.toPath())
