@@ -1,12 +1,12 @@
 package nl.tudelft.lifetiles.graph.model;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import nl.tudelft.lifetiles.core.util.Timer;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
@@ -67,7 +67,8 @@ public class BucketCache {
      * number of buckets the graph should be divided in.
      */
     private void cacheGraph() {
-        long startTime = Calendar.getInstance().getTimeInMillis();
+        Timer timer = Timer.getAndStart();
+        
         buckets = new ArrayList<SortedSet<SequenceSegment>>();
         for (int index = 0; index < numberBuckets; index++) {
             buckets.add(index, new TreeSet<SequenceSegment>());
@@ -75,9 +76,8 @@ public class BucketCache {
         for (SequenceSegment vertex : graph.getAllVertices()) {
             cacheVertex(vertex);
         }
-        System.out.println("Graph caching. Took "
-                + (Calendar.getInstance().getTimeInMillis() - startTime)
-                + " ms.");
+
+        timer.stopAndLog("Graph caching");
     }
 
     /**
