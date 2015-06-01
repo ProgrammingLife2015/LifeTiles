@@ -230,7 +230,7 @@ public class GraphController extends AbstractController {
      * @param segment
      *            The selected segment
      */
-    // Removed final for testing, cannot use PowerMockito because of current big
+    // Removed final for testing, cannot use PowerMockito because of current bug
     // with javafx 8
     public void clicked(final SequenceSegment segment) {
         shout(Message.FILTERED, segment.getSources());
@@ -244,7 +244,7 @@ public class GraphController extends AbstractController {
      * @param hovering
      *            set if mouse is entering this segment or leaving
      */
-    // Removed final for testing, cannot use PowerMockito because of current big
+    // Removed final for testing, cannot use PowerMockito because of current bug
     // with javafx 8
     public void hovered(final SequenceSegment segment, final Boolean hovering) {
         // TODO: Message to say that a segment is hovered over
