@@ -14,7 +14,23 @@ import java.util.List;
  * @author Jos
  *
  */
-public class ResistanceAnnotationParser {
+public final class ResistanceAnnotationParser {
+
+    /**
+     * Constructs a resistance annotation parser.
+     */
+    private ResistanceAnnotationParser() {
+        // noop
+    }
+
+    /**
+     * Factory method to create a resistance annotation parser.
+     *
+     * @return resistance annotation parser.
+     */
+    public static ResistanceAnnotationParser getResistanceAnnotationParser() {
+        return new ResistanceAnnotationParser();
+    }
 
     /**
      * Parses a annotation file and returns a list of resistance annotations.
@@ -24,7 +40,8 @@ public class ResistanceAnnotationParser {
      * @throws IOException
      *             When there is an error reading the specified file.
      */
-    public List<ResistanceAnnotation> parseAnnotations(final File annotationFile) throws IOException {
+    public final List<ResistanceAnnotation> parseAnnotations(final File annotationFile)
+            throws IOException {
         List<ResistanceAnnotation> annotations = new ArrayList<ResistanceAnnotation>();
         Iterator<String> iterator = Files.lines(annotationFile.toPath())
                 .iterator();
