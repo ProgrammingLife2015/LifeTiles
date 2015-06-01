@@ -37,28 +37,28 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
     /**
      * The end position for this segment.
      */
-    private final long endVar;
+    private final long end;
     /**
      * The unified start position for this segment.
      */
-    private long unifiedStartVar = 1;
+    private long unifiedStart = 1;
     /**
      * The unified end position for this segment.
      */
-    private long unifiedEndVar = Long.MAX_VALUE;
+    private long unifiedEnd = Long.MAX_VALUE;
     /**
      * The start position in comparison with the reference.
      */
-    private long referenceStartVar = 1;
+    private long referenceStart = 1;
     /**
      * The end position in comparison with the reference.
      */
-    private long referenceEndVar = Long.MAX_VALUE;
+    private long referenceEnd = Long.MAX_VALUE;
 
     /**
      * The mutation annotation of this segment.
      */
-    private Mutation mutationVar;
+    private Mutation mutation;
 
     /**
      * Used for compareTo.
@@ -101,9 +101,8 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
             final SegmentContent content) {
         this.sources = sources;
         this.start = startPosition;
-        this.endVar = endPosition;
+        this.end = endPosition;
         this.content = content;
-
         identifier = nextId.incrementAndGet();
     }
 
@@ -118,7 +117,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      * @return the end position
      */
     public final long getEnd() {
-        return endVar;
+        return end;
     }
 
     /**
@@ -139,7 +138,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      * @return the unified start position
      */
     public final long getUnifiedStart() {
-        return unifiedStartVar;
+        return unifiedStart;
     }
 
     /**
@@ -147,14 +146,14 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      *            unified start position of this sequence segment.
      */
     public final void setUnifiedStart(final long unifiedStart) {
-        unifiedStartVar = unifiedStart;
+        this.unifiedStart = unifiedStart;
     }
 
     /**
      * @return the unified end position
      */
     public final long getUnifiedEnd() {
-        return unifiedEndVar;
+        return unifiedEnd;
     }
 
     /**
@@ -162,14 +161,14 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      *            unified end position of this sequence segment.
      */
     public final void setUnifiedEnd(final long unifiedEnd) {
-        unifiedEndVar = unifiedEnd;
+        this.unifiedEnd = unifiedEnd;
     }
 
     /**
      * @return mutation annotation of sequence segment.
      */
     public final Mutation getMutation() {
-        return mutationVar;
+        return mutation;
     }
 
     /**
@@ -177,7 +176,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      *            Mutation which is annotated onto the sequence segment.
      */
     public final void setMutation(final Mutation mutation) {
-        mutationVar = mutation;
+        this.mutation = mutation;
     }
 
     /**
@@ -219,7 +218,6 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
                 return candidateComp;
             }
         }
-
         if (this.getIdentifier() == other.getIdentifier()) {
             candidateComp = 0;
         }
@@ -232,7 +230,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      * @return reference start position.
      */
     public final long getReferenceStart() {
-        return referenceStartVar;
+        return referenceStart;
     }
 
     /**
@@ -241,7 +239,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      * @return reference end position.
      */
     public final long getReferenceEnd() {
-        return referenceEndVar;
+        return referenceEnd;
     }
 
     /**
@@ -251,7 +249,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      *            Reference start position.
      */
     public final void setReferenceStart(final long referenceStart) {
-        referenceStartVar = referenceStart;
+        this.referenceStart = referenceStart;
     }
 
     /**
@@ -261,7 +259,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      *            Reference end position.
      */
     public final void setReferenceEnd(final long referenceEnd) {
-        referenceEndVar = referenceEnd;
+        this.referenceEnd = referenceEnd;
     }
 
     /**
@@ -290,7 +288,6 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
             return false;
         }
         SequenceSegment other = (SequenceSegment) obj;
-
         return this.getIdentifier() == other.getIdentifier();
     }
 
@@ -311,7 +308,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
         Mutation mutation;
         if (content.isEmpty()) {
             mutation = Mutation.DELETION;
-        } else if (referenceStartVar > referenceEndVar) {
+        } else if (referenceStart > referenceEnd) {
             mutation = Mutation.INSERTION;
         } else {
             mutation = Mutation.POLYMORPHISM;

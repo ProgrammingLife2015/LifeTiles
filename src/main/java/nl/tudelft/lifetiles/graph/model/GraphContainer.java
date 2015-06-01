@@ -1,5 +1,7 @@
 package nl.tudelft.lifetiles.graph.model;
 
+import java.util.Set;
+
 import nl.tudelft.lifetiles.graph.traverser.EmptySegmentTraverser;
 import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
 import nl.tudelft.lifetiles.graph.traverser.ReferencePositionTraverser;
@@ -20,6 +22,16 @@ public class GraphContainer {
     private Graph<SequenceSegment> graph;
 
     /**
+     * The Current graph that this model is holding in bucket cache form.
+     */
+    private final BucketCache segmentBuckets;
+
+    /**
+     * The amount of buckets the graph is cached in.
+     */
+    private static final int NUMBER_OF_BUCKETS = 1000;
+
+    /**
      * create a new Tile.
      *
      * @param graph
@@ -29,13 +41,13 @@ public class GraphContainer {
         this.graph = graph;
 
         // TODO: Temporary line until sequence selection is implemented.
-        Sequence reference = this.graph.getSources().iterator().next()
-                .getSources().iterator().next();
+        Sequence reference = this.graph.getSources().iterator().next().getSources()
+                .iterator().next();
 
         alignGraph();
-        // TODO: Improve reference position traversal. Currently disabled for
-        // implementing filtering.
-        // findMutations(reference);
+        findMutations(reference);
+
+        segmentBuckets = new BucketCache(NUMBER_OF_BUCKETS, this.graph);
     }
 
     /**
@@ -62,10 +74,21 @@ public class GraphContainer {
     /**
      * Get the graph that this model is holding.
      *
+     * @param position
+     *            bucket position in the scrollPane.
      * @return graph
      */
-    public final Graph<SequenceSegment> getGraph() {
-        return graph;
+    public final Set<SequenceSegment> getSegments(final int position) {
+        return segmentBuckets.getSegments(position);
+    }
+
+    /**
+     * Returns the bucketCache to check the current position.
+     *
+     * @return the bucketCache of the graph.
+     */
+    public final BucketCache getBucketCache() {
+        return segmentBuckets;
     }
 
 }

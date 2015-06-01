@@ -13,11 +13,12 @@ public class TileController {
     /**
      * the model.
      */
-    private final GraphContainer modelVar;
+    private final GraphContainer model;
+
     /**
      * The view.
      */
-    private final TileView viewVar;
+    private final TileView view;
 
     /**
      * Creates a TileController which controls the dataflow.
@@ -28,17 +29,30 @@ public class TileController {
      *            the model that holds the data
      */
     public TileController(final TileView view, final GraphContainer model) {
-        this.viewVar = view;
-        this.modelVar = model;
+        this.view = view;
+        this.model = model;
     }
 
     /**
      * Creates a drawable object of the graph from the model.
      *
+     * @param position
+     *            Bucket position of the scrollPane.
      * @return Group object to be drawn on the screen
      */
-    public final Group drawGraph() {
-        return viewVar.drawGraph(modelVar.getGraph());
+    public final Group drawGraph(final int position) {
+        return view.drawGraph(model.getSegments(position));
+    }
+
+    /**
+     * Return the position in the bucket.
+     *
+     * @param position
+     *            Position in the scrollPane.
+     * @return position in the bucket.
+     */
+    public final int getBucketPosition(final double position) {
+        return model.getBucketCache().bucketPercentagePosition(position);
     }
 
 }
