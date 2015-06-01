@@ -21,7 +21,7 @@ public class UnifiedPositionTraverserTest {
     GraphFactory<SequenceSegment> gf;
     static UnifiedPositionTraverser upt;
     static Set<Sequence> s1;
-    SequenceSegment v1, v2;
+    SequenceSegment v1, v2, v3;
     Graph<SequenceSegment> gr;
 
     @BeforeClass
@@ -40,6 +40,8 @@ public class UnifiedPositionTraverserTest {
         gf = FactoryProducer.getFactory("JGraphT");
         v1 = new SequenceSegment(s1, 1, 11, new SegmentString("AAAAAAAAAA"));
         v2 = new SequenceSegment(s1, 21, 31, new SegmentString("AAAAAAAAAA"));
+        v3 = new SequenceSegment(s1, 11, 21, new SegmentString("AAAAAAAAAA"));
+
         gr = gf.getGraph();
         gr.addVertex(v1);
         gr.addVertex(v2);
@@ -53,6 +55,17 @@ public class UnifiedPositionTraverserTest {
         assertEquals(11, v1.getUnifiedEnd());
         assertEquals(11, v2.getUnifiedStart());
         assertEquals(21, v2.getUnifiedEnd());
+    }
+
+    public void traverseOutOfOrderTest() {
+        gr.addVertex(v3);
+        gr.addEdge(v1, v3);
+        gr.addEdge(v3, v2);
+        upt.unifyGraph(gr);
+        assertEquals(11, v3.getUnifiedStart());
+        assertEquals(21, v3.getUnifiedEnd());
+        assertEquals(21, v2.getUnifiedStart());
+        assertEquals(31, v2.getUnifiedEnd());
     }
 
 }
