@@ -1,5 +1,10 @@
 package nl.tudelft.lifetiles.annotation.model;
 
+import java.util.List;
+
+import nl.tudelft.lifetiles.sequence.model.Sequence;
+import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
+
 /**
  * Abstract class for Annotation. An annotation is a point on the genome with
  * some information attached to it.
@@ -7,7 +12,7 @@ package nl.tudelft.lifetiles.annotation.model;
  * @author Jos
  *
  */
-public abstract class Annotation {
+public abstract class AbstractAnnotation {
 
     /**
      * Position of the annotation on the genome.
@@ -20,7 +25,7 @@ public abstract class Annotation {
      * @param genomePosition
      *            Position of the annotation on the genome.
      */
-    protected Annotation(final long genomePosition) {
+    protected AbstractAnnotation(final long genomePosition) {
         this.genomePosition = genomePosition;
     }
 
@@ -32,4 +37,16 @@ public abstract class Annotation {
     public final long getGenomePosition() {
         return genomePosition;
     }
+
+    /**
+     * Abstract method which maps this annotation to a sequence.
+     *
+     * @param segments
+     *            Segments to map the annotation to.
+     * @param sequence
+     *            The current reference used in the list of segments.
+     * @return segment which annotation should be mapped to.
+     */
+    public abstract SequenceSegment mapOntoSequence(
+            final List<SequenceSegment> segments, final Sequence sequence);
 }
