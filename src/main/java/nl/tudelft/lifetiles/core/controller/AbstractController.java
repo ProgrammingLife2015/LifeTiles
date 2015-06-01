@@ -46,7 +46,7 @@ public abstract class AbstractController implements Initializable {
      * @param args
      *            the arguments of the message
      */
-    protected final void shout(final Message message, final Object... args) {
+    public final void shout(final Message message, final Object... args) {
         for (AbstractController c : controllers) {
             List<BiConsumer<AbstractController, Object[]>> listenersOther = c
                     .getListeners(message);

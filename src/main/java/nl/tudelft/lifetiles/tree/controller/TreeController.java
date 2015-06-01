@@ -4,10 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.ResourceBundle;
 import java.util.Scanner;
+import java.util.Set;
 
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
@@ -39,7 +38,6 @@ public class TreeController extends AbstractController {
      * The tree model.
      */
     private PhylogeneticTreeItem tree;
-
 
     /**
      * The model of sequences.
@@ -73,6 +71,8 @@ public class TreeController extends AbstractController {
                 repaint();
             }
         });
+
+        view.setController(this);
     }
 
     /**
@@ -93,6 +93,8 @@ public class TreeController extends AbstractController {
 
         // parse the string into a tree
         tree = PhylogeneticTreeParser.parse(fileString);
+        linkSequence(sequences, tree);
+        populateChildSequences(tree);
 
         repaint();
 
@@ -108,11 +110,7 @@ public class TreeController extends AbstractController {
         }
     }
 
-    private void linkSequences() {
-            linkSequence(sequences, tree);
-    }
-
-    private void linkSequence(Map<String, Sequence> sequences, PhylogeneticTreeItem node){
+    private void linkSequence(Map<String, Sequence> sequences, PhylogeneticTreeItem node) {
         String id = node.getName();
         Sequence sequence = sequences.get(id);
         node.setSequence(sequence);
@@ -122,4 +120,10 @@ public class TreeController extends AbstractController {
         }
     }
 
+    private void populateChildSequences(PhylogeneticTreeItem node) {
+        for (PhylogeneticTreeItem child: node.getChildren()) {
+            populateChildSequences(child);
+        }
+        node.setChildSequences();
+    }
 }
