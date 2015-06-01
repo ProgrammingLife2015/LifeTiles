@@ -46,6 +46,10 @@ public class PhylogeneticTreeItem {
      * The sequence this node is associated with.
      */
     private Sequence sequence;
+    /**
+     * The sequences this nodes descendants are associated with.
+     */
+    private Set<Sequence> childSequences;
 
     /**
      * Creates a new PhylogeneticTreeItem. Will initialize the ArrayList storing
@@ -277,6 +281,14 @@ public class PhylogeneticTreeItem {
                 + distance + suffix + ">";
 
         return result;
+    }
+
+    public Set<Sequence> getChildSequences() {
+        return childSequences;
+    }
+
+    public void setChildSequences() {
+        this.childSequences = this.getSequences();
     }
 
 }
