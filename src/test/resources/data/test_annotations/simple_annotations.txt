@@ -1,0 +1,20 @@
+## This first column is a mutation descriptor, the second column indicates the drug to which resistance is conferred
+##
+##
+## First column:
+##  - geneName:typeOfMutation,change,filter,genomePosition
+##
+## Second column: 
+##  - A
+##	- B
+##	- C
+test1:mut1,NNN,pass,10	A
+test1:mut2,NNN,pass,110	B
+test1:mut3,NNN,pass,115	B
+test1:mut4,NNN,pass,300	A
+test1:mut5,NNN,pass,305	C
+test2:mut6,NNN,pass,306	A
+test2:mut7,NNN,pass,309	A
+test3:mut8,NNN,pass,1001	B
+test3:mut9,NNN,pass,1003	B
+test3:mut10,NNN,pass,1005	C
