@@ -1,5 +1,6 @@
 package nl.tudelft.lifetiles.annotation.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,17 +40,22 @@ public class ResistanceAnnotationMapper {
      * @return
      *         Map which maps segments to a list of annotations.
      */
-    public final static Map<SequenceSegment, ResistanceAnnotation> mapAnnotations(
+    public final static Map<SequenceSegment, List<ResistanceAnnotation>> mapAnnotations(
             final Graph<SequenceSegment> graph,
             final List<ResistanceAnnotation> annotations,
             final Sequence reference) {
         Set<SequenceSegment> segments = selectReference(graph, reference);
-        Map<SequenceSegment, ResistanceAnnotation> annotatedSegments = new HashMap<SequenceSegment, ResistanceAnnotation>();
+        Map<SequenceSegment, List<ResistanceAnnotation>> annotatedSegments = new HashMap<>();
         for (ResistanceAnnotation annotation : annotations) {
             SequenceSegment segment = annotation.mapOntoSequence(segments,
                     reference);
             if (segment != null) {
-                annotatedSegments.put(segment, annotation);
+                if (annotatedSegments.containsKey(segment)) {
+                    annotatedSegments.get(segment).add(annotation);
+                } else {
+                    ArrayList<ResistanceAnnotation> annotationList = new ArrayList<>();
+                    annotatedSegments.put(segment, annotationList);
+                }
             }
         }
         return annotatedSegments;
@@ -67,7 +73,7 @@ public class ResistanceAnnotationMapper {
      */
     private final static Set<SequenceSegment> selectReference(
             final Graph<SequenceSegment> graph, final Sequence reference) {
-        TreeSet<SequenceSegment> segments = new TreeSet<SequenceSegment>();
+        TreeSet<SequenceSegment> segments = new TreeSet<>();
         for (SequenceSegment segment : graph.getAllVertices()) {
             if (segment.getSources().contains(reference)) {
                 segments.add(segment);
