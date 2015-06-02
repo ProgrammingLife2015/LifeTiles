@@ -43,7 +43,7 @@ public abstract class AbstractAnnotation {
      *
      * @param segments
      *            Segments to map the annotation to.
-     * @param sequence
+     * @param reference
      *            The current reference used in the list of segments.
      * @return segment which annotation should be mapped to.
      */

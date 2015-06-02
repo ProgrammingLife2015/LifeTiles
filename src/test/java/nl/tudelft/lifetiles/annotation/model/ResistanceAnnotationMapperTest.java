@@ -44,6 +44,7 @@ public class ResistanceAnnotationMapperTest {
         r3 = new ResistanceAnnotation(null, null, null, null, 16, null);
         annotations.add(r1);
         annotations.add(r2);
+        annotations.add(r3);
 
         gf = FactoryProducer.getFactory("JGraphT");
         v1 = new SequenceSegment(s1, 1, 11, new SegmentString("AAAAAAAAAA"));
@@ -58,7 +59,7 @@ public class ResistanceAnnotationMapperTest {
         Map<SequenceSegment, List<ResistanceAnnotation>> mappedAnnotations = ResistanceAnnotationMapper
                 .mapAnnotations(gr, annotations, reference);
         assertEquals(1, mappedAnnotations.size());
-        assertEquals(r1, mappedAnnotations.get(v1));
+        assertEquals(r1, mappedAnnotations.get(v1).get(0));
     }
 
     @Test
