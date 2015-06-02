@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.annotation.model;
 
 import java.util.List;
+import java.util.Set;
 
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
@@ -48,5 +49,5 @@ public abstract class AbstractAnnotation {
      * @return segment which annotation should be mapped to.
      */
     public abstract SequenceSegment mapOntoSequence(
-            final List<SequenceSegment> segments, final Sequence sequence);
+            final Set<SequenceSegment> segments, final Sequence reference);
 }
