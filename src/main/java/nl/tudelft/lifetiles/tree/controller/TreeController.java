@@ -77,7 +77,7 @@ public class TreeController extends AbstractController {
 
         listen(Message.LOADED, (controller, args) -> {
             if (controller instanceof GraphController) {
-                assert (args[0] instanceof Graph);
+                assert args[0] instanceof Graph;
                 assert (args[1] instanceof Map<?, ?>);
                 sequences = (Map<String, Sequence>) args[1];
                 repaint();
@@ -86,13 +86,13 @@ public class TreeController extends AbstractController {
 
         listen(Message.FILTERED, (controller, args) -> {
             // check the message is correct
-            assert args.length == 1;
-            if (!(args[0] instanceof Set<?>)) {
-                throw new IllegalArgumentException(
-                        "Argument not of type Set<Sequence>");
-            }
-            if (!(controller instanceof TreeController)) {
-                // create the new tree
+                assert args.length == 1;
+                if (!(args[0] instanceof Set<?>)) {
+                    throw new IllegalArgumentException(
+                            "Argument not of type Set<Sequence>");
+                }
+                if (!(controller instanceof TreeController)) {
+                    // create the new tree
                 setVisible((Set<Sequence>) args[0]);
             }
         });
@@ -135,45 +135,78 @@ public class TreeController extends AbstractController {
         }
     }
 
-    private void linkSequence(Map<String, Sequence> sequences, PhylogeneticTreeItem node) {
-        String id = node.getName();
-        Sequence sequence = sequences.get(id);
+    /**
+     * Add the sequences to a tree, a sequence will be added to a node if the
+     * node's name matches the sequence's id.
+     *
+     * @param sequences
+     *            a map containing the sequences and their identifiers
+     * @param node
+     *            the root of a phylogenetic tree
+     */
+    private void linkSequence(final Map<String, Sequence> sequences,
+            final PhylogeneticTreeItem node) {
+        String ident = node.getName();
+        Sequence sequence = sequences.get(ident);
         node.setSequence(sequence);
 
-        for (PhylogeneticTreeItem child: node.getChildren()) {
+        for (PhylogeneticTreeItem child : node.getChildren()) {
             linkSequence(sequences, child);
         }
     }
 
-    private void populateChildSequences(PhylogeneticTreeItem node) {
-        for (PhylogeneticTreeItem child: node.getChildren()) {
+    /**
+     * Fills the set containing the sequences that descend from this node. the
+     * sequences should already have been added to the tree.
+     *
+     * @param node
+     *            the root of a phylogenetic tree
+     */
+    private void populateChildSequences(final PhylogeneticTreeItem node) {
+        for (PhylogeneticTreeItem child : node.getChildren()) {
             populateChildSequences(child);
         }
         node.setChildSequences();
     }
 
-    private void setVisible(Set<Sequence> visible){
+    /**
+     * Sets the sequences in the set to visible, and creates a tree that only
+     * contains the visible sequences.
+     *
+     * @param visible
+     *            A set containing all visible sequences
+     */
+    private void setVisible(final Set<Sequence> visible) {
         visibleSequences = visible;
         visibleTree = subTree(tree);
         repaint();
     }
 
-    private PhylogeneticTreeItem subTree(PhylogeneticTreeItem node){
+    /**
+     * Creates a new tree that only contains the visible nodes. When a node has
+     * only one child, it is removed from the tree and its child is returned
+     * instead. When a node has no children, and is not visible, null is
+     * returned.
+     *
+     * @param node
+     *            the root of a tree that we want a subtree of
+     * @return
+     *            the new root of a subtree.
+     */
+    private PhylogeneticTreeItem subTree(final PhylogeneticTreeItem node) {
         // copy the node
         PhylogeneticTreeItem result = new PhylogeneticTreeItem();
-        if(visibleSequences.contains(node.getSequence())) {
+        if (visibleSequences.contains(node.getSequence())) {
             result.setName(node.getName());
             result.setDistance(node.getDistance());
-        }
-        else if(node.getChildren().isEmpty()) {
+        } else if (node.getChildren().isEmpty()) {
             return null;
         }
         // copy the children when they are needed
-        for( PhylogeneticTreeItem child: node.getChildren()){
+        for (PhylogeneticTreeItem child : node.getChildren()) {
             // check if this child is needed
-            //TODO loop order?
-            for(Sequence sequence : node.getChildSequences()){
-                if(visibleSequences.contains(sequence)){
+            for (Sequence sequence : node.getChildSequences()) {
+                if (visibleSequences.contains(sequence)) {
                     PhylogeneticTreeItem subtree = subTree(child);
                     if (subtree != null) {
                         subtree.setParent(result);
@@ -182,11 +215,12 @@ public class TreeController extends AbstractController {
                 }
             }
         }
-        // remove useless nodes(nodes with at single child can be removed from the subtree)
+        // remove useless nodes(nodes with at single child can be removed from
+        // the subtree)
         if (result.getChildren().size() == 1) {
             result = result.getChildren().get(0);
         }
-        //fix sequences
+        // fix sequences
         linkSequence(sequences, result);
         populateChildSequences(result);
         return result;

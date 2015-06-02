@@ -75,12 +75,12 @@ public class DefaultSequence implements Sequence {
         }
         return false;
     }
-    
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public String toString(){
+    public final String toString() {
         return "[Sequence: " + getIdentifier() + "]";
     }
 }
