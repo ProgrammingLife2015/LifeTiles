@@ -114,8 +114,15 @@ public class ResistanceAnnotation extends AbstractAnnotation {
      * @return segment which annotation should be mapped to.
      */
     @Override
-    public SequenceSegment mapOntoSequence(
-            final Set<SequenceSegment> segments, final Sequence reference) {
+    public SequenceSegment mapOntoSequence(final Set<SequenceSegment> segments,
+            final Sequence reference) {
+        for (SequenceSegment segment : segments) {
+            if (segment.getSources().contains(reference)
+                    && segment.getStart() <= getGenomePosition()
+                    && segment.getEnd() >= getGenomePosition()) {
+                return segment;
+            }
+        }
         return null;
     }
 
