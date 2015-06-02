@@ -82,8 +82,6 @@ public class GraphController extends AbstractController {
             try {
                 loadGraph((File) args[0], (File) args[1]);
             } catch (Exception exception) {
-
-                exception.printStackTrace();
                 shout(NotificationController.NOTIFY, notFact
                         .getNotification(exception));
             }
@@ -97,7 +95,7 @@ public class GraphController extends AbstractController {
             }
 
             model.setVisible((Set<Sequence>) args[0]);
-            repaint(true);
+            repaint();
         });
 
     }
@@ -132,14 +130,14 @@ public class GraphController extends AbstractController {
         graph = parser.parseGraph(vertexfile, edgefile, factory);
 
         shout(Message.LOADED, graph, parser.getSequences());
-        repaint(false);
+        repaint();
 
     }
 
     /**
      * Repaints the view.
      */
-    private void repaint(Boolean force) {
+    private void repaint() {
         if (graph != null) {
             if (model == null) {
                 model = new GraphContainer(graph);
@@ -150,8 +148,6 @@ public class GraphController extends AbstractController {
 
             wrapper.hvalueProperty().addListener(
                     (observable, oldValue, newValue) -> {
-
-                        Group root2 = new Group();
                         repaintPosition(root, newValue.doubleValue());
                     });
 
@@ -210,7 +206,7 @@ public class GraphController extends AbstractController {
      *            Position in the scrollPane.
      * @return position in the bucket.
      */
-    private final int getBucketPosition(final double position) {
+    private int getBucketPosition(final double position) {
         return model.getBucketCache().bucketPercentagePosition(position);
     }
 
