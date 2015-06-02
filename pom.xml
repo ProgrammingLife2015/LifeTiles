@@ -217,7 +217,9 @@
 				<version>2.14</version>
 				<configuration>
 					<failOnViolation>false</failOnViolation>
+					<linkXRef>false</linkXRef>
 					<!--<configLocation>checkstyle.xml</configLocation> -->
+					<configLocation>checkstyle-config.xml</configLocation>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -238,6 +240,6 @@
                     <findbugsXmlOutputDirectory>${project.build.directory}/findbugs</findbugsXmlOutputDirectory>
                 </configuration>
 			</plugin>
-		</plugins>
+		</plugins>			
 	</reporting>
 </project>
