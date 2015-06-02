@@ -1,6 +1,5 @@
 package nl.tudelft.lifetiles.annotation.model;
 
-import java.util.List;
 import java.util.Set;
 
 import nl.tudelft.lifetiles.sequence.model.Sequence;
