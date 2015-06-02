@@ -17,19 +17,10 @@ import java.util.List;
 public final class ResistanceAnnotationParser {
 
     /**
-     * Constructs a resistance annotation parser.
+     * Static class can not have a public or default constructor.
      */
     private ResistanceAnnotationParser() {
         // noop
-    }
-
-    /**
-     * Factory method to create a resistance annotation parser.
-     *
-     * @return resistance annotation parser.
-     */
-    public static ResistanceAnnotationParser getResistanceAnnotationParser() {
-        return new ResistanceAnnotationParser();
     }
 
     /**
@@ -41,8 +32,8 @@ public final class ResistanceAnnotationParser {
      *             When there is an error reading the specified file.
      * @return list of parsed resistance annotations.
      */
-    public List<ResistanceAnnotation> parseAnnotations(final File annotationFile)
-            throws IOException {
+    public static List<ResistanceAnnotation> parseAnnotations(
+            final File annotationFile) throws IOException {
         List<ResistanceAnnotation> annotations = new ArrayList<ResistanceAnnotation>();
         Iterator<String> iterator = Files.lines(annotationFile.toPath())
                 .iterator();
@@ -64,7 +55,7 @@ public final class ResistanceAnnotationParser {
      *            Line which contains a single annotation and is not a comment.
      * @return parsed annotation in the given line.
      */
-    private ResistanceAnnotation parseAnnotation(final String line) {
+    private static ResistanceAnnotation parseAnnotation(final String line) {
         String[] genomeResistance = line.split("\t");
         String drugResistance = genomeResistance[1];
         String[] genome = genomeResistance[0].split(",");
