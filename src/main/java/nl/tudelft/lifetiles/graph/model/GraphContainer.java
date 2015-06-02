@@ -37,13 +37,22 @@ public class GraphContainer {
     /**
      * The Current graph that this model is holding in bucket cache form.
      */
-    private BucketCache segmentBuckets;
+    private final BucketCache segmentBuckets;
 
+    /**
+     * The set of currently visible sequencesegments.
+     */
     private Set<SequenceSegment> visibles;
 
+    /**
+     * The set of visible sequences.
+     */
     private Set<Sequence> visibleSequences;
 
-    private boolean changed = false;
+    /**
+     * Boolean indicating if the graph in this container is recently changed.
+     */
+    private boolean changed;
 
     /**
      * The amount of buckets the graph is cached in.
@@ -68,6 +77,8 @@ public class GraphContainer {
 
         segmentBuckets = new BucketCache(NUMBER_OF_BUCKETS, this.graph);
         visibles = graph.getAllVertices();
+
+        changed = false;
     }
 
     /**
@@ -104,23 +115,18 @@ public class GraphContainer {
 
     /**
      * Change the graph by selecting the sequences to draw.
-     * The current graph is needed, tt will base the new graph on a subgraph of
-     * the current graph.
      *
      * @param visibleSequences
      *            the sequences to display
-     * @param currentgraph
-     *            the complete graph to base the new graph on
      */
     public final void setVisible(final Set<Sequence> visibleSequences) {
-        GraphFactory<SequenceSegment> factory = FactoryProducer.getFactory();
 
         // Find out which vertices are visible now
         Set<SequenceSegment> vertices = new TreeSet<SequenceSegment>();
         for (Sequence seq : visibleSequences) {
-            Iterator<SequenceSegment> it = seq.getSegments().iterator();
-            while (it.hasNext()) {
-                vertices.add(it.next());
+            Iterator<SequenceSegment> itSegments = seq.getSegments().iterator();
+            while (itSegments.hasNext()) {
+                vertices.add(itSegments.next());
             }
         }
 
@@ -157,7 +163,12 @@ public class GraphContainer {
         return copy;
     }
 
-    public boolean isChanged() {
+    /**
+     * Get if the graph in this container is recently changed.
+     *
+     * @return true if recently changed, else false
+     */
+    public final boolean isChanged() {
         if (changed) {
             changed = false;
             return true;
