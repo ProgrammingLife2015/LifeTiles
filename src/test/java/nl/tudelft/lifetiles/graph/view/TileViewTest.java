@@ -77,34 +77,27 @@ public class TileViewTest {
                 .get(0)).getChildrenUnmodifiable().get(2);
         VertexView v4 = (VertexView) ((Group) result.getChildrenUnmodifiable()
                 .get(0)).getChildrenUnmodifiable().get(3);
-        // V3 is first element, must be drawned at the beginning
-        assertEquals(0, v3.getLayoutX(), 1e-10);
-        assertEquals(0, v3.getLayoutY(), 1e-10);
-        // V3 contains two sequences, so height = 2 VERTICALSCALE - SPACING
-        assertEquals(2 * 40 - 2, v3.getBoundsInParent().getHeight(), 1e-10);
-        // v3 is "--", so width = 2 HORIZONTALSCALE -SPACINGS
-        assertEquals(2 * 11 - 2, v3.getBoundsInParent().getWidth(), 1e-10);
-        // V4 is second element, must be drawned after the first
-        assertEquals(0 + (2 * 11), v4.getLayoutX(), 1e-10);
-        assertEquals(0, v4.getLayoutY(), 1e-10);
-        // V4 contains two sequences, so height = 2 VERTICALSCALE - SPACING
-        assertEquals(2 * 40 - 2, v4.getBoundsInParent().getHeight(), 1e-10);
-        // v4 is "--", so width = 2 HORIZONTALSCALE -SPACINGS
-        assertEquals(2 * 11 - 2, v4.getBoundsInParent().getWidth(), 1e-10);
-        // V1 is third element, must be drawned after the second
-        assertEquals(0 + 2 * 11 + 3 * 11, v1.getLayoutX(), 1e-10);
+
+        assertEquals(0, v1.getLayoutX(), 1e-10);
         assertEquals(0, v1.getLayoutY(), 1e-10);
-        // V1 contains two sequences, so height = 2 VERTICALSCALE - SPACING
         assertEquals(2 * 40 - 2, v1.getBoundsInParent().getHeight(), 1e-10);
-        // v1 is "--", so width = 2 HORIZONTALSCALE -SPACINGS
         assertEquals(2 * 11 - 2, v1.getBoundsInParent().getWidth(), 1e-10);
-        // V2 is fourth element, must be drawned after the third
-        assertEquals(0 + (2 * 11) + (3 * 11) + (2 * 11), v2.getLayoutX(), 1e-10);
+
+        assertEquals(0 + (2 * 11), v2.getLayoutX(), 1e-10);
         assertEquals(0, v2.getLayoutY(), 1e-10);
-        // V2 contains two sequences, so height = 2 VERTICALSCALE - SPACING
         assertEquals(2 * 40 - 2, v2.getBoundsInParent().getHeight(), 1e-10);
-        // v2 is "--", so width = 2 HORIZONTALSCALE -SPACINGS
         assertEquals(2 * 11 - 2, v2.getBoundsInParent().getWidth(), 1e-10);
+
+        assertEquals(55, v3.getLayoutX(), 1e-10);
+        assertEquals(0, v3.getLayoutY(), 1e-10);
+        assertEquals(2 * 40 - 2, v3.getBoundsInParent().getHeight(), 1e-10);
+        assertEquals(2 * 11 - 2, v3.getBoundsInParent().getWidth(), 1e-10);
+
+        assertEquals(0 + (2 * 11) + (3 * 11) + 2 * 11, v4.getLayoutX(), 1e-10);
+        assertEquals(0, v4.getLayoutY(), 1e-10);
+        assertEquals(2 * 40 - 2, v4.getBoundsInParent().getHeight(), 1e-10);
+        assertEquals(2 * 11 - 2, v4.getBoundsInParent().getWidth(), 1e-10);
+
     }
 
     @Test
