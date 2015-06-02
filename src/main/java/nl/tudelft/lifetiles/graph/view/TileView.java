@@ -69,9 +69,7 @@ public class TileView {
         Group root = new Group();
 
         nodemap = new HashMap<SequenceSegment, VertexView>();
-
         edges = new Group();
-
         lanes = new ArrayList<Long>();
 
         for (SequenceSegment segment : segments) {
@@ -97,10 +95,14 @@ public class TileView {
      */
     private void drawEdges(final Graph<SequenceSegment> graph) {
         for (Edge<SequenceSegment> edge : graph.getAllEdges()) {
+            if (nodemap.containsKey(graph.getSource(edge))
+                    && nodemap.containsKey(graph.getDestination(edge))) {
 
-            VertexView source = nodemap.get(graph.getSource(edge));
-            VertexView destination = nodemap.get(graph.getDestination(edge));
-            drawEdge(source, destination);
+                VertexView source = nodemap.get(graph.getSource(edge));
+                VertexView destination = nodemap
+                        .get(graph.getDestination(edge));
+                drawEdge(source, destination);
+            }
         }
     }
 
