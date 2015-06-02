@@ -8,7 +8,7 @@ import org.junit.Test;
 public class EdgeLineTest {
 
     @Test
-    public void testStraightInsFrom_LineSameY() {
+    public void StraightInsFrom_LineSameTest() {
         Rectangle from = new Rectangle(0, 0, 2, 2);
         Rectangle to = new Rectangle(4, 0, 2, 2);
 
@@ -21,7 +21,7 @@ public class EdgeLineTest {
     }
 
     @Test
-    public void testStraightLineInsFrom_DiffY() {
+    public void StraightLineInsFrom_DiffTest() {
         Rectangle from = new Rectangle(0, 0, 2, 2);
         Rectangle to = new Rectangle(4, 1, 2, 1);
 
@@ -35,7 +35,7 @@ public class EdgeLineTest {
     }
 
     @Test
-    public void testStraightLineDiffYLow() {
+    public void StraightLineDiffYLowTest() {
         Rectangle from = new Rectangle(0, 0, 2, 2);
         Rectangle to = new Rectangle(4, 1, 2, 3);
 
@@ -47,7 +47,7 @@ public class EdgeLineTest {
     }
 
     @Test
-    public void testStraightLineDiffYUpper() {
+    public void StraightLineDiffYUpperTest() {
         Rectangle from = new Rectangle(0, 1, 2, 3);
         Rectangle to = new Rectangle(4, 0, 2, 2);
 
@@ -58,7 +58,7 @@ public class EdgeLineTest {
     }
 
     @Test
-    public void testStraightLineFromSmaller() {
+    public void StraightLineFromSmallerTest() {
         Rectangle from = new Rectangle(0, 1, 2, 1);
         Rectangle to = new Rectangle(4, 0, 2, 4);
 
@@ -69,7 +69,7 @@ public class EdgeLineTest {
     }
 
     @Test
-    public void testStraightLineEqualSize() {
+    public void StraightLineEqualSizTest() {
         Rectangle from = new Rectangle(0, 0, 2, 2);
         Rectangle to = new Rectangle(4, 0, 2, 2);
 
@@ -79,5 +79,18 @@ public class EdgeLineTest {
         assertEquals(line.getLine().getStartY(), (double) (0 + (0 + 2)) / 2,
                 1e-10);
 
+    }
+
+    @Test
+    public void CrossLineTest() {
+        Rectangle from = new Rectangle(0, 0, 2, 2);
+        Rectangle to = new Rectangle(4, 4, 2, 2);
+
+        EdgeLine line = new EdgeLine(from, to);
+
+        assertEquals(line.getLine().getStartY(), (double) (0 + (0 + 2)) / 2,
+                1e-10);
+        assertEquals(line.getLine().getEndY(), (double) (4 + (4 + 2)) / 2,
+                1e-10);
     }
 }
