@@ -196,6 +196,12 @@ public class SunburstRingSegment extends AbstractSunburstNode {
         return new LineTo(endX, endY);
     }
 
+    /**
+     * Creates a {@link Color} for this node. the color will be red by default,
+     * and the color associated with the sequence when the node has a sequence.
+     *
+     * @return a Color object that specifies what color this node will be.
+     */
     private Color createColor() {
         Sequence sequence = getValue().getSequence();
         if (sequence == null) {
