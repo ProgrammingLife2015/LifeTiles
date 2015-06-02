@@ -42,15 +42,7 @@ public class GraphController extends AbstractController {
     private ScrollPane wrapper;
 
     /**
-     * <<<<<<< HEAD
-     * <<<<<<< HEAD
      * The model of the graph.
-     * =======
-     * The currently loaded graph.
-     * >>>>>>> First run on drawing Edges
-     * =======
-     * The model of the graph.
-     * >>>>>>> Fixed nullpointer test and removed unnecessary DataPair
      */
     private GraphContainer model;
 
@@ -90,6 +82,8 @@ public class GraphController extends AbstractController {
             try {
                 loadGraph((File) args[0], (File) args[1]);
             } catch (Exception exception) {
+
+                exception.printStackTrace();
                 shout(NotificationController.NOTIFY, notFact
                         .getNotification(exception));
             }
@@ -102,8 +96,8 @@ public class GraphController extends AbstractController {
                         "Argument not of type Set<Sequence>");
             }
 
-            model.changeGraph((Set<Sequence>) args[0], graph);
-            repaint();
+            model.setVisible((Set<Sequence>) args[0], graph);
+            repaint(true);
         });
 
     }
@@ -138,29 +132,35 @@ public class GraphController extends AbstractController {
         graph = parser.parseGraph(vertexfile, edgefile, factory);
 
         shout(Message.LOADED, graph, parser.getSequences());
-        repaint();
+        repaint(false);
 
     }
 
     /**
      * Repaints the view.
      */
-    private void repaint() {
+    private void repaint(Boolean force) {
         if (graph != null) {
-            model = new GraphContainer(graph);
+            if (model == null) {
+                model = new GraphContainer(graph);
+            }
             view = new TileView(this);
 
             Group root = new Group();
 
-            repaintPosition(root, wrapper.hvalueProperty().doubleValue());
             wrapper.hvalueProperty().addListener(
                     (observable, oldValue, newValue) -> {
+
+                        Group root2 = new Group();
                         repaintPosition(root, newValue.doubleValue());
                     });
 
             Rectangle clip = new Rectangle(getMaxUnifiedEnd(graph)
                     * VertexView.HORIZONTALSCALE, 0);
             root.getChildren().add(clip);
+
+            System.out.println("stap 2: "
+                    + wrapper.hvalueProperty().doubleValue());
 
             repaintPosition(root, wrapper.hvalueProperty().doubleValue());
         }
@@ -176,12 +176,16 @@ public class GraphController extends AbstractController {
      */
     private void repaintPosition(final Group root, final double position) {
         int nextPosition = getBucketPosition(position);
-        if (currentPosition != nextPosition) {
+        if (currentPosition != nextPosition || model.isChanged()) {
+            if (graphNode != null) {
+                graphNode.getChildren().clear();
+            }
             graphNode = new Group();
             graphNode.getChildren().add(drawGraph(nextPosition));
             root.getChildren().add(graphNode);
             wrapper.setContent(root);
             currentPosition = nextPosition;
+
         }
     }
 
@@ -233,6 +237,8 @@ public class GraphController extends AbstractController {
     // Removed final for testing, cannot use PowerMockito because of current bug
     // with javafx 8
     public void clicked(final SequenceSegment segment) {
+        System.out.println("Clicked at: "
+                + wrapper.hvalueProperty().doubleValue());
         shout(Message.FILTERED, segment.getSources());
     }
 

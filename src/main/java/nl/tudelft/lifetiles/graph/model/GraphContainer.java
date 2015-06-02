@@ -37,7 +37,13 @@ public class GraphContainer {
     /**
      * The Current graph that this model is holding in bucket cache form.
      */
-    private final BucketCache segmentBuckets;
+    private BucketCache segmentBuckets;
+
+    private Set<SequenceSegment> visibles;
+
+    private Set<Sequence> visibleSequences;
+
+    private boolean changed = false;
 
     /**
      * The amount of buckets the graph is cached in.
@@ -61,7 +67,7 @@ public class GraphContainer {
         // findMutations(reference);
 
         segmentBuckets = new BucketCache(NUMBER_OF_BUCKETS, this.graph);
-
+        visibles = graph.getAllVertices();
     }
 
     /**
@@ -92,7 +98,7 @@ public class GraphContainer {
         }
         new ReferencePositionTraverser(reference).referenceMapGraph(graph);
         new MutationIndicationTraverser(reference)
-                .indicateGraphMutations(graph);
+        .indicateGraphMutations(graph);
 
     }
 
@@ -106,9 +112,8 @@ public class GraphContainer {
      * @param currentgraph
      *            the complete graph to base the new graph on
      */
-    public final void changeGraph(final Set<Sequence> visibleSequences,
-
-    final Graph<SequenceSegment> curgr) {
+    public final void setVisible(final Set<Sequence> visibleSequences,
+            final Graph<SequenceSegment> curgr) {
         GraphFactory<SequenceSegment> factory = FactoryProducer.getFactory();
 
         // Find out which vertices are visible now
@@ -120,15 +125,22 @@ public class GraphContainer {
             }
         }
 
-        // Create a new subgraph based on visible vertices and update the
-        // sources to only the visibleSequences
+        visibles = vertices;
+        this.visibleSequences = visibleSequences;
 
-        Graph<SequenceSegment> subgr = factory.getSubGraph(curgr, vertices);
-        Graph<SequenceSegment> copy = subgr.deepcopy(factory);
-        for (SequenceSegment vertex : copy.getAllVertices()) {
-            vertex.getSources().retainAll(visibleSequences);
-        }
-        graph = copy;
+        changed = true;
+
+        /*
+         * // Create a new subgraph based on visible vertices and update the
+         * // sources to only the visibleSequences
+         * Graph<SequenceSegment> subgr = factory.getSubGraph(curgr, vertices);
+         * Graph<SequenceSegment> copy = subgr.deepcopy(factory);
+         * for (SequenceSegment vertex : copy.getAllVertices()) {
+         * vertex.getSources().retainAll(visibleSequences);
+         * }
+         * graph = copy;
+         */
+
     }
 
     /**
@@ -139,7 +151,30 @@ public class GraphContainer {
      * @return graph
      */
     public final Set<SequenceSegment> getSegments(final int position) {
-        return segmentBuckets.getSegments(position);
+
+        Set<SequenceSegment> copy = new TreeSet<SequenceSegment>();
+        for (SequenceSegment seg : segmentBuckets.getSegments(position)) {
+            copy.add(seg.clone());
+        }
+        // Keep only the sequencesegments that are visible
+        copy.retainAll(visibles);
+
+        // Set the sources so they only contain the visible sequences
+        if (visibleSequences != null) {
+            for (SequenceSegment vertex : copy) {
+                vertex.getSources().retainAll(visibleSequences);
+            }
+        }
+
+        return copy;
+    }
+
+    public boolean isChanged() {
+        if (changed) {
+            changed = false;
+            return true;
+        }
+        return changed;
     }
 
     /**
