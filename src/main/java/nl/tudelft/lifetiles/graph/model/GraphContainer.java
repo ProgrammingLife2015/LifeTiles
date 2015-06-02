@@ -98,7 +98,7 @@ public class GraphContainer {
         }
         new ReferencePositionTraverser(reference).referenceMapGraph(graph);
         new MutationIndicationTraverser(reference)
-        .indicateGraphMutations(graph);
+                .indicateGraphMutations(graph);
 
     }
 
@@ -112,8 +112,7 @@ public class GraphContainer {
      * @param currentgraph
      *            the complete graph to base the new graph on
      */
-    public final void setVisible(final Set<Sequence> visibleSequences,
-            final Graph<SequenceSegment> curgr) {
+    public final void setVisible(final Set<Sequence> visibleSequences) {
         GraphFactory<SequenceSegment> factory = FactoryProducer.getFactory();
 
         // Find out which vertices are visible now
@@ -129,17 +128,6 @@ public class GraphContainer {
         this.visibleSequences = visibleSequences;
 
         changed = true;
-
-        /*
-         * // Create a new subgraph based on visible vertices and update the
-         * // sources to only the visibleSequences
-         * Graph<SequenceSegment> subgr = factory.getSubGraph(curgr, vertices);
-         * Graph<SequenceSegment> copy = subgr.deepcopy(factory);
-         * for (SequenceSegment vertex : copy.getAllVertices()) {
-         * vertex.getSources().retainAll(visibleSequences);
-         * }
-         * graph = copy;
-         */
 
     }
 
