@@ -1,12 +1,11 @@
 package nl.tudelft.lifetiles.graph.view;
 
-import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
+import nl.tudelft.lifetiles.core.util.ColorUtils;
 
 /**
  * A Vertex is the equivalent of a node from the graph datastructure but this is
@@ -74,14 +73,14 @@ public class VertexView extends Group {
             final double initY, final double width, final double height,
             final Color color) {
         text = new Text(string);
-        text.setTextOrigin(VPos.CENTER);
-        text.setFill(Color.WHITE);
-        text.setFontSmoothingType(FontSmoothingType.LCD);
         text.setFont(Font.font("Oxygen Mono", HORIZONTALSCALE));
+        text.getStyleClass().add("vertexText");
 
         rectangle = new Rectangle(width * HORIZONTALSCALE, height
                 * VERTICALSCALE);
-        rectangle.setFill(color);
+        rectangle.setStyle("-fx-fill:" + ColorUtils.webCode(color));
+        rectangle.getStyleClass().add("vertexText");
+
         clip = new Rectangle(width * HORIZONTALSCALE, height * VERTICALSCALE);
         text.setClip(clip);
 
