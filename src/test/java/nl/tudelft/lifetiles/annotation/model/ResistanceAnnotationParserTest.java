@@ -14,19 +14,18 @@ public class ResistanceAnnotationParserTest {
 
     @Before
     public void setUp() throws Exception {
-        ResistanceAnnotationParser parser = ResistanceAnnotationParser.getResistanceAnnotationParser();
         File annotationFile = new File(this.getClass()
                 .getResource(testAnnotationFilename + ".txt").toURI());
-        
-        annotations = parser
+
+        annotations = ResistanceAnnotationParser
                 .parseAnnotations(annotationFile);
     }
-    
+
     @Test
     public void parseAnnotationsTotalTest() throws Exception {
         assertEquals(10, annotations.size());
     }
-    
+
     @Test
     public void parseAnnotationsSingleTest() throws Exception {
         ResistanceAnnotation annotation = annotations.get(0);
@@ -36,6 +35,6 @@ public class ResistanceAnnotationParserTest {
         assertEquals("pass", annotation.getFilter());
         assertEquals(10, annotation.getGenomePosition());
         assertEquals("A", annotation.getDrugResistance());
-        
+
     }
 }
