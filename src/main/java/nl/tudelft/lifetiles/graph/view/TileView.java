@@ -28,11 +28,11 @@ public class TileView {
     /**
      * The edges contains all EdgeLines to be displayed.
      */
-    private Group edges;
+    private final Group edges;
     /**
      * The nodes contains all Vertices to be displayed.
      */
-    private Map<SequenceSegment, VertexView> nodemap;
+    private final Map<SequenceSegment, VertexView> nodemap;
 
     /**
      * The lanes list which contains the occupation of the lanes inside the
@@ -54,6 +54,9 @@ public class TileView {
      */
     public TileView(final GraphController control) {
         controller = control;
+
+        nodemap = new HashMap<SequenceSegment, VertexView>();
+        edges = new Group();
     }
 
     /**
@@ -69,8 +72,6 @@ public class TileView {
             final Graph<SequenceSegment> graph) {
         Group root = new Group();
 
-        nodemap = new HashMap<SequenceSegment, VertexView>();
-        edges = new Group();
         lanes = new ArrayList<Long>();
 
         for (SequenceSegment segment : segments) {

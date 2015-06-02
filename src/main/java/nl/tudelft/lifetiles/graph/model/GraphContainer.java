@@ -73,7 +73,7 @@ public class GraphContainer {
                 .getSources().iterator().next();
 
         alignGraph();
-        // findMutations(reference);
+        findMutations(reference);
 
         segmentBuckets = new BucketCache(NUMBER_OF_BUCKETS, this.graph);
         visibles = graph.getAllVertices();

@@ -77,18 +77,20 @@ public class GraphController extends AbstractController {
         NotificationFactory notFact = new NotificationFactory();
 
         listen(Message.OPENED, (controller, args) -> {
-            assert (controller instanceof MenuController);
-            assert (args[0] instanceof File && args[1] instanceof File);
+            assert controller instanceof MenuController;
+            assert args[0] instanceof File && args[1] instanceof File;
+
             try {
                 loadGraph((File) args[0], (File) args[1]);
-            } catch (Exception exception) {
+            } catch (IOException exception) {
                 shout(NotificationController.NOTIFY, notFact
                         .getNotification(exception));
             }
+
         });
 
         listen(Message.FILTERED, (controller, args) -> {
-            assert (args.length == 1);
+            assert args.length == 1;
             if (!(args[0] instanceof Set<?>)) {
                 throw new IllegalArgumentException(
                         "Argument not of type Set<Sequence>");
