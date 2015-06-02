@@ -103,9 +103,7 @@ public class ResistanceAnnotation extends AbstractAnnotation {
     }
 
     /**
-     * TODO: Figure out a way to map resistance annotations onto a graph or list
-     * of segments.
-     * Method which maps this annotation to a sequence.
+     * Maps resistance annotations onto a set of segments.
      *
      * @param segments
      *            Segments to map the annotation to.
@@ -119,7 +117,7 @@ public class ResistanceAnnotation extends AbstractAnnotation {
         for (SequenceSegment segment : segments) {
             if (segment.getSources().contains(reference)
                     && segment.getStart() <= getGenomePosition()
-                    && segment.getEnd() >= getGenomePosition()) {
+                    && segment.getEnd() > getGenomePosition()) {
                 return segment;
             }
         }
