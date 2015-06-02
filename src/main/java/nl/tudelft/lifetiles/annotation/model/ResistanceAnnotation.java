@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.annotation.model;
 
 import java.util.List;
+import java.util.Set;
 
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
@@ -115,7 +116,7 @@ public class ResistanceAnnotation extends AbstractAnnotation {
      */
     @Override
     public SequenceSegment mapOntoSequence(
-            final List<SequenceSegment> segments, final Sequence reference) {
+            final Set<SequenceSegment> segments, final Sequence reference) {
         return null;
     }
 
