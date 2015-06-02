@@ -55,7 +55,7 @@ public class ResistanceAnnotationMapperTest {
     @Test
     public void mapSingleNodePositiveGraph() {
         gr.addVertex(v1);
-        Map<SequenceSegment, ResistanceAnnotation> mappedAnnotations = ResistanceAnnotationMapper
+        Map<SequenceSegment, List<ResistanceAnnotation>> mappedAnnotations = ResistanceAnnotationMapper
                 .mapAnnotations(gr, annotations, reference);
         assertEquals(1, mappedAnnotations.size());
         assertEquals(r1, mappedAnnotations.get(v1));
@@ -64,7 +64,7 @@ public class ResistanceAnnotationMapperTest {
     @Test
     public void mapSingleNodeNegativeGraph() {
         gr.addVertex(v3);
-        Map<SequenceSegment, ResistanceAnnotation> mappedAnnotations = ResistanceAnnotationMapper
+        Map<SequenceSegment, List<ResistanceAnnotation>> mappedAnnotations = ResistanceAnnotationMapper
                 .mapAnnotations(gr, annotations, reference);
         assertEquals(0, mappedAnnotations.size());
     }
@@ -73,7 +73,7 @@ public class ResistanceAnnotationMapperTest {
     public void mapMultipleNodeGraph() {
         gr.addVertex(v1);
         gr.addVertex(v2);
-        Map<SequenceSegment, ResistanceAnnotation> mappedAnnotations = ResistanceAnnotationMapper
+        Map<SequenceSegment, List<ResistanceAnnotation>> mappedAnnotations = ResistanceAnnotationMapper
                 .mapAnnotations(gr, annotations, reference);
         assertEquals(2, mappedAnnotations.size());
         assertEquals(r1, mappedAnnotations.get(v1).get(0));
@@ -84,7 +84,7 @@ public class ResistanceAnnotationMapperTest {
     public void mapMultipleAssertionsNodeGraph() {
         gr.addVertex(v1);
         gr.addVertex(v2);
-        Map<SequenceSegment, ResistanceAnnotation> mappedAnnotations = ResistanceAnnotationMapper
+        Map<SequenceSegment, List<ResistanceAnnotation>> mappedAnnotations = ResistanceAnnotationMapper
                 .mapAnnotations(gr, annotations, reference);
         assertEquals(2, mappedAnnotations.size());
         assertEquals(r1, mappedAnnotations.get(v1).get(0));
