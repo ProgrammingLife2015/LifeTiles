@@ -1,0 +1,5 @@
+/* Stylesheet for the EdgeLines */
+
+.edgeline{
+    -fx-stroke: rgba(255,0,0,0.5);
+}
