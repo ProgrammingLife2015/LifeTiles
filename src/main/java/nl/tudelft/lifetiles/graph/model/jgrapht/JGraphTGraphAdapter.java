@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.graph.model.Edge;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
@@ -35,7 +36,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
     /**
      * This is the actual graph.
      */
-    private DirectedGraph<V, DefaultEdge> internalGraph;
+    private final DirectedGraph<V, DefaultEdge> internalGraph;
 
     /**
      * Keep track of all vertices that have no incoming edges.
@@ -76,14 +77,14 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      *            the vertices that must be in the new graph. If set to null,
      *            all vertices will be included.
      *
-     * @param ef
+     * @param edgefc
      *            The edgefactory to use for this graph
      */
     public JGraphTGraphAdapter(final Graph<V> base, final Set<V> vertexSubSet,
-            final JGraphTEdgeFactory<V> ef) {
+            final JGraphTEdgeFactory<V> edgefc) {
         internalGraph = new DirectedSubgraph<V, DefaultEdge>(base
                 .getInternalGraph(), vertexSubSet, null);
-        edgeFact = ef;
+        edgeFact = edgefc;
         sources = new TreeSet<>();
         sinks = new TreeSet<>();
         vertexIdentifiers = new ArrayList<>();
@@ -264,6 +265,9 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
         internalGraph.removeEdge(unpackEdge(edge));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final DirectedGraph<V, DefaultEdge> getInternalGraph() {
         return internalGraph;
@@ -288,6 +292,9 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
         return graph;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final Graph<V> deepcopy(final GraphFactory<V> gfact) {
         Graph<V> copygraph = gfact.getGraph();
@@ -301,16 +308,13 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
                 Object copy = method.invoke(vertex);
                 copygraph.addVertex((V) copy);
                 convertVertices.put(vertex, copy);
+            } catch (NoSuchMethodException | SecurityException
+                    | IllegalAccessException | IllegalArgumentException
+                    | InvocationTargetException exception) {
 
-            } catch (NoSuchMethodException | SecurityException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
+                Logging.exception(exception);
             }
+
         }
 
         for (Edge<V> edge : this.getAllEdges()) {
