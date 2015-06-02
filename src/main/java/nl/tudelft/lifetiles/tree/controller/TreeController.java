@@ -183,6 +183,16 @@ public class TreeController extends AbstractController {
     }
 
     /**
+     * Informs other controllers the filter changed.
+     *
+     * @param visible
+     *            the set that needs to be visible
+     */
+    public void shoutVisible(final Set<Sequence> visible) {
+        shout(Message.FILTERED, visible);
+    }
+
+    /**
      * Creates a new tree that only contains the visible nodes. When a node has
      * only one child, it is removed from the tree and its child is returned
      * instead. When a node has no children, and is not visible, null is
@@ -190,8 +200,7 @@ public class TreeController extends AbstractController {
      *
      * @param node
      *            the root of a tree that we want a subtree of
-     * @return
-     *            the new root of a subtree.
+     * @return the new root of a subtree.
      */
     private PhylogeneticTreeItem subTree(final PhylogeneticTreeItem node) {
         // copy the node
