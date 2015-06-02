@@ -96,7 +96,7 @@ public class GraphController extends AbstractController {
                         "Argument not of type Set<Sequence>");
             }
 
-            model.setVisible((Set<Sequence>) args[0], graph);
+            model.setVisible((Set<Sequence>) args[0]);
             repaint(true);
         });
 
@@ -158,9 +158,6 @@ public class GraphController extends AbstractController {
             Rectangle clip = new Rectangle(getMaxUnifiedEnd(graph)
                     * VertexView.HORIZONTALSCALE, 0);
             root.getChildren().add(clip);
-
-            System.out.println("stap 2: "
-                    + wrapper.hvalueProperty().doubleValue());
 
             repaintPosition(root, wrapper.hvalueProperty().doubleValue());
         }
@@ -237,8 +234,6 @@ public class GraphController extends AbstractController {
     // Removed final for testing, cannot use PowerMockito because of current bug
     // with javafx 8
     public void clicked(final SequenceSegment segment) {
-        System.out.println("Clicked at: "
-                + wrapper.hvalueProperty().doubleValue());
         shout(Message.FILTERED, segment.getSources());
     }
 
