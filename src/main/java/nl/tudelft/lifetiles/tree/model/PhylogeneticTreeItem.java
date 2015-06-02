@@ -74,12 +74,18 @@ public class PhylogeneticTreeItem {
         return result;
     }
 
-    public Set<Sequence> getSequences(){
+    /**
+     * creates a Set containing this nodes sequence, and the sequences of its
+     * children.
+     *
+     * @return a set with all sequences that descend from this node.
+     */
+    public final Set<Sequence> getSequences() {
         Set<Sequence> result = new HashSet<Sequence>();
         if (sequence != null) {
             result.add(sequence);
         }
-        for (PhylogeneticTreeItem child : children){
+        for (PhylogeneticTreeItem child : children) {
             result.addAll(child.getSequences());
         }
         return result;
@@ -254,12 +260,15 @@ public class PhylogeneticTreeItem {
     public final Sequence getSequence() {
         return sequence;
     }
+
     /**
-     * @param seq the sequence to set
+     * @param seq
+     *            the sequence to set
      */
     public final void setSequence(final Sequence seq) {
         this.sequence = seq;
     }
+
     /**
      * Returns a String representation of the PhylogeneticTreeItem. The String
      * will have the following format:
@@ -283,11 +292,17 @@ public class PhylogeneticTreeItem {
         return result;
     }
 
-    public Set<Sequence> getChildSequences() {
+    /**
+     * @return returns the list of child sequences stored in this node
+     */
+    public final Set<Sequence> getChildSequences() {
         return childSequences;
     }
 
-    public void setChildSequences() {
+    /**
+     * Sets this nodes childSequences field to the set returned by getSequences.
+     */
+    public final void setChildSequences() {
         this.childSequences = this.getSequences();
     }
 

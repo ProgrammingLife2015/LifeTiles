@@ -1,7 +1,5 @@
 package nl.tudelft.lifetiles.tree.view;
 
-import java.util.Set;
-
 import javafx.scene.control.Control;
 import javafx.scene.input.MouseButton;
 import nl.tudelft.lifetiles.core.util.Message;
