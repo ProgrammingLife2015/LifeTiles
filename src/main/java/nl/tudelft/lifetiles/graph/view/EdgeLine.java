@@ -26,11 +26,6 @@ public class EdgeLine extends Group {
     private final Line line;
 
     /**
-     * Transparancy of the line.
-     */
-    private static final double TRANSPARANCY = 0.5;
-
-    /**
      * Create a new line from a vertex to another vertex. It tries to create a
      * straight line but if it fails then the line will be drawn from the middle
      * of the vertex to the middle of the other vertex.
@@ -42,7 +37,7 @@ public class EdgeLine extends Group {
      */
     public EdgeLine(final Node source, final Node destination) {
         line = new Line();
-        line.setStroke(Color.web("black", TRANSPARANCY));
+        line.getStyleClass().add("edgeline");
 
         Bounds boundFrom = source.getBoundsInParent();
         Bounds boundTo = destination.getBoundsInParent();
