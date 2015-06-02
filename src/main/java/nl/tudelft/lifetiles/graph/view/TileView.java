@@ -34,7 +34,6 @@ public class TileView {
      */
     private Map<SequenceSegment, VertexView> nodemap;
 
-    private Group root;
     /**
      * The lanes list which contains the occupation of the lanes inside the
      * tileview.
@@ -62,6 +61,8 @@ public class TileView {
      *
      * @param segments
      *            Graph to be drawn
+     * @param graph
+     *            graph to base the edges on
      * @return the elements that must be displayed on the screen
      */
     public final Group drawGraph(final Set<SequenceSegment> segments,
