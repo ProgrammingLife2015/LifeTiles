@@ -34,7 +34,6 @@ public class TileView {
      * The nodes contains all Vertices to be displayed.
      */
     private final Map<SequenceSegment, VertexView> nodemap;
-
     /**
      * The bookmarks group contains all bookmarks and annotations to be
      * displayed.
@@ -76,8 +75,6 @@ public class TileView {
     /**
      * Draw the given graph.
      *
-     * @param segments
-     *            Graph to be drawn
      * @param graph
      *            Graph to base the edges on
      * @param annotations
@@ -195,7 +192,6 @@ public class TileView {
         long height = segment.getSources().size();
 
         Color color = sequenceColor(segment.getMutation());
-
         VertexView vertex = new VertexView(text, start, index, width, height,
                 color);
 

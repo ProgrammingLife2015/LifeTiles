@@ -96,6 +96,12 @@ public class GraphController extends AbstractController {
     public static final Message ANNOTATIONS = Message.create("annotations");
 
     /**
+     * Boolean indicating whether the annotations in the graph have been
+     * changed.
+     */
+    private boolean changed = false;
+
+    /**
      * {@inheritDoc}
      */
     @Override
