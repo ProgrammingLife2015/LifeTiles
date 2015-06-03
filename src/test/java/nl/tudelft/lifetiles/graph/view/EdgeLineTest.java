@@ -82,7 +82,7 @@ public class EdgeLineTest {
     }
 
     @Test
-    public void CrossLineTest() {
+    public void CrossLineBelowTest() {
         Rectangle from = new Rectangle(0, 0, 2, 2);
         Rectangle to = new Rectangle(4, 4, 2, 2);
 
@@ -93,4 +93,33 @@ public class EdgeLineTest {
         assertEquals(line.getLine().getEndY(), (double) (4 + (4 + 2)) / 2,
                 1e-10);
     }
+
+    @Test
+    public void CrossLineAboveTest() {
+        Rectangle from = new Rectangle(4, 4, 2, 2);
+        Rectangle to = new Rectangle(0, 0, 2, 2);
+
+        EdgeLine line = new EdgeLine(from, to);
+
+        assertEquals(line.getLine().getStartY(), (double) (4 + (4 + 2)) / 2,
+                1e-10);
+        assertEquals(line.getLine().getEndY(), (double) (0 + (0 + 2)) / 2,
+                1e-10);
+
+    }
+
+    @Test
+    public void CrossLineHalfBelowTest() {
+        Rectangle from = new Rectangle(0, 0, 2, 2);
+        Rectangle to = new Rectangle(1, 1, 2, 2);
+
+        EdgeLine line = new EdgeLine(from, to);
+
+        assertEquals(line.getLine().getStartY(), (double) (0 + (0 + 2)) / 2,
+                1e-10);
+        assertEquals(line.getLine().getEndY(), (double) (0 + (0 + 2)) / 2,
+                1e-10);
+
+    }
+
 }

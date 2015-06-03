@@ -3,7 +3,6 @@ package nl.tudelft.lifetiles.graph.view;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 
@@ -55,18 +54,18 @@ public class EdgeLine extends Group {
      *
      * @param boundFrom
      *            The Bounds of the start Vertex
-     * @param boundTo
+     * @param boundDest
      *            The Bounds of the end Vertex
      */
-    private void drawCrossLine(final Bounds boundFrom, final Bounds boundTo) {
+    private void drawCrossLine(final Bounds boundFrom, final Bounds boundDest) {
 
         double fromX = boundFrom.getMaxX();
         double fromY = boundFrom.getMinY() + (boundFrom.getHeight() / 2);
 
-        double toX = boundTo.getMinX();
-        double toY = boundTo.getMinY() + (boundTo.getHeight() / 2);
+        double destX = boundDest.getMinX();
+        double destY = boundDest.getMinY() + (boundDest.getHeight() / 2);
 
-        drawLine(fromX, fromY, toX, toY);
+        drawLine(fromX, fromY, destX, destY);
 
     }
 
@@ -75,23 +74,23 @@ public class EdgeLine extends Group {
      *
      * @param boundFrom
      *            The Bounds of the start Vertex
-     * @param boundTo
+     * @param boundDest
      *            The Bounds of the end Vertex
      */
-    private void drawStraightLine(final Bounds boundFrom, final Bounds boundTo) {
+    private void drawStraightLine(final Bounds boundFrom, final Bounds boundDest) {
 
         double startY = 0;
 
         // Decide from which bound the Y value should be taken from
-        if (boundFrom.getMaxY() < boundTo.getMaxY()
-                || boundFrom.getMinY() > boundTo.getMinY()) {
+        if (boundFrom.getMaxY() < boundDest.getMaxY()
+                || boundFrom.getMinY() > boundDest.getMinY()) {
 
             startY = boundFrom.getMinY() + boundFrom.getHeight() / 2;
         } else {
-            startY = boundTo.getMinY() + boundTo.getHeight() / 2;
+            startY = boundDest.getMinY() + boundDest.getHeight() / 2;
         }
 
-        drawLine(boundFrom.getMaxX(), startY, boundTo.getMinX(), startY);
+        drawLine(boundFrom.getMaxX(), startY, boundDest.getMinX(), startY);
 
     }
 
@@ -110,8 +109,11 @@ public class EdgeLine extends Group {
     private void drawLine(final double startX, final double startY,
             final double endX, final double endY) {
 
-        Circle head = new Circle(HEAD_RADIUS, Color.RED);
-        Circle tail = new Circle(HEAD_RADIUS, Color.GREEN);
+        Circle head = new Circle(HEAD_RADIUS);
+        Circle tail = new Circle(HEAD_RADIUS);
+
+        head.getStyleClass().add("edgeHead");
+        tail.getStyleClass().add("edgeTail");
 
         line.setStartX(startX);
         line.setStartY(startY);
@@ -146,21 +148,17 @@ public class EdgeLine extends Group {
      * @return true if source lies indeed lies above or below
      */
     private Boolean outofboundsY(final Bounds source, final Bounds destination) {
-        // Check if top of source is below the destination
-        if (source.getMinY() > destination.getMinY()
-                && source.getMinY() > destination.getMaxY()
-                && source.getMaxY() > destination.getMinY()
-                && source.getMaxY() > destination.getMaxY()) {
+        // Check if source is completely below the destination
+        if (source.getMinY() > destination.getMaxY()
+                && source.getMaxY() > destination.getMinY()) {
             return true;
         }
-        // Check if top of source is above the destination
-        if (source.getMinY() < destination.getMinY()
-                && source.getMinY() < destination.getMaxY()
-                && source.getMaxY() < destination.getMinY()
-                && source.getMaxY() < destination.getMaxY()) {
+        // Check if source is completely above the destination
+        if (source.getMinY() < destination.getMaxY()
+                && source.getMaxY() < destination.getMinY()) {
             return true;
         }
+
         return false;
     }
-
 }
