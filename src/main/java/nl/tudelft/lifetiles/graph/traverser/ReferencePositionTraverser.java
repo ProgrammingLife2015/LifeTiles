@@ -2,7 +2,7 @@ package nl.tudelft.lifetiles.graph.traverser;
 
 import java.util.Iterator;
 
-import nl.tudelft.lifetiles.core.util.IterUtils;
+import nl.tudelft.lifetiles.core.util.IteratorUtils;
 import nl.tudelft.lifetiles.core.util.Timer;
 import nl.tudelft.lifetiles.graph.model.BreadthFirstIterator;
 import nl.tudelft.lifetiles.graph.model.Edge;
@@ -67,7 +67,7 @@ public class ReferencePositionTraverser {
 
         Iterator<SequenceSegment> iterator = new BreadthFirstIterator<>(graph);
 
-        for (SequenceSegment vertex : IterUtils.toIterable(iterator)) {
+        for (SequenceSegment vertex : IteratorUtils.toIterable(iterator)) {
             long position = vertex.getReferenceStart();
             if (vertex.getSources().contains(reference)
                     && !vertex.getContent().isEmpty()) {
@@ -100,7 +100,7 @@ public class ReferencePositionTraverser {
 
         Iterator<SequenceSegment> iterator = new BreadthFirstIterator<>(graph,
                 true);
-        for (SequenceSegment vertex : IterUtils.toIterable(iterator)) {
+        for (SequenceSegment vertex : IteratorUtils.toIterable(iterator)) {
             long position = vertex.getReferenceEnd();
 
             if (vertex.getSources().contains(reference)
