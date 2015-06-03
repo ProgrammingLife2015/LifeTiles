@@ -21,12 +21,16 @@ import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
  */
 
 public class SunburstRingSegment extends AbstractSunburstNode {
+    /**
+     * the default color for this segment.
+     */
+    private static final Color DEFAULT_COLOR = Color.RED;
 
     /**
      * Creates a SunburstRingSegment.
      *
      *
-     * @param vertex
+     * @param value
      *            the {@link PhylogeneticTreeItem} this part of the ring will
      *            represent
      * @param layer
@@ -41,11 +45,11 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      * @param centerY
      *            the Y coordinate of the center of the circle
      */
-    public SunburstRingSegment(final PhylogeneticTreeItem vertex, final int layer,
+    public SunburstRingSegment(final PhylogeneticTreeItem value, final int layer,
             final double degreeStart, final double degreeEnd,
             final double centerX, final double centerY) {
         // set the value, and create the text and semi-circle
-        setValue(vertex);
+        setValue(value);
         setName(new Text(getValue().getName()));
         setDisplay(createRing(layer, degreeStart, degreeEnd, centerX, centerY));
 
@@ -205,7 +209,7 @@ public class SunburstRingSegment extends AbstractSunburstNode {
     private Color createColor() {
         Sequence sequence = getValue().getSequence();
         if (sequence == null) {
-            return Color.RED;
+            return DEFAULT_COLOR;
         } else {
             return SequenceColor.getColor(sequence);
         }
