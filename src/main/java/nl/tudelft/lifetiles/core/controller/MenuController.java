@@ -17,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.MouseButton;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import nl.tudelft.lifetiles.core.util.FileUtils;
 import nl.tudelft.lifetiles.core.util.Message;
@@ -122,6 +123,44 @@ public class MenuController extends AbstractController {
 
         shout(Message.OPENED, dataFiles.get(0), dataFiles.get(1),
                 dataFiles.get(2));
+    }
+
+    /**
+     * Handle action to "Insert Annotations" menu item.
+     * 
+     * @param event
+     *            Event on "Insert Annotations" item.
+     */
+    @FXML
+    private void insertAnnotationsAction(final ActionEvent event) {
+        try {
+            loadAnnotationsFile();
+        } catch (IOException e) {
+            AbstractNotification notification = nf.getNotification(e);
+            shout(NotificationController.NOTIFY, notification);
+        }
+    }
+
+    /**
+     * Perform functionality associated with opening and inserting a annotation
+     * file.
+     * 
+     * @throws IOException
+     *             throws <code>IOException</code> if any of the files were not
+     *             found
+     */
+    private void loadAnnotationsFile() throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open file containing annotations");
+        Window window = menuBar.getScene().getWindow();
+        File file = fileChooser.showOpenDialog(window);
+
+        // user aborted
+        if (file == null) {
+            return;
+        }
+
+        shout(Message.ANNOTATIONS, file);
     }
 
     /**
