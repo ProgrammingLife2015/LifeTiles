@@ -16,6 +16,11 @@ import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 public class SunburstCenter extends AbstractSunburstNode {
 
     /**
+     * the default color for this segment.
+     */
+    private static final Color DEFAULT_COLOR = Color.BLUE;
+
+    /**
      * Generates an empty SunburstCenter.
      */
     public SunburstCenter() {
@@ -45,7 +50,7 @@ public class SunburstCenter extends AbstractSunburstNode {
     private Color createColor() {
         Sequence sequence = getValue().getSequence();
         if (sequence == null) {
-            return Color.BLUE;
+            return DEFAULT_COLOR;
         } else {
             return SequenceColor.getColor(sequence);
         }
