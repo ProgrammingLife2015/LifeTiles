@@ -68,7 +68,6 @@ public class BucketCache {
      */
     private void cacheGraph() {
         Timer timer = Timer.getAndStart();
-
         buckets = new ArrayList<SortedSet<SequenceSegment>>();
         for (int index = 0; index < numberBuckets; index++) {
             buckets.add(index, new TreeSet<SequenceSegment>());
