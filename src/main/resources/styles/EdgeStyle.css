@@ -3,3 +3,11 @@
 .edgeline{
     -fx-stroke: rgba(255,0,0,0.5);
 }
+
+.edgeHead{
+    -fx-fill: rgb(255,0,0);
+}
+
+.edgeTail{
+    -fx-fill: rgb(0,255,0);
+}

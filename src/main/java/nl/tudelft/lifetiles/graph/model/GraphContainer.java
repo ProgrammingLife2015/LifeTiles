@@ -1,6 +1,5 @@
 package nl.tudelft.lifetiles.graph.model;
 
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -50,11 +49,6 @@ public class GraphContainer {
     private Set<Sequence> visibleSequences;
 
     /**
-     * Boolean indicating if the graph in this container is recently changed.
-     */
-    private boolean changed;
-
-    /**
      * The amount of buckets the graph is cached in.
      */
     private static final int NUMBER_OF_BUCKETS = 1000;
@@ -78,7 +72,6 @@ public class GraphContainer {
         segmentBuckets = new BucketCache(NUMBER_OF_BUCKETS, this.graph);
         visibles = graph.getAllVertices();
 
-        changed = false;
     }
 
     /**
@@ -109,7 +102,7 @@ public class GraphContainer {
         }
         new ReferencePositionTraverser(reference).referenceMapGraph(graph);
         new MutationIndicationTraverser(reference)
-                .indicateGraphMutations(graph);
+        .indicateGraphMutations(graph);
 
     }
 
@@ -124,27 +117,24 @@ public class GraphContainer {
         // Find out which vertices are visible now
         Set<SequenceSegment> vertices = new TreeSet<SequenceSegment>();
         for (Sequence seq : visibleSequences) {
-            Iterator<SequenceSegment> itSegments = seq.getSegments().iterator();
-            while (itSegments.hasNext()) {
-                vertices.add(itSegments.next());
+            for (SequenceSegment segment : seq.getSegments()) {
+                vertices.add(segment);
             }
         }
 
         visibles = vertices;
         this.visibleSequences = visibleSequences;
 
-        changed = true;
-
     }
 
     /**
-     * Get the graph that this model is holding.
+     * Get the visible segments that this model is holding.
      *
      * @param position
      *            bucket position in the scrollPane.
      * @return graph
      */
-    public final Set<SequenceSegment> getSegments(final int position) {
+    public final Set<SequenceSegment> getVisibleSegments(final int position) {
 
         Set<SequenceSegment> copy = new TreeSet<SequenceSegment>();
         for (SequenceSegment seg : segmentBuckets.getSegments(position)) {
@@ -161,19 +151,6 @@ public class GraphContainer {
         }
 
         return copy;
-    }
-
-    /**
-     * Get if the graph in this container is recently changed.
-     *
-     * @return true if recently changed, else false
-     */
-    public final boolean isChanged() {
-        if (changed) {
-            changed = false;
-            return true;
-        }
-        return changed;
     }
 
     /**

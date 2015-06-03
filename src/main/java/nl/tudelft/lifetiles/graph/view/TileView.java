@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -122,12 +123,14 @@ public class TileView {
         for (int index = 0; index < lanes.size(); index++) {
             if (lanes.get(index) <= segment.getUnifiedStart()
                     && segmentFree(index, segment)) {
-                drawVertex(segment, start, index, width, height, color);
+                Point2D startCoordinate = new Point2D(start, index);
+                drawVertex(segment, startCoordinate, width, height, color);
                 segmentInsert(index, segment);
                 return;
             }
         }
-        drawVertex(segment, start, lanes.size(), width, height, color);
+        Point2D startCoordinate = new Point2D(start, lanes.size());
+        drawVertex(segment, startCoordinate, width, height, color);
         segmentInsert(lanes.size(), segment);
     }
 
@@ -151,10 +154,8 @@ public class TileView {
      *
      * @param segment
      *            the segment to draw an object for
-     * @param xcoord
-     *            top left x coordinate
-     * @param ycoord
-     *            top left y coordinate
+     * @param startCoordinate
+     *            top left coordinate to start from
      * @param width
      *            the width of the vertex
      * @param height
@@ -163,12 +164,13 @@ public class TileView {
      *            the colour of the vertex
      */
 
-    private void drawVertex(final SequenceSegment segment, final double xcoord,
-            final double ycoord, final double width, final double height,
-            final Color color) {
+    private void drawVertex(final SequenceSegment segment,
+            final Point2D startCoordinate, final double width,
+            final double height, final Color color) {
 
         VertexView vertex = new VertexView(segment.getContent().toString(),
-                xcoord, ycoord, width, height, color);
+                startCoordinate.getX(), startCoordinate.getY(), width, height,
+                color);
 
         nodemap.put(segment, vertex);
         vertex.setOnMouseClicked(event -> controller.clicked(segment));
