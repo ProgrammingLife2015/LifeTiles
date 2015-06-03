@@ -8,6 +8,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.shape.Rectangle;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.controller.MenuController;
 import nl.tudelft.lifetiles.core.util.Message;
@@ -18,6 +19,7 @@ import nl.tudelft.lifetiles.graph.model.GraphContainer;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
 import nl.tudelft.lifetiles.graph.model.GraphParser;
 import nl.tudelft.lifetiles.graph.view.TileView;
+import nl.tudelft.lifetiles.graph.view.VertexView;
 import nl.tudelft.lifetiles.notification.controller.NotificationController;
 import nl.tudelft.lifetiles.notification.model.NotificationFactory;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
@@ -40,6 +42,17 @@ public class GraphController extends AbstractController {
      * The currently loaded graph.
      */
     private Graph<SequenceSegment> graph;
+
+    /**
+     * Graph node used to draw the update graph based on bucket cache technique.
+     */
+    private Group graphNode;
+
+    /**
+     * currentPosition of the view in the scrollPane, should only redraw if
+     * position has changed.
+     */
+    private int currentPosition = -1;
 
     /**
      * {@inheritDoc}
@@ -104,9 +117,61 @@ public class GraphController extends AbstractController {
             TileView view = new TileView();
             TileController tileController = new TileController(view, model);
 
-            Group root = tileController.drawGraph();
-            wrapper.setContent(root);
+            Group root = new Group();
+
+            repaintPosition(tileController, root, wrapper.hvalueProperty()
+                    .doubleValue());
+            wrapper.hvalueProperty().addListener(
+                    (observable, oldValue, newValue) -> {
+                        repaintPosition(tileController, root,
+                                newValue.doubleValue());
+                    });
+
+            Rectangle clip = new Rectangle(getMaxUnifiedEnd(graph)
+                    * VertexView.HORIZONTALSCALE, 0);
+            root.getChildren().add(clip);
+
+            repaintPosition(tileController, root, wrapper.hvalueProperty()
+                    .doubleValue());
         }
     }
 
+    /**
+     * Repaints the view indicated by the bucket in the given position.
+     *
+     * @param tileController
+     *            TileController used to draw the graph.
+     * @param root
+     *            Root group used to store the visualized graph in.
+     * @param position
+     *            Position in the scrollPane.
+     */
+    private void repaintPosition(final TileController tileController,
+            final Group root, final double position) {
+        int nextPosition = tileController.getBucketPosition(position);
+        if (currentPosition != nextPosition) {
+            graphNode = new Group();
+            graphNode.getChildren().add(tileController.drawGraph(nextPosition));
+            root.getChildren().add(graphNode);
+            wrapper.setContent(root);
+            currentPosition = nextPosition;
+        }
+    }
+
+    /**
+     * Get the maximal unified end position based on the sinks of the graph.
+     *
+     * @param graph
+     *            Graph for which the width must be calculated.
+     * @return the maximal unified end position.
+     */
+    private long getMaxUnifiedEnd(final Graph<SequenceSegment> graph) {
+        long max = 0;
+        for (SequenceSegment vertex : graph.getSinks()) {
+            if (max < vertex.getUnifiedEnd()) {
+                max = vertex.getUnifiedEnd();
+            }
+        }
+        return max;
+    }
 }
