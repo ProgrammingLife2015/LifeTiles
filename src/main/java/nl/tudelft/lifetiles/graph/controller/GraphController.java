@@ -3,6 +3,10 @@ package nl.tudelft.lifetiles.graph.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -10,6 +14,9 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.shape.Rectangle;
+import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
+import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationMapper;
+import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationParser;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.controller.MenuController;
 import nl.tudelft.lifetiles.core.util.Message;
@@ -73,6 +80,11 @@ public class GraphController extends AbstractController {
     private boolean forceRepaintPosition;
 
     /**
+     * The currently inserted annotations.
+     */
+    private Map<SequenceSegment, List<ResistanceAnnotation>> annotations;
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -82,18 +94,19 @@ public class GraphController extends AbstractController {
         NotificationFactory notFact = new NotificationFactory();
         forceRepaintPosition = false;
 
-        listen(Message.OPENED, (controller, args) -> {
-            assert controller instanceof MenuController;
-            assert args[0] instanceof File && args[1] instanceof File;
+        listen(Message.OPENED,
+                (controller, args) -> {
+                    assert controller instanceof MenuController;
+                    assert args[0] instanceof File && args[1] instanceof File;
 
-            try {
-                loadGraph((File) args[0], (File) args[1]);
-            } catch (IOException exception) {
-                shout(NotificationController.NOTIFY, notFact
-                        .getNotification(exception));
-            }
+                    try {
+                        loadGraph((File) args[0], (File) args[1]);
+                    } catch (IOException exception) {
+                        shout(NotificationController.NOTIFY,
+                                notFact.getNotification(exception));
+                    }
 
-        });
+                });
 
         listen(Message.FILTERED, (controller, args) -> {
             assert args.length == 1;
@@ -104,6 +117,22 @@ public class GraphController extends AbstractController {
             repaint();
         });
 
+        listen(Message.ANNOTATIONS,
+                (controller, args) -> {
+                    assert controller instanceof MenuController;
+                    assert args[0] instanceof File;
+
+                    if (graph != null) {
+                        try {
+                            insertAnnotations((File) args[0]);
+                        } catch (Exception exception) {
+                            shout(NotificationController.NOTIFY,
+                                    notFact.getNotification(exception));
+                        }
+                    } else {
+                        throw new IllegalStateException("Graph not loaded.");
+                    }
+                });
     }
 
     /**
@@ -134,10 +163,31 @@ public class GraphController extends AbstractController {
         GraphFactory<SequenceSegment> factory = FactoryProducer.getFactory();
         GraphParser parser = new DefaultGraphParser();
         graph = parser.parseGraph(vertexfile, edgefile, factory);
+        annotations = new HashMap<>();
 
         shout(Message.LOADED, graph, parser.getSequences());
         repaint();
 
+    }
+
+    /**
+     * Inserts a list of annotations onto the graph from the specified file.
+     * 
+     * @param file
+     *            The file to get annotations from.
+     * @throws IOException
+     *             When an IO error occurs while reading one of the files.
+     */
+    private void insertAnnotations(File file) throws IOException {
+        long startTime = Calendar.getInstance().getTimeInMillis();
+        Sequence reference = this.graph.getSources().iterator().next()
+                .getSources().iterator().next();
+        annotations = ResistanceAnnotationMapper.mapAnnotations(graph,
+                ResistanceAnnotationParser.parseAnnotations(file), reference);
+
+        System.out.println("Inserting annotations. Took "
+                + (Calendar.getInstance().getTimeInMillis() - startTime)
+                + " ms.");
     }
 
     /**
