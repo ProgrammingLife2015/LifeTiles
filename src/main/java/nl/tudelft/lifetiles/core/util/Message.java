@@ -21,7 +21,6 @@ public final class Message {
      * A shout message indicating data has been loaded.
      */
     public static final Message LOADED = create("loaded");
-    
     /**
      * A shout message indicating annotations have been inserted.
      */
