@@ -3,6 +3,7 @@ package nl.tudelft.lifetiles.graph.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +89,7 @@ public class GraphController extends AbstractController {
      * The currently inserted annotations.
      */
     private Map<SequenceSegment, List<ResistanceAnnotation>> annotations;
-    
+
     /**
      * A shout message indicating annotations have been inserted.
      */
@@ -199,8 +200,7 @@ public class GraphController extends AbstractController {
 
         timer.stopAndLog("Inserting annotations");
         forceRepaintPosition = true;
-        repaintPosition(root, wrapper.hvalueProperty()
-                .doubleValue());
+        repaintPosition(root, wrapper.hvalueProperty().doubleValue());
     }
 
     /**
@@ -287,7 +287,8 @@ public class GraphController extends AbstractController {
      * @return Group object to be drawn on the screen
      */
     public final Group drawGraph(final int position) {
-        return view.drawGraph(model.getVisibleSegments(position), graph, annotations);
+        return view.drawGraph(model.getVisibleSegments(position), graph,
+                annotations);
     }
 
     /**
