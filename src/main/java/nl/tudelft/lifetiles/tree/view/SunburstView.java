@@ -2,6 +2,7 @@ package nl.tudelft.lifetiles.tree.view;
 
 import javafx.scene.control.Control;
 import javafx.scene.input.MouseButton;
+import nl.tudelft.lifetiles.tree.controller.TreeController;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
 /**
@@ -30,6 +31,10 @@ public class SunburstView extends Control {
      * the center Y coordinate of the view.
      */
     private final double centerY;
+    /**
+     * the {@link TreeController} controlling this SunburstView.
+     */
+    private TreeController controller;
 
     /**
      * Creates a new SunburstView.
@@ -82,6 +87,14 @@ public class SunburstView extends Control {
     }
 
     /**
+     * @param controller
+     *            the {@link TreeController} controlling this tree
+     */
+    public final void setController(final TreeController controller) {
+        this.controller = controller;
+    }
+
+    /**
      * updates the view by redrawing all elements.
      */
     private void update() {
@@ -93,7 +106,8 @@ public class SunburstView extends Control {
         center.setOnMouseClicked((mouseEvent) -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 selectNode(currentItem.getParent());
-            }
+                controller.shoutVisible(currentItem.getChildSequences());
+           }
         });
         getChildren().add(center);
 
@@ -132,6 +146,7 @@ public class SunburstView extends Control {
         ringUnit.setOnMouseClicked((mouseEvent) -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 selectNode(node);
+                controller.shoutVisible(currentItem.getChildSequences());
             }
         });
         getChildren().add(ringUnit);

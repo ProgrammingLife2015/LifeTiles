@@ -97,6 +97,8 @@ public class SequenceController extends AbstractController {
         if (shout) {
             shout(Message.FILTERED, visible);
         }
+        visibleSequences = visible;
+        repaint();
     }
 
     /**
