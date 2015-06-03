@@ -113,7 +113,7 @@ public class BreadthFirstIterator<V> implements Iterator<V> {
             outgoingVertices = graph.getOutgoing(vertex);
         }
 
-        if (waitForIt(vertex)) {
+        if (waitForVertex(vertex)) {
             return next();
         }
 
@@ -134,10 +134,10 @@ public class BreadthFirstIterator<V> implements Iterator<V> {
      * Check if the iterator has to wait for a vertex.
      *
      * @param vertex
-     *            the vertex, aka "it"
+     *            the vertex to wait for
      * @return whether to wait
      */
-    private boolean waitForIt(final V vertex) {
+    private boolean waitForVertex(final V vertex) {
         int inLinks;
         if (reverse) {
             inLinks = graph.getOutgoing(vertex).size();
