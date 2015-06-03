@@ -1,8 +1,12 @@
 package nl.tudelft.lifetiles.tree.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import nl.tudelft.lifetiles.sequence.model.Sequence;
 
 /**
  * A tree to store the relation between samples.
@@ -39,6 +43,15 @@ public class PhylogeneticTreeItem {
     private PhylogeneticTreeItem parent;
 
     /**
+     * The sequence this node is associated with.
+     */
+    private Sequence sequence;
+    /**
+     * The sequences this nodes descendants are associated with.
+     */
+    private Set<Sequence> childSequences;
+
+    /**
      * Creates a new PhylogeneticTreeItem. Will initialize the ArrayList storing
      * the children and assign a new and unique id to the node.
      */
@@ -58,6 +71,23 @@ public class PhylogeneticTreeItem {
             result += child.numberDescendants() + 1;
         }
 
+        return result;
+    }
+
+    /**
+     * creates a Set containing this nodes sequence, and the sequences of its
+     * children.
+     *
+     * @return a set with all sequences that descend from this node.
+     */
+    public final Set<Sequence> getSequences() {
+        Set<Sequence> result = new HashSet<Sequence>();
+        if (sequence != null) {
+            result.add(sequence);
+        }
+        for (PhylogeneticTreeItem child : children) {
+            result.addAll(child.getSequences());
+        }
         return result;
     }
 
@@ -225,6 +255,21 @@ public class PhylogeneticTreeItem {
     }
 
     /**
+     * @return the sequence
+     */
+    public final Sequence getSequence() {
+        return sequence;
+    }
+
+    /**
+     * @param seq
+     *            the sequence to set
+     */
+    public final void setSequence(final Sequence seq) {
+        this.sequence = seq;
+    }
+
+    /**
      * Returns a String representation of the PhylogeneticTreeItem. The String
      * will have the following format:
      * <code>&lt;Node: id, name: name, Distance:distance, parent: parentID&gt;
@@ -245,6 +290,20 @@ public class PhylogeneticTreeItem {
                 + distance + suffix + ">";
 
         return result;
+    }
+
+    /**
+     * @return returns the list of child sequences stored in this node
+     */
+    public final Set<Sequence> getChildSequences() {
+        return childSequences;
+    }
+
+    /**
+     * Sets this nodes childSequences field to the set returned by getSequences.
+     */
+    public final void setChildSequences() {
+        this.childSequences = this.getSequences();
     }
 
 }
