@@ -13,7 +13,7 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
  * @author Jos
  *
  */
-public class ResistanceAnnotation extends AbstractAnnotation {
+public class ResistanceAnnotation extends AbstractPointAnnotation {
 
     /**
      * Name of the gene.
