@@ -127,7 +127,7 @@ public class MenuController extends AbstractController {
 
     /**
      * Handle action to "Insert Annotations" menu item.
-     * 
+     *
      * @param event
      *            Event on "Insert Annotations" item.
      */
@@ -144,7 +144,7 @@ public class MenuController extends AbstractController {
     /**
      * Perform functionality associated with opening and inserting a annotation
      * file.
-     * 
+     *
      * @throws IOException
      *             throws <code>IOException</code> if any of the files were not
      *             found
