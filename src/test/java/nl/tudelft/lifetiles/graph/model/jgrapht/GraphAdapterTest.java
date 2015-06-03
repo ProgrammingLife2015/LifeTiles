@@ -163,20 +163,20 @@ public class GraphAdapterTest {
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
 
-        Graph<SequenceSegment> copy = gr.copy(gf);
+        Graph<SequenceSegment> copy = gf.copy(gr);
         assertEquals(2, copy.getAllVertices().size());
         assertEquals(1, copy.getAllEdges().size());
     }
 
     @Test
-    public void testSubGraphCreation() {
+    public void testSubGraphCreation() throws NotAJGraphTAdapterException {
         subgr = gf.getSubGraph(gr, null);
         assertEquals(subgr.getAllVertices().size(), gr.getAllVertices().size());
         assertEquals(subgr.getAllEdges().size(), gr.getAllEdges().size());
     }
 
     @Test
-    public void testSubGraphVertices() {
+    public void testSubGraphVertices() throws NotAJGraphTAdapterException {
         gr.addVertex(v1);
         gr.addVertex(v2);
         subgr = gf.getSubGraph(gr, null);
@@ -184,7 +184,7 @@ public class GraphAdapterTest {
     }
 
     @Test
-    public void testSubGraphEdges() {
+    public void testSubGraphEdges() throws NotAJGraphTAdapterException {
         gr.addVertex(v1);
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
@@ -193,7 +193,7 @@ public class GraphAdapterTest {
     }
 
     @Test
-    public void testSubGraphSubsetVertices() {
+    public void testSubGraphSubsetVertices() throws NotAJGraphTAdapterException {
         gr.addVertex(v1);
         gr.addVertex(v2);
         gr.addVertex(v3);
@@ -211,7 +211,8 @@ public class GraphAdapterTest {
     }
 
     @Test
-    public void testSubGraphSubsetVerticesEdges() {
+    public void testSubGraphSubsetVerticesEdges()
+            throws NotAJGraphTAdapterException {
         gr.addVertex(v1);
         gr.addVertex(v2);
         gr.addVertex(v3);
@@ -228,7 +229,38 @@ public class GraphAdapterTest {
     }
 
     @Test
-    public void testDeepCopyVertices() {
+    public void testAddVerticeSubGraph() throws NotAJGraphTAdapterException {
+        gr.addVertex(v1);
+        gr.addVertex(v2);
+        gr.addVertex(v3);
+
+        Set<SequenceSegment> cpy = new TreeSet<SequenceSegment>();
+        cpy.addAll(gr.getAllVertices());
+        cpy.remove(v3);
+
+        subgr = gf.getSubGraph(gr, cpy);
+        subgr.addVertex(v3);
+    }
+
+    @Test
+    public void testAddEdgeSubGraph() throws NotAJGraphTAdapterException {
+        gr.addVertex(v1);
+        gr.addVertex(v2);
+        gr.addVertex(v3);
+        gr.addEdge(v1, v3);
+        gr.addEdge(v2, v3);
+
+        Set<SequenceSegment> cpy = new TreeSet<SequenceSegment>();
+        cpy.addAll(gr.getAllVertices());
+        cpy.remove(v3);
+
+        subgr = gf.getSubGraph(gr, cpy);
+        subgr.addVertex(v3);
+        subgr.addEdge(v2, v3);
+    }
+
+    @Test
+    public void testDeepCopyVertices() throws NotAJGraphTAdapterException {
         gr.addVertex(v1);
         gr.addVertex(v2);
         gr.addVertex(v3);
@@ -237,13 +269,13 @@ public class GraphAdapterTest {
         cpy.addAll(gr.getAllVertices());
 
         subgr = gf.getSubGraph(gr, cpy);
-        subgr = subgr.deepcopy(gf);
+        subgr = gf.deepcopy(subgr);
 
         assertTrue(gr.getAllVertices().containsAll(subgr.getAllVertices()));
     }
 
     @Test
-    public void testDeepCopyEdges() {
+    public void testDeepCopyEdges() throws NotAJGraphTAdapterException {
         gr.addVertex(v1);
         gr.addVertex(v2);
         gr.addVertex(v3);
@@ -253,7 +285,7 @@ public class GraphAdapterTest {
         Set<SequenceSegment> cpy = new TreeSet<SequenceSegment>();
         cpy.addAll(gr.getAllVertices());
         subgr = gf.getSubGraph(gr, cpy);
-        subgr = subgr.deepcopy(gf);
+        subgr = gf.deepcopy(subgr);
 
         assertTrue(gr.getAllEdges().containsAll(subgr.getAllEdges()));
 

@@ -1,24 +1,17 @@
 package nl.tudelft.lifetiles.graph.model.jgrapht;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.graph.model.Edge;
 import nl.tudelft.lifetiles.graph.model.Graph;
-import nl.tudelft.lifetiles.graph.model.GraphFactory;
 
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.DirectedSubgraph;
 import org.jgrapht.graph.SimpleDirectedGraph;
 
 /**
@@ -41,11 +34,11 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
     /**
      * Keep track of all vertices that have no incoming edges.
      */
-    private final SortedSet<V> sources;
+    private SortedSet<V> sources;
     /**
      * Keep track of all vertices that have no outgoing edges.
      */
-    private final SortedSet<V> sinks;
+    private SortedSet<V> sinks;
     /**
      * List of vertices. Used to be able to identify nodes by ids.
      */
@@ -67,27 +60,19 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
     }
 
     /**
-     * Create a new graph based on the base graph. It will take the vertexset
-     * and create a graph only containing those vertices and the corresponding
-     * edges.
+     * Create a new Subgraph, based on the JGraphT library.
      *
-     * @param base
-     *            the graph to base a new graph on
-     * @param vertexSubSet
-     *            the vertices that must be in the new graph. If set to null,
-     *            all vertices will be included.
-     *
-     * @param edgefc
-     *            The edgefactory to use for this graph
+     * @param jgraptGraph
+     *            original JGraphT grah
+     * @param edgeFact
+     *            The edgefactory to use for this graph.
      */
-    public JGraphTGraphAdapter(final Graph<V> base, final Set<V> vertexSubSet,
-            final JGraphTEdgeFactory<V> edgefc) {
-        internalGraph = new DirectedSubgraph<V, DefaultEdge>(base
-                .getInternalGraph(), vertexSubSet, null);
-        edgeFact = edgefc;
-        sources = new TreeSet<>();
-        sinks = new TreeSet<>();
-        vertexIdentifiers = new ArrayList<>();
+    protected JGraphTGraphAdapter(
+            final DirectedGraph<V, DefaultEdge> jgraptGraph,
+            final JGraphTEdgeFactory<V> edgeFact, final List vertexIds) {
+        internalGraph = jgraptGraph;
+        this.edgeFact = edgeFact;
+        vertexIdentifiers = vertexIds;
     }
 
     /**
@@ -134,7 +119,13 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
     public final void addVertex(final V vertex) {
         internalGraph.addVertex(vertex);
         vertexIdentifiers.add(vertex);
+        if (sources == null) {
+            getSources();
+        }
         sources.add(vertex);
+        if (sinks == null) {
+            getSinks();
+        }
         sinks.add(vertex);
     }
 
@@ -204,7 +195,19 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      */
     @Override
     public final SortedSet<V> getSources() {
+        if (sources == null) {
+            SortedSet<V> foundSources = new TreeSet<V>();
+
+            for (V vertice : getAllVertices()) {
+                if (!getIncoming(vertice).isEmpty()) {
+                    foundSources.add(vertice);
+                }
+            }
+
+            sources = foundSources;
+        }
         return sources;
+
     }
 
     /**
@@ -238,7 +241,19 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      */
     @Override
     public final SortedSet<V> getSinks() {
+        if (sinks == null) {
+            SortedSet<V> foundSinks = new TreeSet<V>();
+
+            for (V vertice : getAllVertices()) {
+                if (!getOutgoing(vertice).isEmpty()) {
+                    foundSinks.add(vertice);
+                }
+            }
+
+            sinks = foundSinks;
+        }
         return sinks;
+
     }
 
     /**
@@ -266,65 +281,19 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
     }
 
     /**
-     * {@inheritDoc}
+     *
+     * @return get the JGraphT graph
      */
-    @Override
-    public final DirectedGraph<V, DefaultEdge> getInternalGraph() {
+    protected final DirectedGraph<V, DefaultEdge> getInternalGraph() {
         return internalGraph;
     }
 
     /**
-     * Returns a copy of the graph including edges and vertices.
      *
-     * @param gfact
-     *            Factory which is used to copy the graph.
-     * @return copy of the Graph.
+     * @return the vertexIdentifiers
      */
-    @Override
-    public final Graph<V> copy(final GraphFactory<V> gfact) {
-        Graph<V> graph = gfact.getGraph();
-        for (V vertex : getAllVertices()) {
-            graph.addVertex(vertex);
-        }
-        for (Edge<V> edge : getAllEdges()) {
-            graph.addEdge(getSource(edge), getDestination(edge));
-        }
-        return graph;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public final Graph<V> deepcopy(final GraphFactory<V> gfact) {
-        Graph<V> copygraph = gfact.getGraph();
-
-        Map<Object, Object> convertVertices = new HashMap<Object, Object>();
-
-        for (V vertex : this.getAllVertices()) {
-            try {
-                Method method;
-                method = vertex.getClass().getMethod("clone");
-                Object copy = method.invoke(vertex);
-                copygraph.addVertex((V) copy);
-                convertVertices.put(vertex, copy);
-            } catch (NoSuchMethodException | SecurityException
-                    | IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException exception) {
-
-                Logging.exception(exception);
-            }
-
-        }
-
-        for (Edge<V> edge : this.getAllEdges()) {
-            Object from = convertVertices.get(this.getSource(edge));
-            Object destination = convertVertices.get(this.getDestination(edge));
-
-            copygraph.addEdge((V) from, (V) destination);
-        }
-
-        return copygraph;
+    protected final List<V> getVertexIdentifiers() {
+        return vertexIdentifiers;
     }
 
     /**
