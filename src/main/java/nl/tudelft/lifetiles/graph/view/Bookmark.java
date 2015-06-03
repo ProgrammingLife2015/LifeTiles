@@ -4,6 +4,7 @@ import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.control.Tooltip;
 
 /**
  * A bookmark is the equivalent of a annotation mapped onto the graph.
@@ -12,6 +13,16 @@ import javafx.scene.shape.Rectangle;
  *
  */
 public class Bookmark extends Group {
+
+    /**
+     * The standard opacity of the bookmark overlay.
+     */
+    private static final double OPACITY = 0.5;
+
+    /**
+     * The standard color of the bookmark overlay.
+     */
+    private static final Color STANDARD_COLOR = Color.YELLOW;
 
     /**
      * Constructs a bookmark from a vertex, a annotation and a segment position.
@@ -31,10 +42,11 @@ public class Bookmark extends Group {
 
         Rectangle rectangle = new Rectangle(vertex.HORIZONTALSCALE,
                 vertex.getHeight());
-        rectangle.setOpacity(0.5);
-        rectangle.setFill(Color.YELLOW);
+        rectangle.setOpacity(OPACITY);
+        rectangle.setFill(STANDARD_COLOR);
 
+        Tooltip tooltip = new Tooltip(annotation.toString());
+        Tooltip.install(rectangle, tooltip);
         getChildren().add(rectangle);
     }
-
 }
