@@ -128,15 +128,18 @@ public class ResistanceAnnotation extends AbstractAnnotation {
      * {@inheritDoc}
      */
     public String toString() {
-        String annotation = "";
-        annotation += "Gene Name: " + geneName + System.lineSeparator();
-        annotation += "Gene Position: " + getGenomePosition() + System.lineSeparator();
-        annotation += "Mutation Type: " + typeOfMutation
-                + System.lineSeparator() + System.lineSeparator();
-        annotation += "Change: " + change + System.lineSeparator();
-        annotation += "Filter: " + filter + System.lineSeparator();
-        annotation += "Drug Resistance: " + drugResistance;
-        return annotation;
+        StringBuffer annotation = new StringBuffer(512);
+        annotation.append("Gene Name: ")
+
+        .append(geneName).append(System.lineSeparator())
+                .append("Gene Position: ").append(getGenomePosition())
+                .append(System.lineSeparator()).append("Mutation Type: ")
+                .append(typeOfMutation).append(System.lineSeparator())
+                .append("Change: ").append(change)
+                .append(System.lineSeparator()).append("Filter: ")
+                .append(filter).append(System.lineSeparator())
+                .append("Drug Resistance: ").append(drugResistance);
+        return annotation.toString();
     }
 
 }
