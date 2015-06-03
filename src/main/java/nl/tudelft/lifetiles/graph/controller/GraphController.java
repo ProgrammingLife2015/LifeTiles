@@ -68,6 +68,11 @@ public class GraphController extends AbstractController {
     private int currentPosition = -1;
 
     /**
+     * boolean to indicate if the controller must repaint the current position.
+     */
+    private boolean forceRepaintPosition;
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -75,6 +80,7 @@ public class GraphController extends AbstractController {
             final ResourceBundle resources) {
 
         NotificationFactory notFact = new NotificationFactory();
+        forceRepaintPosition = false;
 
         listen(Message.OPENED, (controller, args) -> {
             assert controller instanceof MenuController;
@@ -97,6 +103,7 @@ public class GraphController extends AbstractController {
             }
 
             model.setVisible((Set<Sequence>) args[0]);
+            forceRepaintPosition = true;
             repaint();
         });
 
@@ -171,7 +178,7 @@ public class GraphController extends AbstractController {
      */
     private void repaintPosition(final Group root, final double position) {
         int nextPosition = getBucketPosition(position);
-        if (currentPosition != nextPosition || model.isChanged()) {
+        if (currentPosition != nextPosition || forceRepaintPosition) {
             if (graphNode != null) {
                 graphNode.getChildren().clear();
             }
@@ -180,6 +187,7 @@ public class GraphController extends AbstractController {
             root.getChildren().add(graphNode);
             wrapper.setContent(root);
             currentPosition = nextPosition;
+            forceRepaintPosition = false;
 
         }
     }
@@ -220,7 +228,7 @@ public class GraphController extends AbstractController {
      * @return Group object to be drawn on the screen
      */
     public final Group drawGraph(final int position) {
-        return view.drawGraph(model.getSegments(position), graph);
+        return view.drawGraph(model.getVisibleSegments(position), graph);
     }
 
     /**
