@@ -329,8 +329,9 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      */
     @Override
     public final SequenceSegment clone() {
-        SequenceSegment seg = new SequenceSegment(copySources(this), this
-                .getStart(), this.getEnd(), this.getContent());
+        SequenceSegment seg = new SequenceSegment(new HashSet<Sequence>(
+                getSources()), this.getStart(), this.getEnd(), this
+                .getContent());
 
         seg.setUnifiedStart(this.getUnifiedStart());
         seg.setUnifiedEnd(this.getUnifiedEnd());
@@ -339,44 +340,6 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
         seg.setReferenceEnd(this.getReferenceEnd());
 
         return seg;
-    }
-
-    /**
-     * Helper function to deep copy the source Sequences.
-     *
-     * @param segment
-     *            Segment to copy
-     * @return new set of sequences
-     */
-    private Set<Sequence> copySources(final SequenceSegment segment) {
-        Set<Sequence> sequencescopy = new HashSet<Sequence>();
-
-        for (Sequence sequence : segment.getSources()) {
-            Sequence copy = copySequence(sequence);
-
-            sequencescopy.add(copy);
-        }
-
-        return sequencescopy;
-    }
-
-    /**
-     * Helper function to a copy a single sequence.
-     *
-     * @param sequence
-     *            to be copied
-     * @return new copy
-     */
-    private Sequence copySequence(final Sequence sequence) {
-        String string = new String();
-        string += sequence.getIdentifier();
-        Sequence copy = new DefaultSequence(string);
-
-        for (SequenceSegment segment : sequence.getSegments()) {
-            copy.appendSegment(segment);
-        }
-
-        return copy;
     }
 
 }
