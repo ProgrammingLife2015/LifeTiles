@@ -2,9 +2,6 @@ package nl.tudelft.lifetiles.graph.model;
 
 import java.util.SortedSet;
 
-import org.jgrapht.DirectedGraph;
-import org.jgrapht.graph.DefaultEdge;
-
 /**
  * Interface for a generic graph.
  *
@@ -101,28 +98,5 @@ public interface Graph<V> {
      *            Vertex to be inserted.
      */
     void splitEdge(Edge<V> edge, V vertex);
-
-    /**
-     * Returns a copy of the graph including edges and vertices.
-     *
-     * @param gfact
-     *            Factory used to create the copy of the graph.
-     * @return copy of the Graph.
-     */
-    Graph<V> copy(GraphFactory<V> gfact);
-
-    /**
-     * @return the "actual" graph
-     */
-    DirectedGraph<V, DefaultEdge> getInternalGraph();
-
-    /**
-     * Returns a new deepcopy of the graph.
-     *
-     * @param gfact
-     *            Factory used to create the copy of the graph.
-     * @return a deep copy of the graph
-     */
-    Graph<V> deepcopy(GraphFactory<V> gfact);
 
 }
