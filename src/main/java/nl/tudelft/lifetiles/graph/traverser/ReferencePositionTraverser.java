@@ -5,6 +5,7 @@ import java.util.Iterator;
 import nl.tudelft.lifetiles.core.util.IterUtils;
 import nl.tudelft.lifetiles.core.util.Timer;
 import nl.tudelft.lifetiles.graph.model.BreadthFirstIterator;
+import nl.tudelft.lifetiles.graph.model.Edge;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
@@ -65,18 +66,19 @@ public class ReferencePositionTraverser {
         }
 
         Iterator<SequenceSegment> iterator = new BreadthFirstIterator<>(graph);
-        long position = 1;
-        for (SequenceSegment vertex : IterUtils.toIterable(iterator)) {
-            // update start position
-            if (vertex.getReferenceStart() < position) {
-                vertex.setReferenceStart(position);
-            }
 
-            // update current position
-            position = vertex.getReferenceStart();
+        for (SequenceSegment vertex : IterUtils.toIterable(iterator)) {
+            long position = vertex.getReferenceStart();
             if (vertex.getSources().contains(reference)
                     && !vertex.getContent().isEmpty()) {
                 position += vertex.getContent().getLength();
+            }
+
+            for (Edge<SequenceSegment> edge : graph.getOutgoing(vertex)) {
+                SequenceSegment destination = graph.getDestination(edge);
+                if (destination.getReferenceStart() < position) {
+                    destination.setReferenceStart(position);
+                }
             }
         }
     }
@@ -88,28 +90,29 @@ public class ReferencePositionTraverser {
      *            Graph to be traversed.
      */
     private void referenceMapGraphBackward(final Graph<SequenceSegment> graph) {
-        long referenceEnd = Long.MAX_VALUE;
         for (SequenceSegment sink : graph.getSinks()) {
-            referenceEnd = sink.getReferenceStart() - 1;
+            long referenceEnd = sink.getReferenceStart() - 1;
             if (sink.getSources().contains(reference)) {
                 referenceEnd += sink.getContent().getLength();
             }
             sink.setReferenceEnd(referenceEnd);
         }
 
-        Iterator<SequenceSegment> iterator = new BreadthFirstIterator<>(graph, true);
-        long position = referenceEnd;
+        Iterator<SequenceSegment> iterator = new BreadthFirstIterator<>(graph,
+                true);
         for (SequenceSegment vertex : IterUtils.toIterable(iterator)) {
-            // update start position
-            if (vertex.getReferenceEnd() > position) {
-                vertex.setReferenceEnd(position);
-            }
+            long position = vertex.getReferenceEnd();
 
-            // update current position
-            position = vertex.getReferenceEnd();
             if (vertex.getSources().contains(reference)
                     && !vertex.getContent().isEmpty()) {
                 position -= vertex.getContent().getLength();
+            }
+
+            for (Edge<SequenceSegment> edge : graph.getIncoming(vertex)) {
+                SequenceSegment source = graph.getSource(edge);
+                if (source.getReferenceEnd() > position) {
+                    source.setReferenceEnd(position);
+                }
             }
         }
     }
