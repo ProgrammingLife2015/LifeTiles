@@ -32,7 +32,7 @@ public class GraphFactoryImplementationTest {
     }
 
     @Test
-    public void testGetSubGraph() {
+    public void testGetSubGraph() throws NotAJGraphTAdapterException {
         Graph<SequenceSegment> g = gf.getSubGraph(gf.getGraph(), null);
         assert (g instanceof JGraphTGraphAdapter);
     }
