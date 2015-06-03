@@ -52,18 +52,18 @@ public class EdgeLine extends Group {
     /**
      * Draw a Crossed line between two Vertices.
      *
-     * @param boundFrom
+     * @param source
      *            The Bounds of the start Vertex
-     * @param boundDest
+     * @param destination
      *            The Bounds of the end Vertex
      */
-    private void drawCrossLine(final Bounds boundFrom, final Bounds boundDest) {
+    private void drawCrossLine(final Bounds source, final Bounds destination) {
 
-        double fromX = boundFrom.getMaxX();
-        double fromY = boundFrom.getMinY() + (boundFrom.getHeight() / 2);
+        double fromX = source.getMaxX();
+        double fromY = source.getMinY() + (source.getHeight() / 2);
 
-        double destX = boundDest.getMinX();
-        double destY = boundDest.getMinY() + (boundDest.getHeight() / 2);
+        double destX = destination.getMinX();
+        double destY = destination.getMinY() + (destination.getHeight() / 2);
 
         drawLine(fromX, fromY, destX, destY);
 
@@ -72,25 +72,25 @@ public class EdgeLine extends Group {
     /**
      * Draw a straight line between two vertices.
      *
-     * @param boundFrom
+     * @param source
      *            The Bounds of the start Vertex
-     * @param boundDest
+     * @param destination
      *            The Bounds of the end Vertex
      */
-    private void drawStraightLine(final Bounds boundFrom, final Bounds boundDest) {
+    private void drawStraightLine(final Bounds source, final Bounds destination) {
 
         double startY = 0;
 
         // Decide from which bound the Y value should be taken from
-        if (boundFrom.getMaxY() < boundDest.getMaxY()
-                || boundFrom.getMinY() > boundDest.getMinY()) {
+        if (source.getMaxY() < destination.getMaxY()
+                || source.getMinY() > destination.getMinY()) {
 
-            startY = boundFrom.getMinY() + boundFrom.getHeight() / 2;
+            startY = source.getMinY() + source.getHeight() / 2;
         } else {
-            startY = boundDest.getMinY() + boundDest.getHeight() / 2;
+            startY = destination.getMinY() + destination.getHeight() / 2;
         }
 
-        drawLine(boundFrom.getMaxX(), startY, boundDest.getMinX(), startY);
+        drawLine(source.getMaxX(), startY, destination.getMinX(), startY);
 
     }
 
