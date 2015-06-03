@@ -140,7 +140,7 @@ public class GraphController extends AbstractController {
                     } else {
                         try {
                             insertAnnotations((File) args[0]);
-                        } catch (Exception exception) {
+                        } catch (IOException exception) {
                             shout(NotificationController.NOTIFY,
                                     notFact.getNotification(exception));
                         }
