@@ -3,7 +3,6 @@ package nl.tudelft.lifetiles.graph.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +19,7 @@ import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationParser;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.controller.MenuController;
 import nl.tudelft.lifetiles.core.util.Message;
+import nl.tudelft.lifetiles.core.util.Timer;
 import nl.tudelft.lifetiles.graph.model.DefaultGraphParser;
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
 import nl.tudelft.lifetiles.graph.model.Graph;
@@ -64,6 +64,11 @@ public class GraphController extends AbstractController {
     private Graph<SequenceSegment> graph;
 
     /**
+     * Group used to draw the tileGraph on.
+     */
+    private Group root;
+
+    /**
      * Graph node used to draw the update graph based on bucket cache technique.
      */
     private Group graphNode;
@@ -83,6 +88,12 @@ public class GraphController extends AbstractController {
      * The currently inserted annotations.
      */
     private Map<SequenceSegment, List<ResistanceAnnotation>> annotations;
+
+    /**
+     * Boolean indicating whether the annotations in the graph have been
+     * changed.
+     */
+    private boolean changed = false;
 
     /**
      * {@inheritDoc}
@@ -122,15 +133,17 @@ public class GraphController extends AbstractController {
                     assert controller instanceof MenuController;
                     assert args[0] instanceof File;
 
-                    if (graph != null) {
+                    if (graph == null) {
+                        shout(NotificationController.NOTIFY, notFact
+                                .getNotification(new IllegalStateException(
+                                        "Graph not loaded.")));
+                    } else {
                         try {
                             insertAnnotations((File) args[0]);
                         } catch (Exception exception) {
                             shout(NotificationController.NOTIFY,
                                     notFact.getNotification(exception));
                         }
-                    } else {
-                        throw new IllegalStateException("Graph not loaded.");
                     }
                 });
     }
@@ -172,22 +185,23 @@ public class GraphController extends AbstractController {
 
     /**
      * Inserts a list of annotations onto the graph from the specified file.
-     * 
+     *
      * @param file
      *            The file to get annotations from.
      * @throws IOException
      *             When an IO error occurs while reading one of the files.
      */
-    private void insertAnnotations(File file) throws IOException {
-        long startTime = Calendar.getInstance().getTimeInMillis();
+    private void insertAnnotations(final File file) throws IOException {
+        Timer timer = Timer.getAndStart();
         Sequence reference = this.graph.getSources().iterator().next()
                 .getSources().iterator().next();
         annotations = ResistanceAnnotationMapper.mapAnnotations(graph,
                 ResistanceAnnotationParser.parseAnnotations(file), reference);
 
-        System.out.println("Inserting annotations. Took "
-                + (Calendar.getInstance().getTimeInMillis() - startTime)
-                + " ms.");
+        timer.stopAndLog("Inserting annotations");
+        changed = true;
+        repaintPosition(root, wrapper.hvalueProperty()
+                .doubleValue());
     }
 
     /**
@@ -200,7 +214,7 @@ public class GraphController extends AbstractController {
             }
             view = new TileView(this);
 
-            Group root = new Group();
+            root = new Group();
 
             wrapper.hvalueProperty().addListener(
                     (observable, oldValue, newValue) -> {
@@ -235,7 +249,6 @@ public class GraphController extends AbstractController {
             wrapper.setContent(root);
             currentPosition = nextPosition;
             forceRepaintPosition = false;
-
         }
     }
 
@@ -275,7 +288,7 @@ public class GraphController extends AbstractController {
      * @return Group object to be drawn on the screen
      */
     public final Group drawGraph(final int position) {
-        return view.drawGraph(model.getVisibleSegments(position), graph);
+        return view.drawGraph(model.getVisibleSegments(position), graph, annotations);
     }
 
     /**
