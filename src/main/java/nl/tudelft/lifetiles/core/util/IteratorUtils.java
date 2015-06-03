@@ -7,12 +7,12 @@ import java.util.Iterator;
  *
  * @author Joren Hammudoglu
  */
-public final class IterUtils {
+public final class IteratorUtils {
 
     /**
      * Uninstantiable.
      */
-    private IterUtils() {
+    private IteratorUtils() {
         // noop
     }
 
