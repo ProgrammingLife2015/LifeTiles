@@ -38,13 +38,13 @@ public class EdgeLine extends Group {
         line = new Line();
         line.getStyleClass().add("edgeline");
 
-        Bounds boundFrom = source.getBoundsInParent();
-        Bounds boundTo = destination.getBoundsInParent();
+        Bounds sourceBound = source.getBoundsInParent();
+        Bounds destinationBound = destination.getBoundsInParent();
 
-        if (outofboundsY(boundFrom, boundTo)) {
-            drawCrossLine(boundFrom, boundTo);
+        if (outofboundsY(sourceBound, destinationBound)) {
+            drawCrossLine(sourceBound, destinationBound);
         } else {
-            drawStraightLine(boundFrom, boundTo);
+            drawStraightLine(sourceBound, destinationBound);
         }
 
     }
@@ -149,13 +149,19 @@ public class EdgeLine extends Group {
      */
     private Boolean outofboundsY(final Bounds source, final Bounds destination) {
         // Check if source is completely below the destination
+
         if (source.getMinY() > destination.getMaxY()
-                && source.getMaxY() > destination.getMinY()) {
+                && source.getMaxY() > destination.getMinY()
+                && source.getMinY() > destination.getMinY()
+                && source.getMaxY() > destination.getMaxY()) {
+
             return true;
         }
         // Check if source is completely above the destination
         if (source.getMinY() < destination.getMaxY()
-                && source.getMaxY() < destination.getMinY()) {
+                && source.getMaxY() < destination.getMinY()
+                && source.getMinY() < destination.getMinY()
+                && source.getMaxY() < destination.getMaxY()) {
             return true;
         }
 
