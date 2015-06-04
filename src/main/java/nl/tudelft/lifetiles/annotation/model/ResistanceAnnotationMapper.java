@@ -71,7 +71,7 @@ public final class ResistanceAnnotationMapper {
      */
     private static Set<SequenceSegment> selectReference(
             final Graph<SequenceSegment> graph, final Sequence reference) {
-        TreeSet<SequenceSegment> segments = new TreeSet<>();
+        Set<SequenceSegment> segments = new TreeSet<>();
         for (SequenceSegment segment : graph.getAllVertices()) {
             if (segment.getSources().contains(reference)) {
                 segments.add(segment);
