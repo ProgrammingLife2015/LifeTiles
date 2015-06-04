@@ -1,2 +1,6 @@
 test_set	.	gene	1	1000	0.0	+	.	Name=test1
 test_set	.	gene	2001	3000	0.0	+	.	Name=test2
+test_set	.	no_gene	2001	3000	0.0	+	.	Name=test3
+test_set	.	no_gene	2001	3000	0.0	+	.	Name=test4
+test_set	.	no_gene	2001	3000	0.0	+	.	Name=test5
+test_set	.	no_gene	2001	3000	0.0	+	.	Name=test6
