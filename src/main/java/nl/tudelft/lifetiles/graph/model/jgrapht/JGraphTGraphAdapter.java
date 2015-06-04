@@ -9,8 +9,8 @@ import java.util.TreeSet;
 
 import nl.tudelft.lifetiles.graph.model.Edge;
 import nl.tudelft.lifetiles.graph.model.Graph;
+import nl.tudelft.lifetiles.graph.model.GraphFactory;
 
-import org.jgrapht.DirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.SimpleDirectedGraph;
 
@@ -20,8 +20,7 @@ import org.jgrapht.graph.SimpleDirectedGraph;
  * @param <V>
  *            The type of vertex to use.
  */
-public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
-        implements Graph<V> {
+public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
     /**
      * The edgefactory to use to create the edges for this graph.
      */
@@ -29,16 +28,15 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
     /**
      * This is the actual graph.
      */
-    private final DirectedGraph<V, DefaultEdge> internalGraph;
-
+    private final SimpleDirectedGraph<V, DefaultEdge> internalGraph;
     /**
      * Keep track of all vertices that have no incoming edges.
      */
-    private SortedSet<V> sources;
+    private final SortedSet<V> sources;
     /**
      * Keep track of all vertices that have no outgoing edges.
      */
-    private SortedSet<V> sinks;
+    private final SortedSet<V> sinks;
     /**
      * List of vertices. Used to be able to identify nodes by ids.
      */
@@ -60,28 +58,12 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
     }
 
     /**
-     * Create a new Subgraph, based on the JGraphT library.
-     *
-     * @param jgraptGraph
-     *            original JGraphT grah
-     * @param edgeFact
-     *            The edgefactory to use for this graph.
-     */
-    protected JGraphTGraphAdapter(
-            final DirectedGraph<V, DefaultEdge> jgraptGraph,
-            final JGraphTEdgeFactory<V> edgeFact, final List vertexIds) {
-        internalGraph = jgraptGraph;
-        this.edgeFact = edgeFact;
-        vertexIdentifiers = vertexIds;
-    }
-
-    /**
      * {@inheritDoc}
      */
     @Override
     public final void addEdge(final int source, final int destination) {
-        addEdge(vertexIdentifiers.get(source), vertexIdentifiers
-                .get(destination));
+        addEdge(vertexIdentifiers.get(source),
+                vertexIdentifiers.get(destination));
 
     }
 
@@ -119,13 +101,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
     public final void addVertex(final V vertex) {
         internalGraph.addVertex(vertex);
         vertexIdentifiers.add(vertex);
-        if (sources == null) {
-            getSources();
-        }
         sources.add(vertex);
-        if (sinks == null) {
-            getSinks();
-        }
         sinks.add(vertex);
     }
 
@@ -195,19 +171,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      */
     @Override
     public final SortedSet<V> getSources() {
-        if (sources == null) {
-            SortedSet<V> foundSources = new TreeSet<V>();
-
-            for (V vertice : getAllVertices()) {
-                if (!getIncoming(vertice).isEmpty()) {
-                    foundSources.add(vertice);
-                }
-            }
-
-            sources = foundSources;
-        }
         return sources;
-
     }
 
     /**
@@ -241,19 +205,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      */
     @Override
     public final SortedSet<V> getSinks() {
-        if (sinks == null) {
-            SortedSet<V> foundSinks = new TreeSet<V>();
-
-            for (V vertice : getAllVertices()) {
-                if (!getOutgoing(vertice).isEmpty()) {
-                    foundSinks.add(vertice);
-                }
-            }
-
-            sinks = foundSinks;
-        }
         return sinks;
-
     }
 
     /**
@@ -281,19 +233,22 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
     }
 
     /**
+     * Returns a copy of the graph including edges and vertices.
      *
-     * @return get the JGraphT graph
+     * @param gfact
+     *            Factory which is used to copy the graph.
+     * @return copy of the Graph.
      */
-    protected final DirectedGraph<V, DefaultEdge> getInternalGraph() {
-        return internalGraph;
-    }
-
-    /**
-     *
-     * @return the vertexIdentifiers
-     */
-    protected final List<V> getVertexIdentifiers() {
-        return vertexIdentifiers;
+    @Override
+    public final Graph<V> copy(final GraphFactory<V> gfact) {
+        Graph<V> graph = gfact.getGraph();
+        for (V vertex : getAllVertices()) {
+            graph.addVertex(vertex);
+        }
+        for (Edge<V> edge : getAllEdges()) {
+            graph.addEdge(getSource(edge), getDestination(edge));
+        }
+        return graph;
     }
 
     /**

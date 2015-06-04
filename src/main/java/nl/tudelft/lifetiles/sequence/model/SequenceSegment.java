@@ -1,7 +1,6 @@
 package nl.tudelft.lifetiles.sequence.model;
 
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -13,7 +12,7 @@ import nl.tudelft.lifetiles.graph.view.Mutation;
 /**
  * @author Rutger van den Berg Contains a partial sequence.
  */
-public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
+public class SequenceSegment implements Comparable<SequenceSegment> {
     /**
      * Keep track of already used ID's.
      */
@@ -29,7 +28,7 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
     /**
      * Contains the sources containing this segment.
      */
-    private Set<Sequence> sources;
+    private final Set<Sequence> sources;
 
     /**
      * The start position for this segment.
@@ -66,21 +65,26 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      */
     private static final List<ToIntBiFunction<SequenceSegment, SequenceSegment>> COMPARATORS = Arrays
             .asList((left, right) -> {
-                return Long.compare(left.getUnifiedStart(), right
-                        .getUnifiedStart());
-            }, (left, right) -> {
-                return Long.compare(left.getStart(), right.getStart());
-            }, (left, right) -> {
-                return Long
-                        .compare(left.getUnifiedEnd(), right.getUnifiedEnd());
-            }, (left, right) -> {
-                return Long.compare(left.getEnd(), right.getEnd());
-            }, (left, right) -> {
-                return left.getContent().toString().compareTo(
-                        right.getContent().toString());
-            }, (left, right) -> {
-                return left.getSources().size() - right.getSources().size();
-            });
+                return Long.compare(left.getUnifiedStart(),
+                        right.getUnifiedStart());
+            },
+                    (left, right) -> {
+                        return Long.compare(left.getStart(), right.getStart());
+                    },
+                    (left, right) -> {
+                        return Long.compare(left.getUnifiedEnd(),
+                                right.getUnifiedEnd());
+                    },
+                    (left, right) -> {
+                        return Long.compare(left.getEnd(), right.getEnd());
+                    },
+                    (left, right) -> {
+                        return left.getContent().toString()
+                                .compareTo(right.getContent().toString());
+                    }, (left, right) -> {
+                        return left.getSources().size()
+                                - right.getSources().size();
+                    });
 
     /**
      * @param sources
@@ -121,16 +125,6 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      */
     public final Set<Sequence> getSources() {
         return sources;
-    }
-
-    /**
-     * Change the current sources to the new sources.
-     *
-     * @param set
-     *            new sources
-     */
-    public final void setSources(final Set<Sequence> set) {
-        sources = set;
     }
 
     /**
@@ -218,8 +212,8 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
         Iterator<Sequence> thisIt = this.getSources().iterator();
         Iterator<Sequence> otherIt = other.getSources().iterator();
         while (thisIt.hasNext()) {
-            candidateComp = thisIt.next().getIdentifier().compareTo(
-                    otherIt.next().getIdentifier());
+            candidateComp = thisIt.next().getIdentifier()
+                    .compareTo(otherIt.next().getIdentifier());
             if (candidateComp != 0) {
                 return candidateComp;
             }
@@ -321,25 +315,4 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
         }
         return mutation;
     }
-
-    /**
-     * Create a new deep copy of this SequenceSegment.
-     *
-     * @return a copy
-     */
-    @Override
-    public final SequenceSegment clone() {
-        SequenceSegment seg = new SequenceSegment(new HashSet<Sequence>(
-                getSources()), this.getStart(), this.getEnd(), this
-                .getContent());
-
-        seg.setUnifiedStart(this.getUnifiedStart());
-        seg.setUnifiedEnd(this.getUnifiedEnd());
-        seg.setMutation(this.getMutation());
-        seg.setReferenceStart(this.getReferenceStart());
-        seg.setReferenceEnd(this.getReferenceEnd());
-
-        return seg;
-    }
-
 }
