@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.shape.Rectangle;
+import nl.tudelft.lifetiles.annotation.model.GenomeAnnotation;
 import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
 import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationMapper;
 import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationParser;
@@ -88,7 +89,12 @@ public class GraphController extends AbstractController {
     /**
      * The currently inserted annotations.
      */
-    private Map<SequenceSegment, List<ResistanceAnnotation>> annotations;
+    private Map<SequenceSegment, List<ResistanceAnnotation>> resistanceAnnotations;
+
+    /**
+     * The currently inserted genome annotations.
+     */
+    private Map<String, GenomeAnnotation> genomeAnnotations;
 
     /**
      * A shout message indicating annotations have been inserted.
@@ -143,9 +149,13 @@ public class GraphController extends AbstractController {
                         shout(NotificationController.NOTIFY, notFact
                                 .getNotification(new IllegalStateException(
                                         "Graph not loaded.")));
+                    } else if (genomeAnnotations == null) {
+                        shout(NotificationController.NOTIFY, notFact
+                                .getNotification(new IllegalStateException(
+                                        "Genomes not loaded.")));
                     } else {
                         try {
-                            insertAnnotations((File) args[0]);
+                            insertResistanceAnnotations((File) args[0]);
                         } catch (IOException exception) {
                             shout(NotificationController.NOTIFY,
                                     notFact.getNotification(exception));
@@ -182,7 +192,7 @@ public class GraphController extends AbstractController {
         GraphFactory<SequenceSegment> factory = FactoryProducer.getFactory();
         GraphParser parser = new DefaultGraphParser();
         graph = parser.parseGraph(vertexfile, edgefile, factory);
-        annotations = new HashMap<>();
+        resistanceAnnotations = new HashMap<>();
 
         shout(Message.LOADED, graph, parser.getSequences());
         repaint();
@@ -197,12 +207,14 @@ public class GraphController extends AbstractController {
      * @throws IOException
      *             When an IO error occurs while reading one of the files.
      */
-    private void insertAnnotations(final File file) throws IOException {
+    private void insertResistanceAnnotations(final File file)
+            throws IOException {
         Timer timer = Timer.getAndStart();
         Sequence reference = this.graph.getSources().iterator().next()
                 .getSources().iterator().next();
-        annotations = ResistanceAnnotationMapper.mapAnnotations(graph,
-                ResistanceAnnotationParser.parseAnnotations(file), reference);
+        resistanceAnnotations = ResistanceAnnotationMapper.mapAnnotations(
+                graph, ResistanceAnnotationParser.parseAnnotations(file),
+                reference);
 
         timer.stopAndLog("Inserting annotations");
         forceRepaintPosition = true;
@@ -294,7 +306,7 @@ public class GraphController extends AbstractController {
      */
     public final Group drawGraph(final int position) {
         return view.drawGraph(model.getVisibleSegments(position), graph,
-                annotations);
+                resistanceAnnotations);
     }
 
     /**
