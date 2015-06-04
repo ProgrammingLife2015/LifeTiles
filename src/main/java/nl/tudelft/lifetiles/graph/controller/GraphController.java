@@ -90,12 +90,6 @@ public class GraphController extends AbstractController {
     private Map<SequenceSegment, List<ResistanceAnnotation>> annotations;
 
     /**
-     * Boolean indicating whether the annotations in the graph have been
-     * changed.
-     */
-    private boolean changed = false;
-
-    /**
      * {@inheritDoc}
      */
     @Override
@@ -199,7 +193,7 @@ public class GraphController extends AbstractController {
                 ResistanceAnnotationParser.parseAnnotations(file), reference);
 
         timer.stopAndLog("Inserting annotations");
-        changed = true;
+        forceRepaintPosition = true;
         repaintPosition(root, wrapper.hvalueProperty()
                 .doubleValue());
     }
