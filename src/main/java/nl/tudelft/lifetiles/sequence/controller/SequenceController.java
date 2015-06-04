@@ -179,40 +179,49 @@ public final class SequenceController extends AbstractController {
             label.setStyle("-fx-background-color: rgba("
                     + ColorUtils.rgbaFormat(color) + ")");
 
-            String styleClassFilter = "filtered";
-            if (getVisible().contains(sequence)) {
-                label.getStyleClass().add(styleClassFilter);
-            }
-
-            label.setOnMouseClicked(mouseEvent -> {
-                if (mouseEvent.isPrimaryButtonDown()) {
-                    Set<Sequence> visible = getVisible();
-
-                    if (label.getStyleClass().contains(styleClassFilter)) {
-                        // hide
-                        visible.remove(sequence);
-                        label.getStyleClass().remove(styleClassFilter);
-                    } else {
-                        // show
-                        visible.add(sequence);
-                        label.getStyleClass().add(styleClassFilter);
-                    }
-
-                    setVisible(visible, true);
-                }
-            });
-
-            label.setOnMousePressed(mouseEvent -> {
-                if (mouseEvent.isSecondaryButtonDown()) {
-                    getContextMenu(sequence).show(label,
-                            mouseEvent.getScreenX(), mouseEvent.getScreenY());
-                }
-            });
+            addMouseEventListener(sequence, label);
 
             sequenceItems.add(label);
         }
 
         return sequenceItems;
+    }
+
+    /**
+     * Adds mouse event listeners to a sequence label.
+     *
+     * @param sequence
+     *            the sequence
+     * @param label
+     *            the label
+     */
+    public void addMouseEventListener(final Sequence sequence, final Label label) {
+        String styleClassFilter = "filtered";
+        ObservableList<String> styleClass = label.getStyleClass();
+        if (getVisible().contains(sequence)) {
+            styleClass.add(styleClassFilter);
+        }
+
+        label.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.isPrimaryButtonDown()) {
+                Set<Sequence> visible = getVisible();
+
+                if (styleClass.contains(styleClassFilter)) {
+                    // hide
+                    visible.remove(sequence);
+                    styleClass.remove(styleClassFilter);
+                } else {
+                    // show
+                    visible.add(sequence);
+                    styleClass.add(styleClassFilter);
+                }
+
+                setVisible(visible, true);
+            } else if (mouseEvent.isSecondaryButtonDown()) {
+                getContextMenu(sequence).show(label, mouseEvent.getScreenX(),
+                        mouseEvent.getScreenY());
+            }
+        });
     }
 
     /**
