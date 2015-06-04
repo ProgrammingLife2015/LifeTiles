@@ -103,6 +103,11 @@ public class GraphController extends AbstractController {
     public static final Message ANNOTATIONS = Message.create("annotations");
 
     /**
+     * A shout message indicating genomes have been inserted.
+     */
+    public static final Message GENOMES = Message.create("genomes");
+
+    /**
      * Boolean indicating whether the annotations in the graph have been
      * changed.
      */

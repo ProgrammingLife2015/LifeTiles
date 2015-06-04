@@ -109,10 +109,7 @@ public class MenuController extends AbstractController {
             return;
         }
 
-        List<File> dataFiles = new ArrayList<>();
-        List<File> annotations = FileUtils.findByExtension(directory, ".txt");
-        
-        
+        List<File> dataFiles = new ArrayList<>();        
         List<String> exts = Arrays.asList(".node.graph", ".edge.graph", ".nwk");
         for (String ext : exts) {
             List<File> hits = FileUtils.findByExtension(directory, ext);
@@ -120,12 +117,18 @@ public class MenuController extends AbstractController {
                 throw new IOException("Expected 1 " + ext + " file intead of "
                         + hits.size());
             }
-
             dataFiles.add(hits.get(0));
         }
         
         shout(Message.OPENED, dataFiles.get(0), dataFiles.get(1),
                 dataFiles.get(2));
+
+        List<File> genomes = FileUtils.findByExtension(directory, ".gff");
+        if (genomes != null && !genomes.isEmpty()) {
+            shout(GraphController.GENOMES, genomes.get(0));
+        }
+        
+        List<File> annotations = FileUtils.findByExtension(directory, ".txt");
         if (annotations != null && !annotations.isEmpty()) {
             shout(GraphController.ANNOTATIONS, annotations.get(0));
         }

@@ -21,14 +21,6 @@ public final class Message {
      * A shout message indicating data has been loaded.
      */
     public static final Message LOADED = create("loaded");
-    /**
-     * A shout message indicating annotations have been inserted.
-     */
-    public static final Message ANNOTATIONS = create("annotations");
-    /**
-     * A shout message indicating genomes have been inserted.
-     */
-    public static final Message GENOMES = create("genomes");
 
     /**
      * The value.
