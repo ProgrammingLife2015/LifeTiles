@@ -127,7 +127,7 @@ public class MenuController extends AbstractController {
         shout(Message.OPENED, dataFiles.get(0), dataFiles.get(1),
                 dataFiles.get(2));
         if (annotations != null && !annotations.isEmpty()) {
-            shout(Message.ANNOTATIONS, annotations.get(0));
+            shout(GraphController.ANNOTATIONS, annotations.get(0));
         }
     }
 
@@ -166,7 +166,7 @@ public class MenuController extends AbstractController {
             return;
         }
 
-        shout(Message.ANNOTATIONS, file);
+        shout(GraphController.ANNOTATIONS, file);
     }
 
     /**
