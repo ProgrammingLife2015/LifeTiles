@@ -135,9 +135,9 @@ public class ResistanceAnnotation extends AbstractAnnotation {
     public String toString() {
         Formatter formatter = new Formatter();
         formatter
-                .format("Gene Name: %1$s%nGene Position: %2$s%nMutation Type: %3$s%nGene Name: %4$s%nChange: %5$s%nFilter: %6$s%nDrug Resistance %7$s",
-                        geneName, getGenomePosition(), typeOfMutation,
-                        geneName, change, filter, drugResistance);
+                .format("Gene Name: %1$s%nGene Position: %2$s%nMutation Type: %3$s%nChange: %4$s%nFilter: %5$s%nDrug Resistance: %6$s",
+                        geneName, getGenomePosition(), typeOfMutation, change,
+                        filter, drugResistance);
         String annotation = formatter.toString();
         formatter.close();
         return annotation;
