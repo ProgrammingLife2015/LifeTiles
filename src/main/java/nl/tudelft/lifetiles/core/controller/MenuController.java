@@ -37,6 +37,11 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
 public class MenuController extends AbstractController {
 
     /**
+     * Constant annotation extension, currently as defined by client: '.txt'.
+     */
+    private static final String ANNOTATION_EXTENSION = ".txt";
+
+    /**
      * The initial x-coordinate of the window.
      */
     private double initialX;
@@ -110,8 +115,8 @@ public class MenuController extends AbstractController {
         }
 
         List<File> dataFiles = new ArrayList<>();
-        List<File> annotations = FileUtils.findByExtension(directory, ".txt");
-
+        List<File> annotations = FileUtils.findByExtension(directory,
+                ANNOTATION_EXTENSION);
 
         List<String> exts = Arrays.asList(".node.graph", ".edge.graph", ".nwk");
         for (String ext : exts) {
@@ -126,7 +131,11 @@ public class MenuController extends AbstractController {
 
         shout(Message.OPENED, dataFiles.get(0), dataFiles.get(1),
                 dataFiles.get(2));
-        if (annotations != null && !annotations.isEmpty()) {
+        if (annotations == null || annotations.isEmpty()) {
+            shout(NotificationController.NOTIFY, nf.getNotification(
+                    "Annotation file (" + ANNOTATION_EXTENSION
+                            + ") can't be found", NotificationFactory.WARNING));
+        } else {
             shout(GraphController.ANNOTATIONS, annotations.get(0));
         }
     }
