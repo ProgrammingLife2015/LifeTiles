@@ -66,37 +66,32 @@ public class TileViewTest {
 
     @Test
     public void drawVerticesTest() {
-        creategraph();
-        buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0), gr);
-        VertexView v1 = (VertexView) ((Group) result.getChildrenUnmodifiable()
-                .get(0)).getChildrenUnmodifiable().get(0);
-        VertexView v2 = (VertexView) ((Group) result.getChildrenUnmodifiable()
-                .get(0)).getChildrenUnmodifiable().get(1);
-        VertexView v3 = (VertexView) ((Group) result.getChildrenUnmodifiable()
-                .get(0)).getChildrenUnmodifiable().get(2);
-        VertexView v4 = (VertexView) ((Group) result.getChildrenUnmodifiable()
-                .get(0)).getChildrenUnmodifiable().get(3);
 
-        assertEquals(0, v1.getLayoutX(), 1e-10);
-        assertEquals(0, v1.getLayoutY(), 1e-10);
-        assertEquals(2 * 40 - 2, v1.getBoundsInParent().getHeight(), 1e-10);
-        assertEquals(2 * 11 - 2, v1.getBoundsInParent().getWidth(), 1e-10);
+        GraphFactory<SequenceSegment> gf = FactoryProducer
+                .getFactory("JGraphT");
 
-        assertEquals(0 + (2 * 11), v2.getLayoutX(), 1e-10);
-        assertEquals(0, v2.getLayoutY(), 1e-10);
-        assertEquals(2 * 40 - 2, v2.getBoundsInParent().getHeight(), 1e-10);
-        assertEquals(2 * 11 - 2, v2.getBoundsInParent().getWidth(), 1e-10);
+        Graph<SequenceSegment> graph;
 
-        assertEquals(55, v3.getLayoutX(), 1e-10);
-        assertEquals(0, v3.getLayoutY(), 1e-10);
-        assertEquals(2 * 40 - 2, v3.getBoundsInParent().getHeight(), 1e-10);
-        assertEquals(2 * 11 - 2, v3.getBoundsInParent().getWidth(), 1e-10);
+        SequenceSegment v1;
+        v1 = new SequenceSegment(new HashSet<Sequence>(Arrays.asList(s1, s2)),
+                5, 7, new SegmentEmpty(2));
 
-        assertEquals(0 + (2 * 11) + (3 * 11) + 2 * 11, v4.getLayoutX(), 1e-10);
-        assertEquals(0, v4.getLayoutY(), 1e-10);
-        assertEquals(2 * 40 - 2, v4.getBoundsInParent().getHeight(), 1e-10);
-        assertEquals(2 * 11 - 2, v4.getBoundsInParent().getWidth(), 1e-10);
+        v1.setUnifiedStart(0);
+        v1.setUnifiedEnd(2);
+
+        graph = gf.getGraph();
+        graph.addVertex(v1);
+
+        BucketCache buckets = new BucketCache(1, graph);
+        Group result = tileview.drawGraph(buckets.getSegments(0), graph);
+        VertexView vView1 = (VertexView) ((Group) result
+                .getChildrenUnmodifiable().get(0)).getChildrenUnmodifiable()
+                .get(0);
+
+        assertEquals(0, vView1.getLayoutX(), 1e-10);
+        assertEquals(0, vView1.getLayoutY(), 1e-10);
+        assertEquals(2 * 40 - 2, vView1.getBoundsInParent().getHeight(), 1e-10);
+        assertEquals(2 * 11 - 2, vView1.getBoundsInParent().getWidth(), 1e-10);
 
     }
 
@@ -107,9 +102,9 @@ public class TileViewTest {
         Group result = tileview.drawGraph(buckets.getSegments(0), gr);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
-                MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                true, true, true, true, true, true, true, true, true, true,
-                null));
+                        MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
+                        true, true, true, true, true, true, true, true, true, true,
+                        null));
         Mockito.verify(controller).clicked(Mockito.any());
     }
 
@@ -120,9 +115,9 @@ public class TileViewTest {
         Group result = tileview.drawGraph(buckets.getSegments(0), gr);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
-                MouseEvent.MOUSE_ENTERED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                true, true, true, true, true, true, true, true, true, true,
-                null));
+                        MouseEvent.MOUSE_ENTERED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
+                        true, true, true, true, true, true, true, true, true, true,
+                        null));
         Mockito.verify(controller).hovered(Mockito.any(), Mockito.eq(true));
     }
 
@@ -133,9 +128,9 @@ public class TileViewTest {
         Group result = tileview.drawGraph(buckets.getSegments(0), gr);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
-                MouseEvent.MOUSE_EXITED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                true, true, true, true, true, true, true, true, true, true,
-                null));
+                        MouseEvent.MOUSE_EXITED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
+                        true, true, true, true, true, true, true, true, true, true,
+                        null));
         Mockito.verify(controller).hovered(Mockito.any(), Mockito.eq(false));
     }
 
