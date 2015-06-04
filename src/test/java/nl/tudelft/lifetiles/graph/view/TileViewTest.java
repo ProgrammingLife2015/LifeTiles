@@ -43,14 +43,13 @@ public class TileViewTest {
         s2 = new DefaultSequence("Not TKK-REF");
         s3 = new DefaultSequence("Imposter");
         s4 = new DefaultSequence("4Zftr3H");
-
     }
 
     @Test
     public void drawGraphVerticesDrawGenericTest() {
         creategraph();
         buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0), gr);
+        Group result = tileview.drawGraph(buckets.getSegments(0), gr, null);
         assertEquals(4, ((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().size());
     }
@@ -59,52 +58,56 @@ public class TileViewTest {
     public void drawGraphEdgesDrawGenericTest() {
         creategraph();
         buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0), gr);
+        Group result = tileview.drawGraph(buckets.getSegments(0), gr, null);
         assertEquals(3, ((Group) result.getChildrenUnmodifiable().get(1))
                 .getChildrenUnmodifiable().size());
     }
 
     @Test
     public void drawVerticesTest() {
+        creategraph();
+        buckets = new BucketCache(1, gr);
+        Group result = tileview.drawGraph(buckets.getSegments(0), gr, null);
+        VertexView v1 = (VertexView) ((Group) result.getChildrenUnmodifiable()
+                .get(0)).getChildrenUnmodifiable().get(0);
+        VertexView v2 = (VertexView) ((Group) result.getChildrenUnmodifiable()
+                .get(0)).getChildrenUnmodifiable().get(1);
+        VertexView v3 = (VertexView) ((Group) result.getChildrenUnmodifiable()
+                .get(0)).getChildrenUnmodifiable().get(2);
+        VertexView v4 = (VertexView) ((Group) result.getChildrenUnmodifiable()
+                .get(0)).getChildrenUnmodifiable().get(3);
 
-        GraphFactory<SequenceSegment> gf = FactoryProducer
-                .getFactory("JGraphT");
+        assertEquals(0, v1.getLayoutX(), 1e-10);
+        assertEquals(0, v1.getLayoutY(), 1e-10);
+        assertEquals(2 * 40 - 2, v1.getBoundsInParent().getHeight(), 1e-10);
+        assertEquals(2 * 11 - 2, v1.getBoundsInParent().getWidth(), 1e-10);
 
-        Graph<SequenceSegment> graph;
+        assertEquals(0 + (2 * 11), v2.getLayoutX(), 1e-10);
+        assertEquals(0, v2.getLayoutY(), 1e-10);
+        assertEquals(2 * 40 - 2, v2.getBoundsInParent().getHeight(), 1e-10);
+        assertEquals(2 * 11 - 2, v2.getBoundsInParent().getWidth(), 1e-10);
 
-        SequenceSegment v1;
-        v1 = new SequenceSegment(new HashSet<Sequence>(Arrays.asList(s1, s2)),
-                5, 7, new SegmentEmpty(2));
+        assertEquals(55, v3.getLayoutX(), 1e-10);
+        assertEquals(0, v3.getLayoutY(), 1e-10);
+        assertEquals(2 * 40 - 2, v3.getBoundsInParent().getHeight(), 1e-10);
+        assertEquals(2 * 11 - 2, v3.getBoundsInParent().getWidth(), 1e-10);
 
-        v1.setUnifiedStart(0);
-        v1.setUnifiedEnd(2);
-
-        graph = gf.getGraph();
-        graph.addVertex(v1);
-
-        BucketCache buckets = new BucketCache(1, graph);
-        Group result = tileview.drawGraph(buckets.getSegments(0), graph);
-        VertexView vView1 = (VertexView) ((Group) result
-                .getChildrenUnmodifiable().get(0)).getChildrenUnmodifiable()
-                .get(0);
-
-        assertEquals(0, vView1.getLayoutX(), 1e-10);
-        assertEquals(0, vView1.getLayoutY(), 1e-10);
-        assertEquals(2 * 40 - 2, vView1.getBoundsInParent().getHeight(), 1e-10);
-        assertEquals(2 * 11 - 2, vView1.getBoundsInParent().getWidth(), 1e-10);
-
+        assertEquals(0 + (2 * 11) + (3 * 11) + 2 * 11, v4.getLayoutX(), 1e-10);
+        assertEquals(0, v4.getLayoutY(), 1e-10);
+        assertEquals(2 * 40 - 2, v4.getBoundsInParent().getHeight(), 1e-10);
+        assertEquals(2 * 11 - 2, v4.getBoundsInParent().getWidth(), 1e-10);
     }
 
     @Test
     public void clickVertexTest() {
         creategraph();
         buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0), gr);
+        Group result = tileview.drawGraph(buckets.getSegments(0), gr, null);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
-                        MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                        true, true, true, true, true, true, true, true, true, true,
-                        null));
+                MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
+                true, true, true, true, true, true, true, true, true, true,
+                null));
         Mockito.verify(controller).clicked(Mockito.any());
     }
 
@@ -112,12 +115,12 @@ public class TileViewTest {
     public void hoveringEnterVertexText() {
         creategraph();
         buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0), gr);
+        Group result = tileview.drawGraph(buckets.getSegments(0), gr, null);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
-                        MouseEvent.MOUSE_ENTERED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                        true, true, true, true, true, true, true, true, true, true,
-                        null));
+                MouseEvent.MOUSE_ENTERED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
+                true, true, true, true, true, true, true, true, true, true,
+                null));
         Mockito.verify(controller).hovered(Mockito.any(), Mockito.eq(true));
     }
 
@@ -125,12 +128,12 @@ public class TileViewTest {
     public void hoveringExitVertexText() {
         creategraph();
         buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0), gr);
+        Group result = tileview.drawGraph(buckets.getSegments(0), gr, null);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
-                        MouseEvent.MOUSE_EXITED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                        true, true, true, true, true, true, true, true, true, true,
-                        null));
+                MouseEvent.MOUSE_EXITED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
+                true, true, true, true, true, true, true, true, true, true,
+                null));
         Mockito.verify(controller).hovered(Mockito.any(), Mockito.eq(false));
     }
 

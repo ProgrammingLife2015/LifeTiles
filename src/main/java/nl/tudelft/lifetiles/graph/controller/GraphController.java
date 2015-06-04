@@ -3,6 +3,10 @@ package nl.tudelft.lifetiles.graph.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -10,9 +14,15 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.shape.Rectangle;
+import nl.tudelft.lifetiles.annotation.model.GenomeAnnotation;
+import nl.tudelft.lifetiles.annotation.model.GenomeAnnotationParser;
+import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
+import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationMapper;
+import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationParser;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.controller.MenuController;
 import nl.tudelft.lifetiles.core.util.Message;
+import nl.tudelft.lifetiles.core.util.Timer;
 import nl.tudelft.lifetiles.graph.model.DefaultGraphParser;
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
 import nl.tudelft.lifetiles.graph.model.Graph;
@@ -57,6 +67,11 @@ public class GraphController extends AbstractController {
     private Graph<SequenceSegment> graph;
 
     /**
+     * Group used to draw the tileGraph on.
+     */
+    private Group root;
+
+    /**
      * Graph node used to draw the update graph based on bucket cache technique.
      */
     private Group graphNode;
@@ -73,6 +88,32 @@ public class GraphController extends AbstractController {
     private boolean forceRepaintPosition;
 
     /**
+     * The currently inserted annotations.
+     */
+    private Map<SequenceSegment, List<ResistanceAnnotation>> resistanceAnnotations;
+
+    /**
+     * The currently inserted genome annotations.
+     */
+    private Map<String, GenomeAnnotation> genomeAnnotations;
+
+    /**
+     * A shout message indicating annotations have been inserted.
+     */
+    public static final Message ANNOTATIONS = Message.create("annotations");
+
+    /**
+     * A shout message indicating genomes have been inserted.
+     */
+    public static final Message GENOMES = Message.create("genomes");
+
+    /**
+     * Boolean indicating whether the annotations in the graph have been
+     * changed.
+     */
+    private boolean changed = false;
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -82,18 +123,19 @@ public class GraphController extends AbstractController {
         NotificationFactory notFact = new NotificationFactory();
         forceRepaintPosition = false;
 
-        listen(Message.OPENED, (controller, args) -> {
-            assert controller instanceof MenuController;
-            assert args[0] instanceof File && args[1] instanceof File;
+        listen(Message.OPENED,
+                (controller, args) -> {
+                    assert controller instanceof MenuController;
+                    assert args[0] instanceof File && args[1] instanceof File;
 
-            try {
-                loadGraph((File) args[0], (File) args[1]);
-            } catch (IOException exception) {
-                shout(NotificationController.NOTIFY, notFact
-                        .getNotification(exception));
-            }
+                    try {
+                        loadGraph((File) args[0], (File) args[1]);
+                    } catch (IOException exception) {
+                        shout(NotificationController.NOTIFY,
+                                notFact.getNotification(exception));
+                    }
 
-        });
+                });
 
         listen(Message.FILTERED, (controller, args) -> {
             assert args.length == 1;
@@ -104,6 +146,47 @@ public class GraphController extends AbstractController {
             repaint();
         });
 
+        listen(ANNOTATIONS,
+                (controller, args) -> {
+                    assert controller instanceof MenuController;
+                    assert args[0] instanceof File;
+
+                    if (graph == null) {
+                        shout(NotificationController.NOTIFY, notFact
+                                .getNotification(new IllegalStateException(
+                                        "Graph not loaded.")));
+                    } else if (genomeAnnotations == null) {
+                        shout(NotificationController.NOTIFY, notFact
+                                .getNotification(new IllegalStateException(
+                                        "Genomes not loaded.")));
+                    } else {
+                        try {
+                            insertResistanceAnnotations((File) args[0]);
+                        } catch (IOException exception) {
+                            shout(NotificationController.NOTIFY,
+                                    notFact.getNotification(exception));
+                        }
+                    }
+                });
+
+        listen(GENOMES,
+                (controller, args) -> {
+                    assert controller instanceof MenuController;
+                    assert args[0] instanceof File;
+
+                    if (graph == null) {
+                        shout(NotificationController.NOTIFY, notFact
+                                .getNotification(new IllegalStateException(
+                                        "Graph not loaded.")));
+                    } else {
+                        try {
+                            insertGenomes((File) args[0]);
+                        } catch (IOException exception) {
+                            shout(NotificationController.NOTIFY,
+                                    notFact.getNotification(exception));
+                        }
+                    }
+                });
     }
 
     /**
@@ -134,10 +217,48 @@ public class GraphController extends AbstractController {
         GraphFactory<SequenceSegment> factory = FactoryProducer.getFactory();
         GraphParser parser = new DefaultGraphParser();
         graph = parser.parseGraph(vertexfile, edgefile, factory);
+        resistanceAnnotations = new HashMap<>();
+        genomeAnnotations = new HashMap<>();
 
         shout(Message.LOADED, graph, parser.getSequences());
         repaint();
 
+    }
+
+    /**
+     * Inserts a list of annotations onto the graph from the specified file.
+     *
+     * @param file
+     *            The file to get annotations from.
+     * @throws IOException
+     *             When an IO error occurs while reading one of the files.
+     */
+    private void insertResistanceAnnotations(final File file)
+            throws IOException {
+        Timer timer = Timer.getAndStart();
+        Sequence reference = this.graph.getSources().iterator().next()
+                .getSources().iterator().next();
+        resistanceAnnotations = ResistanceAnnotationMapper.mapAnnotations(
+                genomeAnnotations, graph, ResistanceAnnotationParser.parseAnnotations(file),
+                reference);
+
+        timer.stopAndLog("Inserting annotations");
+        forceRepaintPosition = true;
+        repaintPosition(root, wrapper.hvalueProperty().doubleValue());
+    }
+
+    /**
+     * Inserts a map of genomes to be used by the resistance annotations.
+     *
+     * @param file
+     *            The file to get genomes from.
+     * @throws IOException
+     *             When an IO error occurs while reading one of the files.
+     */
+    private void insertGenomes(final File file) throws IOException {
+        Timer timer = Timer.getAndStart();
+        genomeAnnotations = GenomeAnnotationParser.parseGenomeAnnotations(file);
+        timer.stopAndLog("Inserting genomes");
     }
 
     /**
@@ -150,7 +271,7 @@ public class GraphController extends AbstractController {
             }
             view = new TileView(this);
 
-            Group root = new Group();
+            root = new Group();
 
             wrapper.hvalueProperty().addListener(
                     (observable, oldValue, newValue) -> {
@@ -185,7 +306,6 @@ public class GraphController extends AbstractController {
             wrapper.setContent(root);
             currentPosition = nextPosition;
             forceRepaintPosition = false;
-
         }
     }
 
@@ -225,7 +345,8 @@ public class GraphController extends AbstractController {
      * @return Group object to be drawn on the screen
      */
     public final Group drawGraph(final int position) {
-        return view.drawGraph(model.getVisibleSegments(position), graph);
+        return view.drawGraph(model.getVisibleSegments(position), graph,
+                resistanceAnnotations);
     }
 
     /**

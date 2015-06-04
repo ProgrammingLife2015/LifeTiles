@@ -17,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.MouseButton;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import nl.tudelft.lifetiles.core.util.FileUtils;
 import nl.tudelft.lifetiles.core.util.Message;
@@ -108,7 +109,7 @@ public class MenuController extends AbstractController {
             return;
         }
 
-        List<File> dataFiles = new ArrayList<>();
+        List<File> dataFiles = new ArrayList<>();        
         List<String> exts = Arrays.asList(".node.graph", ".edge.graph", ".nwk");
         for (String ext : exts) {
             List<File> hits = FileUtils.findByExtension(directory, ext);
@@ -116,12 +117,97 @@ public class MenuController extends AbstractController {
                 throw new IOException("Expected 1 " + ext + " file intead of "
                         + hits.size());
             }
-
             dataFiles.add(hits.get(0));
         }
-
+        
         shout(Message.OPENED, dataFiles.get(0), dataFiles.get(1),
                 dataFiles.get(2));
+
+        List<File> genomes = FileUtils.findByExtension(directory, ".gff");
+        if (genomes != null && !genomes.isEmpty()) {
+            shout(GraphController.GENOMES, genomes.get(0));
+        }
+        
+        List<File> annotations = FileUtils.findByExtension(directory, ".txt");
+        if (annotations != null && !annotations.isEmpty()) {
+            shout(GraphController.ANNOTATIONS, annotations.get(0));
+        }
+    }
+
+    /**
+     * Handle action to "Insert Genomes" menu item.
+     *
+     * @param event
+     *            Event on "Insert Resistance Annotations" item.
+     */
+    @FXML
+    private void insertGenomesAction(final ActionEvent event) {
+        try {
+            loadGenomesFile();
+        } catch (IOException e) {
+            AbstractNotification notification = nf.getNotification(e);
+            shout(NotificationController.NOTIFY, notification);
+        }
+    }
+
+    /**
+     * Handle action to "Insert Resistance Annotations" menu item.
+     *
+     * @param event
+     *            Event on "Insert Resistance Annotations" item.
+     */
+    @FXML
+    private void insertResistanceAnnotationsAction(final ActionEvent event) {
+        try {
+            loadResistanceAnnotationsFile();
+        } catch (IOException e) {
+            AbstractNotification notification = nf.getNotification(e);
+            shout(NotificationController.NOTIFY, notification);
+        }
+    }
+
+    /**
+     * Perform functionality associated with opening and inserting a genome
+     * file.
+     *
+     * @throws IOException
+     *             throws <code>IOException</code> if any of the files were not
+     *             found
+     */
+    private void loadGenomesFile() throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open file containing genomes");
+        Window window = menuBar.getScene().getWindow();
+        File file = fileChooser.showOpenDialog(window);
+
+        // user aborted
+        if (file == null) {
+            return;
+        }
+
+        shout(GraphController.GENOMES, file);
+    }
+
+    /**
+     * Perform functionality associated with opening and inserting a annotation
+     * file.
+     *
+     * @throws IOException
+     *             throws <code>IOException</code> if any of the files were not
+     *             found
+     */
+    private void loadResistanceAnnotationsFile() throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open file containing resistance annotations");
+        Window window = menuBar.getScene().getWindow();
+        File file = fileChooser.showOpenDialog(window);
+
+        // user aborted
+        if (file == null) {
+            return;
+        }
+
+        shout(GraphController.ANNOTATIONS, file);
     }
 
     /**
