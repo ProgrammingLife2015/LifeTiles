@@ -126,7 +126,11 @@ public class ResistanceAnnotation extends AbstractAnnotation {
     }
 
     /**
-     * {@inheritDoc}
+     * Returns the String representation for the annotation to be displayed in
+     * the tooltip of it's bookmark.
+     * 
+     * @return
+     *         Tooltip string representation.
      */
     public String toString() {
         Formatter formatter = new Formatter();
