@@ -110,6 +110,9 @@ public class MenuController extends AbstractController {
         }
 
         List<File> dataFiles = new ArrayList<>();
+        List<File> annotations = FileUtils.findByExtension(directory, ".txt");
+        
+        
         List<String> exts = Arrays.asList(".node.graph", ".edge.graph", ".nwk");
         for (String ext : exts) {
             List<File> hits = FileUtils.findByExtension(directory, ext);
@@ -120,9 +123,12 @@ public class MenuController extends AbstractController {
 
             dataFiles.add(hits.get(0));
         }
-
+        
         shout(Message.OPENED, dataFiles.get(0), dataFiles.get(1),
                 dataFiles.get(2));
+        if (annotations != null && !annotations.isEmpty()) {
+            shout(Message.ANNOTATIONS, annotations.get(0));
+        }
     }
 
     /**
