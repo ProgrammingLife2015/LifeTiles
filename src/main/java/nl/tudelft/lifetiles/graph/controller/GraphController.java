@@ -88,7 +88,7 @@ public class GraphController extends AbstractController {
      * The currently inserted annotations.
      */
     private Map<SequenceSegment, List<ResistanceAnnotation>> annotations;
-    
+
     /**
      * A shout message indicating annotations have been inserted.
      */
