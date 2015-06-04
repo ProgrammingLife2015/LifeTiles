@@ -56,6 +56,31 @@ public final class GenomeAnnotationParser {
      * @return parsed genome.
      */
     private static GenomeAnnotation parseGenomeAnnotation(final String line) {
+        String[] columns = line.split("\t");
+        if (columns[2].equals("gene")) {
+            long start = Long.parseLong(columns[3]);
+            long end = Long.parseLong(columns[4]);
+            Map<String, String> fields = extractGenomeFields(columns[8]
+                    .split(";"));
+            String name = fields.get("Name");
+            return new GenomeAnnotation(start, end, name);
+        }
         return null;
+    }
+
+    /**
+     * Method which extract the genome fields into a map.
+     * 
+     * @param fields
+     *            Fields of the genome.
+     * @return Map of attributes in the genome.
+     */
+    private static Map<String, String> extractGenomeFields(String[] fields) {
+        Map<String, String> genomeFields = new HashMap<String, String>();
+        for (String field : fields) {
+            String[] attribute = field.split("=");
+            genomeFields.put(attribute[0], attribute[1]);
+        }
+        return genomeFields;
     }
 }
