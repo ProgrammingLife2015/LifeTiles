@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.annotation.model;
 
-import java.util.List;
+import java.util.Formatter;
+import java.util.Set;
 
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
@@ -103,9 +104,7 @@ public class ResistanceAnnotation extends AbstractAnnotation {
     }
 
     /**
-     * TODO: Figure out a way to map resistance annotations onto a graph or list
-     * of segments.
-     * Method which maps this annotation to a sequence.
+     * Maps resistance annotations onto a set of segments.
      *
      * @param segments
      *            Segments to map the annotation to.
@@ -114,9 +113,34 @@ public class ResistanceAnnotation extends AbstractAnnotation {
      * @return segment which annotation should be mapped to.
      */
     @Override
-    public SequenceSegment mapOntoSequence(
-            final List<SequenceSegment> segments, final Sequence reference) {
+    public SequenceSegment mapOntoSequence(final Set<SequenceSegment> segments,
+            final Sequence reference) {
+        for (SequenceSegment segment : segments) {
+            if (segment.getSources().contains(reference)
+                    && segment.getStart() <= getGenomePosition()
+                    && segment.getEnd() > getGenomePosition()) {
+                return segment;
+            }
+        }
         return null;
+    }
+
+    /**
+     * Returns the String representation for the annotation to be displayed in
+     * the tooltip of it's bookmark.
+     *
+     * @return
+     *         Tooltip string representation.
+     */
+    public String toString() {
+        Formatter formatter = new Formatter();
+        formatter
+                .format("Gene Name: %1$s%nGene Position: %2$s%nMutation Type: %3$s%nChange: %4$s%nFilter: %5$s%nDrug Resistance: %6$s",
+                        geneName, getGenomePosition(), typeOfMutation, change,
+                        filter, drugResistance);
+        String annotation = formatter.toString();
+        formatter.close();
+        return annotation;
     }
 
 }
