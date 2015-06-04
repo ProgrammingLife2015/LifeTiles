@@ -149,7 +149,6 @@ public class EdgeLine extends Group {
      */
     private Boolean outofboundsY(final Bounds source, final Bounds destination) {
         // Check if source is completely below the destination
-
         if (source.getMinY() > destination.getMaxY()
                 && source.getMaxY() > destination.getMinY()
                 && source.getMinY() > destination.getMinY()
@@ -159,9 +158,11 @@ public class EdgeLine extends Group {
         }
         // Check if source is completely above the destination
         if (source.getMinY() < destination.getMaxY()
-                && source.getMaxY() < destination.getMinY()
+
+        && source.getMaxY() < destination.getMinY()
                 && source.getMinY() < destination.getMinY()
                 && source.getMaxY() < destination.getMaxY()) {
+
             return true;
         }
 
