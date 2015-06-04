@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -87,7 +86,7 @@ public class TileView {
      */
     public final Group drawGraph(final Set<SequenceSegment> segments,
             final Graph<SequenceSegment> graph,
-            Map<SequenceSegment, List<ResistanceAnnotation>> annotations) {
+            final Map<SequenceSegment, List<ResistanceAnnotation>> annotations) {
         Group root = new Group();
 
         lanes = new ArrayList<Long>();

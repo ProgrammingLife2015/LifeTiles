@@ -66,6 +66,8 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      *            original JGraphT grah
      * @param edgeFact
      *            The edgefactory to use for this graph.
+     * @param vertexIds
+     *            Vertex identifiers
      */
     protected JGraphTGraphAdapter(
             final DirectedGraph<V, DefaultEdge> jgraptGraph,
@@ -80,8 +82,8 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      */
     @Override
     public final void addEdge(final int source, final int destination) {
-        addEdge(vertexIdentifiers.get(source), vertexIdentifiers
-                .get(destination));
+        addEdge(vertexIdentifiers.get(source),
+                vertexIdentifiers.get(destination));
 
     }
 
