@@ -50,7 +50,7 @@ public final class GenomeAnnotationParser {
     /**
      * Parses a single line of the genome file into a genome.
      * TODO: specific implementation of the genome field handling.
-     * 
+     *
      * @param line
      *            Single line of the genome file.
      * @return parsed genome.

@@ -218,6 +218,7 @@ public class GraphController extends AbstractController {
         GraphParser parser = new DefaultGraphParser();
         graph = parser.parseGraph(vertexfile, edgefile, factory);
         resistanceAnnotations = new HashMap<>();
+        genomeAnnotations = new HashMap<>();
 
         shout(Message.LOADED, graph, parser.getSequences());
         repaint();
@@ -238,7 +239,7 @@ public class GraphController extends AbstractController {
         Sequence reference = this.graph.getSources().iterator().next()
                 .getSources().iterator().next();
         resistanceAnnotations = ResistanceAnnotationMapper.mapAnnotations(
-                graph, ResistanceAnnotationParser.parseAnnotations(file),
+                genomeAnnotations, graph, ResistanceAnnotationParser.parseAnnotations(file),
                 reference);
 
         timer.stopAndLog("Inserting annotations");

@@ -29,7 +29,9 @@ public final class ResistanceAnnotationMapper {
 
     /**
      * Maps a list of annotations to a graph.
-     *
+     * 
+     * @param genomes
+     *            Map of genomes in the graph.
      * @param graph
      *            Graph to annotate the annotations onto.
      * @param annotations
@@ -41,13 +43,15 @@ public final class ResistanceAnnotationMapper {
      *         Map which maps segments to a list of annotations.
      */
     public static Map<SequenceSegment, List<ResistanceAnnotation>> mapAnnotations(
+            final Map<String, GenomeAnnotation> genomes,
             final Graph<SequenceSegment> graph,
             final List<ResistanceAnnotation> annotations,
             final Sequence reference) {
         Set<SequenceSegment> segments = selectReference(graph, reference);
         Map<SequenceSegment, List<ResistanceAnnotation>> annotatedSegments = new HashMap<>();
         for (ResistanceAnnotation annotation : annotations) {
-             SequenceSegment segment = annotation.mapOntoSequence(segments,
+            annotation.mapOntoGenome(genomes);
+            SequenceSegment segment = annotation.mapOntoSequence(segments,
                     reference);
             if (segment != null) {
                 if (!annotatedSegments.containsKey(segment)) {
