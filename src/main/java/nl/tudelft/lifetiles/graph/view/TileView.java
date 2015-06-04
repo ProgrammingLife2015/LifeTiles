@@ -92,8 +92,10 @@ public class TileView {
         lanes = new ArrayList<Long>();
 
         for (SequenceSegment segment : segments) {
-            List<ResistanceAnnotation> segmentAnnotations = annotations
-                    .get(segment);
+            List<ResistanceAnnotation> segmentAnnotations = null;
+            if (annotations != null && annotations.containsKey(segment)) {
+                annotations.get(segment);
+            }
             drawVertexLane(segment, segmentAnnotations);
         }
 
