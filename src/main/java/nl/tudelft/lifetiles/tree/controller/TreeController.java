@@ -211,8 +211,8 @@ public class TreeController extends AbstractController {
         // copy the children when they are needed
         for (PhylogeneticTreeItem child : node.getChildren()) {
             // check if this child is needed
-            for (Sequence sequence : node.getChildSequences()) {
-                if (visibleSequences.contains(sequence)) {
+            for (Sequence sequence : visibleSequences) {
+                if (node.getChildSequences().contains(sequence)) {
                     PhylogeneticTreeItem subtree = subTree(child);
                     if (subtree != null) {
                         subtree.setParent(result);
@@ -223,6 +223,9 @@ public class TreeController extends AbstractController {
         }
         // remove useless nodes(nodes with at single child can be removed from
         // the subtree)
+        if (result.getChildren().isEmpty() && result.getName() == null) {
+            return null;
+        }
         if (result.getChildren().size() == 1) {
             result = result.getChildren().get(0);
         }
