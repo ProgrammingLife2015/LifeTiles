@@ -94,7 +94,7 @@ public class TileView {
         for (SequenceSegment segment : segments) {
             List<ResistanceAnnotation> segmentAnnotations = null;
             if (annotations != null && annotations.containsKey(segment)) {
-                annotations.get(segment);
+                segmentAnnotations = annotations.get(segment);
             }
             drawVertexLane(segment, segmentAnnotations);
         }
