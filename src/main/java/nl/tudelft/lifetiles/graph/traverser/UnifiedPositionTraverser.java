@@ -1,11 +1,10 @@
 package nl.tudelft.lifetiles.graph.traverser;
 
-import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
+import java.util.Iterator;
 
+import nl.tudelft.lifetiles.core.util.IteratorUtils;
 import nl.tudelft.lifetiles.core.util.Timer;
+import nl.tudelft.lifetiles.graph.model.BreadthFirstIterator;
 import nl.tudelft.lifetiles.graph.model.Edge;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
@@ -46,37 +45,14 @@ public class UnifiedPositionTraverser {
     private void unifyGraph() {
         Timer timer = Timer.getAndStart();
 
-        // a queue for breadth-first
-        Queue<SequenceSegment> queue = new ArrayDeque<>();
-        Map<SequenceSegment, Integer> waiting = new HashMap<>();
-
         for (SequenceSegment vertex : graph.getSources()) {
             vertex.setUnifiedStart(1);
             vertex.setUnifiedEnd(1 + vertex.getContent().getLength());
-            queue.add(vertex);
         }
 
-        while (!queue.isEmpty()) {
-            SequenceSegment vertex = queue.poll();
-
-            // Only continue traversal once all incoming paths to this vertex
-            // have been traversed.
-            final int inLinks = graph.getIncoming(vertex).size();
-            if (waiting.containsKey(vertex)) {
-                int newVal = waiting.get(vertex) - 1;
-                if (newVal < 1) {
-                    // not waiting for the vertex anymore, continue traversal
-                    waiting.remove(vertex);
-                } else {
-                    waiting.put(vertex, newVal);
-                    continue;
-                }
-            } else if (inLinks > 1) {
-                waiting.put(vertex, inLinks - 1);
-                continue;
-            }
-
-            final long position = vertex.getUnifiedStart()
+        Iterator<SequenceSegment> iterator = new BreadthFirstIterator<>(graph);
+        for (SequenceSegment vertex : IteratorUtils.toIterable(iterator)) {
+            long position = vertex.getUnifiedStart()
                     + vertex.getContent().getLength();
             for (Edge<SequenceSegment> edge : graph.getOutgoing(vertex)) {
                 SequenceSegment next = graph.getDestination(edge);
@@ -84,7 +60,6 @@ public class UnifiedPositionTraverser {
                     next.setUnifiedStart(position);
                     next.setUnifiedEnd(position + next.getContent().getLength());
                 }
-                queue.add(next);
             }
         }
 
