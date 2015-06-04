@@ -203,7 +203,7 @@ public class TileView {
 
         if (annotations != null) {
             for (ResistanceAnnotation annotation : annotations) {
-                long segmentPosition = annotation.getGenomePosition()
+                long segmentPosition = annotation.getPosition()
                         - segment.getStart();
                 Bookmark bookmark = new Bookmark(vertex, annotation,
                         segmentPosition);
