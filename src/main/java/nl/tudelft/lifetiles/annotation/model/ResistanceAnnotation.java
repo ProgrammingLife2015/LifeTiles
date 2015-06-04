@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.annotation.model;
 
 import java.util.Formatter;
+import java.util.Map;
 import java.util.Set;
 
 import nl.tudelft.lifetiles.sequence.model.Sequence;
@@ -13,7 +14,7 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
  * @author Jos
  *
  */
-public class ResistanceAnnotation extends AbstractPointAnnotation {
+public class ResistanceAnnotation {
 
     /**
      * Name of the gene.
@@ -41,6 +42,22 @@ public class ResistanceAnnotation extends AbstractPointAnnotation {
     private final String drugResistance;
 
     /**
+     * Position of the annotation on the genome.
+     */
+    private final long genomePosition;
+
+    /**
+     * SequenceSegment this resistance annotation is mapped to. Needed for
+     * feature: jumping to segment in the view.
+     */
+    private SequenceSegment segment;
+
+    /**
+     * Genome annotation this resistance is belonging to.
+     */
+    private GenomeAnnotation genome;
+
+    /**
      * Construct a resistance annotation.
      *
      * @param geneName
@@ -60,7 +77,7 @@ public class ResistanceAnnotation extends AbstractPointAnnotation {
             final String typeOfMutation, final String change,
             final String filter, final long genomePosition,
             final String drugResistance) {
-        super(genomePosition);
+        this.genomePosition = genomePosition;
         this.geneName = geneName;
         this.typeOfMutation = typeOfMutation;
         this.change = change;
@@ -112,17 +129,51 @@ public class ResistanceAnnotation extends AbstractPointAnnotation {
      *            The current reference used in the list of segments.
      * @return segment which annotation should be mapped to.
      */
-    @Override
     public SequenceSegment mapOntoSequence(final Set<SequenceSegment> segments,
             final Sequence reference) {
-        for (SequenceSegment segment : segments) {
-            if (segment.getSources().contains(reference)
-                    && segment.getStart() <= getGenomePosition()
-                    && segment.getEnd() > getGenomePosition()) {
-                return segment;
+        if (genome != null) {
+            for (SequenceSegment segment : segments) {
+                if (segment.getSources().contains(reference)
+                        && !segment.getContent().isEmpty()
+                        && segment.getStart() <= getPosition()
+                        && segment.getEnd() > getPosition()) {
+                    this.segment = segment;
+                    return segment;
+                }
             }
         }
         return null;
+    }
+
+    /**
+     * Maps genome annotation onto this resistance annotation.
+     * 
+     * @param genomes
+     *            Map of annotations by genomeName.
+     */
+    public void mapOntoGenome(final Map<String, GenomeAnnotation> genomes) {
+        if (genomes.containsKey(geneName)) {
+            genome = genomes.get(geneName);
+        }
+    }
+
+    /**
+     * Returns the position of the annotation on the genome.
+     *
+     * @return position of the annotation on the genome.
+     */
+    public final long getGenomePosition() {
+        return genomePosition;
+    }
+
+    /**
+     * Returns the position of the resistance annotation on the sequence.
+     * 
+     * @return
+     *         Position of the resistance annotation on the sequence.
+     */
+    private long getPosition() {
+        return getGenomePosition() + genome.getStart();
     }
 
     /**
