@@ -128,7 +128,7 @@ public class ResistanceAnnotation extends AbstractAnnotation {
     /**
      * Returns the String representation for the annotation to be displayed in
      * the tooltip of it's bookmark.
-     * 
+     *
      * @return
      *         Tooltip string representation.
      */

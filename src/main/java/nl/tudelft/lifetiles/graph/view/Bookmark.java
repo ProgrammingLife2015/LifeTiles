@@ -1,7 +1,6 @@
 package nl.tudelft.lifetiles.graph.view;
 
 import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.control.Tooltip;
