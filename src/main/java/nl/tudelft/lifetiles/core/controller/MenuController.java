@@ -185,7 +185,7 @@ public class MenuController extends AbstractController {
             return;
         }
 
-        shout(Message.GENOMES, file);
+        shout(GraphController.GENOMES, file);
     }
 
     /**

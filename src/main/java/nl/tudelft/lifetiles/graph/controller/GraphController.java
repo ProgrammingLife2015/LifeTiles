@@ -169,7 +169,7 @@ public class GraphController extends AbstractController {
                     }
                 });
 
-        listen(Message.GENOMES,
+        listen(GENOMES,
                 (controller, args) -> {
                     assert controller instanceof MenuController;
                     assert args[0] instanceof File;
