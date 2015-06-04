@@ -9,6 +9,11 @@ package nl.tudelft.lifetiles.annotation.model;
 public class GenomeAnnotation extends AbstractDomainAnnotation {
 
     /**
+     * Name of the genome.
+     */
+    private String name;
+
+    /**
      * Construct a genome annotation.
      * 
      * @param start
@@ -20,6 +25,14 @@ public class GenomeAnnotation extends AbstractDomainAnnotation {
      */
     public GenomeAnnotation(final long start, final long end, final String name) {
         super(start, end);
+        this.name = name;
+    }
+
+    /**
+     * @return name of the genome.
+     */
+    public String getName() {
+        return name;
     }
 
 }

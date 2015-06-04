@@ -3,10 +3,8 @@ package nl.tudelft.lifetiles.annotation.model;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,10 +30,10 @@ public final class GenomeAnnotationParser {
         String line;
         while (iterator.hasNext()) {
             line = iterator.next();
-            parseGenomeAnnotation(line);
-            genomeAnnotations
+            GenomeAnnotation genome = parseGenomeAnnotation(line);
+            genomeAnnotations.put(genome.getName(), genome);
         }
-        return annotations;
+        return genomeAnnotations;
     }
 
     private static GenomeAnnotation parseGenomeAnnotation(final String line) {
