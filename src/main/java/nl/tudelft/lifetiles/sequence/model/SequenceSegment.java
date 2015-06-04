@@ -66,21 +66,26 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      */
     private static final List<ToIntBiFunction<SequenceSegment, SequenceSegment>> COMPARATORS = Arrays
             .asList((left, right) -> {
-                return Long.compare(left.getUnifiedStart(), right
-                        .getUnifiedStart());
-            }, (left, right) -> {
-                return Long.compare(left.getStart(), right.getStart());
-            }, (left, right) -> {
-                return Long
-                        .compare(left.getUnifiedEnd(), right.getUnifiedEnd());
-            }, (left, right) -> {
-                return Long.compare(left.getEnd(), right.getEnd());
-            }, (left, right) -> {
-                return left.getContent().toString().compareTo(
-                        right.getContent().toString());
-            }, (left, right) -> {
-                return left.getSources().size() - right.getSources().size();
-            });
+                return Long.compare(left.getUnifiedStart(),
+                        right.getUnifiedStart());
+            },
+                    (left, right) -> {
+                        return Long.compare(left.getStart(), right.getStart());
+                    },
+                    (left, right) -> {
+                        return Long.compare(left.getUnifiedEnd(),
+                                right.getUnifiedEnd());
+                    },
+                    (left, right) -> {
+                        return Long.compare(left.getEnd(), right.getEnd());
+                    },
+                    (left, right) -> {
+                        return left.getContent().toString()
+                                .compareTo(right.getContent().toString());
+                    }, (left, right) -> {
+                        return left.getSources().size()
+                                - right.getSources().size();
+                    });
 
     /**
      * @param sources
@@ -100,6 +105,31 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
         this.end = endPosition;
         this.content = content;
         identifier = nextId.incrementAndGet();
+    }
+
+    /**
+     * Constructs a sequence segment with the given segment id.
+     * Private constructor to be used in the copy method.
+     *
+     * @param sources
+     *            The sources containing this segment.
+     * @param startPosition
+     *            The start position for this segment.
+     * @param endPosition
+     *            The end position for this segment.
+     * @param content
+     *            The content for this segment.
+     * @param identifier
+     *            Identifier of the sequence segment.
+     */
+    private SequenceSegment(final Set<Sequence> sources,
+            final long startPosition, final long endPosition,
+            final SegmentContent content, final int identifier) {
+        this.sources = sources;
+        this.start = startPosition;
+        this.end = endPosition;
+        this.content = content;
+        this.identifier = identifier;
     }
 
     /**
@@ -218,8 +248,8 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
         Iterator<Sequence> thisIt = this.getSources().iterator();
         Iterator<Sequence> otherIt = other.getSources().iterator();
         while (thisIt.hasNext()) {
-            candidateComp = thisIt.next().getIdentifier().compareTo(
-                    otherIt.next().getIdentifier());
+            candidateComp = thisIt.next().getIdentifier()
+                    .compareTo(otherIt.next().getIdentifier());
             if (candidateComp != 0) {
                 return candidateComp;
             }
@@ -330,8 +360,8 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
     @Override
     public final SequenceSegment clone() {
         SequenceSegment seg = new SequenceSegment(new HashSet<Sequence>(
-                getSources()), this.getStart(), this.getEnd(), this
-                .getContent());
+                getSources()), this.getStart(), this.getEnd(),
+                this.getContent(), this.getIdentifier());
 
         seg.setUnifiedStart(this.getUnifiedStart());
         seg.setUnifiedEnd(this.getUnifiedEnd());
