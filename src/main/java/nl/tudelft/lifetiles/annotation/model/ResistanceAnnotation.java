@@ -162,7 +162,7 @@ public class ResistanceAnnotation {
      *
      * @return position of the annotation on the genome.
      */
-    private long getGenomePosition() {
+    public long getGenomePosition() {
         return genomePosition;
     }
 
