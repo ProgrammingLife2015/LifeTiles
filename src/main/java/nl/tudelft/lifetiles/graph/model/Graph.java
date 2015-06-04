@@ -99,12 +99,4 @@ public interface Graph<V> {
      */
     void splitEdge(Edge<V> edge, V vertex);
 
-    /**
-     * Returns a copy of the graph including edges and vertices.
-     *
-     * @param gfact
-     *            Factory used to create the copy of the graph.
-     * @return copy of the Graph.
-     */
-    Graph<V> copy(GraphFactory<V> gfact);
 }
