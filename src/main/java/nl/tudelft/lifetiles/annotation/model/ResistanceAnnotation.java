@@ -1,5 +1,6 @@
 package nl.tudelft.lifetiles.annotation.model;
 
+import java.util.Formatter;
 import java.util.Set;
 
 import nl.tudelft.lifetiles.sequence.model.Sequence;
@@ -128,18 +129,14 @@ public class ResistanceAnnotation extends AbstractAnnotation {
      * {@inheritDoc}
      */
     public String toString() {
-        StringBuffer annotation = new StringBuffer(512);
-        annotation.append("Gene Name: ")
-
-        .append(geneName).append(System.lineSeparator())
-                .append("Gene Position: ").append(getGenomePosition())
-                .append(System.lineSeparator()).append("Mutation Type: ")
-                .append(typeOfMutation).append(System.lineSeparator())
-                .append("Change: ").append(change)
-                .append(System.lineSeparator()).append("Filter: ")
-                .append(filter).append(System.lineSeparator())
-                .append("Drug Resistance: ").append(drugResistance);
-        return annotation.toString();
+        Formatter formatter = new Formatter();
+        formatter
+                .format("Gene Name: %1$s%nGene Position: %2$s%nMutation Type: %3$s%nGene Name: %4$s%nChange: %5$s%nFilter: %6$s%nDrug Resistance %7$s",
+                        geneName, getGenomePosition(), typeOfMutation,
+                        geneName, change, filter, drugResistance);
+        String annotation = formatter.toString();
+        formatter.close();
+        return annotation;
     }
 
 }
