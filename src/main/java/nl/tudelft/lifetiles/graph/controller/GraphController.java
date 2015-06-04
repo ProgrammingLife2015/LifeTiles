@@ -97,10 +97,7 @@ public class GraphController extends AbstractController {
 
         listen(Message.FILTERED, (controller, args) -> {
             assert args.length == 1;
-            if (!(args[0] instanceof Set<?>)) {
-                throw new IllegalArgumentException(
-                        "Argument not of type Set<Sequence>");
-            }
+            assert args[0] instanceof Set<?>;
 
             model.setVisible((Set<Sequence>) args[0]);
             forceRepaintPosition = true;
