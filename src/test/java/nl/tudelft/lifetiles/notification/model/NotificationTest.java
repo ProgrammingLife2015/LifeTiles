@@ -11,13 +11,16 @@ import org.junit.Test;
 public class NotificationTest {
 
     private NotificationFactory nf;
-    private AbstractNotification error, warning, info, exception, null1, null2;
+    private AbstractNotification error, error2, warning, info, exception,
+            null1, null2;
 
     @Before
     public void setUp() {
         this.nf = new NotificationFactory();
         this.error = nf.getNotification("Satan", NotificationFactory.ERROR);
-        this.warning = nf.getNotification("Belial", NotificationFactory.WARNING);
+        this.error2 = nf.getNotification("Satan", NotificationFactory.ERROR);
+        this.warning = nf
+                .getNotification("Belial", NotificationFactory.WARNING);
         this.info = nf.getNotification("Lucifer", NotificationFactory.INFO);
         this.exception = nf.getNotification(new IOException("Beelzebub"));
         this.null1 = nf.getNotification(null, NotificationFactory.INFO);
@@ -53,19 +56,19 @@ public class NotificationTest {
 
     @Test
     public void testNotificationHashCode() {
-        final int expected = -320626619;
-        assertEquals(expected, error.hashCode());
+        assertEquals(error2.hashCode(), error.hashCode());
     }
 
     @Test
-    public void testNotificationHashCodeNull() {
-        final int expected = 383012891;
-        assertEquals(expected, null1.hashCode());
+    public void testNotificationHashCodeUnequal() {
+        AbstractNotification error3 = nf.getNotification("Satan",
+                NotificationFactory.ERROR);
+        error3.setDuration(616);
+        assertEquals(error.hashCode(), error3.hashCode());
     }
 
     @Test
     public void testNotificationEquals() {
-        AbstractNotification error2 = nf.getNotification("Satan", NotificationFactory.ERROR);
         assertEquals(error, error2);
     }
 
@@ -82,7 +85,8 @@ public class NotificationTest {
 
     @Test
     public void testNotificationNotEquals1() {
-        AbstractNotification warning2 = nf.getNotification("Jezus", NotificationFactory.WARNING);
+        AbstractNotification warning2 = nf.getNotification("Jezus",
+                NotificationFactory.WARNING);
         assertNotEquals(warning, warning2);
     }
 
