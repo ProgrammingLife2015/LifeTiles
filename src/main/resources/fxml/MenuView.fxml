@@ -17,8 +17,8 @@
 		<Menu text="File">
 			<items>
 				<MenuItem text="Open" onAction="#openAction" />
-				<MenuItem text="Insert Annotations" onAction="#insertAnnotationsAction" />
-				<MenuItem text="Insert Annotations" />
+				<MenuItem text="Insert Genomes" onAction="#insertGenomesAction" />
+				<MenuItem text="Insert Resistance Annotations" onAction="#insertResistanceAnnotationsAction" />
 			</items>
 		</Menu>
 		<Menu text="View">

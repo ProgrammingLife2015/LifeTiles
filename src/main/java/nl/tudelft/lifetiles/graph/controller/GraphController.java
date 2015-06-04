@@ -15,6 +15,7 @@ import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.shape.Rectangle;
 import nl.tudelft.lifetiles.annotation.model.GenomeAnnotation;
+import nl.tudelft.lifetiles.annotation.model.GenomeAnnotationParser;
 import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
 import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationMapper;
 import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationParser;
@@ -162,6 +163,25 @@ public class GraphController extends AbstractController {
                         }
                     }
                 });
+
+        listen(Message.GENOMES,
+                (controller, args) -> {
+                    assert controller instanceof MenuController;
+                    assert args[0] instanceof File;
+
+                    if (graph == null) {
+                        shout(NotificationController.NOTIFY, notFact
+                                .getNotification(new IllegalStateException(
+                                        "Graph not loaded.")));
+                    } else {
+                        try {
+                            insertGenomes((File) args[0]);
+                        } catch (IOException exception) {
+                            shout(NotificationController.NOTIFY,
+                                    notFact.getNotification(exception));
+                        }
+                    }
+                });
     }
 
     /**
@@ -219,6 +239,20 @@ public class GraphController extends AbstractController {
         timer.stopAndLog("Inserting annotations");
         forceRepaintPosition = true;
         repaintPosition(root, wrapper.hvalueProperty().doubleValue());
+    }
+
+    /**
+     * Inserts a map of genomes to be used by the resistance annotations.
+     *
+     * @param file
+     *            The file to get genomes from.
+     * @throws IOException
+     *             When an IO error occurs while reading one of the files.
+     */
+    private void insertGenomes(final File file) throws IOException {
+        Timer timer = Timer.getAndStart();
+        genomeAnnotations = GenomeAnnotationParser.parseGenomeAnnotations(file);
+        timer.stopAndLog("Inserting genomes");
     }
 
     /**

@@ -132,19 +132,57 @@ public class MenuController extends AbstractController {
     }
 
     /**
-     * Handle action to "Insert Annotations" menu item.
+     * Handle action to "Insert Genomes" menu item.
      *
      * @param event
-     *            Event on "Insert Annotations" item.
+     *            Event on "Insert Resistance Annotations" item.
      */
     @FXML
-    private void insertAnnotationsAction(final ActionEvent event) {
+    private void insertGenomesAction(final ActionEvent event) {
         try {
-            loadAnnotationsFile();
+            loadGenomesFile();
         } catch (IOException e) {
             AbstractNotification notification = nf.getNotification(e);
             shout(NotificationController.NOTIFY, notification);
         }
+    }
+
+    /**
+     * Handle action to "Insert Resistance Annotations" menu item.
+     *
+     * @param event
+     *            Event on "Insert Resistance Annotations" item.
+     */
+    @FXML
+    private void insertResistanceAnnotationsAction(final ActionEvent event) {
+        try {
+            loadResistanceAnnotationsFile();
+        } catch (IOException e) {
+            AbstractNotification notification = nf.getNotification(e);
+            shout(NotificationController.NOTIFY, notification);
+        }
+    }
+
+    /**
+     * Perform functionality associated with opening and inserting a genome
+     * file.
+     *
+     * @throws IOException
+     *             throws <code>IOException</code> if any of the files were not
+     *             found
+     */
+    private void loadGenomesFile() throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open file containing genomes");
+        Window window = menuBar.getScene().getWindow();
+        File file = fileChooser.showOpenDialog(window);
+
+        // user aborted
+        if (file == null) {
+            return;
+        }
+
+        shout(Message.GENOMES, file);
     }
 
     /**
@@ -155,9 +193,9 @@ public class MenuController extends AbstractController {
      *             throws <code>IOException</code> if any of the files were not
      *             found
      */
-    private void loadAnnotationsFile() throws IOException {
+    private void loadResistanceAnnotationsFile() throws IOException {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open file containing annotations");
+        fileChooser.setTitle("Open file containing resistance annotations");
         Window window = menuBar.getScene().getWindow();
         File file = fileChooser.showOpenDialog(window);
 
