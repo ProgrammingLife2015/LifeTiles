@@ -88,6 +88,11 @@ public class GraphController extends AbstractController {
      * The currently inserted annotations.
      */
     private Map<SequenceSegment, List<ResistanceAnnotation>> annotations;
+    
+    /**
+     * A shout message indicating annotations have been inserted.
+     */
+    public static final Message ANNOTATIONS = Message.create("annotations");
 
     /**
      * {@inheritDoc}
@@ -122,7 +127,7 @@ public class GraphController extends AbstractController {
             repaint();
         });
 
-        listen(Message.ANNOTATIONS,
+        listen(ANNOTATIONS,
                 (controller, args) -> {
                     assert controller instanceof MenuController;
                     assert args[0] instanceof File;
