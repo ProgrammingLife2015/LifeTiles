@@ -217,7 +217,11 @@ public final class SequenceController extends AbstractController {
                 }
 
                 setVisible(visible, true);
-            } else if (mouseEvent.isSecondaryButtonDown()) {
+            }
+        });
+
+        label.setOnMousePressed(mouseEvent -> {
+            if (mouseEvent.isSecondaryButtonDown()) {
                 getContextMenu(sequence).show(label, mouseEvent.getScreenX(),
                         mouseEvent.getScreenY());
             }
