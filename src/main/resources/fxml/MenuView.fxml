@@ -17,13 +17,10 @@
 		<Menu text="File">
 			<items>
 				<MenuItem text="Open" onAction="#openAction" />
+				<MenuItem text="Insert Annotations" onAction="#insertAnnotationsAction" />
 			</items>
 		</Menu>
 		<Menu text="View">
-			<items>
-				<MenuItem text="Foo" />
-				<MenuItem text="Bar" />
-			</items>
 		</Menu>
 		<Menu text="Filter">
 			<items>
@@ -31,15 +28,8 @@
 			</items>
 		</Menu>
 		<Menu text="Configuration">
-			<items>
-				<MenuItem text="Foo" />
-				<MenuItem text="Bar" />
-			</items>
 		</Menu>
 		<Menu text="Help">
-			<items>
-				<MenuItem text="About" />
-			</items>
 		</Menu>
 	</menus>
 
