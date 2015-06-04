@@ -12,7 +12,7 @@ import javafx.scene.control.Tooltip;
  * @author Jos
  *
  */
-public class Bookmark extends Group {
+public class Bookmark extends Rectangle {
 
     /**
      * The standard opacity of the bookmark overlay.
@@ -36,17 +36,14 @@ public class Bookmark extends Group {
      */
     public Bookmark(final VertexView vertex,
             final ResistanceAnnotation annotation, final long segmentPosition) {
+        super(vertex.HORIZONTALSCALE, vertex.getHeight());
         setLayoutX(vertex.getLayoutX() + segmentPosition
                 * vertex.HORIZONTALSCALE);
         setLayoutY(vertex.getLayoutY());
-
-        Rectangle rectangle = new Rectangle(vertex.HORIZONTALSCALE,
-                vertex.getHeight());
-        rectangle.setOpacity(OPACITY);
-        rectangle.setFill(STANDARD_COLOR);
+        setOpacity(OPACITY);
+        setFill(STANDARD_COLOR);
 
         Tooltip tooltip = new Tooltip(annotation.toString());
-        Tooltip.install(rectangle, tooltip);
-        getChildren().add(rectangle);
+        Tooltip.install(this, tooltip);
     }
 }
