@@ -1,7 +1,6 @@
 package nl.tudelft.lifetiles.graph.model;
 
 import nl.tudelft.lifetiles.graph.model.jgrapht.JGraphTGraphFactory;
-import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,9 +13,7 @@ public class FactoryProducerTest {
 
     @Test
     public void testGetWithParam() {
-        GraphFactory<SequenceSegment> gf = FactoryProducer
-                .getFactory("JGraphT");
-
+        GraphFactory<String> gf = FactoryProducer.getFactory("JGraphT");
         assert (gf instanceof JGraphTGraphFactory<?>);
     }
 
@@ -28,7 +25,7 @@ public class FactoryProducerTest {
 
     @Test
     public void testGet() {
-        GraphFactory<SequenceSegment> gf = FactoryProducer.getFactory();
+        GraphFactory<String> gf = FactoryProducer.getFactory();
         assert (gf instanceof JGraphTGraphFactory<?>);
     }
 
