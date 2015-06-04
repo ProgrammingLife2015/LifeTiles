@@ -1,19 +1,11 @@
 package nl.tudelft.lifetiles.graph.view;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
-import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import nl.tudelft.lifetiles.graph.controller.GraphController;
-import nl.tudelft.lifetiles.graph.model.Edge;
-import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
@@ -29,11 +21,17 @@ public class TileView {
     /**
      * The edges contains all EdgeLines to be displayed.
      */
-    private final Group edges;
+    private Group edges;
     /**
      * The nodes contains all Vertices to be displayed.
      */
-    private final Map<SequenceSegment, VertexView> nodemap;
+    private Group nodes;
+
+    /**
+     * The root contains all the to be displayed
+     * elements.
+     */
+    private Group root;
 
     /**
      * The lanes list which contains the occupation of the lanes inside the
@@ -42,22 +40,16 @@ public class TileView {
     private List<Long> lanes;
 
     /**
-     * Controller for the View.
-     */
-    private final GraphController controller;
-
-    /**
-     * Create the TileView by initializing the groups where the to be drawn
-     * vertices and edges are stored.
+     * Change Vertex colour.
      *
-     * @param control
-     *            The controller for the TileView
+     * @param vertex
+     *            vertex to be changed.
+     * @param color
+     *            the new colour
      */
-    public TileView(final GraphController control) {
-        controller = control;
-
-        nodemap = new HashMap<SequenceSegment, VertexView>();
-        edges = new Group();
+    public final void changeVertexColor(final VertexView vertex,
+            final Color color) {
+        vertex.setColor(color);
     }
 
     /**
@@ -65,48 +57,19 @@ public class TileView {
      *
      * @param segments
      *            Graph to be drawn
-     * @param graph
-     *            graph to base the edges on
      * @return the elements that must be displayed on the screen
      */
-    public final Group drawGraph(final Set<SequenceSegment> segments,
-            final Graph<SequenceSegment> graph) {
-        Group root = new Group();
-
+    public final Group drawGraph(final Set<SequenceSegment> segments) {
+        root = new Group();
+        nodes = new Group();
+        edges = new Group();
         lanes = new ArrayList<Long>();
 
         for (SequenceSegment segment : segments) {
             drawVertexLane(segment);
-
         }
-
-        drawEdges(graph);
-        Group nodes = new Group();
-
-        for (Entry<SequenceSegment, VertexView> entry : nodemap.entrySet()) {
-            nodes.getChildren().add(entry.getValue());
-        }
-
-        root.getChildren().addAll(nodes, edges);
-
+        root.getChildren().addAll(edges, nodes);
         return root;
-    }
-
-    /**
-     * @param graph
-     *            graph to draw the edges from
-     */
-    private void drawEdges(final Graph<SequenceSegment> graph) {
-        for (Edge<SequenceSegment> edge : graph.getAllEdges()) {
-            if (nodemap.containsKey(graph.getSource(edge))
-                    && nodemap.containsKey(graph.getDestination(edge))) {
-
-                VertexView source = nodemap.get(graph.getSource(edge));
-                VertexView destination = nodemap
-                        .get(graph.getDestination(edge));
-                drawEdge(source, destination);
-            }
-        }
     }
 
     /**
@@ -116,6 +79,7 @@ public class TileView {
      *            segment to be drawn
      */
     private void drawVertexLane(final SequenceSegment segment) {
+        String text = segment.getContent().toString();
         long start = segment.getUnifiedStart();
         long width = segment.getContent().getLength();
         long height = segment.getSources().size();
@@ -123,14 +87,12 @@ public class TileView {
         for (int index = 0; index < lanes.size(); index++) {
             if (lanes.get(index) <= segment.getUnifiedStart()
                     && segmentFree(index, segment)) {
-                Point2D startCoordinate = new Point2D(start, index);
-                drawVertex(segment, startCoordinate, width, height, color);
+                drawVertex(text, start, index, width, height, color);
                 segmentInsert(index, segment);
                 return;
             }
         }
-        Point2D startCoordinate = new Point2D(start, lanes.size());
-        drawVertex(segment, startCoordinate, width, height, color);
+        drawVertex(text, start, lanes.size(), width, height, color);
         segmentInsert(lanes.size(), segment);
     }
 
@@ -152,10 +114,12 @@ public class TileView {
     /**
      * Create a Vertex that can be displayed on the screen.
      *
-     * @param segment
-     *            the segment to draw an object for
-     * @param startCoordinate
-     *            top left coordinate to start from
+     * @param text
+     *            text of the dna segment
+     * @param xcoord
+     *            top left x coordinate
+     * @param ycoord
+     *            top left y coordinate
      * @param width
      *            the width of the vertex
      * @param height
@@ -163,34 +127,12 @@ public class TileView {
      * @param color
      *            the colour of the vertex
      */
-
-    private void drawVertex(final SequenceSegment segment,
-            final Point2D startCoordinate, final double width,
-            final double height, final Color color) {
-
-        VertexView vertex = new VertexView(segment.getContent().toString(),
-                startCoordinate.getX(), startCoordinate.getY(), width, height,
+    private void drawVertex(final String text, final double xcoord,
+            final double ycoord, final double width, final double height,
+            final Color color) {
+        VertexView vertex = new VertexView(text, xcoord, ycoord, width, height,
                 color);
-
-        nodemap.put(segment, vertex);
-        vertex.setOnMouseClicked(event -> controller.clicked(segment));
-        // Hovering
-        vertex.setOnMouseEntered(event -> controller.hovered(segment, true));
-        vertex.setOnMouseExited(event -> controller.hovered(segment, false));
-
-    }
-
-    /**
-     * Create an Edge that can be displayed on the screen.
-     *
-     * @param source
-     *            Node to draw from
-     * @param destination
-     *            Node to draw to
-     */
-    private void drawEdge(final Node source, final Node destination) {
-        EdgeLine edge = new EdgeLine(source, destination);
-        edges.getChildren().add(edge);
+        nodes.getChildren().add(vertex);
     }
 
     /**
@@ -231,5 +173,4 @@ public class TileView {
             }
         }
     }
-
 }
