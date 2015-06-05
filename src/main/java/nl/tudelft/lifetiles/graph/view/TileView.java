@@ -10,10 +10,10 @@ import java.util.Set;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
 import nl.tudelft.lifetiles.graph.model.Edge;
 import nl.tudelft.lifetiles.graph.model.Graph;
-import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
@@ -99,7 +99,8 @@ public class TileView {
             drawVertexLane(segment, segmentAnnotations);
         }
 
-        drawEdges(graph);
+        // TODO toggle edge drawing in the settings
+        //drawEdges(graph);
         Group nodes = new Group();
 
         for (Entry<SequenceSegment, VertexView> entry : nodemap.entrySet()) {
