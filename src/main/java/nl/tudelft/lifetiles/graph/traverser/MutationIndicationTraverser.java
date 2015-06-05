@@ -1,5 +1,6 @@
 package nl.tudelft.lifetiles.graph.traverser;
 
+import nl.tudelft.lifetiles.core.util.Timer;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
@@ -36,9 +37,14 @@ public class MutationIndicationTraverser {
      */
     public final Graph<SequenceSegment> indicateGraphMutations(
             final Graph<SequenceSegment> graph) {
+        Timer timer = Timer.getAndStart();
+
         for (SequenceSegment vertex : graph.getAllVertices()) {
             indicateVertexMutations(vertex);
         }
+
+        timer.stopAndLog("Calculating mutations");
+
         return graph;
     }
 

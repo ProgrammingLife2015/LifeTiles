@@ -1,8 +1,12 @@
 package nl.tudelft.lifetiles.graph.traverser;
 
+import java.util.Iterator;
+
+import nl.tudelft.lifetiles.core.util.IteratorUtils;
+import nl.tudelft.lifetiles.core.util.Timer;
+import nl.tudelft.lifetiles.graph.model.BreadthFirstIterator;
 import nl.tudelft.lifetiles.graph.model.Edge;
 import nl.tudelft.lifetiles.graph.model.Graph;
-import nl.tudelft.lifetiles.sequence.model.SegmentString;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
@@ -11,6 +15,7 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
  * the reference sequence.
  *
  * @author Jos
+ * @author Joren Hammudoglu
  *
  */
 public class ReferencePositionTraverser {
@@ -31,7 +36,8 @@ public class ReferencePositionTraverser {
     }
 
     /**
-     * Traverses the graph. Computes the position of the vertices in comparison
+     * Traverses the graph. Computes the position of the vertices in
+     * comparison
      * to the reference sequence. Reference coordinates are needed to indicate
      * mutations.
      *
@@ -39,12 +45,17 @@ public class ReferencePositionTraverser {
      *            Graph to be traversed.
      */
     public final void referenceMapGraph(final Graph<SequenceSegment> graph) {
+        Timer timer = Timer.getAndStart();
+
         referenceMapGraphForward(graph);
         referenceMapGraphBackward(graph);
+
+        timer.stopAndLog("Mapping graph onto reference");
     }
 
     /**
-     * Traverses the graph forward to generate reference start positions.
+     * Traverses the graph forward to generate reference start
+     * positions.
      *
      * @param graph
      *            Graph to be traversed.
@@ -52,7 +63,23 @@ public class ReferencePositionTraverser {
     private void referenceMapGraphForward(final Graph<SequenceSegment> graph) {
         for (SequenceSegment source : graph.getSources()) {
             source.setReferenceStart(1);
-            referenceMapVertexForward(source, graph);
+        }
+
+        Iterator<SequenceSegment> iterator = new BreadthFirstIterator<>(graph);
+
+        for (SequenceSegment vertex : IteratorUtils.toIterable(iterator)) {
+            long position = vertex.getReferenceStart();
+            if (vertex.getSources().contains(reference)
+                    && !vertex.getContent().isEmpty()) {
+                position += vertex.getContent().getLength();
+            }
+
+            for (Edge<SequenceSegment> edge : graph.getOutgoing(vertex)) {
+                SequenceSegment destination = graph.getDestination(edge);
+                if (destination.getReferenceStart() < position) {
+                    destination.setReferenceStart(position);
+                }
+            }
         }
     }
 
@@ -64,62 +91,28 @@ public class ReferencePositionTraverser {
      */
     private void referenceMapGraphBackward(final Graph<SequenceSegment> graph) {
         for (SequenceSegment sink : graph.getSinks()) {
+            long referenceEnd = sink.getReferenceStart() - 1;
             if (sink.getSources().contains(reference)) {
-                sink.setReferenceEnd(sink.getReferenceStart()
-                        + sink.getContent().getLength() - 1);
-            } else {
-                sink.setReferenceEnd(sink.getReferenceStart() - 1);
+                referenceEnd += sink.getContent().getLength();
             }
-            referenceMapVertexBackward(sink, graph);
+            sink.setReferenceEnd(referenceEnd);
         }
-    }
 
-    /**
-     * Traverses a vertex forward to generate its reference start position.
-     *
-     * @param vertex
-     *            Vertex to be traversed, calculate reference start position.
-     * @param graph
-     *            Graph to be traversed.
-     */
-    private void referenceMapVertexForward(final SequenceSegment vertex,
-            final Graph<SequenceSegment> graph) {
-        long position = vertex.getReferenceStart();
+        Iterator<SequenceSegment> iterator = new BreadthFirstIterator<>(graph,
+                true);
+        for (SequenceSegment vertex : IteratorUtils.toIterable(iterator)) {
+            long position = vertex.getReferenceEnd();
 
-        if (vertex.getSources().contains(reference)
-                && vertex.getContent() instanceof SegmentString) {
-            position += vertex.getContent().getLength();
-        }
-        for (Edge<SequenceSegment> edge : graph.getOutgoing(vertex)) {
-            SequenceSegment destination = graph.getDestination(edge);
-            if (destination.getReferenceStart() < position) {
-                destination.setReferenceStart(position);
-                referenceMapVertexForward(destination, graph);
+            if (vertex.getSources().contains(reference)
+                    && !vertex.getContent().isEmpty()) {
+                position -= vertex.getContent().getLength();
             }
-        }
-    }
 
-    /**
-     * Traverses a vertex backward to generate its reference end position.
-     *
-     * @param vertex
-     *            Vertex to be traversed, calculate reference end position.
-     * @param graph
-     *            Graph to be traversed.
-     */
-    private void referenceMapVertexBackward(final SequenceSegment vertex,
-            final Graph<SequenceSegment> graph) {
-        long position = vertex.getReferenceEnd();
-
-        if (vertex.getSources().contains(reference)
-                && vertex.getContent() instanceof SegmentString) {
-            position -= vertex.getContent().getLength();
-        }
-        for (Edge<SequenceSegment> edge : graph.getIncoming(vertex)) {
-            SequenceSegment source = graph.getSource(edge);
-            if (source.getReferenceEnd() > position) {
-                source.setReferenceEnd(position);
-                referenceMapVertexBackward(source, graph);
+            for (Edge<SequenceSegment> edge : graph.getIncoming(vertex)) {
+                SequenceSegment source = graph.getSource(edge);
+                if (source.getReferenceEnd() > position) {
+                    source.setReferenceEnd(position);
+                }
             }
         }
     }

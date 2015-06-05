@@ -9,7 +9,8 @@ import nl.tudelft.lifetiles.graph.model.jgrapht.JGraphTGraphFactory;
  * @param <V>
  *            The type of vertex to use.
  */
-public final class FactoryProducer<V extends Comparable<V>> {
+
+public final class FactoryProducer<V extends Comparable<V> & Cloneable> {
     /**
      * The graph library to use when none is specified.
      */
@@ -33,7 +34,7 @@ public final class FactoryProducer<V extends Comparable<V>> {
      *            the type of vertex the new factory should use.
      * @return A new factory using the default library.
      */
-    public static <V extends Comparable<V>> GraphFactory<V> getFactory() {
+    public static <V extends Comparable<V> & Cloneable> GraphFactory<V> getFactory() {
         return getFactory(DEFAULT_LIBRARY);
     }
 
@@ -44,7 +45,7 @@ public final class FactoryProducer<V extends Comparable<V>> {
      *            the type of vertex the new factory should use.
      * @return A new factory of the desired type.
      */
-    public static <V extends Comparable<V>> GraphFactory<V> getFactory(
+    public static <V extends Comparable<V> & Cloneable> GraphFactory<V> getFactory(
             final String graphLibrary) {
         if (JGRAPHT.equalsIgnoreCase(graphLibrary)) {
             return new JGraphTGraphFactory<V>();

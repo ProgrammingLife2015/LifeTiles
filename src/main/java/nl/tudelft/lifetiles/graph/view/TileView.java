@@ -1,11 +1,18 @@
 package nl.tudelft.lifetiles.graph.view;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.PriorityQueue;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
+import nl.tudelft.lifetiles.graph.controller.GraphController;
+import nl.tudelft.lifetiles.graph.model.Edge;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
@@ -26,59 +33,99 @@ public class TileView {
     /**
      * The nodes contains all Vertices to be displayed.
      */
-    private final Group nodes;
+    private final Map<SequenceSegment, VertexView> nodemap;
+
+    /**
+     * The bookmarks group contains all bookmarks and annotations to be
+     * displayed.
+     */
+    private Group bookmarks;
 
     /**
      * The root contains all the to be displayed
      * elements.
      */
-    private final Group root;
+    private Group root;
 
     /**
      * The lanes list which contains the occupation of the lanes inside the
      * tileview.
      */
-    private final List<Long> lanes;
+    private List<Long> lanes;
+
+    /**
+     * Controller for the View.
+     */
+    private final GraphController controller;
 
     /**
      * Create the TileView by initializing the groups where the to be drawn
      * vertices and edges are stored.
-     */
-    public TileView() {
-        root = new Group();
-        nodes = new Group();
-        edges = new Group();
-        lanes = new LinkedList<Long>();
-    }
-
-    /**
-     * Change Vertex colour.
      *
-     * @param vertex
-     *            vertex to be changed.
-     * @param color
-     *            the new colour
+     * @param control
+     *            The controller for the TileView
      */
-    public final void changeVertexColor(final VertexView vertex,
-            final Color color) {
-        vertex.setColor(color);
+    public TileView(final GraphController control) {
+        controller = control;
+
+        nodemap = new HashMap<SequenceSegment, VertexView>();
+        edges = new Group();
+        bookmarks = new Group();
     }
 
     /**
      * Draw the given graph.
      *
-     * @param graph
+     * @param segments
      *            Graph to be drawn
+     * @param graph
+     *            Graph to base the edges on
+     * @param annotations
+     *            Map from segment to annotations.
      * @return the elements that must be displayed on the screen
      */
-    public final Group drawGraph(final Graph<SequenceSegment> graph) {
-        PriorityQueue<SequenceSegment> iterator = sortStartVar(graph);
-        while (!iterator.isEmpty()) {
-            SequenceSegment segment = iterator.poll();
-            drawVertexLane(segment);
+    public final Group drawGraph(final Set<SequenceSegment> segments,
+            final Graph<SequenceSegment> graph,
+            final Map<SequenceSegment, List<ResistanceAnnotation>> annotations) {
+        Group root = new Group();
+
+        lanes = new ArrayList<Long>();
+
+        for (SequenceSegment segment : segments) {
+            List<ResistanceAnnotation> segmentAnnotations = null;
+            if (annotations != null && annotations.containsKey(segment)) {
+                segmentAnnotations = annotations.get(segment);
+            }
+            drawVertexLane(segment, segmentAnnotations);
         }
-        root.getChildren().addAll(edges, nodes);
+
+        // TODO toggle edge drawing in the settings
+        //drawEdges(graph);
+        Group nodes = new Group();
+
+        for (Entry<SequenceSegment, VertexView> entry : nodemap.entrySet()) {
+            nodes.getChildren().add(entry.getValue());
+        }
+
+        root.getChildren().addAll(nodes, edges, bookmarks);
         return root;
+    }
+
+    /**
+     * @param graph
+     *            graph to draw the edges from
+     */
+    private void drawEdges(final Graph<SequenceSegment> graph) {
+        for (Edge<SequenceSegment> edge : graph.getAllEdges()) {
+            if (nodemap.containsKey(graph.getSource(edge))
+                    && nodemap.containsKey(graph.getDestination(edge))) {
+
+                VertexView source = nodemap.get(graph.getSource(edge));
+                VertexView destination = nodemap
+                        .get(graph.getDestination(edge));
+                drawEdge(source, destination);
+            }
+        }
     }
 
     /**
@@ -86,22 +133,20 @@ public class TileView {
      *
      * @param segment
      *            segment to be drawn
+     * @param annotations
+     *            List of annotations in this segment
      */
-    private void drawVertexLane(final SequenceSegment segment) {
-        String text = segment.getContent().toString();
-        long start = segment.getUnifiedStart();
-        long width = segment.getContent().getLength();
-        long height = segment.getSources().size();
-        Color color = sequenceColor(segment.getMutation());
+    private void drawVertexLane(final SequenceSegment segment,
+            final List<ResistanceAnnotation> annotations) {
         for (int index = 0; index < lanes.size(); index++) {
             if (lanes.get(index) <= segment.getUnifiedStart()
                     && segmentFree(index, segment)) {
-                drawVertex(text, start, index, width, height, color);
+                drawVertex(index, segment, annotations);
                 segmentInsert(index, segment);
                 return;
             }
         }
-        drawVertex(text, start, lanes.size(), width, height, color);
+        drawVertex(lanes.size(), segment, annotations);
         segmentInsert(lanes.size(), segment);
     }
 
@@ -121,27 +166,55 @@ public class TileView {
     }
 
     /**
+     * Create an Edge that can be displayed on the screen.
+     *
+     * @param source
+     *            Node to draw from
+     * @param destination
+     *            Node to draw to
+     */
+    private void drawEdge(final Node source, final Node destination) {
+        EdgeLine edge = new EdgeLine(source, destination);
+        edges.getChildren().add(edge);
+    }
+
+    /**
      * Create a Vertex that can be displayed on the screen.
      *
-     * @param text
-     *            text of the dna segment
-     * @param xcoord
-     *            top left x coordinate
-     * @param ycoord
+     * @param index
      *            top left y coordinate
-     * @param width
-     *            the width of the vertex
-     * @param height
-     *            the height of the vertex
-     * @param color
-     *            the colour of the vertex
+     * @param segment
+     *            the segment to be drawn in the vertex
+     * @param annotations
+     *            the annotations of the vertex
      */
-    private void drawVertex(final String text, final double xcoord,
-            final double ycoord, final double width, final double height,
-            final Color color) {
-        VertexView vertex = new VertexView(text, xcoord, ycoord, width, height,
+    private void drawVertex(final double index, final SequenceSegment segment,
+            final List<ResistanceAnnotation> annotations) {
+        String text = segment.getContent().toString();
+        long start = segment.getUnifiedStart();
+        long width = segment.getContent().getLength();
+        long height = segment.getSources().size();
+
+        Color color = sequenceColor(segment.getMutation());
+
+        VertexView vertex = new VertexView(text, start, index, width, height,
                 color);
-        nodes.getChildren().add(vertex);
+
+        nodemap.put(segment, vertex);
+        vertex.setOnMouseClicked(event -> controller.clicked(segment));
+        // Hovering
+        vertex.setOnMouseEntered(event -> controller.hovered(segment, true));
+        vertex.setOnMouseExited(event -> controller.hovered(segment, false));
+
+        if (annotations != null) {
+            for (ResistanceAnnotation annotation : annotations) {
+                long segmentPosition = annotation.getGenomePosition()
+                        - segment.getStart();
+                Bookmark bookmark = new Bookmark(vertex, annotation,
+                        segmentPosition);
+                bookmarks.getChildren().add(bookmark);
+            }
+        }
     }
 
     /**
@@ -181,27 +254,6 @@ public class TileView {
                 lanes.add(position, segment.getUnifiedEnd());
             }
         }
-    }
-
-    /**
-     * This will sort the nodes based on the
-     * starting position.
-     * Beware: temporary code which will be obsolete with #56 Internal
-     * sorting of edges on destination starting position
-     *
-     * @param graph
-     *            the graph that contains the to be sorted nodes
-     * @return Iterator of the sorted list
-     */
-    @Deprecated
-    private PriorityQueue<SequenceSegment> sortStartVar(
-            final Graph<SequenceSegment> graph) {
-        PriorityQueue<SequenceSegment> iterator;
-        iterator = new PriorityQueue<SequenceSegment>();
-        for (SequenceSegment segment : graph.getAllVertices()) {
-            iterator.add(segment);
-        }
-        return iterator;
     }
 
 }

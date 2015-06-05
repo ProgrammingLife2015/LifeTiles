@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,12 +17,16 @@ import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.MouseButton;
 import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import nl.tudelft.lifetiles.core.util.FileUtils;
 import nl.tudelft.lifetiles.core.util.Message;
+import nl.tudelft.lifetiles.graph.controller.GraphController;
+import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.notification.controller.NotificationController;
 import nl.tudelft.lifetiles.notification.model.AbstractNotification;
 import nl.tudelft.lifetiles.notification.model.NotificationFactory;
+import nl.tudelft.lifetiles.sequence.model.Sequence;
 
 /**
  * The controller of the menu bar.
@@ -28,6 +35,11 @@ import nl.tudelft.lifetiles.notification.model.NotificationFactory;
  *
  */
 public class MenuController extends AbstractController {
+
+    /**
+     * Constant annotation extension, currently as defined by client: '.txt'.
+     */
+    private static final String ANNOTATION_EXTENSION = ".txt";
 
     /**
      * The initial x-coordinate of the window.
@@ -51,6 +63,11 @@ public class MenuController extends AbstractController {
     private NotificationFactory nf;
 
     /**
+     * all sequences, to reset the filters.
+     */
+    private Set<Sequence> sequences;
+
+    /**
      * Handle action related to "Open" menu item.
      *
      * @param event
@@ -63,6 +80,19 @@ public class MenuController extends AbstractController {
         } catch (IOException e) {
             AbstractNotification notification = nf.getNotification(e);
             shout(NotificationController.NOTIFY, notification);
+        }
+    }
+
+    /**
+     * Handle the click on the "Reset" item in the "Filter" menu.
+     *
+     * @param event
+     *            Event on "Reset" menu item.
+     */
+    @FXML
+    private void resetAction(final ActionEvent event) {
+        if (sequences != null) {
+            shout(Message.FILTERED, sequences);
         }
     }
 
@@ -85,6 +115,9 @@ public class MenuController extends AbstractController {
         }
 
         List<File> dataFiles = new ArrayList<>();
+        List<File> annotations = FileUtils.findByExtension(directory,
+                ANNOTATION_EXTENSION);
+
         List<String> exts = Arrays.asList(".node.graph", ".edge.graph", ".nwk");
         for (String ext : exts) {
             List<File> hits = FileUtils.findByExtension(directory, ext);
@@ -98,6 +131,51 @@ public class MenuController extends AbstractController {
 
         shout(Message.OPENED, dataFiles.get(0), dataFiles.get(1),
                 dataFiles.get(2));
+        if (annotations == null || annotations.isEmpty()) {
+            shout(NotificationController.NOTIFY, nf.getNotification(
+                    "Annotation file (" + ANNOTATION_EXTENSION
+                            + ") can't be found", NotificationFactory.WARNING));
+        } else {
+            shout(GraphController.ANNOTATIONS, annotations.get(0));
+        }
+    }
+
+    /**
+     * Handle action to "Insert Annotations" menu item.
+     *
+     * @param event
+     *            Event on "Insert Annotations" item.
+     */
+    @FXML
+    private void insertAnnotationsAction(final ActionEvent event) {
+        try {
+            loadAnnotationsFile();
+        } catch (IOException e) {
+            AbstractNotification notification = nf.getNotification(e);
+            shout(NotificationController.NOTIFY, notification);
+        }
+    }
+
+    /**
+     * Perform functionality associated with opening and inserting a annotation
+     * file.
+     *
+     * @throws IOException
+     *             throws <code>IOException</code> if any of the files were not
+     *             found
+     */
+    private void loadAnnotationsFile() throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open file containing annotations");
+        Window window = menuBar.getScene().getWindow();
+        File file = fileChooser.showOpenDialog(window);
+
+        // user aborted
+        if (file == null) {
+            return;
+        }
+
+        shout(GraphController.ANNOTATIONS, file);
     }
 
     /**
@@ -132,5 +210,15 @@ public class MenuController extends AbstractController {
             final ResourceBundle resources) {
         addDraggableNode(menuBar);
         nf = new NotificationFactory();
+        // listen to loaded to get the sequence list
+        listen(Message.LOADED,
+                (controller, args) -> {
+                    if (controller instanceof GraphController) {
+                        assert args[0] instanceof Graph;
+                        assert (args[1] instanceof Map<?, ?>);
+                        Map<String, Sequence> sequenceMap = (Map<String, Sequence>) args[1];
+                        sequences = new HashSet<Sequence>(sequenceMap.values());
+                    }
+                });
     }
 }
