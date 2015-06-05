@@ -1,7 +1,10 @@
 package nl.tudelft.lifetiles.tree.model;
 
 import static org.junit.Assert.*;
-import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeParser;
+import java.util.HashSet;
+import java.util.Set;
+import nl.tudelft.lifetiles.sequence.model.DefaultSequence;
+import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
 import org.junit.Test;
@@ -61,6 +64,62 @@ public class TestPhylogeneticTreeItem {
         
         assertEquals("numberDescendants did not match for full tree",5,root.numberDescendants());
         assertEquals("numberDescendants did not match for childless tree",0,test2.numberDescendants());
+	}
+	
+	/**
+	 * Test for getSequences
+	 */
+	@Test
+	public void testGetSequences(){
+	    // create the test tree
+	    // (A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5)F;
+        // root node
+        PhylogeneticTreeItem rootExpected = new PhylogeneticTreeItem();
+        rootExpected.setName("F");
+        // add 3 child nodes
+        PhylogeneticTreeItem test1 = new PhylogeneticTreeItem();
+        test1.setParent(rootExpected);
+        test1.setName("A");
+        test1.setSequence(new DefaultSequence("A"));
+        test1.setDistance(0.1);
+        PhylogeneticTreeItem current = new PhylogeneticTreeItem();
+        current.setName("B");
+        current.setSequence(new DefaultSequence("B"));
+        current.setDistance(0.2);
+        current.setParent(rootExpected);
+        current = new PhylogeneticTreeItem();
+        current.setParent(rootExpected);
+        current.setName("E");
+        current.setDistance(0.5);
+        // add 2 child nodes to the third node
+        PhylogeneticTreeItem current2 = new PhylogeneticTreeItem();
+        current2.setParent(current);
+        current2.setName("C");
+        current2.setSequence(new DefaultSequence("C"));
+        current2.setDistance(0.3);
+        current2 = new PhylogeneticTreeItem();
+        current2.setParent(current);
+        current2.setName("D");
+        current2.setSequence(new DefaultSequence("D"));
+        current2.setDistance(0.4);
+        
+        //generate test Sets
+        Set<Sequence> set1 = new HashSet<Sequence>();
+        set1.add(new DefaultSequence("A"));
+        
+        Set<Sequence> set2 = new HashSet<Sequence>();
+        set2.add(new DefaultSequence("C"));
+        set2.add(new DefaultSequence("D"));
+        
+        Set<Sequence> set3 = new HashSet<Sequence>();
+        set3.addAll(set2);
+        set3.addAll(set1);
+        set3.add(new DefaultSequence("B"));
+        
+        assertEquals("Sequences did not match on childless tree" ,set1, test1.getSequences());
+        assertEquals("Sequences did not match on small tree" ,set2, current.getSequences());
+        assertEquals("Sequences did not match on childless tree" ,set3, rootExpected.getSequences());
+
 	}
 	
 	/**

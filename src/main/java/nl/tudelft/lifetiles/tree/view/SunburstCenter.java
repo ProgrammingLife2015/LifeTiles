@@ -3,6 +3,8 @@ package nl.tudelft.lifetiles.tree.view;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import nl.tudelft.lifetiles.sequence.SequenceColor;
+import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
 /**
@@ -12,6 +14,11 @@ import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
  *
  */
 public class SunburstCenter extends AbstractSunburstNode {
+
+    /**
+     * the default color for this segment.
+     */
+    private static final Color DEFAULT_COLOR = Color.BLUE;
 
     /**
      * Generates an empty SunburstCenter.
@@ -24,14 +31,29 @@ public class SunburstCenter extends AbstractSunburstNode {
     /**
      * Generates a SunburstCenter for the node.
      *
-     * @param vertex
+     * @param value
      *            the node that this will represent
      */
-    public SunburstCenter(final PhylogeneticTreeItem vertex) {
-        setValue(vertex);
-        setDisplay(new Circle(CENTER_RADIUS, Color.BLUE));
+    public SunburstCenter(final PhylogeneticTreeItem value) {
+        setValue(value);
+        setDisplay(new Circle(CENTER_RADIUS, createColor()));
         setName(new Text(getValue().getName()));
         this.getChildren().addAll(getDisplay(), getName());
+    }
+
+    /**
+     * Creates a {@link Color} for this node. the color will be blue by default,
+     * and the color associated with the sequence when the node has a sequence.
+     *
+     * @return a Color object that specifies what color this node will be.
+     */
+    private Color createColor() {
+        Sequence sequence = getValue().getSequence();
+        if (sequence == null) {
+            return DEFAULT_COLOR;
+        } else {
+            return SequenceColor.getColor(sequence);
+        }
     }
 
 }
