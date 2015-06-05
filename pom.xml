@@ -4,7 +4,7 @@
 	<groupId>nl.tudelft</groupId>
 	<artifactId>lifetiles</artifactId>
 	<packaging>jar</packaging>
-	<version>1.2.1-dev</version>
+	<version>1.6-SNAPSHOT</version>
 	<name>lifetiles</name>
 	<url>http://maven.apache.org</url>
 	<properties>
@@ -53,6 +53,26 @@
 
 	<build>
 		<plugins>
+			  <plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-dependency-plugin</artifactId>
+			    <executions>
+			        <execution>
+			            <id>copy-dependencies</id>
+			            <phase>prepare-package</phase>
+			            <goals>
+			                <goal>copy-dependencies</goal>
+			            </goals>
+			            <configuration>
+			                <outputDirectory>${project.build.directory}/lib</outputDirectory>
+			                <overWriteReleases>false</overWriteReleases>
+			                <overWriteSnapshots>false</overWriteSnapshots>
+			                <overWriteIfNewer>true</overWriteIfNewer>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
+		
 			<plugin>
 				<!-- Build an executable JAR -->
 				<groupId>org.apache.maven.plugins</groupId>
