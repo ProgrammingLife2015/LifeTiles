@@ -54,7 +54,7 @@ public class TileViewTest {
                 .getChildrenUnmodifiable().size());
     }
 
-    @Test
+    //@Test TODO integrate this in the edge drwaing settings
     public void drawGraphEdgesDrawGenericTest() {
         creategraph();
         buckets = new BucketCache(1, gr);
