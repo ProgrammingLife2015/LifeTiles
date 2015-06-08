@@ -355,7 +355,7 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
     /**
      * Calculate the contextless interestingness of this sequence. This is
      * effectivly the fraction between length and number of sources, unknown
-     * amoniacids weigh less.
+     * nucleotides weigh less.
      *
      * @return the interestingness score
      */
