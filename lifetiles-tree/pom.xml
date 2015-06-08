@@ -15,16 +15,6 @@
 			<artifactId>lifetiles-core</artifactId>
 			<version>1.6-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-            <groupId>nl.tudelft.lifetiles</groupId>
-            <artifactId>lifetiles-graph</artifactId>
-            <version>1.6-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>nl.tudelft.lifetiles</groupId>
-            <artifactId>lifetiles-sequence</artifactId>
-            <version>1.6-SNAPSHOT</version>
-        </dependency>
 	</dependencies>
 </project>
     
