@@ -203,21 +203,19 @@ public final class SequenceController extends AbstractController {
         }
 
         label.setOnMouseClicked(mouseEvent -> {
-            if (mouseEvent.isPrimaryButtonDown()) {
-                Set<Sequence> visible = getVisible();
+            Set<Sequence> visible = getVisible();
 
-                if (styleClass.contains(styleClassFilter)) {
-                    // hide
-                    visible.remove(sequence);
-                    styleClass.remove(styleClassFilter);
-                } else {
-                    // show
-                    visible.add(sequence);
-                    styleClass.add(styleClassFilter);
-                }
-
-                setVisible(visible, true);
+            if (styleClass.contains(styleClassFilter)) {
+                // hide
+                visible.remove(sequence);
+                styleClass.remove(styleClassFilter);
+            } else {
+                // show
+                visible.add(sequence);
+                styleClass.add(styleClassFilter);
             }
+
+            setVisible(visible, true);
         });
 
         label.setOnMousePressed(mouseEvent -> {
