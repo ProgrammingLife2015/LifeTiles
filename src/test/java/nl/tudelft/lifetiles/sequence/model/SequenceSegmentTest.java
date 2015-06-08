@@ -17,8 +17,6 @@ public class SequenceSegmentTest {
 
     SequenceSegment v1, v2, v3;
 
-    private static final double DELTA = 1e-15;
-
     @Before
     public void setUp() throws Exception {
         v1 = new SequenceSegment(new TreeSet<Sequence>(), 1, 10, new SegmentString("AAAAAAAAAA"));
