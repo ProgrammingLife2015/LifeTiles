@@ -1,32 +1,24 @@
 package nl.tudelft.lifetiles.sequence.controller;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuItem;
-import javafx.scene.paint.Color;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.CheckBoxTableCell;
+import javafx.scene.control.cell.ChoiceBoxTableCell;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
-import nl.tudelft.lifetiles.core.util.ColorUtils;
 import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
 import nl.tudelft.lifetiles.graph.model.Graph;
-import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
-import nl.tudelft.lifetiles.graph.traverser.ReferencePositionTraverser;
-import nl.tudelft.lifetiles.notification.controller.NotificationController;
-import nl.tudelft.lifetiles.notification.model.AbstractNotification;
-import nl.tudelft.lifetiles.notification.model.NotificationFactory;
-import nl.tudelft.lifetiles.sequence.SequenceColor;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
-import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
+import nl.tudelft.lifetiles.sequence.model.SequenceEntry;
 
 /**
  * The controller of the data view.
@@ -47,10 +39,28 @@ public final class SequenceController extends AbstractController {
     private static final String DEFAULT_REFERENCE = "TKK_REF";
 
     /**
-     * Contains the sequences.
+     * The sequence table.
      */
     @FXML
-    private ListView<Label> sequenceList;
+    private TableView<SequenceEntry> sequenceTable;
+
+    /**
+     * The table column of sequence id's.
+     */
+    @FXML
+    private TableColumn<SequenceEntry, String> idColumn;
+
+    /**
+     * The table column indiciating sequence visibility.
+     */
+    @FXML
+    private TableColumn<SequenceEntry, Boolean> visibleColumn;
+
+    /**
+     * The table column indiciating if a sequence is the reference.
+     */
+    @FXML
+    private TableColumn<SequenceEntry, Boolean> referenceColumn;
 
     /**
      * The model of sequences.
@@ -63,37 +73,34 @@ public final class SequenceController extends AbstractController {
     private Set<Sequence> visibleSequences;
 
     /**
-     * The reference sequence.
+     * The sequence entries for in the table.
      */
-    private Sequence reference;
-
-    /**
-     * The loaded graph.
-     */
-    private Graph<SequenceSegment> graph;
-
-    /**
-     * Notification factory.
-     */
-    private final NotificationFactory notFact = new NotificationFactory();
+    private Map<String, SequenceEntry> sequenceEntries;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        repaint();
+        registerListeners();
+        initializeTable();
+    }
 
-        listen(Message.LOADED, (sender, args) -> {
-            if (sender instanceof GraphController) {
-                assert args[0] instanceof Graph;
-                assert (args[1] instanceof Map<?, ?>);
-                graph = (Graph<SequenceSegment>) args[0];
-                setSequences((Map<String, Sequence>) args[1]);
-                setReference();
-                repaint();
-            }
-        });
+    /**
+     * Register the shout listeners.
+     */
+    private void registerListeners() {
+        listen(Message.LOADED,
+                (sender, args) -> {
+                    if (sender instanceof GraphController) {
+                        assert args[0] instanceof Graph;
+                        assert (args[1] instanceof Map<?, ?>);
+                        Map<String, Sequence> newSequences = (Map<String, Sequence>) args[1];
+                        setSequences(newSequences);
+                        initializeEntries(newSequences);
+                        populateTable();
+                    }
+                });
 
         listen(Message.FILTERED, (sender, args) -> {
             assert args.length == 1;
@@ -101,6 +108,52 @@ public final class SequenceController extends AbstractController {
 
             setVisible((Set<Sequence>) args[0], false);
         });
+    }
+
+    /**
+     * Initialize and populate the table.
+     * TODO display colors
+     */
+    private void populateTable() {
+        sequenceTable.setItems(FXCollections
+                .observableArrayList(sequenceEntries.values()));
+    }
+
+    /**
+     * Initialize the table.
+     * TODO change the 'visible' column to contain checkboxes (see
+     * {@link CheckBoxTableCell}).
+     * TODO change the 'reference' column to contain choiceboxes (see
+     * {@link ChoiceBoxTableCell}).
+     */
+    private void initializeTable() {
+        idColumn.setCellValueFactory(cellData -> cellData.getValue()
+                .identifierProperty());
+        visibleColumn.setCellValueFactory(cellData -> cellData.getValue()
+                .visibleProperty());
+        referenceColumn.setCellValueFactory(cellData -> cellData.getValue()
+                .referenceProperty());
+    }
+
+    /**
+     * Generate Sequence entries from sequences and store them.
+     *
+     * @param sequences
+     *            the sequences
+     */
+    private void initializeEntries(final Map<String, Sequence> sequences) {
+        sequenceEntries = new HashMap<>(sequences.size());
+        for (Sequence sequence : sequences.values()) {
+            SequenceEntry sequenceEntry = SequenceEntry.fromSequence(sequence);
+            String identifier = sequence.getIdentifier();
+            if (identifier.equals(DEFAULT_REFERENCE)) {
+                sequenceEntry = SequenceEntry
+                        .fromSequence(sequence, true, true);
+            } else {
+                sequenceEntry = SequenceEntry.fromSequence(sequence);
+            }
+            sequenceEntries.put(identifier, sequenceEntry);
+        }
     }
 
     /**
@@ -129,13 +182,11 @@ public final class SequenceController extends AbstractController {
         // Limit the visible segquences of this class to the visible set given
         // from someone
         getVisible().retainAll(visible);
-        repaint();
 
         if (shout) {
             shout(Message.FILTERED, visible);
         }
         visibleSequences = visible;
-        repaint();
     }
 
     /**
@@ -147,147 +198,6 @@ public final class SequenceController extends AbstractController {
     public void setSequences(final Map<String, Sequence> newSequences) {
         sequences = newSequences;
         visibleSequences = new HashSet<>(sequences.values());
-    }
-
-    /**
-     * Fills the sequence view and removes the old content.
-     */
-    private void repaint() {
-        if (sequences != null) {
-            sequenceList.setItems(generateLabels());
-        }
-    }
-
-    /**
-     * Generates the sequence labels.
-     *
-     * @return a list of the labels
-     */
-    private ObservableList<Label> generateLabels() {
-        ObservableList<Label> sequenceItems = FXCollections
-                .observableArrayList();
-        for (final Sequence sequence : sequences.values()) {
-            String identifier = sequence.getIdentifier();
-
-            if (sequence.equals(reference)) {
-                identifier += "*";
-            }
-
-            Label label = new Label(identifier);
-            Color color = SequenceColor.getColor(sequence);
-
-            label.setStyle("-fx-background-color: rgba("
-                    + ColorUtils.rgbaFormat(color) + ")");
-
-            addMouseEventListener(sequence, label);
-
-            sequenceItems.add(label);
-        }
-
-        return sequenceItems;
-    }
-
-    /**
-     * Adds mouse event listeners to a sequence label.
-     *
-     * @param sequence
-     *            the sequence
-     * @param label
-     *            the label
-     */
-    public void addMouseEventListener(final Sequence sequence, final Label label) {
-        String styleClassFilter = "filtered";
-        ObservableList<String> styleClass = label.getStyleClass();
-        if (getVisible().contains(sequence)) {
-            styleClass.add(styleClassFilter);
-        }
-
-        label.setOnMouseClicked(mouseEvent -> {
-            Set<Sequence> visible = getVisible();
-
-            if (styleClass.contains(styleClassFilter)) {
-                // hide
-                visible.remove(sequence);
-                styleClass.remove(styleClassFilter);
-            } else {
-                // show
-                visible.add(sequence);
-                styleClass.add(styleClassFilter);
-            }
-
-            setVisible(visible, true);
-        });
-
-        label.setOnMousePressed(mouseEvent -> {
-            if (mouseEvent.isSecondaryButtonDown()) {
-                getContextMenu(sequence).show(label, mouseEvent.getScreenX(),
-                        mouseEvent.getScreenY());
-            }
-        });
-    }
-
-    /**
-     * Get the sequence context menu.
-     *
-     * @param sequence
-     *            the sequence
-     * @return the context menu
-     */
-    private ContextMenu getContextMenu(final Sequence sequence) {
-        final ContextMenu contextMenu = new ContextMenu();
-        MenuItem setRef = new MenuItem("Set as reference.");
-        contextMenu.getItems().add(setRef);
-        setRef.setOnAction(actionEvent -> {
-            setReference(sequence);
-            repaint();
-        });
-        return contextMenu;
-    }
-
-    /**
-     * Set the default reference as reference.
-     */
-    private void setReference() {
-        Sequence defaultReference = null;
-        for (Sequence other : sequences.values()) {
-            if (other.getIdentifier().equals(DEFAULT_REFERENCE)) {
-                defaultReference = other;
-                break;
-            }
-        }
-
-        if (defaultReference == null) {
-            String message = "The default reference sequence "
-                    + DEFAULT_REFERENCE + " was not found";
-            AbstractNotification notification = notFact.getNotification(
-                    message, NotificationFactory.WARNING);
-            shout(NotificationController.NOTIFY, notification);
-        }
-
-        this.reference = defaultReference;
-    }
-
-    /**
-     * Set a sequence as reference.
-     *
-     * @param sequence
-     *            the new reference sequence
-     */
-    private void setReference(final Sequence sequence) {
-        this.reference = sequence;
-        shout(SequenceController.REFERENCE_SET, sequence);
-
-        new ReferencePositionTraverser(sequence).referenceMapGraph(graph);
-        new MutationIndicationTraverser(sequence).indicateGraphMutations(graph);
-    }
-
-    /**
-     * Get the reference.
-     *
-     * @return the reference
-     */
-    private Sequence getReference() {
-        return reference;
     }
 
 }
