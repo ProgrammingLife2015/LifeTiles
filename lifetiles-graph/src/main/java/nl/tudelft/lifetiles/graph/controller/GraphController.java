@@ -26,10 +26,13 @@ import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.model.GraphContainer;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
 import nl.tudelft.lifetiles.graph.model.GraphParser;
+import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
+import nl.tudelft.lifetiles.graph.traverser.ReferencePositionTraverser;
 import nl.tudelft.lifetiles.graph.view.TileView;
 import nl.tudelft.lifetiles.graph.view.VertexView;
 import nl.tudelft.lifetiles.notification.controller.NotificationController;
 import nl.tudelft.lifetiles.notification.model.NotificationFactory;
+import nl.tudelft.lifetiles.sequence.controller.SequenceController;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
@@ -107,10 +110,14 @@ public class GraphController extends AbstractController {
         listen(Message.OPENED,
                 (controller, args) -> {
                     assert controller instanceof MenuController;
-                    assert args[0] instanceof File && args[1] instanceof File;
+                    assert args[0] instanceof String;
+                    if (!((String) args[0]).equals("graph")) {
+                        return;
+                    }
+                    assert args[1] instanceof File && args[2] instanceof File;
 
                     try {
-                        loadGraph((File) args[0], (File) args[1]);
+                        loadGraph((File) args[1], (File) args[2]);
                     } catch (IOException exception) {
                         shout(NotificationController.NOTIFY,
                                 notFact.getNotification(exception));
@@ -127,18 +134,32 @@ public class GraphController extends AbstractController {
             repaint();
         });
 
-        listen(ANNOTATIONS,
+        listen(SequenceController.REFERENCE_SET,
+                (controller, args) -> {
+                    assert args.length == 1;
+                    assert args[0] instanceof Sequence;
+                    Sequence sequence = (Sequence) args[0];
+                    new ReferencePositionTraverser(sequence)
+                            .referenceMapGraph(graph);
+                    new MutationIndicationTraverser(sequence)
+                            .indicateGraphMutations(graph);
+                });
+
+        listen(Message.OPENED,
                 (controller, args) -> {
                     assert controller instanceof MenuController;
-                    assert args[0] instanceof File;
+                    if (!((String) args[0]).equals("annotations")) {
+                        return;
+                    }
+                    assert args[1] instanceof File;
 
                     if (graph == null) {
-                        shout(NotificationController.NOTIFY, notFact
-                                .getNotification(new IllegalStateException(
-                                        "Graph not loaded.")));
+                        shout(NotificationController.NOTIFY,
+                                notFact.getNotification(new IllegalStateException(
+                                        "Graph not loaded while attempting to add annotations.")));
                     } else {
                         try {
-                            insertAnnotations((File) args[0]);
+                            insertAnnotations((File) args[1]);
                         } catch (IOException exception) {
                             shout(NotificationController.NOTIFY,
                                     notFact.getNotification(exception));
@@ -177,7 +198,7 @@ public class GraphController extends AbstractController {
         graph = parser.parseGraph(vertexfile, edgefile, factory);
         annotations = new HashMap<>();
 
-        shout(Message.LOADED, graph, parser.getSequences());
+        shout(Message.LOADED, "sequences", parser.getSequences());
         repaint();
 
     }
@@ -199,8 +220,7 @@ public class GraphController extends AbstractController {
 
         timer.stopAndLog("Inserting annotations");
         forceRepaintPosition = true;
-        repaintPosition(root, wrapper.hvalueProperty()
-                .doubleValue());
+        repaintPosition(root, wrapper.hvalueProperty().doubleValue());
     }
 
     /**
@@ -287,7 +307,8 @@ public class GraphController extends AbstractController {
      * @return Group object to be drawn on the screen
      */
     public final Group drawGraph(final int position) {
-        return view.drawGraph(model.getVisibleSegments(position), graph, annotations);
+        return view.drawGraph(model.getVisibleSegments(position), graph,
+                annotations);
     }
 
     /**

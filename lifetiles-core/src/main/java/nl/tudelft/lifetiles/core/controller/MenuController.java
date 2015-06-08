@@ -3,13 +3,7 @@ package nl.tudelft.lifetiles.core.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.Set;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,12 +15,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import nl.tudelft.lifetiles.core.util.FileUtils;
 import nl.tudelft.lifetiles.core.util.Message;
-import nl.tudelft.lifetiles.graph.controller.GraphController;
-import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.notification.controller.NotificationController;
 import nl.tudelft.lifetiles.notification.model.AbstractNotification;
 import nl.tudelft.lifetiles.notification.model.NotificationFactory;
-import nl.tudelft.lifetiles.sequence.model.Sequence;
 
 /**
  * The controller of the menu bar.
@@ -40,6 +31,19 @@ public class MenuController extends AbstractController {
      * Constant annotation extension, currently as defined by client: '.txt'.
      */
     private static final String ANNOTATION_EXTENSION = ".txt";
+    /**
+     * Extension of the node file.
+     */
+    private static final String NODE_EXTENSION = ".node.graph";
+    /**
+     * Extension of the edge file.
+     */
+    private static final String EDGE_EXTENSION = ".edge.graph";
+
+    /**
+     * Extension of the tree file.
+     */
+    private static final String TREE_EXTENSION = ".nwk";
 
     /**
      * The initial x-coordinate of the window.
@@ -61,11 +65,6 @@ public class MenuController extends AbstractController {
      * The notification factory.
      */
     private NotificationFactory nf;
-
-    /**
-     * all sequences, to reset the filters.
-     */
-    private Set<Sequence> sequences;
 
     /**
      * Handle action related to "Open" menu item.
@@ -91,9 +90,7 @@ public class MenuController extends AbstractController {
      */
     @FXML
     private void resetAction(final ActionEvent event) {
-        if (sequences != null) {
-            shout(Message.FILTERED, sequences);
-        }
+        shout(Message.RESET);
     }
 
     /**
@@ -113,31 +110,40 @@ public class MenuController extends AbstractController {
         if (directory == null) {
             return;
         }
+        loadGraph(directory);
+        loadTree(directory);
+        loadAnnotations(directory);
+    }
 
-        List<File> dataFiles = new ArrayList<>();
-        List<File> annotations = FileUtils.findByExtension(directory,
-                ANNOTATION_EXTENSION);
+    private void loadGraph(File directory) throws IOException {
+        File nodeFile = FileUtils.getFile(directory, NODE_EXTENSION);
+        File edgeFile = FileUtils.getFile(directory, EDGE_EXTENSION);
+        shout(Message.OPENED, "graph", nodeFile, edgeFile);
+    }
 
-        List<String> exts = Arrays.asList(".node.graph", ".edge.graph", ".nwk");
-        for (String ext : exts) {
-            List<File> hits = FileUtils.findByExtension(directory, ext);
-            if (hits.size() != 1) {
-                throw new IOException("Expected 1 " + ext + " file intead of "
-                        + hits.size());
-            }
-
-            dataFiles.add(hits.get(0));
+    private void loadAnnotations(File directory) {
+        File annotationFile = loadOrWarn(directory, ANNOTATION_EXTENSION);
+        if (annotationFile != null) {
+            shout(Message.OPENED, "annotations", annotationFile);
         }
+    }
 
-        shout(Message.OPENED, dataFiles.get(0), dataFiles.get(1),
-                dataFiles.get(2));
-        if (annotations == null || annotations.isEmpty()) {
-            shout(NotificationController.NOTIFY, nf.getNotification(
-                    "Annotation file (" + ANNOTATION_EXTENSION
-                            + ") can't be found", NotificationFactory.WARNING));
-        } else {
-            shout(GraphController.ANNOTATIONS, annotations.get(0));
+    private void loadTree(File directory) {
+        File treeFile = loadOrWarn(directory, TREE_EXTENSION);
+        if (treeFile != null) {
+            shout(Message.OPENED, "tree", treeFile);
         }
+    }
+
+    private File loadOrWarn(File directory, String extension) {
+        try {
+            File file = FileUtils.getFile(directory, extension);
+            return file;
+        } catch (IOException e) {
+            shout(NotificationController.NOTIFY, nf.getNotification(extension
+                    + " file could not be found", NotificationFactory.WARNING));
+        }
+        return null;
     }
 
     /**
@@ -175,7 +181,7 @@ public class MenuController extends AbstractController {
             return;
         }
 
-        shout(GraphController.ANNOTATIONS, file);
+        shout(Message.OPENED, "annotations", file);
     }
 
     /**
@@ -210,15 +216,5 @@ public class MenuController extends AbstractController {
             final ResourceBundle resources) {
         addDraggableNode(menuBar);
         nf = new NotificationFactory();
-        // listen to loaded to get the sequence list
-        listen(Message.LOADED,
-                (controller, args) -> {
-                    if (controller instanceof GraphController) {
-                        assert args[0] instanceof Graph;
-                        assert (args[1] instanceof Map<?, ?>);
-                        Map<String, Sequence> sequenceMap = (Map<String, Sequence>) args[1];
-                        sequences = new HashSet<Sequence>(sequenceMap.values());
-                    }
-                });
     }
 }

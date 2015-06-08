@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.core.util;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
  * Utility functions for files.
  *
  * @author Joren Hammudoglu
+ * @author Rutger van den Berg
  *
  */
 public final class FileUtils {
@@ -41,4 +43,13 @@ public final class FileUtils {
         return Arrays.asList(res);
     }
 
+    public static File getFile(File directory, String extension)
+            throws IOException {
+        List<File> files = FileUtils.findByExtension(directory, extension);
+        if (files.size() != 1) {
+            throw new IOException("Expected 1 " + extension
+                    + " file instead of " + files.size());
+        }
+        return files.get(0);
+    }
 }

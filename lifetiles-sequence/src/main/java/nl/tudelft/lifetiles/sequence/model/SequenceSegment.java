@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.ToIntBiFunction;
 
-import nl.tudelft.lifetiles.graph.view.Mutation;
+import nl.tudelft.lifetiles.sequence.Mutation;
 
 /**
  * @author Rutger van den Berg Contains a partial sequence.

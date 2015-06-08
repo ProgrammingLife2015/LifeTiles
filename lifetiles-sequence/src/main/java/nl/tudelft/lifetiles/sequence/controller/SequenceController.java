@@ -15,11 +15,18 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
+import nl.tudelft.lifetiles.core.util.ColorUtils;
 import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
 import nl.tudelft.lifetiles.graph.model.Graph;
+import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
+import nl.tudelft.lifetiles.graph.traverser.ReferencePositionTraverser;
+import nl.tudelft.lifetiles.notification.controller.NotificationController;
+import nl.tudelft.lifetiles.notification.model.AbstractNotification;
+import nl.tudelft.lifetiles.notification.model.NotificationFactory;
+import nl.tudelft.lifetiles.sequence.SequenceColor;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
-import nl.tudelft.lifetiles.sequence.model.SequenceEntry;
+import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
  * The controller of the data view.
@@ -103,10 +110,11 @@ public final class SequenceController extends AbstractController {
      * Register the shout listeners.
      */
     private void registerShoutListeners() {
-        listen(Message.LOADED,
-                (sender, args) -> {
-                    if (sender instanceof GraphController) {
-                        assert args[0] instanceof Graph;
+        listen(Message.LOADED, (sender, args) -> {
+            assert args[0] instanceof String;
+            if (!args[0].equals("sequences")) {
+                return;
+            }
                         assert (args[1] instanceof Map<?, ?>);
 
                         Map<String, Sequence> newSequences = (Map<String, Sequence>) args[1];

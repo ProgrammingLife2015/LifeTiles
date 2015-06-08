@@ -11,10 +11,15 @@
 	<name>lifetiles-tree</name>
 	<dependencies>
 		<dependency>
-			<groupId>nl.tudelft.lifetiles</groupId>
-			<artifactId>lifetiles-core</artifactId>
-			<version>1.6-SNAPSHOT</version>
-		</dependency>
+            <groupId>nl.tudelft.lifetiles</groupId>
+            <artifactId>lifetiles-core</artifactId>
+            <version>1.6-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>nl.tudelft.lifetiles</groupId>
+            <artifactId>lifetiles-sequence</artifactId>
+            <version>1.6-SNAPSHOT</version>
+        </dependency>
 	</dependencies>
 </project>
     
