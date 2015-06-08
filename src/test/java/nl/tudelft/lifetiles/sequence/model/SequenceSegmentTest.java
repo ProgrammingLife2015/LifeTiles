@@ -24,12 +24,17 @@ public class SequenceSegmentTest {
         v1 = new SequenceSegment(new TreeSet<Sequence>(), 1, 10, new SegmentString("AAAAAAAAAA"));
         v1.setUnifiedStart(1);
         v1.setUnifiedEnd(10);
+        v1.setSources(new HashSet<>(Arrays.asList(new DefaultSequence("s1"))));
+
         v2 = new SequenceSegment(new TreeSet<Sequence>(), 11, 20, new SegmentEmpty(10));
         v2.setUnifiedStart(11);
         v2.setUnifiedEnd(20);
+        v2.setSources(new HashSet<>(Arrays.asList(new DefaultSequence("s2"))));
+
         v3 = new SequenceSegment(new TreeSet<Sequence>(), 21, 30, new SegmentString("AAAAANNNNN"));
         v3.setUnifiedStart(21);
         v3.setUnifiedEnd(30);
+        v3.setSources(new HashSet<>(Arrays.asList(new DefaultSequence("s3"))));
     }
 
     @Test
@@ -79,13 +84,16 @@ public class SequenceSegmentTest {
 
     @Test
     public void testInterestingness1() {
-        v1.setSources(new HashSet<>(Arrays.asList(new DefaultSequence("s1"))));
-        assertEquals(10.0, v1.interestingness(), DELTA);
+        assertTrue(v1.interestingness() > v2.interestingness());
     }
 
     @Test
     public void testInterestingness2() {
-        v3.setSources(new HashSet<>(Arrays.asList(new DefaultSequence("s3"))));
-        assertEquals(7.5, v3.interestingness(), DELTA);
+        assertTrue(v1.interestingness() > v3.interestingness());
+    }
+
+    @Test
+    public void testInterestingness3() {
+        assertTrue(v3.interestingness() > v2.interestingness());
     }
 }
