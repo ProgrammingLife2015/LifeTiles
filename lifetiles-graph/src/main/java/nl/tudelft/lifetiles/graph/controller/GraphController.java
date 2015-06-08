@@ -97,6 +97,13 @@ public class GraphController extends AbstractController {
      */
     public static final Message ANNOTATIONS = Message.create("annotations");
 
+    private int zoomLevel;
+
+    /**
+     * Maximal zoomed in level
+     */
+    private static int MAXZOOM = 5;
+
     /**
      * {@inheritDoc}
      */
@@ -107,6 +114,7 @@ public class GraphController extends AbstractController {
         NotificationFactory notFact = new NotificationFactory();
         forceRepaintPosition = false;
 
+<<<<<<< HEAD:lifetiles-graph/src/main/java/nl/tudelft/lifetiles/graph/controller/GraphController.java
         listen(Message.OPENED,
                 (controller, subject, args) -> {
                     assert controller instanceof MenuController;
@@ -122,8 +130,22 @@ public class GraphController extends AbstractController {
                         shout(NotificationController.NOTIFY, "",
                                 notFact.getNotification(exception));
                     }
+=======
+        zoomLevel = 0;
 
-                });
+        listen(Message.OPENED, (controller, args) -> {
+            assert controller instanceof MenuController;
+            assert args[0] instanceof File && args[1] instanceof File;
+>>>>>>> Added Zoombuttons:src/main/java/nl/tudelft/lifetiles/graph/controller/GraphController.java
+
+            try {
+                loadGraph((File) args[0], (File) args[1]);
+            } catch (IOException exception) {
+                shout(NotificationController.NOTIFY, notFact
+                        .getNotification(exception));
+            }
+
+        });
 
         listen(Message.FILTERED, (controller, subject, args) -> {
             assert args.length == 1;
@@ -134,6 +156,7 @@ public class GraphController extends AbstractController {
             repaint();
         });
 
+<<<<<<< HEAD:lifetiles-graph/src/main/java/nl/tudelft/lifetiles/graph/controller/GraphController.java
         listen(SequenceController.REFERENCE_SET,
                 (controller, subject, args) -> {
                     assert args.length == 1;
@@ -167,6 +190,55 @@ public class GraphController extends AbstractController {
                         }
                     }
                 });
+=======
+        listen(Message.ZOOM, (controller, args) -> {
+            assert args.length == 1;
+            assert args[0] instanceof Integer;
+
+            // Zooming out
+            if ((Integer) args[0] == -1) {
+                if (zoomLevel != 0) {
+                    zoomLevel -= 1;
+                    zoomOut();
+                }
+            }
+            // Zooming in
+            else {
+                if (zoomLevel != MAXZOOM) {
+                    zoomLevel += 1;
+                    zoomIn();
+                }
+            }
+
+            });
+
+        listen(ANNOTATIONS, (controller, args) -> {
+            assert controller instanceof MenuController;
+            assert args[0] instanceof File;
+
+            if (graph == null) {
+                shout(NotificationController.NOTIFY, notFact
+                        .getNotification(new IllegalStateException(
+                                "Graph not loaded.")));
+            } else {
+                try {
+                    insertAnnotations((File) args[0]);
+                } catch (IOException exception) {
+                    shout(NotificationController.NOTIFY, notFact
+                            .getNotification(exception));
+                }
+            }
+        });
+    }
+
+    private void zoomIn() {
+        System.out.println(getBucketPosition(wrapper.getHvalue()));
+
+    }
+
+    private void zoomOut() {
+
+>>>>>>> Added Zoombuttons:src/main/java/nl/tudelft/lifetiles/graph/controller/GraphController.java
     }
 
     /**
@@ -233,9 +305,7 @@ public class GraphController extends AbstractController {
                 model = new GraphContainer(graph);
             }
             view = new TileView(this);
-
             root = new Group();
-
             wrapper.hvalueProperty().addListener(
                     (observable, oldValue, newValue) -> {
                         repaintPosition(root, newValue.doubleValue());
