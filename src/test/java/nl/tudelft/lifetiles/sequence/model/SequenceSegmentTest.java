@@ -3,15 +3,12 @@ package nl.tudelft.lifetiles.sequence.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
 import nl.tudelft.lifetiles.graph.view.Mutation;
-import nl.tudelft.lifetiles.sequence.model.SegmentEmpty;
-import nl.tudelft.lifetiles.sequence.model.SegmentString;
-import nl.tudelft.lifetiles.sequence.model.Sequence;
-import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +16,8 @@ import org.junit.Test;
 public class SequenceSegmentTest {
 
     SequenceSegment v1, v2, v3;
+
+    private static final double DELTA = 1e-15;
 
     @Before
     public void setUp() throws Exception {
@@ -28,7 +27,7 @@ public class SequenceSegmentTest {
         v2 = new SequenceSegment(new TreeSet<Sequence>(), 11, 20, new SegmentEmpty(10));
         v2.setUnifiedStart(11);
         v2.setUnifiedEnd(20);
-        v3 = new SequenceSegment(new TreeSet<Sequence>(), 21, 30, new SegmentString("AAAAAAAAAA"));
+        v3 = new SequenceSegment(new TreeSet<Sequence>(), 21, 30, new SegmentString("AAAAANNNNN"));
         v3.setUnifiedStart(21);
         v3.setUnifiedEnd(30);
     }
@@ -76,5 +75,17 @@ public class SequenceSegmentTest {
         segments.add(v1);
         v1.setUnifiedStart(2);
         assertTrue(segments.contains(v1));
+    }
+
+    @Test
+    public void testInterestingness1() {
+        v1.setSources(new HashSet<>(Arrays.asList(new DefaultSequence("s1"))));
+        assertEquals(10.0, v1.interestingness(), DELTA);
+    }
+
+    @Test
+    public void testInterestingness2() {
+        v3.setSources(new HashSet<>(Arrays.asList(new DefaultSequence("s3"))));
+        assertEquals(7.5, v3.interestingness(), DELTA);
     }
 }
