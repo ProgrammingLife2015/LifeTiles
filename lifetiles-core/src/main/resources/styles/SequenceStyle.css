@@ -1,0 +1,25 @@
+/* Stylesheet for the sequence view. */
+
+#sequencePane {
+    -fx-border-color: #CCCCCC;
+    -fx-border-width: 0 1 0 0;
+    -fx-border-style: solid;
+    -fx-background-color: #FFFFFF;
+}
+ 
+#sequenceList {
+    -fx-background-insets: 0.0;
+}
+
+#sequenceList .list-cell {
+    -fx-background-color: #FFFFFF;
+}
+
+#sequenceList .list-cell .label {
+    -fx-background-radius: 10.0;
+    -fx-padding: 5.0
+}
+
+.filtered {
+    -fx-underline: true;
+}
