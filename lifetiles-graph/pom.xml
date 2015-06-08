@@ -11,18 +11,8 @@
 	<name>lifetiles-graph</name>
 	<dependencies>
 		<dependency>
-			<groupId>nl.tudelft.lifetiles</groupId>
-			<artifactId>lifetiles-annotation</artifactId>
-			<version>1.6-SNAPSHOT</version>
-		</dependency>
-		<dependency>
             <groupId>nl.tudelft.lifetiles</groupId>
             <artifactId>lifetiles-core</artifactId>
-            <version>1.6-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>nl.tudelft.lifetiles</groupId>
-            <artifactId>lifetiles-notification</artifactId>
             <version>1.6-SNAPSHOT</version>
         </dependency>
         <dependency>

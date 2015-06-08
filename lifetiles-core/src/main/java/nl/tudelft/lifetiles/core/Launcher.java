@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles;
+package nl.tudelft.lifetiles.core;
 
 import java.io.IOException;
 import java.net.URL;
