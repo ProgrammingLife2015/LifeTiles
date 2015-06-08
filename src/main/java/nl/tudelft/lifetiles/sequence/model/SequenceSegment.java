@@ -353,6 +353,28 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
     }
 
     /**
+     * Calculate the contextless interestingness of this sequence. This is
+     * effectivly the fraction between length and number of sources, unknown
+     * nucleotides weigh less.
+     *
+     * @return the interestingness score
+     */
+    public final double interestingness() {
+        if (content.isEmpty()) {
+            return 0;
+        }
+
+        final String uninteresting = "N";
+
+        final String rawContent = content.toString();
+        final String cleanContent = rawContent.replace(uninteresting, "");
+
+        double contentScore = (rawContent.length() + cleanContent.length()) / 2.0;
+
+        return contentScore / sources.size();
+    }
+
+    /**
      * Create a new deep copy of this SequenceSegment.
      *
      * @return a copy
