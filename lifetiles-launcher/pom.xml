@@ -1,17 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>lifetiles-graph</artifactId>
+	<artifactId>lifetiles-launcher</artifactId>
 	<parent>
 		<groupId>nl.tudelft.lifetiles</groupId>
 		<artifactId>lifetiles-parent</artifactId>
 		<version>1.6-SNAPSHOT</version>
 		<relativePath>../lifetiles-parent</relativePath>
 	</parent>
-	<name>lifetiles-graph</name>
-	<properties>
-		<jgrapht.version>0.9.1</jgrapht.version>
-	</properties>
+	<name>lifetiles-launcher</name>
 	<dependencies>
 		<dependency>
 			<groupId>nl.tudelft.lifetiles</groupId>
@@ -20,14 +17,20 @@
 		</dependency>
 		<dependency>
 			<groupId>nl.tudelft.lifetiles</groupId>
+			<artifactId>lifetiles-graph</artifactId>
+			<version>1.6-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>nl.tudelft.lifetiles</groupId>
 			<artifactId>lifetiles-sequence</artifactId>
 			<version>1.6-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jgrapht</groupId>
-			<artifactId>jgrapht-core</artifactId>
-			<version>${jgrapht.version}</version>
+			<groupId>nl.tudelft.lifetiles</groupId>
+			<artifactId>lifetiles-tree</artifactId>
+			<version>1.6-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+
 </project>
     

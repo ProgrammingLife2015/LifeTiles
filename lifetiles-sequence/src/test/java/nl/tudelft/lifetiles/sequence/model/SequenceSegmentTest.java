@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-import nl.tudelft.lifetiles.graph.view.Mutation;
+import nl.tudelft.lifetiles.sequence.Mutation;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -78,20 +78,5 @@ public class SequenceSegmentTest {
         segments.add(v1);
         v1.setUnifiedStart(2);
         assertTrue(segments.contains(v1));
-    }
-
-    @Test
-    public void testInterestingness1() {
-        assertTrue(v1.interestingness() > v2.interestingness());
-    }
-
-    @Test
-    public void testInterestingness2() {
-        assertTrue(v1.interestingness() > v3.interestingness());
-    }
-
-    @Test
-    public void testInterestingness3() {
-        assertTrue(v3.interestingness() > v2.interestingness());
     }
 }

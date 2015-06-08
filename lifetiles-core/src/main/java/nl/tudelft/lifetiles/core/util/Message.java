@@ -1,10 +1,10 @@
 package nl.tudelft.lifetiles.core.util;
 
-
 /**
  * A message, used as shout identifier.
  *
  * @author joren
+ * @author Rutger van den Berg
  *
  */
 public final class Message {
@@ -21,6 +21,10 @@ public final class Message {
      * A shout message indicating data has been loaded.
      */
     public static final Message LOADED = create("loaded");
+    /**
+     * A shout message indicating that the filters have been reset.
+     */
+    public static final Message RESET = create("reset");
 
     /**
      * The value.

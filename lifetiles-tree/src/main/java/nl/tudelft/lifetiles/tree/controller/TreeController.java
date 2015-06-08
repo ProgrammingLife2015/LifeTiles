@@ -8,17 +8,15 @@ import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.Set;
 
-import nl.tudelft.lifetiles.sequence.model.Sequence;
-import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
-import nl.tudelft.lifetiles.tree.view.SunburstView;
 import javafx.fxml.FXML;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.controller.MenuController;
 import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.core.util.Message;
-import nl.tudelft.lifetiles.graph.controller.GraphController;
-import nl.tudelft.lifetiles.graph.model.Graph;
+import nl.tudelft.lifetiles.sequence.model.Sequence;
+import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeParser;
+import nl.tudelft.lifetiles.tree.view.SunburstView;
 
 /**
  * The controller of the tree view.
@@ -65,23 +63,28 @@ public class TreeController extends AbstractController {
         // load the tree when the files are opened
         listen(Message.OPENED, (controller, args) -> {
             assert controller instanceof MenuController;
-            final int expectedLength = 3;
+            assert args[0] instanceof String;
+            if (!((String) args[0]).equals("tree")) {
+                return;
+            }
+            final int expectedLength = 2;
             assert args.length == expectedLength;
-            assert args[2] instanceof File;
+            assert args[1] instanceof File;
             try {
-                loadTree((File) args[2]);
+                loadTree((File) args[1]);
             } catch (FileNotFoundException e) {
                 Logging.exception(e);
             }
         });
 
         listen(Message.LOADED, (controller, args) -> {
-            if (controller instanceof GraphController) {
-                assert args[0] instanceof Graph;
-                assert (args[1] instanceof Map<?, ?>);
-                sequences = (Map<String, Sequence>) args[1];
-                repaint();
+            assert args[0] instanceof String;
+            if (!((String) args[0]).equals("sequences")) {
+                return;
             }
+            assert (args[1] instanceof Map<?, ?>);
+            sequences = (Map<String, Sequence>) args[1];
+            repaint();
         });
 
         listen(Message.FILTERED, (controller, args) -> {
@@ -90,8 +93,8 @@ public class TreeController extends AbstractController {
                 assert (args[0] instanceof Set<?>);
                 if (!(controller instanceof TreeController)) {
                     // create the new tree
-                    setVisible((Set<Sequence>) args[0]);
-                }
+                setVisible((Set<Sequence>) args[0]);
+            }
         });
         view.setController(this);
     }
@@ -120,7 +123,7 @@ public class TreeController extends AbstractController {
 
         repaint();
 
-        shout(Message.LOADED, tree);
+        shout(Message.LOADED, "tree", tree);
     }
 
     /**

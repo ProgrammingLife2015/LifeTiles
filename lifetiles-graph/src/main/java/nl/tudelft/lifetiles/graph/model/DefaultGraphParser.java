@@ -126,7 +126,7 @@ public class DefaultGraphParser implements GraphParser {
     @Override
     public final Graph<SequenceSegment> parseGraph(final File vertexfile,
             final File edgefile, final GraphFactory<SequenceSegment> gfact)
-                    throws IOException {
+            throws IOException {
         Timer timer = Timer.getAndStart();
 
         Graph<SequenceSegment> graph = gfact.getGraph();
