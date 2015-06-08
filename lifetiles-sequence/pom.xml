@@ -6,7 +6,7 @@
         <groupId>nl.tudelft.lifetiles</groupId>
         <artifactId>lifetiles-parent</artifactId>
         <version>1.6-SNAPSHOT</version>
-        <relativePath>../lifetiles-parent</relativePath>
+        <relativePath>../</relativePath>
     </parent>
     <name>lifetiles-sequence</name>
     <dependencies>
