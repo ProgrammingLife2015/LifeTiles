@@ -1,0 +1,12 @@
+/* Stylesheet for the VertexView. */
+
+.vertexRectangle{
+    -fx-fill: #A1D3FF
+}
+
+
+.vertexText {
+	 -fx-font-smoothing-type: lcd; 
+	 -fx-fill: #ffffff;
+	 -fx-text-alignment: center;
+}
