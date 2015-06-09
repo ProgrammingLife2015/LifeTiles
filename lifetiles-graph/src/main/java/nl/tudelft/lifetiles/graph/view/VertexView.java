@@ -52,6 +52,11 @@ public class VertexView extends Group {
     private final Text text;
 
     /**
+     * The scale to resize this VertexView.
+     */
+    private final double scale;
+
+    /**
      * Creates a new Block to be displayed on the screen. The width is already
      * computed by the length of the string after applying css styling. The
      * following data can be set:
@@ -66,29 +71,34 @@ public class VertexView extends Group {
      *            the width of the vertex
      * @param height
      *            the height of the vertex
+     * @param scale
+     *            the resize factor of the vertex
      * @param color
      *            the color of the vertex
      */
     public VertexView(final String string, final double initX,
             final double initY, final double width, final double height,
-            final Color color) {
+            final double scale, final Color color) {
         text = new Text(string);
-        text.setFont(Font.font("Oxygen Mono", HORIZONTALSCALE));
+        text.setFont(Font.font("Oxygen Mono", HORIZONTALSCALE * scale));
         text.getStyleClass().add("vertexText");
 
-        rectangle = new Rectangle(width * HORIZONTALSCALE, height
-                * VERTICALSCALE);
+        rectangle = new Rectangle(width * HORIZONTALSCALE * scale, height
+                * VERTICALSCALE * scale);
         rectangle.setStyle("-fx-fill:" + ColorUtils.webCode(color));
         rectangle.getStyleClass().add("vertexText");
 
-        clip = new Rectangle(width * HORIZONTALSCALE, height * VERTICALSCALE);
+        clip = new Rectangle(width * HORIZONTALSCALE * scale, height
+                * VERTICALSCALE * scale);
         text.setClip(clip);
 
-        setLayoutX(initX * HORIZONTALSCALE);
-        setLayoutY(initY * VERTICALSCALE);
+        setLayoutX(initX * HORIZONTALSCALE * scale);
+        setLayoutY(initY * VERTICALSCALE * scale);
 
-        setHeight(height * VERTICALSCALE - SPACING);
-        setWidth(width * HORIZONTALSCALE - SPACING);
+        setHeight(height * VERTICALSCALE * scale - SPACING);
+        setWidth(width * HORIZONTALSCALE * scale - SPACING);
+
+        this.scale = scale;
 
         getChildren().addAll(rectangle, text);
 
@@ -121,7 +131,8 @@ public class VertexView extends Group {
         double height = rectangle.getHeight();
 
         double fontWidth = text.getLayoutBounds().getWidth();
-        text.setFont(Font.font(FONTNAME, (HORIZONTALSCALE) * width / fontWidth));
+        text.setFont(Font.font(FONTNAME, (HORIZONTALSCALE * scale) * width
+                / fontWidth));
 
         clip.setWidth(width);
         clip.setHeight(height);

@@ -1,9 +1,9 @@
 package nl.tudelft.lifetiles.graph.view;
 
-import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
+import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.control.Tooltip;
+import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
 
 /**
  * A bookmark is the equivalent of a annotation mapped onto the graph.
@@ -32,12 +32,15 @@ public class Bookmark extends Rectangle {
      *            The annotation which is visualized using this bookmark.
      * @param segmentPosition
      *            The position of the bookmark on the segment.
+     * @param scale
+     *            the factor to resize this bookmark
      */
     public Bookmark(final VertexView vertex,
-            final ResistanceAnnotation annotation, final long segmentPosition) {
-        super(vertex.HORIZONTALSCALE, vertex.getHeight());
+            final ResistanceAnnotation annotation, final long segmentPosition,
+            final double scale) {
+        super(vertex.HORIZONTALSCALE * scale, vertex.getHeight());
         setLayoutX(vertex.getLayoutX() + segmentPosition
-                * vertex.HORIZONTALSCALE);
+                * vertex.HORIZONTALSCALE * scale);
         setLayoutY(vertex.getLayoutY());
         setOpacity(OPACITY);
         setFill(STANDARD_COLOR);

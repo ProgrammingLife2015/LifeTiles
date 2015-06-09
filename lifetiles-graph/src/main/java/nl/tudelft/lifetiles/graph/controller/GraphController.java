@@ -67,25 +67,29 @@ public class GraphController extends AbstractController {
     private Graph<SequenceSegment> graph;
 
     /**
-     * Group used to draw the tileGraph on.
-     */
-    private Group root;
-
-    /**
      * Graph node used to draw the update graph based on bucket cache technique.
      */
     private Group graphNode;
 
     /**
-     * currentPosition of the view in the scrollPane, should only redraw if
-     * position has changed.
+     * Current end position of a bucket.
      */
-    private int currentPosition = -1;
+    private int currEndPosition = -1;
+
+    /**
+     * Current start position of a bucket.
+     */
+    private int currStartPosition = -1;
 
     /**
      * boolean to indicate if the controller must repaint the current position.
      */
     private boolean forceRepaintPosition;
+
+    /**
+     * The current scale to resize the graph.
+     */
+    private double scale = 1;
 
     /**
      * The currently inserted annotations.
@@ -97,12 +101,15 @@ public class GraphController extends AbstractController {
      */
     public static final Message ANNOTATIONS = Message.create("annotations");
 
+    /**
+     * The current zoom level.
+     */
     private int zoomLevel;
 
     /**
-     * Maximal zoomed in level
+     * Maximal zoomed in level.
      */
-    private static int MAXZOOM = 5;
+    private static int MAXZOOM = 50;
 
     /**
      * {@inheritDoc}
@@ -114,38 +121,22 @@ public class GraphController extends AbstractController {
         NotificationFactory notFact = new NotificationFactory();
         forceRepaintPosition = false;
 
-<<<<<<< HEAD:lifetiles-graph/src/main/java/nl/tudelft/lifetiles/graph/controller/GraphController.java
-        listen(Message.OPENED,
-                (controller, subject, args) -> {
-                    assert controller instanceof MenuController;
-                    if (!subject.equals("graph")) {
-                        return;
-                    }
-                    assert args.length == 2;
-                    assert args[0] instanceof File && args[1] instanceof File;
-
-                    try {
-                        loadGraph((File) args[0], (File) args[1]);
-                    } catch (IOException exception) {
-                        shout(NotificationController.NOTIFY, "",
-                                notFact.getNotification(exception));
-                    }
-=======
-        zoomLevel = 0;
-
-        listen(Message.OPENED, (controller, args) -> {
+        listen(Message.OPENED, (controller, subject, args) -> {
             assert controller instanceof MenuController;
+            if (!subject.equals("graph")) {
+                return;
+            }
+            assert args.length == 2;
             assert args[0] instanceof File && args[1] instanceof File;
->>>>>>> Added Zoombuttons:src/main/java/nl/tudelft/lifetiles/graph/controller/GraphController.java
 
             try {
                 loadGraph((File) args[0], (File) args[1]);
             } catch (IOException exception) {
-                shout(NotificationController.NOTIFY, notFact
+                shout(NotificationController.NOTIFY, "", notFact
                         .getNotification(exception));
             }
-
         });
+        zoomLevel = MAXZOOM / 2;
 
         listen(Message.FILTERED, (controller, subject, args) -> {
             assert args.length == 1;
@@ -156,7 +147,6 @@ public class GraphController extends AbstractController {
             repaint();
         });
 
-<<<<<<< HEAD:lifetiles-graph/src/main/java/nl/tudelft/lifetiles/graph/controller/GraphController.java
         listen(SequenceController.REFERENCE_SET,
                 (controller, subject, args) -> {
                     assert args.length == 1;
@@ -185,60 +175,50 @@ public class GraphController extends AbstractController {
                         try {
                             insertAnnotations((File) args[0]);
                         } catch (IOException exception) {
-                            shout(NotificationController.NOTIFY, "",
-                                    notFact.getNotification(exception));
+                            shout(NotificationController.NOTIFY, "", notFact
+                                    .getNotification(exception));
                         }
                     }
                 });
-=======
-        listen(Message.ZOOM, (controller, args) -> {
+
+        listen(Message.ZOOM, (controller, subject, args) -> {
             assert args.length == 1;
             assert args[0] instanceof Integer;
 
             // Zooming out
-            if ((Integer) args[0] == -1) {
-                if (zoomLevel != 0) {
-                    zoomLevel -= 1;
-                    zoomOut();
+                if ((Integer) args[0] == -1) {
+                    if (zoomLevel != 0) {
+                        zoomLevel -= 1;
+                        zoomOut();
+                    }
                 }
-            }
-            // Zooming in
-            else {
-                if (zoomLevel != MAXZOOM) {
-                    zoomLevel += 1;
-                    zoomIn();
+                // Zooming in
+                else {
+                    if (zoomLevel != MAXZOOM) {
+                        zoomLevel += 1;
+                        zoomIn();
+                    }
                 }
-            }
 
             });
 
-        listen(ANNOTATIONS, (controller, args) -> {
+        listen(ANNOTATIONS, (controller, subject, args) -> {
             assert controller instanceof MenuController;
             assert args[0] instanceof File;
 
             if (graph == null) {
-                shout(NotificationController.NOTIFY, notFact
+                shout(NotificationController.NOTIFY, "", notFact
                         .getNotification(new IllegalStateException(
                                 "Graph not loaded.")));
             } else {
                 try {
                     insertAnnotations((File) args[0]);
                 } catch (IOException exception) {
-                    shout(NotificationController.NOTIFY, notFact
+                    shout(NotificationController.NOTIFY, "", notFact
                             .getNotification(exception));
                 }
             }
         });
-    }
-
-    private void zoomIn() {
-        System.out.println(getBucketPosition(wrapper.getHvalue()));
-
-    }
-
-    private void zoomOut() {
-
->>>>>>> Added Zoombuttons:src/main/java/nl/tudelft/lifetiles/graph/controller/GraphController.java
     }
 
     /**
@@ -293,7 +273,7 @@ public class GraphController extends AbstractController {
 
         timer.stopAndLog("Inserting annotations");
         forceRepaintPosition = true;
-        repaintPosition(root, wrapper.hvalueProperty().doubleValue());
+        repaintPosition(wrapper.hvalueProperty().doubleValue());
     }
 
     /**
@@ -305,41 +285,86 @@ public class GraphController extends AbstractController {
                 model = new GraphContainer(graph);
             }
             view = new TileView(this);
-            root = new Group();
+
             wrapper.hvalueProperty().addListener(
                     (observable, oldValue, newValue) -> {
-                        repaintPosition(root, newValue.doubleValue());
+                        repaintPosition(newValue.doubleValue());
                     });
 
-            Rectangle clip = new Rectangle(getMaxUnifiedEnd(graph)
-                    * VertexView.HORIZONTALSCALE, 0);
-            root.getChildren().add(clip);
-
-            repaintPosition(root, wrapper.hvalueProperty().doubleValue());
+            repaintPosition(wrapper.hvalueProperty().doubleValue());
         }
     }
 
     /**
      * Repaints the view indicated by the bucket in the given position.
      *
-     * @param root
-     *            Root group used to store the visualized graph in.
      * @param position
      *            Position in the scrollPane.
      */
-    private void repaintPosition(final Group root, final double position) {
-        int nextPosition = getBucketPosition(position);
-        if (currentPosition != nextPosition || forceRepaintPosition) {
+    private void repaintPosition(final double position) {
+        double graphWidth = getMaxUnifiedEnd(graph)
+                * VertexView.HORIZONTALSCALE * scale;
+
+        double screenWidth = wrapper.getViewportBounds().getWidth();
+        double diffWidth = graphWidth - screenWidth;
+        double scaledScreenWidth = screenWidth * 2 * scale;
+
+        double newPosition = (position * (screenWidth / 2 + diffWidth))
+                / graphWidth;
+
+        double start = ((newPosition * graphWidth - scaledScreenWidth) / scale)
+                / VertexView.HORIZONTALSCALE;
+
+        double end = ((newPosition * graphWidth + scaledScreenWidth) / scale)
+                / VertexView.HORIZONTALSCALE;
+
+        int startBucket = getStartBucketPosition(start);
+        int endBucket = getEndBucketPosition(end) + 1;
+
+        if (currEndPosition != endBucket && currStartPosition != startBucket
+                || forceRepaintPosition) {
             if (graphNode != null) {
                 graphNode.getChildren().clear();
             }
             graphNode = new Group();
-            graphNode.getChildren().add(drawGraph(nextPosition));
-            root.getChildren().add(graphNode);
-            wrapper.setContent(root);
-            currentPosition = nextPosition;
+
+            graphNode.getChildren().add(drawGraph(startBucket, endBucket));
+
+            Rectangle clip = new Rectangle(graphWidth, 0);
+
+            Group newRoot = new Group();
+            newRoot.getChildren().add(clip);
+            newRoot.getChildren().add(graphNode);
+
+            wrapper.setContent(newRoot);
+
+            currEndPosition = endBucket;
+            currStartPosition = startBucket;
+
             forceRepaintPosition = false;
         }
+    }
+
+    /**
+     * Zoom in on the current graph.
+     */
+    private void zoomIn() {
+        this.scale = scale * 2;
+
+        forceRepaintPosition = true;
+        repaint();
+
+    }
+
+    /**
+     * Zoom out on the current graph.
+     */
+    private void zoomOut() {
+        this.scale = scale * 0.5;
+
+        forceRepaintPosition = true;
+        repaint();
+
     }
 
     /**
@@ -360,26 +385,43 @@ public class GraphController extends AbstractController {
     }
 
     /**
-     * Return the position in the bucket.
+     * Return the start position in the bucket.
      *
      * @param position
      *            Position in the scrollPane.
      * @return position in the bucket.
      */
-    private int getBucketPosition(final double position) {
-        return model.getBucketCache().bucketPercentagePosition(position);
+    private int getStartBucketPosition(final double position) {
+        return model.getBucketCache().bucketStartPosition(position);
+    }
+
+    /**
+     * Return the end position in the bucket.
+     *
+     * @param position
+     *            Position in the scrollPane.
+     * @return position in the bucket.
+     */
+    private int getEndBucketPosition(final double position) {
+        return model.getBucketCache().bucketEndPosition(position);
     }
 
     /**
      * Creates a drawable object of the graph from the model.
      *
-     * @param position
-     *            Bucket position of the scrollPane.
+     * It will draw from the startBucket all the way to the endBucket.
+     *
+     * @param startBucket
+     *            the first buket
+     * @param endBucket
+     *            the last bucket
      * @return Group object to be drawn on the screen
      */
-    public final Group drawGraph(final int position) {
-        return view.drawGraph(model.getVisibleSegments(position), graph,
-                annotations);
+    public final Group drawGraph(final int startBucket, final int endBucket) {
+        Group test = view.drawGraph(model.getVisibleSegments(startBucket,
+                endBucket), graph, annotations, scale);
+
+        return test;
     }
 
     /**

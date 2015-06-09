@@ -87,8 +87,8 @@ public class BucketCache {
      *            The vertex to cache in the buckets in the cache.
      */
     private void cacheVertex(final SequenceSegment vertex) {
-        int startBucket = bucketPosition(vertex.getUnifiedStart());
-        int endBucket = 1 + bucketPosition(vertex.getUnifiedEnd());
+        int startBucket = bucketStartPosition(vertex.getUnifiedStart());
+        int endBucket = bucketEndPosition(vertex.getUnifiedEnd());
 
         for (SortedSet<SequenceSegment> bucket : buckets.subList(startBucket,
                 endBucket)) {
@@ -131,13 +131,21 @@ public class BucketCache {
 
     /**
      * Returns the set of sequence segments on a certain domain.
+     * This will all sequence segment from the starting bucket to the ending
+     * bucket and include the last one as well.
      *
-     * @param bucketPosition
-     *            Bucket position of the domain.
+     * @param start
+     *            the minimal Bucket to search on the domain
+     * @param end
+     *            the maximal Bucket to search on the domain
      * @return set of sequence segments on the domain.
      */
-    public final Set<SequenceSegment> getSegments(final int bucketPosition) {
-        return buckets.get(bucketPosition);
+    public final Set<SequenceSegment> getSegments(final int start, final int end) {
+        Set<SequenceSegment> set = new TreeSet<SequenceSegment>();
+        for (Set<SequenceSegment> bucket : buckets.subList(start, end)) {
+            set.addAll(bucket);
+        }
+        return set;
     }
 
     /**
@@ -148,19 +156,33 @@ public class BucketCache {
      *            Percentage position in the GraphController
      * @return position in the bucketCache.
      */
-    public final int bucketPercentagePosition(final double position) {
+    public final int bucketPercentageStartPosition(final double position) {
         return (int) ((position * maxUnifiedEnd) / bucketWidth);
     }
 
     /**
-     * Returns the position in the bucketCache given the long position in
-     * the GraphController.
+     * Returns the minimal bucket it can find in the bucketCache, given a
+     * position relative to the screen.
      *
      * @param position
-     *            Long position in the GraphController
+     *            relative position on the screen
      * @return position in the bucketCache.
      */
-    public final int bucketPosition(final long position) {
-        return (int) (position / bucketWidth);
+    public final int bucketStartPosition(final double position) {
+        return (int) Math.min(numberBuckets, Math
+                .max(0, position / bucketWidth));
+    }
+
+    /**
+     * Returns the maximal bucket it can find in the bucketCache, given a
+     * position relative to the screen.
+     *
+     * @param position
+     *            relative position on the screen
+     * @return position in the bucketCache.
+     */
+    public final int bucketEndPosition(final double position) {
+        return (int) Math.min(numberBuckets, Math.ceil(Math.max(0, position
+                / bucketWidth)));
     }
 }
