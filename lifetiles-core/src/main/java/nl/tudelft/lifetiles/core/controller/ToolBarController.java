@@ -17,12 +17,12 @@ public class ToolBarController extends AbstractController {
 
     @FXML
     private void zoomOut(final ActionEvent event) {
-        shout(Message.ZOOM, new Integer(-1));
+        shout(Message.ZOOM, "", new Integer(-1));
     }
 
     @FXML
     private void zoomIn(final ActionEvent event) {
-        shout(Message.ZOOM, new Integer(1));
+        shout(Message.ZOOM, "", new Integer(1));
     }
 
     @Override

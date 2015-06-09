@@ -47,6 +47,11 @@ public class TileView {
     private List<Long> lanes;
 
     /**
+     * The factor to apply on the vertices and bookmarks to resize them.
+     */
+    private double scale;
+
+    /**
      * Controller for the View.
      */
     private final GraphController controller;
@@ -75,14 +80,18 @@ public class TileView {
      *            Graph to base the edges on
      * @param annotations
      *            Map from segment to annotations.
+     * @param scale
+     *            the scale to resize all elements of the graph
      * @return the elements that must be displayed on the screen
      */
     public final Group drawGraph(final Set<SequenceSegment> segments,
             final Graph<SequenceSegment> graph,
-            final Map<SequenceSegment, List<ResistanceAnnotation>> annotations) {
+            final Map<SequenceSegment, List<ResistanceAnnotation>> annotations,
+            final double scale) {
         Group root = new Group();
 
         lanes = new ArrayList<Long>();
+        this.scale = scale;
 
         for (SequenceSegment segment : segments) {
             List<ResistanceAnnotation> segmentAnnotations = null;
@@ -191,7 +200,7 @@ public class TileView {
         Color color = sequenceColor(segment.getMutation());
 
         VertexView vertex = new VertexView(text, start, index, width, height,
-                color);
+                scale, color);
 
         nodemap.put(segment, vertex);
         vertex.setOnMouseClicked(event -> controller.clicked(segment));
@@ -204,7 +213,7 @@ public class TileView {
                 long segmentPosition = annotation.getGenomePosition()
                         - segment.getStart();
                 Bookmark bookmark = new Bookmark(vertex, annotation,
-                        segmentPosition);
+                        segmentPosition, scale);
                 bookmarks.getChildren().add(bookmark);
             }
         }

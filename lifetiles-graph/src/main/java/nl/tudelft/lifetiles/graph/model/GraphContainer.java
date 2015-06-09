@@ -52,7 +52,7 @@ public class GraphContainer {
     /**
      * The amount of buckets the graph is cached in.
      */
-    private static final int NUMBER_OF_BUCKETS = 1000;
+    private static final int NUMBER_OF_BUCKETS = 10000;
 
     /**
      * create a new Tile.
@@ -128,14 +128,17 @@ public class GraphContainer {
     /**
      * Get the visible segments that this model is holding.
      *
-     * @param position
-     *            bucket position in the scrollPane.
+     * @param start
+     *            starting bucket position
+     * @param end
+     *            the last bucket position
      * @return graph
      */
-    public final Set<SequenceSegment> getVisibleSegments(final int position) {
+    public final Set<SequenceSegment> getVisibleSegments(final int start,
+            final int end) {
 
         Set<SequenceSegment> copy = new TreeSet<SequenceSegment>();
-        for (SequenceSegment seg : segmentBuckets.getSegments(position)) {
+        for (SequenceSegment seg : segmentBuckets.getSegments(start, end)) {
             try {
                 copy.add(seg.clone());
             } catch (CloneNotSupportedException e) {
