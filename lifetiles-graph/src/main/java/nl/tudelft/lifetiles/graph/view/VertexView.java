@@ -80,7 +80,7 @@ public class VertexView extends Group {
             final double initY, final double width, final double height,
             final double scale, final Color color) {
         text = new Text(string);
-        text.setFont(Font.font("Oxygen Mono", HORIZONTALSCALE * scale));
+        text.setFont(Font.font("Oxygen Mono", HORIZONTALSCALE));
         text.getStyleClass().add("vertexText");
 
         rectangle = new Rectangle(width * HORIZONTALSCALE * scale, height
@@ -131,8 +131,8 @@ public class VertexView extends Group {
         double height = rectangle.getHeight();
 
         double fontWidth = text.getLayoutBounds().getWidth();
-        text.setFont(Font.font(FONTNAME, (HORIZONTALSCALE * scale) * width
-                / fontWidth));
+
+        text.setFont(Font.font(FONTNAME, (HORIZONTALSCALE) * width / fontWidth));
 
         clip.setWidth(width);
         clip.setHeight(height);
