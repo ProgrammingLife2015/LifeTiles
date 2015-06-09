@@ -50,16 +50,18 @@ public class TileViewTest {
     public void drawGraphVerticesDrawGenericTest() {
         creategraph();
         buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0), gr, null);
+        Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
+                1);
         assertEquals(4, ((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().size());
     }
 
-    //@Test TODO integrate this in the edge drwaing settings
+    // @Test TODO integrate this in the edge drwaing settings
     public void drawGraphEdgesDrawGenericTest() {
         creategraph();
         buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0), gr, null);
+        Group result = tileview.drawGraph(buckets.getSegments(0, 0), gr, null,
+                1);
         assertEquals(3, ((Group) result.getChildrenUnmodifiable().get(1))
                 .getChildrenUnmodifiable().size());
     }
@@ -82,7 +84,8 @@ public class TileViewTest {
         graph.addVertex(v1);
 
         BucketCache buckets = new BucketCache(1, graph);
-        Group result = tileview.drawGraph(buckets.getSegments(0), graph, null);
+        Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
+                1);
         VertexView vView1 = (VertexView) ((Group) result
                 .getChildrenUnmodifiable().get(0)).getChildrenUnmodifiable()
                 .get(0);
@@ -98,7 +101,8 @@ public class TileViewTest {
     public void clickVertexTest() {
         creategraph();
         buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0), gr, null);
+        Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
+                1);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
                 MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
@@ -111,7 +115,8 @@ public class TileViewTest {
     public void hoveringEnterVertexText() {
         creategraph();
         buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0), gr, null);
+        Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
+                1);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
                 MouseEvent.MOUSE_ENTERED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
@@ -124,7 +129,8 @@ public class TileViewTest {
     public void hoveringExitVertexText() {
         creategraph();
         buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0), gr, null);
+        Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
+                1);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
                 MouseEvent.MOUSE_EXITED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,

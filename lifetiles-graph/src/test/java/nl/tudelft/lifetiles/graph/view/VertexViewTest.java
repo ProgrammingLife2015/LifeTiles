@@ -12,7 +12,7 @@ public class VertexViewTest {
 
     @Before
     public void setup() {
-        vertex = new VertexView("ATCG", 0, 0, 10, 10, Color.RED);
+        vertex = new VertexView("ATCG", 0, 0, 10, 10, 1, Color.RED);
     }
 
     @Test

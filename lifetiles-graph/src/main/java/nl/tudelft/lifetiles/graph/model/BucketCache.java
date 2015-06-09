@@ -132,7 +132,7 @@ public class BucketCache {
     /**
      * Returns the set of sequence segments on a certain domain.
      * This will all sequence segment from the starting bucket to the ending
-     * bucket and include the last one as well.
+     * bucket.
      *
      * @param start
      *            the minimal Bucket to search on the domain
