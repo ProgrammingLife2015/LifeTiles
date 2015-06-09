@@ -19,7 +19,6 @@ import org.junit.Test;
 
 public class UnifiedPositionTraverserTest {
     GraphFactory<SequenceSegment> gf;
-    static UnifiedPositionTraverser upt;
     static Set<Sequence> s1;
     SequenceSegment v1, v2, v3;
     Graph<SequenceSegment> gr;
@@ -28,8 +27,6 @@ public class UnifiedPositionTraverserTest {
     public static void runOnce() {
 
         Sequence ss1 = new DefaultSequence("reference");
-
-        upt = new UnifiedPositionTraverser();
 
         s1 = new HashSet<Sequence>();
         s1.add(ss1);
@@ -50,7 +47,7 @@ public class UnifiedPositionTraverserTest {
 
     @Test
     public void traverseGapTest() {
-        upt.unifyGraph(gr);
+        UnifiedPositionTraverser.unifyGraph(gr);
         assertEquals(1, v1.getUnifiedStart());
         assertEquals(11, v1.getUnifiedEnd());
         assertEquals(11, v2.getUnifiedStart());
@@ -61,7 +58,7 @@ public class UnifiedPositionTraverserTest {
         gr.addVertex(v3);
         gr.addEdge(v1, v3);
         gr.addEdge(v3, v2);
-        upt.unifyGraph(gr);
+        UnifiedPositionTraverser.unifyGraph(gr);
         assertEquals(11, v3.getUnifiedStart());
         assertEquals(21, v3.getUnifiedEnd());
         assertEquals(21, v2.getUnifiedStart());

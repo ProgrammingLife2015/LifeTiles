@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import javafx.scene.paint.Color;
+import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.core.util.TypeUtils;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 
@@ -52,7 +53,7 @@ public final class SequenceColor {
             digest = MessageDigest.getInstance("MD5");
             return digest.digest(sequence.getIdentifier().getBytes());
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            Logging.exception(e);
             return new byte[] {};
         }
     }

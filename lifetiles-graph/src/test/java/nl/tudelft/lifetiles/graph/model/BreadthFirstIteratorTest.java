@@ -42,12 +42,10 @@ public class BreadthFirstIteratorTest {
 
         SegmentString content = new SegmentString("AC");
 
-        vertices = Arrays.asList(
-                new SequenceSegment(s1, 1, 11, content),
-                new SequenceSegment(s2, 11, 21, content),
-                new SequenceSegment(s2, 21, 31, content),
-                new SequenceSegment(s2, 31, 41, content),
-                new SequenceSegment(s3, 11, 41, content),
+        vertices = Arrays.asList(new SequenceSegment(s1, 1, 11, content),
+                new SequenceSegment(s2, 11, 21, content), new SequenceSegment(
+                        s2, 21, 31, content), new SequenceSegment(s2, 31, 41,
+                        content), new SequenceSegment(s3, 11, 41, content),
                 new SequenceSegment(s2, 41, 51, content));
 
         vertices.forEach(graph::addVertex);
@@ -59,8 +57,7 @@ public class BreadthFirstIteratorTest {
         graph.addEdge(vertices.get(0), vertices.get(4));
         graph.addEdge(vertices.get(4), vertices.get(5));
 
-        UnifiedPositionTraverser traverser = new UnifiedPositionTraverser();
-        traverser.unifyGraph(graph);
+        UnifiedPositionTraverser.unifyGraph(graph);
     }
 
     @Test
@@ -74,9 +71,9 @@ public class BreadthFirstIteratorTest {
     public void testOrder() {
         BreadthFirstIterator<SequenceSegment> it = new BreadthFirstIterator<>(
                 graph);
-        List<SequenceSegment> expected = Arrays.asList(
-                vertices.get(0), vertices.get(1), vertices.get(4),
-                vertices.get(2), vertices.get(3), vertices.get(5));
+        List<SequenceSegment> expected = Arrays.asList(vertices.get(0),
+                vertices.get(1), vertices.get(4), vertices.get(2),
+                vertices.get(3), vertices.get(5));
         List<SequenceSegment> actual = Arrays.asList(it.next(), it.next(),
                 it.next(), it.next(), it.next(), it.next());
         assertEquals(expected, actual);
@@ -86,9 +83,9 @@ public class BreadthFirstIteratorTest {
     public void testReversedOrder() {
         BreadthFirstIterator<SequenceSegment> it = new BreadthFirstIterator<>(
                 graph, true);
-        List<SequenceSegment> expected = Arrays.asList(
-                vertices.get(5), vertices.get(4), vertices.get(3),
-                vertices.get(2), vertices.get(1), vertices.get(0));
+        List<SequenceSegment> expected = Arrays.asList(vertices.get(5),
+                vertices.get(4), vertices.get(3), vertices.get(2),
+                vertices.get(1), vertices.get(0));
         List<SequenceSegment> actual = Arrays.asList(it.next(), it.next(),
                 it.next(), it.next(), it.next(), it.next());
         assertEquals(expected, actual);

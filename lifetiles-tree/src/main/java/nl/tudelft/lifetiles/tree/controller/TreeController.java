@@ -188,7 +188,7 @@ public class TreeController extends AbstractController {
      * @param visible
      *            the set that needs to be visible
      */
-    public void shoutVisible(final Set<Sequence> visible) {
+    public final void shoutVisible(final Set<Sequence> visible) {
         shout(Message.FILTERED, visible);
     }
 

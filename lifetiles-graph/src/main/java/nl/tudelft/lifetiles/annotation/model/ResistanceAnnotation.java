@@ -71,35 +71,35 @@ public class ResistanceAnnotation extends AbstractAnnotation {
     /**
      * @return the drugResistance
      */
-    public String getDrugResistance() {
+    public final String getDrugResistance() {
         return drugResistance;
     }
 
     /**
      * @return the filter
      */
-    public String getFilter() {
+    public final String getFilter() {
         return filter;
     }
 
     /**
      * @return the change
      */
-    public String getChange() {
+    public final String getChange() {
         return change;
     }
 
     /**
      * @return the typeOfMutation
      */
-    public String getTypeOfMutation() {
+    public final String getTypeOfMutation() {
         return typeOfMutation;
     }
 
     /**
      * @return the geneName
      */
-    public String getGeneName() {
+    public final String getGeneName() {
         return geneName;
     }
 
@@ -113,8 +113,8 @@ public class ResistanceAnnotation extends AbstractAnnotation {
      * @return segment which annotation should be mapped to.
      */
     @Override
-    public SequenceSegment mapOntoSequence(final Set<SequenceSegment> segments,
-            final Sequence reference) {
+    public final SequenceSegment mapOntoSequence(
+            final Set<SequenceSegment> segments, final Sequence reference) {
         for (SequenceSegment segment : segments) {
             if (segment.getSources().contains(reference)
                     && segment.getStart() <= getGenomePosition()
@@ -132,7 +132,8 @@ public class ResistanceAnnotation extends AbstractAnnotation {
      * @return
      *         Tooltip string representation.
      */
-    public String toString() {
+    @Override
+    public final String toString() {
         Formatter formatter = new Formatter();
         formatter
                 .format("Gene Name: %1$s%nGene Position: %2$s%nMutation Type: %3$s%nChange: %4$s%nFilter: %5$s%nDrug Resistance: %6$s",

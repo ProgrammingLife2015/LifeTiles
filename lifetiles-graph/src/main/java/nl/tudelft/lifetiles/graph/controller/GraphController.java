@@ -127,7 +127,7 @@ public class GraphController extends AbstractController {
 
         listen(Message.FILTERED, (controller, args) -> {
             assert args.length == 1;
-            assert args[0] instanceof Set<?>;
+            assert (args[0] instanceof Set<?>);
 
             model.setVisible((Set<Sequence>) args[0]);
             forceRepaintPosition = true;

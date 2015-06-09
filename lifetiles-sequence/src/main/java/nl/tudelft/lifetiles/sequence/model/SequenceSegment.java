@@ -380,7 +380,7 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      * @return a copy
      */
     @Override
-    public final SequenceSegment clone() {
+    public final SequenceSegment clone() throws CloneNotSupportedException {
         SequenceSegment seg = new SequenceSegment(new HashSet<Sequence>(
                 getSources()), this.getStart(), this.getEnd(),
                 this.getContent(), this.getIdentifier());
