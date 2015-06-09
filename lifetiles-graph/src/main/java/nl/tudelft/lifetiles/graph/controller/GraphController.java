@@ -84,7 +84,7 @@ public class GraphController extends AbstractController {
     /**
      * boolean to indicate if the controller must repaint the current position.
      */
-    private boolean forceRepaintPosition;
+    private boolean repaintNow;
 
     /**
      * The current scale to resize the graph.
@@ -104,12 +104,25 @@ public class GraphController extends AbstractController {
     /**
      * The current zoom level.
      */
+    // Suppressed bcause zoomLevel is called within a lambda and PMD does not
+    // understand this.
+    @SuppressWarnings("PMD.SingularField")
     private int zoomLevel;
+
+    /**
+     * The factor that each zoom in step that updates the current scale.
+     */
+    private static final double ZOOMINFACTOR = 2;
+
+    /**
+     * The factor that each zoom out step that updates the current scale.
+     */
+    private static final double ZOOMOUTFACTOR = 0.5;
 
     /**
      * Maximal zoomed in level.
      */
-    private static int MAXZOOM = 50;
+    private static final int MAXZOOM = 50;
 
     /**
      * {@inheritDoc}
@@ -119,7 +132,7 @@ public class GraphController extends AbstractController {
             final ResourceBundle resources) {
 
         NotificationFactory notFact = new NotificationFactory();
-        forceRepaintPosition = false;
+        repaintNow = false;
 
         listen(Message.OPENED, (controller, subject, args) -> {
             assert controller instanceof MenuController;
@@ -143,7 +156,7 @@ public class GraphController extends AbstractController {
             assert (args[0] instanceof Set<?>);
 
             model.setVisible((Set<Sequence>) args[0]);
-            forceRepaintPosition = true;
+            repaintNow = true;
             repaint();
         });
 
@@ -185,22 +198,15 @@ public class GraphController extends AbstractController {
             assert args.length == 1;
             assert args[0] instanceof Integer;
 
-            // Zooming out
-                if ((Integer) args[0] == -1) {
-                    if (zoomLevel != 0) {
-                        zoomLevel -= 1;
-                        zoomOut();
-                    }
-                }
-                // Zooming in
-                else {
-                    if (zoomLevel != MAXZOOM) {
-                        zoomLevel += 1;
-                        zoomIn();
-                    }
-                }
+            if ((Integer) args[0] == -1 && zoomLevel != 0) {
+                zoomLevel -= 1;
+                zoomOut();
+            } else if (zoomLevel != MAXZOOM) {
+                zoomLevel += 1;
+                zoomIn();
+            }
 
-            });
+        });
 
         listen(ANNOTATIONS, (controller, subject, args) -> {
             assert controller instanceof MenuController;
@@ -272,7 +278,7 @@ public class GraphController extends AbstractController {
                 ResistanceAnnotationParser.parseAnnotations(file), reference);
 
         timer.stopAndLog("Inserting annotations");
-        forceRepaintPosition = true;
+        repaintNow = true;
         repaintPosition(wrapper.hvalueProperty().doubleValue());
     }
 
@@ -322,7 +328,7 @@ public class GraphController extends AbstractController {
         int endBucket = getEndBucketPosition(end) + 1;
 
         if (currEndPosition != endBucket && currStartPosition != startBucket
-                || forceRepaintPosition) {
+                || repaintNow) {
             if (graphNode != null) {
                 graphNode.getChildren().clear();
             }
@@ -341,7 +347,7 @@ public class GraphController extends AbstractController {
             currEndPosition = endBucket;
             currStartPosition = startBucket;
 
-            forceRepaintPosition = false;
+            repaintNow = false;
         }
     }
 
@@ -349,9 +355,9 @@ public class GraphController extends AbstractController {
      * Zoom in on the current graph.
      */
     private void zoomIn() {
-        this.scale = scale * 2;
+        this.scale = scale * ZOOMINFACTOR;
 
-        forceRepaintPosition = true;
+        repaintNow = true;
         repaint();
 
     }
@@ -360,9 +366,9 @@ public class GraphController extends AbstractController {
      * Zoom out on the current graph.
      */
     private void zoomOut() {
-        this.scale = scale * 0.5;
+        this.scale = scale * ZOOMOUTFACTOR;
 
-        forceRepaintPosition = true;
+        repaintNow = true;
         repaint();
 
     }

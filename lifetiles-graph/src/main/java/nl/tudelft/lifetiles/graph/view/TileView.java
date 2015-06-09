@@ -94,11 +94,11 @@ public class TileView {
         this.scale = scale;
 
         for (SequenceSegment segment : segments) {
-            List<ResistanceAnnotation> segmentAnnotations = null;
+            List<ResistanceAnnotation> segAnnotations = null;
             if (annotations != null && annotations.containsKey(segment)) {
-                segmentAnnotations = annotations.get(segment);
+                segAnnotations = annotations.get(segment);
             }
-            drawVertexLane(segment, segmentAnnotations);
+            drawVertexLane(segment, segAnnotations);
         }
 
         // TODO toggle edge drawing in the settings

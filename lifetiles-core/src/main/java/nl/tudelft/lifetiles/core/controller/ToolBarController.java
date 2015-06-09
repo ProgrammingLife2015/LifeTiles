@@ -3,31 +3,44 @@ package nl.tudelft.lifetiles.core.controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import nl.tudelft.lifetiles.core.util.Message;
-import nl.tudelft.lifetiles.notification.model.NotificationFactory;
 
+/**
+ * This Toolbar contains additional controls for the program
+ * like zoom buttons.
+ *
+ * @author AC Langerak
+ *
+ */
 public class ToolBarController extends AbstractController {
 
     /**
-     * The notification factory.
+     *
+     * Event triggered when clicked on the "-" button.
      */
-    private NotificationFactory nf;
-
     @FXML
-    private void zoomOut(final ActionEvent event) {
-        shout(Message.ZOOM, "", new Integer(-1));
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    private void zoomOut() {
+        shout(Message.ZOOM, "", Integer.valueOf(-1));
     }
 
+    /**
+     *
+     * Event triggered when clicked on the "+" button.
+     */
     @FXML
-    private void zoomIn(final ActionEvent event) {
-        shout(Message.ZOOM, "", new Integer(1));
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    private void zoomIn() {
+        shout(Message.ZOOM, "", Integer.valueOf(1));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void initialize(URL arg0, ResourceBundle arg1) {
-        nf = new NotificationFactory();
+    public void initialize(final URL arg0, final ResourceBundle arg1) {
+
     }
 
 }
