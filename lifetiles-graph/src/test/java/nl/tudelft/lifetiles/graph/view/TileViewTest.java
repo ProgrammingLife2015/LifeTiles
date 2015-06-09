@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.event.Event;
 import javafx.scene.Group;
@@ -139,17 +140,21 @@ public class TileViewTest {
         // Hack so you make a tooltip, javafx toolkit need to be initialised for
         // that
         JFXPanel panel = new JFXPanel();
-        Group result = tileview.drawGraph(buckets.getSegments(0, 1), graph,
-                annotations, 1);
+        Platform.runLater(() -> {
 
-        Rectangle rec = (Rectangle) ((Group) result.getChildrenUnmodifiable()
-                .get(2)).getChildrenUnmodifiable().get(0);
+            Group result = tileview.drawGraph(buckets.getSegments(0, 1), graph,
+                    annotations, 1);
 
-        VertexView vView1 = (VertexView) ((Group) result
-                .getChildrenUnmodifiable().get(0)).getChildrenUnmodifiable()
-                .get(0);
+            Rectangle rec = (Rectangle) ((Group) result
+                    .getChildrenUnmodifiable().get(2))
+                    .getChildrenUnmodifiable().get(0);
 
-        assertEquals(rec.getHeight(), vView1.getHeight(), 1e-10);
+            VertexView vView1 = (VertexView) ((Group) result
+                    .getChildrenUnmodifiable().get(0))
+                    .getChildrenUnmodifiable().get(0);
+
+            assertEquals(rec.getHeight(), vView1.getHeight(), 1e-10);
+        });
 
     }
 
