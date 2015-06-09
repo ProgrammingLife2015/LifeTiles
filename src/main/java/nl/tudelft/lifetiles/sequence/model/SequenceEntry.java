@@ -41,7 +41,6 @@ public final class SequenceEntry {
         this.visible.setValue(visible);
         this.reference.setValue(reference);
     }
-
     /**
      * Get the identifier.
      *
