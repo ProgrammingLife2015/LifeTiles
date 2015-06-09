@@ -1,18 +1,17 @@
 package nl.tudelft.lifetiles.sequence.controller;
 
 import java.net.URL;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.cell.ChoiceBoxTableCell;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
@@ -75,7 +74,7 @@ public final class SequenceController extends AbstractController {
     /**
      * The sequence entries for in the table.
      */
-    private Map<String, SequenceEntry> sequenceEntries;
+    private ObservableList<SequenceEntry> sequenceEntries;
 
     /**
      * {@inheritDoc}
@@ -116,23 +115,22 @@ public final class SequenceController extends AbstractController {
      */
     private void populateTable() {
         sequenceTable.setItems(FXCollections
-                .observableArrayList(sequenceEntries.values()));
+                .observableArrayList(sequenceEntries));
     }
 
     /**
      * Initialize the table.
-     * TODO change the 'visible' column to contain checkboxes (see
-     * {@link CheckBoxTableCell}).
-     * TODO change the 'reference' column to contain choiceboxes (see
-     * {@link ChoiceBoxTableCell}).
      */
     private void initializeTable() {
-        idColumn.setCellValueFactory(cellData -> cellData.getValue()
-                .identifierProperty());
-        visibleColumn.setCellValueFactory(cellData -> cellData.getValue()
-                .visibleProperty());
-        referenceColumn.setCellValueFactory(cellData -> cellData.getValue()
-                .referenceProperty());
+        sequenceTable.setEditable(true);
+
+        visibleColumn.setCellFactory(CheckBoxTableCell
+                .forTableColumn(visibleColumn));
+        visibleColumn.setEditable(true);
+
+        referenceColumn.setCellFactory(CheckBoxTableCell
+                .forTableColumn(referenceColumn));
+        referenceColumn.setEditable(true);
     }
 
     /**
@@ -142,7 +140,7 @@ public final class SequenceController extends AbstractController {
      *            the sequences
      */
     private void initializeEntries(final Map<String, Sequence> sequences) {
-        sequenceEntries = new HashMap<>(sequences.size());
+        sequenceEntries = FXCollections.observableArrayList();
         for (Sequence sequence : sequences.values()) {
             SequenceEntry sequenceEntry = SequenceEntry.fromSequence(sequence);
             String identifier = sequence.getIdentifier();
@@ -152,8 +150,44 @@ public final class SequenceController extends AbstractController {
             } else {
                 sequenceEntry = SequenceEntry.fromSequence(sequence);
             }
-            sequenceEntries.put(identifier, sequenceEntry);
+            addEntryListeners(sequenceEntry);
+
+            sequenceEntries.add(sequenceEntry);
         }
+    }
+
+    /**
+     * Add listeners to the visible and reference properties of a sequence
+     * entry.
+     *
+     * @param entry
+     *            the sequence entry
+     */
+    private void addEntryListeners(final SequenceEntry entry) {
+        entry.visibleProperty().addListener(
+                (value, wasSelected, isSelected) -> {
+                    if (wasSelected != isSelected) {
+                        updateVisible(entry, isSelected);
+                    }
+                });
+    }
+
+    /**
+     * Update a sequence's visiblity and shout new visible sequences.
+     *
+     * @param entry
+     *            the sequence entry
+     * @param visible
+     *            whether the sequence became visible
+     */
+    private void updateVisible(final SequenceEntry entry, final boolean visible) {
+        Sequence sequence = this.sequences.get(entry.getIdentifier());
+        if (visible) {
+            visibleSequences.add(sequence);
+        } else {
+            visibleSequences.remove(sequence);
+        }
+        shout(Message.FILTERED, visibleSequences);
     }
 
     /**
