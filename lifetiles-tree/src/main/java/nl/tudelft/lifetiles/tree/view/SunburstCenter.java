@@ -21,14 +21,6 @@ public class SunburstCenter extends AbstractSunburstNode {
     private static final Color DEFAULT_COLOR = Color.BLUE;
 
     /**
-     * Generates an empty SunburstCenter.
-     */
-    public SunburstCenter() {
-        setDisplay(new Circle(CENTER_RADIUS, Color.BLUE));
-        getChildren().add(getDisplay());
-    }
-
-    /**
      * Generates a SunburstCenter for the node.
      *
      * @param value
