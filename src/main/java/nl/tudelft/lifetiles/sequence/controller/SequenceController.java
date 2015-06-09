@@ -81,7 +81,7 @@ public final class SequenceController extends AbstractController {
     /**
      * The index of the reference sequence entry.
      */
-    private int referenceIndex;
+    private String reference;
 
     /**
      * The listeners for the visible properties.
@@ -93,7 +93,7 @@ public final class SequenceController extends AbstractController {
      */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
-        registerListeners();
+        registerShoutListeners();
         initializeTable();
 
         visibilityListeners = new HashMap<>();
@@ -102,7 +102,7 @@ public final class SequenceController extends AbstractController {
     /**
      * Register the shout listeners.
      */
-    private void registerListeners() {
+    private void registerShoutListeners() {
         listen(Message.LOADED,
                 (sender, args) -> {
                     if (sender instanceof GraphController) {
@@ -168,27 +168,25 @@ public final class SequenceController extends AbstractController {
     private void initializeEntries(final Map<String, Sequence> sequences) {
         sequenceEntries = FXCollections.observableHashMap();
 
-        int index = 0;
         for (Sequence sequence : sequences.values()) {
             SequenceEntry sequenceEntry = SequenceEntry.fromSequence(sequence);
             String identifier = sequence.getIdentifier();
             if (identifier.equals(DEFAULT_REFERENCE)) {
                 sequenceEntry = SequenceEntry
                         .fromSequence(sequence, true, true);
-                referenceIndex = index;
+                reference = identifier;
             } else {
                 sequenceEntry = SequenceEntry.fromSequence(sequence);
             }
             addVisibilityListener(sequenceEntry);
+            addReferenceListener(sequenceEntry);
 
             sequenceEntries.put(identifier, sequenceEntry);
-
-            index++;
         }
     }
 
     /**
-     * Add listeners to the visible and reference properties of a sequence
+     * Add listener to the visible and reference properties of a sequence
      * entry.
      *
      * @param entry
@@ -223,6 +221,28 @@ public final class SequenceController extends AbstractController {
                     + " has no listener");
         }
         entry.visibleProperty().removeListener(visibilityListeners.get(entry));
+    }
+
+    /**
+     * Add listener to the sequence entry's reference property.
+     *
+     * @param entry
+     *            the sequence entry.
+     */
+    private void addReferenceListener(final SequenceEntry entry) {
+        entry.referenceProperty().addListener(
+                (value, previous, current) -> {
+                    if (previous != current && !previous) {
+                        SequenceEntry previousRef = sequenceEntries
+                                .get(reference);
+                        previousRef.setReference(false);
+                        String identifier = entry.getIdentifier();
+                        reference = identifier;
+
+                        shout(SequenceController.REFERENCE_SET,
+                                sequences.get(identifier));
+                    }
+                });
     }
 
     /**
