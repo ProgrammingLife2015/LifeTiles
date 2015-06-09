@@ -55,7 +55,7 @@ public class BucketCache {
      */
     public BucketCache(final int numberBuckets,
             final Graph<SequenceSegment> graph) {
-        this.numberBuckets = numberBuckets;
+        this.numberBuckets = (int) Math.pow(2, Math.ceil(Math.log(numberBuckets) / Math.log(2)));
         this.graph = graph;
         maxUnifiedEnd = getMaxUnifiedEnd();
         bucketWidth = maxUnifiedEnd / this.numberBuckets + 1;
