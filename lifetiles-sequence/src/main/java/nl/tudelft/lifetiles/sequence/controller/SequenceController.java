@@ -130,6 +130,11 @@ public final class SequenceController extends AbstractController {
 
             updateVisible((Set<Sequence>) args[0]);
         });
+
+        listen(Message.RESET, (sender, args) -> {
+            System.out.println("reset");
+            setVisible(new HashSet<Sequence>(sequences.values()), true);
+        });
     }
 
     /**
