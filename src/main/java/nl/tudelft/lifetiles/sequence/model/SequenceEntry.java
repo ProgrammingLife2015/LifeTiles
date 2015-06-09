@@ -37,9 +37,9 @@ public final class SequenceEntry {
      */
     public SequenceEntry(final String identifier, final boolean visible,
             final boolean reference) {
-        this.identifier.setValue(identifier);
-        this.visible.setValue(visible);
-        this.reference.setValue(reference);
+        identifierProperty().setValue(identifier);
+        visibleProperty().setValue(visible);
+        referenceProperty().setValue(reference);
     }
     /**
      * Get the identifier.
@@ -47,7 +47,7 @@ public final class SequenceEntry {
      * @return the identifier
      */
     public String getIdentifier() {
-        return identifier.getValue();
+        return identifierProperty().getValue();
     }
 
     /**
@@ -56,7 +56,7 @@ public final class SequenceEntry {
      * @return true if visible, else false.
      */
     public boolean getVisible() {
-        return visible.getValue();
+        return visibleProperty().getValue();
     }
 
     /**
@@ -73,7 +73,7 @@ public final class SequenceEntry {
      *            true if visible, else false.
      */
     public void setVisible(final boolean visible) {
-        this.visible.setValue(visible);
+        visibleProperty().setValue(visible);
     }
 
     /**
@@ -89,7 +89,7 @@ public final class SequenceEntry {
      * @return true if reference, else false.
      */
     public boolean getReference() {
-        return reference.getValue();
+        return referenceProperty().getValue();
     }
 
     /**
@@ -99,7 +99,7 @@ public final class SequenceEntry {
      *            true if reference, else false.
      */
     public void setReference(final boolean reference) {
-        this.reference.setValue(reference);
+        this.referenceProperty().setValue(reference);
     }
 
     /**
