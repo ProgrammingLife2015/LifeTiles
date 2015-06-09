@@ -1,12 +1,11 @@
 package nl.tudelft.lifetiles.tree.view;
 
 
-import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
-import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Control;
 import javafx.scene.input.MouseButton;
 import nl.tudelft.lifetiles.tree.controller.TreeController;
+import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
 
 /**
@@ -126,6 +125,10 @@ public class SunburstView extends Control {
      */
     public final void setBounds(final Bounds bounds) {
         parentLayoutBounds = bounds;
+        if(rootItem != null) {
+            scale = calculateScale();
+            update();
+        }
     }
 
     /**
@@ -211,14 +214,15 @@ public class SunburstView extends Control {
 
         double maxRadius = AbstractSunburstNode.CENTER_RADIUS;
         maxRadius += (depth * AbstractSunburstNode.RING_WIDTH);
-        maxRadius += AbstractSunburstNode.RING_WIDTH;
+        //maxRadius += AbstractSunburstNode.RING_WIDTH;
 
-        double scale = minSize / maxRadius;
+        double scale = minSize / (maxRadius * 2);
         if (scale > 1) {
             scale = 1d;
         } else  if (scale <= 0) { //should not be needed, but bounds returns 0 to often
             scale = 1d;
         }
+        System.out.println(scale);
         return scale;
     }
 
