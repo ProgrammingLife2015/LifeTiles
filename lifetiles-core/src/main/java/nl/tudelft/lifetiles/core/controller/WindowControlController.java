@@ -50,11 +50,7 @@ public class WindowControlController extends AbstractController {
      */
     @FXML
     private void closeWindowAction() {
-        Window window = windowClose.getScene().getWindow();
-        if (window instanceof Stage) {
-            Stage stage = (Stage) window;
-            stage.close();
-        }
+        getStage(windowClose.getScene().getWindow()).close();
     }
 
     /**
@@ -71,13 +67,21 @@ public class WindowControlController extends AbstractController {
      */
     @FXML
     public final void minimizeWindowAction() {
-        Window window = windowMinimize.getScene().getWindow();
-        if (window instanceof Stage) {
-            Stage stage = (Stage) window;
-            stage.toBack();
-        }
-
+        getStage(windowMinimize.getScene().getWindow()).toBack();
         shout(MINIMIZE);
+    }
+
+    /**
+     * @param window
+     *            The window to cast.
+     * @return The old Window as a Stage.
+     */
+    private Stage getStage(final Window window) {
+        if (window instanceof Stage) {
+            return (Stage) window;
+        } else {
+            throw new IllegalStateException("The window was not a Stage");
+        }
     }
 
     /**
@@ -85,12 +89,8 @@ public class WindowControlController extends AbstractController {
      */
     @FXML
     private void resizeWindowAction() {
-        Window window = windowResize.getScene().getWindow();
-        if (window instanceof Stage) {
-            Stage stage = (Stage) window;
-            stage.setMaximized(!stage.isMaximized());
-        }
-
+        Stage stage = getStage(windowResize.getScene().getWindow());
+        stage.setMaximized(!stage.isMaximized());
         shout(RESIZE);
     }
 }
