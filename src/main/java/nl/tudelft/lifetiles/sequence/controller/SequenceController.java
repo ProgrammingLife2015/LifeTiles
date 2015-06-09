@@ -1,13 +1,15 @@
 package nl.tudelft.lifetiles.sequence.controller;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -74,7 +76,17 @@ public final class SequenceController extends AbstractController {
     /**
      * The sequence entries for in the table.
      */
-    private ObservableList<SequenceEntry> sequenceEntries;
+    private ObservableMap<String, SequenceEntry> sequenceEntries;
+
+    /**
+     * The index of the reference sequence entry.
+     */
+    private int referenceIndex;
+
+    /**
+     * The listeners for the visible properties.
+     */
+    private Map<SequenceEntry, ChangeListener<? super Boolean>> visibilityListeners;
 
     /**
      * {@inheritDoc}
@@ -83,6 +95,8 @@ public final class SequenceController extends AbstractController {
     public void initialize(final URL location, final ResourceBundle resources) {
         registerListeners();
         initializeTable();
+
+        visibilityListeners = new HashMap<>();
     }
 
     /**
@@ -94,10 +108,9 @@ public final class SequenceController extends AbstractController {
                     if (sender instanceof GraphController) {
                         assert args[0] instanceof Graph;
                         assert (args[1] instanceof Map<?, ?>);
+
                         Map<String, Sequence> newSequences = (Map<String, Sequence>) args[1];
-                        setSequences(newSequences);
-                        initializeEntries(newSequences);
-                        populateTable();
+                        load(newSequences);
                     }
                 });
 
@@ -105,8 +118,21 @@ public final class SequenceController extends AbstractController {
             assert args.length == 1;
             assert (args[0] instanceof Set<?>);
 
-            setVisible((Set<Sequence>) args[0], false);
+            updateVisible((Set<Sequence>) args[0]);
         });
+    }
+
+    /**
+     * Load in the new sequences.
+     *
+     * @param sequences
+     *            the new sequences
+     */
+    private void load(final Map<String, Sequence> sequences) {
+        this.sequences = sequences;
+        this.visibleSequences = new HashSet<>(sequences.values());
+        initializeEntries(sequences);
+        populateTable();
     }
 
     /**
@@ -115,7 +141,7 @@ public final class SequenceController extends AbstractController {
      */
     private void populateTable() {
         sequenceTable.setItems(FXCollections
-                .observableArrayList(sequenceEntries));
+                .observableArrayList(sequenceEntries.values()));
     }
 
     /**
@@ -140,19 +166,24 @@ public final class SequenceController extends AbstractController {
      *            the sequences
      */
     private void initializeEntries(final Map<String, Sequence> sequences) {
-        sequenceEntries = FXCollections.observableArrayList();
+        sequenceEntries = FXCollections.observableHashMap();
+
+        int index = 0;
         for (Sequence sequence : sequences.values()) {
             SequenceEntry sequenceEntry = SequenceEntry.fromSequence(sequence);
             String identifier = sequence.getIdentifier();
             if (identifier.equals(DEFAULT_REFERENCE)) {
                 sequenceEntry = SequenceEntry
                         .fromSequence(sequence, true, true);
+                referenceIndex = index;
             } else {
                 sequenceEntry = SequenceEntry.fromSequence(sequence);
             }
-            addEntryListeners(sequenceEntry);
+            addVisibilityListener(sequenceEntry);
 
-            sequenceEntries.add(sequenceEntry);
+            sequenceEntries.put(identifier, sequenceEntry);
+
+            index++;
         }
     }
 
@@ -163,13 +194,35 @@ public final class SequenceController extends AbstractController {
      * @param entry
      *            the sequence entry
      */
-    private void addEntryListeners(final SequenceEntry entry) {
-        entry.visibleProperty().addListener(
-                (value, wasSelected, isSelected) -> {
-                    if (wasSelected != isSelected) {
-                        updateVisible(entry, isSelected);
-                    }
-                });
+    private void addVisibilityListener(final SequenceEntry entry) {
+        final ChangeListener<? super Boolean> visibilityListener;
+        if (visibilityListeners.containsKey(entry)) {
+            visibilityListener = visibilityListeners.get(entry);
+        } else {
+            visibilityListener = (value, previous, current) -> {
+                if (previous != current) {
+                    updateVisible(entry, current);
+                    shout(Message.FILTERED, visibleSequences);
+                }
+            };
+            visibilityListeners.put(entry, visibilityListener);
+        }
+
+        entry.visibleProperty().addListener(visibilityListener);
+    }
+
+    /**
+     * Remove the visibility listener from the entry.
+     *
+     * @param entry
+     *            the entry
+     */
+    private void removeVisibilityListener(final SequenceEntry entry) {
+        if (!visibilityListeners.containsKey(entry)) {
+            throw new IllegalArgumentException("Entry " + entry.getIdentifier()
+                    + " has no listener");
+        }
+        entry.visibleProperty().removeListener(visibilityListeners.get(entry));
     }
 
     /**
@@ -187,51 +240,30 @@ public final class SequenceController extends AbstractController {
         } else {
             visibleSequences.remove(sequence);
         }
-        shout(Message.FILTERED, visibleSequences);
     }
 
     /**
-     * @return A set containing all visible sequences.
-     */
-    public Set<Sequence> getVisible() {
-        if (visibleSequences == null) {
-            throw new IllegalStateException("Sequences not loaded.");
-        }
-        return visibleSequences;
-    }
-
-    /**
-     * Sets the visible sequences in all views to the provided sequences.
+     * Update to the new visibles.
      *
-     * @param visible
-     *            The sequences to set to visible.
-     * @param shout
-     *            shout that the seqeunces have been filtered
+     * @param visibles
+     *            the new visibles
      */
-    private void setVisible(final Set<Sequence> visible, final boolean shout) {
-        if (!sequences.values().containsAll(visible)) {
-            throw new IllegalArgumentException(
-                    "Attempted to set a non-existant sequence to visible");
+    private void updateVisible(final Set<Sequence> visibles) {
+        if (!sequences.values().containsAll(visibles)) {
+            throw new IllegalArgumentException("Unknown sequences");
         }
-        // Limit the visible segquences of this class to the visible set given
-        // from someone
-        getVisible().retainAll(visible);
 
-        if (shout) {
-            shout(Message.FILTERED, visible);
+        for (Sequence sequence : sequences.values()) {
+            boolean visible = visibles.contains(sequence);
+            SequenceEntry entry = sequenceEntries.get(sequence.getIdentifier());
+
+            // temporarily stop listening to prevent circular shouting
+            removeVisibilityListener(entry);
+            entry.visibleProperty().setValue(visible);
+            addVisibilityListener(entry);
         }
-        visibleSequences = visible;
-    }
 
-    /**
-     * Set the sequences.
-     *
-     * @param newSequences
-     *            the sequences to set
-     */
-    public void setSequences(final Map<String, Sequence> newSequences) {
-        sequences = newSequences;
-        visibleSequences = new HashSet<>(sequences.values());
+        visibleSequences = visibles;
     }
 
 }
