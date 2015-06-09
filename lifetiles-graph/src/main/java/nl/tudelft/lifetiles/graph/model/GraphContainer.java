@@ -135,13 +135,14 @@ public class GraphContainer {
     public final Set<SequenceSegment> getVisibleSegments(final int position) {
 
         Set<SequenceSegment> copy = new TreeSet<SequenceSegment>();
-        try {
-            for (SequenceSegment seg : segmentBuckets.getSegments(position)) {
+        for (SequenceSegment seg : segmentBuckets.getSegments(position)) {
+            try {
                 copy.add(seg.clone());
+            } catch (CloneNotSupportedException e) {
+                Logging.exception(e);
             }
-        } catch (CloneNotSupportedException e) {
-            Logging.exception(e);
         }
+
         // Keep only the sequencesegments that are visible
         copy.retainAll(visibles);
 
