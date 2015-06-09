@@ -46,7 +46,7 @@ public class SunburstView extends Control {
     /**
      * The bounds for this view, used to scale content to fit.
      */
-    private Bounds parentBounds;
+    private Bounds parentLayoutBounds;
 
 
     /**
@@ -124,10 +124,8 @@ public class SunburstView extends Control {
      * @param bounds
      *              The bounds of the parent node
      */
-    public final void setBounds(final ReadOnlyObjectProperty<Bounds> bounds) {
-        bounds.addListener((observableBounds, oldValue, newValue) -> {
-            this.parentBounds = newValue;
-        });
+    public final void setBounds(final Bounds bounds) {
+        parentLayoutBounds = bounds;
     }
 
     /**
@@ -209,24 +207,18 @@ public class SunburstView extends Control {
 
     private double calculateScale() {
         int depth = currentItem.maxDepth();
-
-        System.out.println("SunburstView.calculateScale()");
-        System.out.println(parentBounds);
-        double minSize = Math.min(parentBounds.getWidth(), parentBounds.getHeight());
+        double minSize = Math.min(parentLayoutBounds.getWidth(), parentLayoutBounds.getHeight());
 
         double maxRadius = AbstractSunburstNode.CENTER_RADIUS;
         maxRadius += (depth * AbstractSunburstNode.RING_WIDTH);
         maxRadius += AbstractSunburstNode.RING_WIDTH;
 
         double scale = minSize / maxRadius;
-        System.out.println("scale = " + scale);
         if (scale > 1) {
             scale = 1d;
         } else  if (scale <= 0) { //should not be needed, but bounds returns 0 to often
             scale = 1d;
         }
-        System.out.println("maxradius = " + maxRadius);
-        System.out.println("scale = " + scale);
         return scale;
     }
 
