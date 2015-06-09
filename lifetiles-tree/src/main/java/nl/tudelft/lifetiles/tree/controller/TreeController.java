@@ -9,9 +9,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.shape.Rectangle;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.controller.MenuController;
 import nl.tudelft.lifetiles.core.util.Logging;

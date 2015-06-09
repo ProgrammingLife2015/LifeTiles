@@ -45,7 +45,7 @@ public class SunburstView extends Control {
     /**
      * The bounds for this view, used to scale content to fit.
      */
-    private Bounds parentLayoutBounds;
+    private Bounds layoutBounds;
 
 
     /**
@@ -55,33 +55,6 @@ public class SunburstView extends Control {
         super();
         centerX = getWidth() / 2d;
         centerY = getHeight() / 2d;
-        this.setOnScroll((scrollEvent) -> {
-            double zoomFactor = 1d / scrollEvent.getDeltaY();
-            scale = scale + zoomFactor;
-            update();
-        });
-    }
-
-    /**
-     * Creates a new SunburstView.
-     *
-     * @param root
-     *            the root of the tree to display
-     */
-    public SunburstView(final PhylogeneticTreeItem root) {
-        super();
-
-        centerX = getWidth() / 2d;
-        centerY = getHeight() / 2d;
-        rootItem = root;
-        selectNode(rootItem);
-
-        this.setOnScroll((scrollEvent) -> {
-            double zoomFactor = 1d / scrollEvent.getDeltaY();
-            scale = scale + zoomFactor;
-            update();
-        });
-
     }
 
     /**
@@ -124,8 +97,8 @@ public class SunburstView extends Control {
      *              The bounds of the parent node
      */
     public final void setBounds(final Bounds bounds) {
-        parentLayoutBounds = bounds;
-        if(rootItem != null) {
+        layoutBounds = bounds;
+        if (rootItem != null) {
             scale = calculateScale();
             update();
         }
@@ -208,21 +181,23 @@ public class SunburstView extends Control {
 
     }
 
+    /**
+     * Calculate the scaling factor needed for rendering the full tree
+     * in the avialable space.
+     * @return a double between 0 and 1
+     */
     private double calculateScale() {
         int depth = currentItem.maxDepth();
-        double minSize = Math.min(parentLayoutBounds.getWidth(), parentLayoutBounds.getHeight());
+        double minSize = Math.min(layoutBounds.getWidth(),
+                layoutBounds.getHeight());
 
         double maxRadius = AbstractSunburstNode.CENTER_RADIUS;
-        maxRadius += (depth * AbstractSunburstNode.RING_WIDTH);
-        //maxRadius += AbstractSunburstNode.RING_WIDTH;
+        maxRadius += depth * AbstractSunburstNode.RING_WIDTH;
 
         double scale = minSize / (maxRadius * 2);
         if (scale > 1) {
             scale = 1d;
-        } else  if (scale <= 0) { //should not be needed, but bounds returns 0 to often
-            scale = 1d;
         }
-        System.out.println(scale);
         return scale;
     }
 
