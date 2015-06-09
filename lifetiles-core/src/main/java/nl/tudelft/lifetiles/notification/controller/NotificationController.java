@@ -60,14 +60,14 @@ public class NotificationController extends AbstractController {
         final int initialCapacity = 10;
         this.notifications = new PriorityQueue<>(initialCapacity, (
                 notification1, notification2) -> {
-                    if (notification1.getPriority() == notification2.getPriority()) {
-                        return Boolean.compare(notification1.equals(notification2),
-                                true);
-                    } else {
-                        return notification1.getPriority()
-                                - notification2.getPriority();
-                    }
-                });
+            if (notification1.getPriority() == notification2.getPriority()) {
+                return Boolean.compare(notification1.equals(notification2),
+                        true);
+            } else {
+                return notification1.getPriority()
+                        - notification2.getPriority();
+            }
+        });
 
         hide();
 
@@ -87,7 +87,6 @@ public class NotificationController extends AbstractController {
      * Close the notification.
      */
     @FXML
-    @SuppressWarnings("PMD.UnusedPrivateMethod")
     private void closeAction() {
         displayNext();
     }

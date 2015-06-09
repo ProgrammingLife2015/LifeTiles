@@ -28,8 +28,6 @@ public class EmptySegmentTraverserTest {
 
     @BeforeClass
     public static void runOnce() {
-        pt = new UnifiedPositionTraverser();
-        at = new EmptySegmentTraverser();
 
         Sequence ss1 = new DefaultSequence("reference");
         Sequence ss2 = new DefaultSequence("mutation");
@@ -63,7 +61,8 @@ public class EmptySegmentTraverserTest {
         gr.addVertex(v4);
         gr.addEdge(v1, v3);
         gr.addEdge(v4, v3);
-        at.addEmptySegmentsGraph(pt.unifyGraph(gr));
+        UnifiedPositionTraverser.unifyGraph(gr);
+        EmptySegmentTraverser.addEmptySegmentsGraph(gr);
         assertEquals(3, gr.getAllVertices().size());
     }
 
@@ -74,21 +73,24 @@ public class EmptySegmentTraverserTest {
         gr.addVertex(v4);
         gr.addEdge(v1, v3);
         gr.addEdge(v1, v4);
-        at.addEmptySegmentsGraph(pt.unifyGraph(gr));
+        UnifiedPositionTraverser.unifyGraph(gr);
+        EmptySegmentTraverser.addEmptySegmentsGraph(gr);
         assertEquals(3, gr.getAllVertices().size());
     }
 
     @Test
     public void testTraverseGapGraph() {
         gr.addEdge(v1, v3);
-        at.addEmptySegmentsGraph(pt.unifyGraph(gr));
+        UnifiedPositionTraverser.unifyGraph(gr);
+        EmptySegmentTraverser.addEmptySegmentsGraph(gr);
         assertEquals(2, gr.getAllVertices().size());
     }
 
     @Test
     public void testTraverseGapCoordinatesGraph() {
         gr.addEdge(v1, v3);
-        at.addEmptySegmentsGraph(pt.unifyGraph(gr));
+        UnifiedPositionTraverser.unifyGraph(gr);
+        EmptySegmentTraverser.addEmptySegmentsGraph(gr);
         assertEquals(11, gr.getSource(gr.getIncoming(v3).iterator().next())
                 .getEnd());
         assertEquals(1, gr.getSource(gr.getIncoming(v3).iterator().next())
@@ -100,8 +102,9 @@ public class EmptySegmentTraverserTest {
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
         gr.addEdge(v2, v3);
-        at.addEmptySegmentsGraph(pt.unifyGraph(gr));
-        assertEquals(3, at.addEmptySegmentsGraph(gr).getAllVertices().size());
+        UnifiedPositionTraverser.unifyGraph(gr);
+        EmptySegmentTraverser.addEmptySegmentsGraph(gr);
+        assertEquals(3, gr.getAllVertices().size());
     }
 
     @Test
@@ -112,8 +115,9 @@ public class EmptySegmentTraverserTest {
         gr.addEdge(v1, v3);
         gr.addEdge(v1, v4);
         gr.addEdge(v4, v3);
-        at.addEmptySegmentsGraph(pt.unifyGraph(gr));
-        assertEquals(4, at.addEmptySegmentsGraph(gr).getAllVertices().size());
+        UnifiedPositionTraverser.unifyGraph(gr);
+        EmptySegmentTraverser.addEmptySegmentsGraph(gr);
+        assertEquals(4, gr.getAllVertices().size());
     }
 
 }

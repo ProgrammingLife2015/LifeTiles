@@ -53,7 +53,14 @@ public final class Timer {
      * @return the elapsed time in nanoseconds.
      */
     public long getElapsed() {
-        return stopTime - startTime;
+        if (startTime == null) {
+            throw new IllegalStateException("Timer has not been started yet.");
+        }
+        if (stopTime == null) {
+            return System.nanoTime() - startTime;
+        } else {
+            return stopTime - startTime;
+        }
     }
 
     /**

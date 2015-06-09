@@ -16,11 +16,14 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
  * @author Jos
  *
  */
-public class EmptySegmentTraverser {
+public final class EmptySegmentTraverser {
+
     /**
-     * Traverser's graph.
+     * Don't instantiate.
      */
-    private Graph<SequenceSegment> graphVar;
+    private EmptySegmentTraverser() {
+
+    }
 
     /**
      * Traverses the graph. Adds empty vertices to the graph which are being
@@ -28,24 +31,12 @@ public class EmptySegmentTraverser {
      *
      * @param graph
      *            the graph to traverse.
-     * @return the traversed of the graph.
      */
-    public final Graph<SequenceSegment> addEmptySegmentsGraph(
-            final Graph<SequenceSegment> graph) {
-        graphVar = graph;
-        addEmptySegmentsGraph();
-        return this.graphVar;
-    }
-
-    /**
-     * Traverses the graph. Adds empty vertices to the graph which are being
-     * used to indicate mutations on.
-     */
-    private void addEmptySegmentsGraph() {
+    public static void addEmptySegmentsGraph(final Graph<SequenceSegment> graph) {
         Timer timer = Timer.getAndStart();
 
-        for (SequenceSegment vertex : graphVar.getAllVertices()) {
-            addEmptySegmentsVertex(vertex);
+        for (SequenceSegment vertex : graph.getAllVertices()) {
+            addEmptySegmentsVertex(graph, vertex);
         }
 
         timer.stopAndLog("Adding empty segments");
@@ -55,18 +46,21 @@ public class EmptySegmentTraverser {
      * Traverses a vertex in the graph. Adds empty vertices to the graph which
      * are being used to indicate mutations on.
      *
+     * @param graph
+     *            The graph to traverse.
      * @param vertex
      *            the vertex to traverse.
      */
-    private void addEmptySegmentsVertex(final SequenceSegment vertex) {
+    private static void addEmptySegmentsVertex(
+            final Graph<SequenceSegment> graph, final SequenceSegment vertex) {
         Set<Sequence> buffer = new HashSet<Sequence>(vertex.getSources());
-        for (Edge<SequenceSegment> edge : graphVar.getOutgoing(vertex)) {
-            SequenceSegment destination = graphVar.getDestination(edge);
+        for (Edge<SequenceSegment> edge : graph.getOutgoing(vertex)) {
+            SequenceSegment destination = graph.getDestination(edge);
             Set<Sequence> sources = new HashSet<Sequence>(
                     destination.getSources());
             sources.retainAll(buffer);
             if (vertex.distanceTo(destination) > 0) {
-                graphVar.splitEdge(edge,
+                graph.splitEdge(edge,
                         bridgeSequence(vertex, destination, sources));
             }
             buffer.removeAll(sources);
@@ -85,7 +79,7 @@ public class EmptySegmentTraverser {
      *            The set of sources in the to be constructed segment.
      * @return sequence segment between source and destination segment
      */
-    private SequenceSegment bridgeSequence(final SequenceSegment source,
+    private static SequenceSegment bridgeSequence(final SequenceSegment source,
             final SequenceSegment destination, final Set<Sequence> sources) {
         SequenceSegment vertex = new SequenceSegment(sources,
                 source.getUnifiedEnd(), destination.getUnifiedStart(),

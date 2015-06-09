@@ -115,33 +115,68 @@ public class MenuController extends AbstractController {
         loadAnnotations(directory);
     }
 
-    private void loadGraph(File directory) throws IOException {
-        File nodeFile = FileUtils.getFile(directory, NODE_EXTENSION);
-        File edgeFile = FileUtils.getFile(directory, EDGE_EXTENSION);
+    /**
+     * Loads the graph from files in the specified directory.
+     *
+     * @param directory
+     *            The directory in which to locate the files.
+     * @throws IOException
+     *             When the directory does not contain exactly one graph file
+     *             and one node file.
+     */
+    private void loadGraph(final File directory) throws IOException {
+        File nodeFile = FileUtils.getSingleFileByExtension(directory,
+                NODE_EXTENSION);
+        File edgeFile = FileUtils.getSingleFileByExtension(directory,
+                EDGE_EXTENSION);
         shout(Message.OPENED, "graph", nodeFile, edgeFile);
     }
 
-    private void loadAnnotations(File directory) {
+    /**
+     * Loads the annotations from a file in the specified directory.
+     *
+     * @param directory
+     *            The directory from which to load annotations.
+     */
+    private void loadAnnotations(final File directory) {
         File annotationFile = loadOrWarn(directory, ANNOTATION_EXTENSION);
         if (annotationFile != null) {
             shout(Message.OPENED, "annotations", annotationFile);
         }
     }
 
-    private void loadTree(File directory) {
+    /**
+     * Loads the tree from a file in the specified directory.
+     *
+     * @param directory
+     *            The directory in which to search for the tree file.
+     */
+    private void loadTree(final File directory) {
         File treeFile = loadOrWarn(directory, TREE_EXTENSION);
         if (treeFile != null) {
             shout(Message.OPENED, "tree", treeFile);
         }
     }
 
-    private File loadOrWarn(File directory, String extension) {
+    /**
+     * Loads a file from the specified directory, with the specified extension,
+     * and give a warning.
+     *
+     * @param directory
+     *            The directory in which to search for the file.
+     * @param extension
+     *            The extension to search for.
+     * @return The found file.
+     */
+    private File loadOrWarn(final File directory, final String extension) {
         try {
-            File file = FileUtils.getFile(directory, extension);
+            File file = FileUtils
+                    .getSingleFileByExtension(directory, extension);
             return file;
         } catch (IOException e) {
             shout(NotificationController.NOTIFY, nf.getNotification(extension
-                    + " file could not be found", NotificationFactory.WARNING));
+                    + " file could not be found or multiple files found ",
+                    NotificationFactory.WARNING));
         }
         return null;
     }

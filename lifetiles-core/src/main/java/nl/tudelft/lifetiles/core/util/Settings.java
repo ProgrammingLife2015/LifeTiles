@@ -27,7 +27,6 @@ public final class Settings {
                     .getResourceAsStream(RESOURCE));
         } catch (IOException e) {
             Logging.exception(e);
-            System.exit(0);
         }
     }
 

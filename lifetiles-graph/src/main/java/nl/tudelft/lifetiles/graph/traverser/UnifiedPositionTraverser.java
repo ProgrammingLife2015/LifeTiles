@@ -17,7 +17,15 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
  * @author Jos
  *
  */
-public class UnifiedPositionTraverser {
+public final class UnifiedPositionTraverser {
+
+    /**
+     * Don't instantiate.
+     */
+    private UnifiedPositionTraverser() {
+
+    }
+
     /**
      * Graph which is being traversed.
      */
@@ -29,20 +37,8 @@ public class UnifiedPositionTraverser {
      *
      * @param graph
      *            Graph to be traversed, calculate unified positions.
-     * @return traversed graph.
      */
-    public final Graph<SequenceSegment> unifyGraph(
-            final Graph<SequenceSegment> graph) {
-        this.graph = graph;
-        unifyGraph();
-        return graph;
-    }
-
-    /**
-     * Traverses the graph, calculates unified positions. Unified positions
-     * are needed to visualize a comprehensible model of the graph.
-     */
-    private void unifyGraph() {
+    public static void unifyGraph(final Graph<SequenceSegment> graph) {
         Timer timer = Timer.getAndStart();
 
         for (SequenceSegment vertex : graph.getSources()) {

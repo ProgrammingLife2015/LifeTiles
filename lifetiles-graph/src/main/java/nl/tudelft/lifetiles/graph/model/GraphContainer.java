@@ -3,6 +3,7 @@ package nl.tudelft.lifetiles.graph.model;
 import java.util.Set;
 import java.util.TreeSet;
 
+import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.core.util.Settings;
 import nl.tudelft.lifetiles.graph.traverser.EmptySegmentTraverser;
 import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
@@ -79,12 +80,10 @@ public class GraphContainer {
      */
     private void alignGraph() {
 
-        UnifiedPositionTraverser upt = new UnifiedPositionTraverser();
-        graph = upt.unifyGraph(graph);
+        UnifiedPositionTraverser.unifyGraph(graph);
 
         if (Settings.getBoolean(SETTING_EMPTY)) {
-            EmptySegmentTraverser est = new EmptySegmentTraverser();
-            graph = est.addEmptySegmentsGraph(graph);
+            EmptySegmentTraverser.addEmptySegmentsGraph(graph);
         }
 
     }
@@ -102,7 +101,7 @@ public class GraphContainer {
         }
         new ReferencePositionTraverser(reference).referenceMapGraph(graph);
         new MutationIndicationTraverser(reference)
-        .indicateGraphMutations(graph);
+                .indicateGraphMutations(graph);
 
     }
 
@@ -137,8 +136,12 @@ public class GraphContainer {
     public final Set<SequenceSegment> getVisibleSegments(final int position) {
 
         Set<SequenceSegment> copy = new TreeSet<SequenceSegment>();
-        for (SequenceSegment seg : segmentBuckets.getSegments(position)) {
-            copy.add(seg.clone());
+        try {
+            for (SequenceSegment seg : segmentBuckets.getSegments(position)) {
+                copy.add(seg.clone());
+            }
+        } catch (CloneNotSupportedException e) {
+            Logging.exception(e);
         }
         // Keep only the sequencesegments that are visible
         copy.retainAll(visibles);

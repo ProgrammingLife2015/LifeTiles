@@ -43,8 +43,22 @@ public final class FileUtils {
         return Arrays.asList(res);
     }
 
-    public static File getFile(File directory, String extension)
-            throws IOException {
+    /**
+     * Looks for and opens a file with the specified extension in the specified
+     * directory, and throws an exception if multiple files are found with the
+     * same extension.
+     *
+     * @param directory
+     *            The directory in which to search for the file.
+     * @param extension
+     *            The file extension to look for.
+     * @return The file with the specified extension.
+     * @throws IOException
+     *             When a number of files other than one is found with the
+     *             specified extension.
+     */
+    public static File getSingleFileByExtension(final File directory,
+            final String extension) throws IOException {
         List<File> files = FileUtils.findByExtension(directory, extension);
         if (files.size() != 1) {
             throw new IOException("Expected 1 " + extension

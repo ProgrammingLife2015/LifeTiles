@@ -8,11 +8,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
-import nl.tudelft.lifetiles.graph.model.Edge;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.sequence.Mutation;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
@@ -40,13 +38,7 @@ public class TileView {
      * The bookmarks group contains all bookmarks and annotations to be
      * displayed.
      */
-    private Group bookmarks;
-
-    /**
-     * The root contains all the to be displayed
-     * elements.
-     */
-    private Group root;
+    private final Group bookmarks;
 
     /**
      * The lanes list which contains the occupation of the lanes inside the
@@ -101,7 +93,7 @@ public class TileView {
         }
 
         // TODO toggle edge drawing in the settings
-        //drawEdges(graph);
+        // drawEdges(graph);
         Group nodes = new Group();
 
         for (Entry<SequenceSegment, VertexView> entry : nodemap.entrySet()) {
@@ -112,22 +104,22 @@ public class TileView {
         return root;
     }
 
-    /**
-     * @param graph
-     *            graph to draw the edges from
-     */
-    private void drawEdges(final Graph<SequenceSegment> graph) {
-        for (Edge<SequenceSegment> edge : graph.getAllEdges()) {
-            if (nodemap.containsKey(graph.getSource(edge))
-                    && nodemap.containsKey(graph.getDestination(edge))) {
-
-                VertexView source = nodemap.get(graph.getSource(edge));
-                VertexView destination = nodemap
-                        .get(graph.getDestination(edge));
-                drawEdge(source, destination);
-            }
-        }
-    }
+    // /**
+    // * @param graph
+    // * graph to draw the edges from
+    // */
+    // private void drawEdges(final Graph<SequenceSegment> graph) {
+    // for (Edge<SequenceSegment> edge : graph.getAllEdges()) {
+    // if (nodemap.containsKey(graph.getSource(edge))
+    // && nodemap.containsKey(graph.getDestination(edge))) {
+    //
+    // VertexView source = nodemap.get(graph.getSource(edge));
+    // VertexView destination = nodemap
+    // .get(graph.getDestination(edge));
+    // drawEdge(source, destination);
+    // }
+    // }
+    // }
 
     /**
      * Draws a given segment to an available position in the graph.
@@ -166,18 +158,18 @@ public class TileView {
         }
     }
 
-    /**
-     * Create an Edge that can be displayed on the screen.
-     *
-     * @param source
-     *            Node to draw from
-     * @param destination
-     *            Node to draw to
-     */
-    private void drawEdge(final Node source, final Node destination) {
-        EdgeLine edge = new EdgeLine(source, destination);
-        edges.getChildren().add(edge);
-    }
+    // /**
+    // * Create an Edge that can be displayed on the screen.
+    // *
+    // * @param source
+    // * Node to draw from
+    // * @param destination
+    // * Node to draw to
+    // */
+    // private void drawEdge(final Node source, final Node destination) {
+    // EdgeLine edge = new EdgeLine(source, destination);
+    // edges.getChildren().add(edge);
+    // }
 
     /**
      * Create a Vertex that can be displayed on the screen.

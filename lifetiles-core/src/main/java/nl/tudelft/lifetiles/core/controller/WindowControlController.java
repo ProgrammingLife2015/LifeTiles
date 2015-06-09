@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import nl.tudelft.lifetiles.core.util.Message;
 
 /**
@@ -49,8 +50,11 @@ public class WindowControlController extends AbstractController {
      */
     @FXML
     private void closeWindowAction() {
-        Stage stage = (Stage) windowClose.getScene().getWindow();
-        stage.close();
+        Window window = windowClose.getScene().getWindow();
+        if (window instanceof Stage) {
+            Stage stage = (Stage) window;
+            stage.close();
+        }
     }
 
     /**
@@ -67,8 +71,11 @@ public class WindowControlController extends AbstractController {
      */
     @FXML
     public final void minimizeWindowAction() {
-        Stage stage = (Stage) windowMinimize.getScene().getWindow();
-        stage.toBack();
+        Window window = windowMinimize.getScene().getWindow();
+        if (window instanceof Stage) {
+            Stage stage = (Stage) window;
+            stage.toBack();
+        }
 
         shout(MINIMIZE);
     }
@@ -78,8 +85,11 @@ public class WindowControlController extends AbstractController {
      */
     @FXML
     private void resizeWindowAction() {
-        Stage stage = (Stage) windowResize.getScene().getWindow();
-        stage.setMaximized(!stage.isMaximized());
+        Window window = windowResize.getScene().getWindow();
+        if (window instanceof Stage) {
+            Stage stage = (Stage) window;
+            stage.setMaximized(!stage.isMaximized());
+        }
 
         shout(RESIZE);
     }

@@ -72,3 +72,8 @@ hs_err_pid*
 
 # pmd config file
 .eclipse-pmd
+.pmd
+.pmdruleset.xml
+
+#
+*.log.1

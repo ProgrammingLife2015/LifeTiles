@@ -13,9 +13,13 @@
 		<mockito.version>1.9.5</mockito.version>
 		<compiler.plugin.version>3.3</compiler.plugin.version>
 		<pmd.plugin.version>3.4</pmd.plugin.version>
+		<!-- Link to github to get around maven not providing a usable way to get a modules parent folder -->
+		<pmd.config>https://raw.githubusercontent.com/ProgrammingLife5/LifeTiles/master/pmd.ruleset.xml</pmd.config>
 		<jdk.version>1.8</jdk.version>
 		<checkstyle.plugin.version>2.14</checkstyle.plugin.version>
 		<checkstyle.version>6.6</checkstyle.version>
+		<!-- Link to github to get around maven not providing a usable way to get a modules parent folder -->
+		<checkstyle.config>https://raw.githubusercontent.com/ProgrammingLife5/LifeTiles/master/checkstyle-config.xml</checkstyle.config>
 		<findbugs.version>3.0.1</findbugs.version>
 		<jacoco.version>0.7.2.201409121644</jacoco.version>
 	</properties>
@@ -54,7 +58,6 @@
 		</dependency>
 	</dependencies>
 	<modules>
-		<module>build-tools</module>
 		<module>lifetiles-sequence</module>
 		<module>lifetiles-core</module>
 		<module>lifetiles-graph</module>
@@ -64,6 +67,50 @@
 
 	<build>
 		<plugins>
+		    <!--################################################################ 
+                                     Dependency plugin 
+             ###################################################################-->
+		    <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                            <overWriteReleases>false</overWriteReleases>
+                            <overWriteSnapshots>false</overWriteSnapshots>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--################################################################ 
+                                     Jar plugin 
+             ###################################################################-->
+            <plugin>
+                <!-- Build an executable JAR -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>nl.tudelft.lifetiles.Launcher</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+		
+		    <!--################################################################ 
+                                     Compiler plugin 
+             ###################################################################-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -74,7 +121,9 @@
 				</configuration>
 			</plugin>
 
-			
+			<!--################################################################ 
+                                     Checkstyle 
+             ###################################################################-->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -87,16 +136,11 @@
 						<!-- internal checkstyle version -->
 						<version>${checkstyle.version}</version>
 					</dependency>
-					<dependency>
-                        <groupId>nl.tudelft.lifetiles</groupId>
-                        <artifactId>build-tools</artifactId>
-                        <version>1.0</version>
-                    </dependency>
 				</dependencies>
 				<configuration>
 					<failOnViolation>false</failOnViolation>
 					<linkXRef>false</linkXRef>
-					<configLocation>checkstyle-config.xml</configLocation>
+					<configLocation>${checkstyle.config}</configLocation>
 				</configuration>
 				<executions>
 					<execution>
@@ -107,6 +151,35 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!--################################################################ 
+			                         PMD 
+			 ###################################################################-->
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${pmd.plugin.version}</version>
+                <configuration>
+                    <targetJdk>1.8</targetJdk>
+                    <linkXRef>false</linkXRef>
+                    <failOnViolation>false</failOnViolation>
+                    <verbose>true</verbose>
+                    <rulesets>
+                        <ruleset>${pmd.config}</ruleset>
+                    </rulesets>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>check</goal>
+                            <goal>cpd-check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+			<!--################################################################ 
+                                     Findbugs 
+             ###################################################################-->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
@@ -135,6 +208,9 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!--################################################################ 
+                                     JaCoCo 
+             ###################################################################-->
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -148,9 +224,66 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!--################################################################ 
+                                     Coveralls 
+             ###################################################################-->
+			<plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>3.1.0</version>
+            </plugin>
 		</plugins>
-
-
 	</build>
+	
+	
+	
+	
+	
+	<reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${pmd.plugin.version}</version>
+                <configuration>
+                    <targetJdk>1.8</targetJdk>
+                    <linkXRef>false</linkXRef>
+                    <failOnViolation>false</failOnViolation>
+                    <verbose>true</verbose>
+                    <rulesets>
+                        <ruleset>${pmd.config}</ruleset>
+                    </rulesets>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${checkstyle.plugin.version}</version>
+                <configuration>
+                    <failOnViolation>false</failOnViolation>
+                    <linkXRef>false</linkXRef>
+                    <configLocation>${checkstyle.config}</configLocation>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${findbugs.version}</version>
+                <configuration>
+                    <!-- Enables analysis which takes more memory but finds more bugs. If 
+                        you run out of memory, changes the value of the effort element to 'Low'. -->
+                    <effort>Max</effort>
+                    <!-- Build doesn't fail if problems are found -->
+                    <failOnError>false</failOnError>
+                    <!-- Reports all bugs (other values are medium and max) -->
+                    <threshold>Low</threshold>
+                    <!-- Produces XML report -->
+                    <xmlOutput>true</xmlOutput>
+                    <!-- Configures the directory in which the XML report is created -->
+                    <findbugsXmlOutputDirectory>${project.build.directory}/findbugs</findbugsXmlOutputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 
 </project>
