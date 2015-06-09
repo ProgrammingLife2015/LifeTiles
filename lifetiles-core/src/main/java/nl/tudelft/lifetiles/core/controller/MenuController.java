@@ -78,7 +78,7 @@ public class MenuController extends AbstractController {
             loadDataFiles();
         } catch (IOException e) {
             AbstractNotification notification = nf.getNotification(e);
-            shout(NotificationController.NOTIFY, notification);
+            shout(NotificationController.NOTIFY, "", notification);
         }
     }
 
@@ -90,7 +90,7 @@ public class MenuController extends AbstractController {
      */
     @FXML
     private void resetAction(final ActionEvent event) {
-        shout(Message.RESET);
+        shout(Message.RESET, "");
     }
 
     /**
@@ -174,9 +174,12 @@ public class MenuController extends AbstractController {
                     .getSingleFileByExtension(directory, extension);
             return file;
         } catch (IOException e) {
-            shout(NotificationController.NOTIFY, nf.getNotification(extension
-                    + " file could not be found or multiple files found ",
-                    NotificationFactory.WARNING));
+            shout(NotificationController.NOTIFY,
+                    "",
+                    nf.getNotification(
+                            extension
+                                    + " file could not be found or multiple files found ",
+                            NotificationFactory.WARNING));
         }
         return null;
     }
@@ -193,7 +196,7 @@ public class MenuController extends AbstractController {
             loadAnnotationsFile();
         } catch (IOException e) {
             AbstractNotification notification = nf.getNotification(e);
-            shout(NotificationController.NOTIFY, notification);
+            shout(NotificationController.NOTIFY, "", notification);
         }
     }
 

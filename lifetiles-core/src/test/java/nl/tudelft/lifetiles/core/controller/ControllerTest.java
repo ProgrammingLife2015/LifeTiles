@@ -35,31 +35,35 @@ public class ControllerTest {
         final Message message = Message.create("Leviathan");
         final String content = "hail santa";
 
-        stub1.listen(message, (controller, args) -> inbox1.set(args[0]));
-        stub1.shout(message, content);
+        stub1.listen(message,
+                (controller, subject, args) -> inbox1.set(args[0]));
+        stub1.shout(message, "", content);
 
         assertEquals(content, inbox1.get());
     }
 
     @Test
     public void testShoutOther() {
-        final Message message =  Message.create("Behemoth");
+        final Message message = Message.create("Behemoth");
         final String content = "hail satan";
 
-        stub2.listen(message, (controller, args) -> inbox1.set(args[0]));
-        stub1.shout(message, content);
+        stub2.listen(message,
+                (controller, subject, args) -> inbox1.set(args[0]));
+        stub1.shout(message, "", content);
 
         assertEquals(content, inbox1.get());
     }
 
     @Test
     public void testDoubleListener() {
-        final Message message =  Message.create("Ziz");
+        final Message message = Message.create("Ziz");
         final String content = "abyssum abyssus invocat";
 
-        stub2.listen(message, (controller, args) -> inbox1.set(args[0]));
-        stub2.listen(message, (controller, args) -> inbox2.set(args[0]));
-        stub1.shout(message, content);
+        stub2.listen(message,
+                (controller, subject, args) -> inbox1.set(args[0]));
+        stub2.listen(message,
+                (controller, subject, args) -> inbox2.set(args[0]));
+        stub1.shout(message, "", content);
 
         assertEquals(content, inbox1.get());
         assertEquals(content, inbox2.get());

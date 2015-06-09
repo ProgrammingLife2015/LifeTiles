@@ -61,33 +61,30 @@ public class TreeController extends AbstractController {
     public final void initialize(final URL location,
             final ResourceBundle resources) {
         // load the tree when the files are opened
-        listen(Message.OPENED, (controller, args) -> {
+        listen(Message.OPENED, (controller, subject, args) -> {
             assert controller instanceof MenuController;
-            assert args[0] instanceof String;
-            if (!((String) args[0]).equals("tree")) {
+            if (!subject.equals("tree")) {
                 return;
             }
-            final int expectedLength = 2;
-            assert args.length == expectedLength;
-            assert args[1] instanceof File;
+            assert args.length == 1;
+            assert args[0] instanceof File;
             try {
-                loadTree((File) args[1]);
+                loadTree((File) args[0]);
             } catch (FileNotFoundException e) {
                 Logging.exception(e);
             }
         });
 
-        listen(Message.LOADED, (controller, args) -> {
-            assert args[0] instanceof String;
-            if (!((String) args[0]).equals("sequences")) {
+        listen(Message.LOADED, (controller, subject, args) -> {
+            if (!subject.equals("sequences")) {
                 return;
             }
-            assert (args[1] instanceof Map<?, ?>);
-            sequences = (Map<String, Sequence>) args[1];
+            assert (args[0] instanceof Map<?, ?>);
+            sequences = (Map<String, Sequence>) args[0];
             repaint();
         });
 
-        listen(Message.FILTERED, (controller, args) -> {
+        listen(Message.FILTERED, (controller, subject, args) -> {
             // check the message is correct
                 assert args.length == 1;
                 assert (args[0] instanceof Set<?>);
@@ -189,7 +186,7 @@ public class TreeController extends AbstractController {
      *            the set that needs to be visible
      */
     public final void shoutVisible(final Set<Sequence> visible) {
-        shout(Message.FILTERED, visible);
+        shout(Message.FILTERED, "", visible);
     }
 
     /**

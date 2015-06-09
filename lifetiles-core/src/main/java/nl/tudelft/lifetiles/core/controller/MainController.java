@@ -38,7 +38,7 @@ public class MainController extends AbstractController {
 
         repaint(true);
 
-        listen(Message.OPENED, (controller, args) -> {
+        listen(Message.OPENED, (controller, subject, args) -> {
             repaint(false);
         });
     }

@@ -99,9 +99,8 @@ public class GraphContainer {
         if (!Settings.getBoolean(SETTING_MUTATION)) {
             return;
         }
-        new ReferencePositionTraverser(reference).referenceMapGraph(graph);
-        new MutationIndicationTraverser(reference)
-                .indicateGraphMutations(graph);
+        ReferencePositionTraverser.referenceMapGraph(graph, reference);
+        MutationIndicationTraverser.indicateGraphMutations(graph, reference);
 
     }
 

@@ -71,7 +71,7 @@ public class NotificationController extends AbstractController {
 
         hide();
 
-        listen(NOTIFY, (controller, args) -> {
+        listen(NOTIFY, (controller, subject, args) -> {
             assert args.length == 1 && args[0] instanceof AbstractNotification;
             AbstractNotification notification = (AbstractNotification) args[0];
             if (!notifications.contains(notification)) {

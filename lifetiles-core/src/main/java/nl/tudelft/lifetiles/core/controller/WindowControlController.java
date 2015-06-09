@@ -68,7 +68,7 @@ public class WindowControlController extends AbstractController {
     @FXML
     public final void minimizeWindowAction() {
         getStage(windowMinimize.getScene().getWindow()).toBack();
-        shout(MINIMIZE);
+        shout(MINIMIZE, "");
     }
 
     /**
@@ -91,6 +91,6 @@ public class WindowControlController extends AbstractController {
     private void resizeWindowAction() {
         Stage stage = getStage(windowResize.getScene().getWindow());
         stage.setMaximized(!stage.isMaximized());
-        shout(RESIZE);
+        shout(RESIZE, "");
     }
 }

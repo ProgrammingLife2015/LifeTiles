@@ -11,21 +11,13 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
  * @author Jos
  *
  */
-public class MutationIndicationTraverser {
+public final class MutationIndicationTraverser {
 
     /**
-     * Reference which is compared to determine the mutation types.
+     * Don't instaniate.
      */
-    private final Sequence reference;
+    private MutationIndicationTraverser() {
 
-    /**
-     * Constructs a MutationIndicationTraverser.
-     *
-     * @param reference
-     *            Reference which is compared to determine the mutation types.
-     */
-    public MutationIndicationTraverser(final Sequence reference) {
-        this.reference = reference;
     }
 
     /**
@@ -33,14 +25,16 @@ public class MutationIndicationTraverser {
      *
      * @param graph
      *            The graph to use.
+     * @param reference
+     *            The reference sequence.
      * @return traversed graph.
      */
-    public final Graph<SequenceSegment> indicateGraphMutations(
-            final Graph<SequenceSegment> graph) {
+    public static Graph<SequenceSegment> indicateGraphMutations(
+            final Graph<SequenceSegment> graph, final Sequence reference) {
         Timer timer = Timer.getAndStart();
 
         for (SequenceSegment vertex : graph.getAllVertices()) {
-            indicateVertexMutations(vertex);
+            indicateVertexMutations(vertex, reference);
         }
 
         timer.stopAndLog("Calculating mutations");
@@ -54,8 +48,11 @@ public class MutationIndicationTraverser {
      *
      * @param vertex
      *            Vertex in the graph to be traversed.
+     * @param reference
+     *            The reference sequence.
      */
-    private void indicateVertexMutations(final SequenceSegment vertex) {
+    private static void indicateVertexMutations(final SequenceSegment vertex,
+            final Sequence reference) {
         if (!vertex.getSources().contains(reference)) {
             vertex.setMutation(vertex.determineMutation());
         }

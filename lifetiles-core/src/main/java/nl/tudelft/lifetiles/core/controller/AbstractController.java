@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.BiConsumer;
 import java.util.logging.Level;
 
 import javafx.fxml.Initializable;
@@ -28,7 +27,7 @@ public abstract class AbstractController implements Initializable {
     /**
      * The listeners for messages.
      */
-    private final Map<Message, List<BiConsumer<AbstractController, Object[]>>> listeners;
+    private final Map<Message, List<ShoutCallback>> listeners;
 
     /**
      * Create a new controller and register it.
@@ -43,16 +42,18 @@ public abstract class AbstractController implements Initializable {
      *
      * @param message
      *            the message
+     * @param subject
+     *            The subject of this message.
      * @param args
      *            the arguments of the message
      */
-    protected final void shout(final Message message, final Object... args) {
+    protected final void shout(final Message message, final String subject,
+            final Object... args) {
         for (AbstractController c : controllers) {
-            List<BiConsumer<AbstractController, Object[]>> listenersOther = c
-                    .getListeners(message);
+            List<ShoutCallback> listenersOther = c.getListeners(message);
             if (listenersOther != null) {
                 listenersOther.stream().forEach(
-                        listener -> listener.accept(this, args));
+                        listener -> listener.accept(this, subject, args));
             }
         }
 
@@ -68,11 +69,11 @@ public abstract class AbstractController implements Initializable {
      *            the action to perform when recieving the message
      */
     protected final void listen(final Message message,
-            final BiConsumer<AbstractController, Object[]> action) {
+            final ShoutCallback action) {
         if (listeners.containsKey(message)) {
             listeners.get(message).add(action);
         } else {
-            List<BiConsumer<AbstractController, Object[]>> newListeners;
+            List<ShoutCallback> newListeners;
             newListeners = new ArrayList<>();
             newListeners.add(action);
             listeners.put(message, newListeners);
@@ -86,8 +87,7 @@ public abstract class AbstractController implements Initializable {
      *            the message
      * @return a map of listeners for messages
      */
-    private List<BiConsumer<AbstractController, Object[]>> getListeners(
-            final Message message) {
+    private List<ShoutCallback> getListeners(final Message message) {
         return listeners.get(message);
     }
 

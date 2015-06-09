@@ -18,21 +18,12 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
  * @author Joren Hammudoglu
  *
  */
-public class ReferencePositionTraverser {
+public final class ReferencePositionTraverser {
 
     /**
-     * Reference sequence which segments are compared to.
+     * Don't instantiate.
      */
-    private final Sequence reference;
-
-    /**
-     * Constructs a ReferencePositionTraverser.
-     *
-     * @param reference
-     *            Reference sequence which segments are compared to.
-     */
-    public ReferencePositionTraverser(final Sequence reference) {
-        this.reference = reference;
+    private ReferencePositionTraverser() {
     }
 
     /**
@@ -43,12 +34,15 @@ public class ReferencePositionTraverser {
      *
      * @param graph
      *            Graph to be traversed.
+     * @param reference
+     *            The reference sequence.
      */
-    public final void referenceMapGraph(final Graph<SequenceSegment> graph) {
+    public static void referenceMapGraph(final Graph<SequenceSegment> graph,
+            final Sequence reference) {
         Timer timer = Timer.getAndStart();
 
-        referenceMapGraphForward(graph);
-        referenceMapGraphBackward(graph);
+        referenceMapGraphForward(graph, reference);
+        referenceMapGraphBackward(graph, reference);
 
         timer.stopAndLog("Mapping graph onto reference");
     }
@@ -59,8 +53,11 @@ public class ReferencePositionTraverser {
      *
      * @param graph
      *            Graph to be traversed.
+     * @param reference
+     *            The reference sequence.
      */
-    private void referenceMapGraphForward(final Graph<SequenceSegment> graph) {
+    private static void referenceMapGraphForward(
+            final Graph<SequenceSegment> graph, final Sequence reference) {
         for (SequenceSegment source : graph.getSources()) {
             source.setReferenceStart(1);
         }
@@ -88,8 +85,11 @@ public class ReferencePositionTraverser {
      *
      * @param graph
      *            Graph to be traversed.
+     * @param reference
+     *            The reference sequence.
      */
-    private void referenceMapGraphBackward(final Graph<SequenceSegment> graph) {
+    private static void referenceMapGraphBackward(
+            final Graph<SequenceSegment> graph, final Sequence reference) {
         for (SequenceSegment sink : graph.getSinks()) {
             long referenceEnd = sink.getReferenceStart() - 1;
             if (sink.getSources().contains(reference)) {
