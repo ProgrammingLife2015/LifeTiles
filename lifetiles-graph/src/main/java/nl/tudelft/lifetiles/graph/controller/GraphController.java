@@ -108,24 +108,24 @@ public class GraphController extends AbstractController {
         forceRepaintPosition = false;
 
         listen(Message.OPENED,
-                (controller, args) -> {
+                (controller, subject, args) -> {
                     assert controller instanceof MenuController;
-                    assert args[0] instanceof String;
-                    if (!((String) args[0]).equals("graph")) {
+                    if (!subject.equals("graph")) {
                         return;
                     }
-                    assert args[1] instanceof File && args[2] instanceof File;
+                    assert args.length == 2;
+                    assert args[0] instanceof File && args[1] instanceof File;
 
                     try {
-                        loadGraph((File) args[1], (File) args[2]);
+                        loadGraph((File) args[0], (File) args[1]);
                     } catch (IOException exception) {
-                        shout(NotificationController.NOTIFY,
+                        shout(NotificationController.NOTIFY, "",
                                 notFact.getNotification(exception));
                     }
 
                 });
 
-        listen(Message.FILTERED, (controller, args) -> {
+        listen(Message.FILTERED, (controller, subject, args) -> {
             assert args.length == 1;
             assert (args[0] instanceof Set<?>);
 
@@ -135,33 +135,34 @@ public class GraphController extends AbstractController {
         });
 
         listen(SequenceController.REFERENCE_SET,
-                (controller, args) -> {
+                (controller, subject, args) -> {
                     assert args.length == 1;
                     assert args[0] instanceof Sequence;
                     Sequence sequence = (Sequence) args[0];
-                    new ReferencePositionTraverser(sequence)
-                            .referenceMapGraph(graph);
-                    new MutationIndicationTraverser(sequence)
-                            .indicateGraphMutations(graph);
+                    ReferencePositionTraverser.referenceMapGraph(graph,
+                            sequence);
+                    MutationIndicationTraverser.indicateGraphMutations(graph,
+                            sequence);
                 });
 
         listen(Message.OPENED,
-                (controller, args) -> {
+                (controller, subject, args) -> {
                     assert controller instanceof MenuController;
-                    if (!((String) args[0]).equals("annotations")) {
+                    if (!subject.equals("annotations")) {
                         return;
                     }
                     assert args[1] instanceof File;
 
                     if (graph == null) {
                         shout(NotificationController.NOTIFY,
+                                "",
                                 notFact.getNotification(new IllegalStateException(
                                         "Graph not loaded while attempting to add annotations.")));
                     } else {
                         try {
                             insertAnnotations((File) args[1]);
                         } catch (IOException exception) {
-                            shout(NotificationController.NOTIFY,
+                            shout(NotificationController.NOTIFY, "",
                                     notFact.getNotification(exception));
                         }
                     }
@@ -320,7 +321,7 @@ public class GraphController extends AbstractController {
     // Removed final for testing, cannot use PowerMockito because of current bug
     // with javafx 8
     public void clicked(final SequenceSegment segment) {
-        shout(Message.FILTERED, segment.getSources());
+        shout(Message.FILTERED, "", segment.getSources());
     }
 
     /**

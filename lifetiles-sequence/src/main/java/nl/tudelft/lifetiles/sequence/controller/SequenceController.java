@@ -1,7 +1,6 @@
 package nl.tudelft.lifetiles.sequence.controller;
 
 import java.net.URL;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -112,14 +111,13 @@ public final class SequenceController extends AbstractController {
      * Register the shout listeners.
      */
     private void registerShoutListeners() {
-        listen(Message.LOADED, (sender, args) -> {
-            assert args[0] instanceof String;
-            if (!args[0].equals("sequences")) {
+        listen(Message.LOADED, (sender, subject, args) -> {
+            if (!subject.equals("sequences")) {
                 return;
             }
-                        assert (args[1] instanceof Map<?, ?>);
+                        assert (args[0] instanceof Map<?, ?>);
 
-                        Map<String, Sequence> newSequences = (Map<String, Sequence>) args[1];
+                        Map<String, Sequence> newSequences = (Map<String, Sequence>) args[0];
                         load(newSequences);
                     }
                 });
@@ -131,8 +129,7 @@ public final class SequenceController extends AbstractController {
             updateVisible((Set<Sequence>) args[0]);
         });
 
-        listen(Message.RESET, (sender, args) -> {
-            System.out.println("reset");
+        listen(Message.RESET, (sender, subject, args) -> {
             setVisible(new HashSet<Sequence>(sequences.values()), true);
         });
     }
@@ -215,7 +212,7 @@ public final class SequenceController extends AbstractController {
             visibilityListener = (value, previous, current) -> {
                 if (previous != current) {
                     updateVisible(entry, current);
-                    shout(Message.FILTERED, visibleSequences);
+                    shout(Message.FILTERED, "", visibleSequences);
                 }
             };
             visibilityListeners.put(entry, visibilityListener);

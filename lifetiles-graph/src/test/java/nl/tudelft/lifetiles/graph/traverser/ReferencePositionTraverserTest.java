@@ -20,24 +20,22 @@ import org.junit.Test;
 
 public class ReferencePositionTraverserTest {
     GraphFactory<SequenceSegment> gf;
-    static ReferencePositionTraverser rpt;
     static Set<Sequence> s1, s2, s3;
     SequenceSegment v1, v4;
     Graph<SequenceSegment> gr;
+    static Sequence reference;
 
     @BeforeClass
     public static void runOnce() {
-        Sequence ss1 = new DefaultSequence("reference");
+        reference = new DefaultSequence("reference");
         Sequence ss2 = new DefaultSequence("mutation");
 
-        rpt = new ReferencePositionTraverser(ss1);
-
         s1 = new HashSet<Sequence>();
-        s1.add(ss1);
+        s1.add(reference);
         s1.add(ss2);
 
         s2 = new HashSet<Sequence>();
-        s2.add(ss1);
+        s2.add(reference);
 
         s3 = new HashSet<Sequence>();
         s3.add(ss2);
@@ -66,7 +64,7 @@ public class ReferencePositionTraverserTest {
         gr.addEdge(v3, v4);
         gr.addEdge(v6, v4);
 
-        rpt.referenceMapGraph(gr);
+        ReferencePositionTraverser.referenceMapGraph(gr, reference);
 
         assertEquals(1, v1.getReferenceStart());
         assertEquals(10, v1.getReferenceEnd());
@@ -91,7 +89,7 @@ public class ReferencePositionTraverserTest {
         gr.addEdge(v2, v4);
         gr.addEdge(v5, v4);
 
-        rpt.referenceMapGraph(gr);
+        ReferencePositionTraverser.referenceMapGraph(gr, reference);
 
         assertEquals(1, v1.getReferenceStart());
         assertEquals(10, v1.getReferenceEnd());
@@ -116,7 +114,7 @@ public class ReferencePositionTraverserTest {
         gr.addEdge(v2, v4);
         gr.addEdge(v6, v4);
 
-        rpt.referenceMapGraph(gr);
+        ReferencePositionTraverser.referenceMapGraph(gr, reference);
 
         assertEquals(1, v1.getReferenceStart());
         assertEquals(10, v1.getReferenceEnd());
