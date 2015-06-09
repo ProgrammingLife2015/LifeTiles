@@ -9,6 +9,8 @@ import java.util.Scanner;
 import java.util.Set;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.BorderPane;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.controller.MenuController;
 import nl.tudelft.lifetiles.core.util.Logging;
@@ -31,6 +33,8 @@ public class TreeController extends AbstractController {
      */
     @FXML
     private SunburstView view;
+    @FXML
+    private BorderPane wrapper;
 
     /**
      * The tree model.
@@ -93,7 +97,9 @@ public class TreeController extends AbstractController {
                 setVisible((Set<Sequence>) args[0]);
             }
         });
+
         view.setController(this);
+        view.setBounds(wrapper.boundsInParentProperty());
     }
 
     /**

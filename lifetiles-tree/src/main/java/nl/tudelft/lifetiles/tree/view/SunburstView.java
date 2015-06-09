@@ -2,6 +2,7 @@ package nl.tudelft.lifetiles.tree.view;
 
 
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.geometry.Bounds;
 import javafx.scene.control.Control;
 import javafx.scene.input.MouseButton;
@@ -42,6 +43,10 @@ public class SunburstView extends Control {
      * the scaling factor to calculate coordinates, starts at 1.
      */
     private double scale = 1d;
+    /**
+     * The bounds for this view, used to scale content to fit.
+     */
+    private Bounds parentBounds;
 
 
     /**
@@ -89,6 +94,7 @@ public class SunburstView extends Control {
     public final void selectNode(final PhylogeneticTreeItem selected) {
         if (selected != null) {
             currentItem = selected;
+            scale = calculateScale();
             update();
         }
 
@@ -112,6 +118,17 @@ public class SunburstView extends Control {
     public final void setController(final TreeController controller) {
         this.controller = controller;
     }
+    /**
+     * stores a reference to this nodes' parents bounds
+     * because the nodes' own bounds are not accurate.
+     * @param bounds
+     *              The bounds of the parent node
+     */
+    public final void setBounds(final ReadOnlyObjectProperty<Bounds> bounds) {
+        bounds.addListener((observableBounds, oldValue, newValue) -> {
+            this.parentBounds = newValue;
+        });
+    }
 
     /**
      * updates the view by redrawing all elements.
@@ -119,10 +136,10 @@ public class SunburstView extends Control {
     private void update() {
         // remove the old elements
         getChildren().clear();
+
         centerX = getWidth() / 2d;
         centerY = getHeight() / 2d;
 
-        scale = calculateScale();
         // add a center unit
         SunburstCenter center = new SunburstCenter(currentItem, scale);
         center.setOnMouseClicked((mouseEvent) -> {
@@ -190,27 +207,25 @@ public class SunburstView extends Control {
 
     }
 
-    private double calculateScale(){
-        int depth = rootItem.maxDepth();
-        updateBounds();
-        Bounds bounds = getLayoutBounds();
-        System.out.println(bounds);
+    private double calculateScale() {
+        int depth = currentItem.maxDepth();
 
-        double minSize = Math.min(bounds.getWidth(), bounds.getHeight());
+        System.out.println("SunburstView.calculateScale()");
+        System.out.println(parentBounds);
+        double minSize = Math.min(parentBounds.getWidth(), parentBounds.getHeight());
 
         double maxRadius = AbstractSunburstNode.CENTER_RADIUS;
         maxRadius += (depth * AbstractSunburstNode.RING_WIDTH);
         maxRadius += AbstractSunburstNode.RING_WIDTH;
 
         double scale = minSize / maxRadius;
+        System.out.println("scale = " + scale);
         if (scale > 1) {
             scale = 1d;
-        } else  if (scale <= 0) {
+        } else  if (scale <= 0) { //should not be needed, but bounds returns 0 to often
             scale = 1d;
         }
-        System.out.println("depth = " + depth);
         System.out.println("maxradius = " + maxRadius);
-        System.out.println("minSize = " + minSize);
         System.out.println("scale = " + scale);
         return scale;
     }
