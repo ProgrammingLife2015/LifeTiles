@@ -25,11 +25,11 @@ public class SunburstRingSegment extends AbstractSunburstNode {
     /**
      * the default start color for the color range.
      */
-    private static final Color START_COLOR = Color.hsb(0.1, 0.5 , 0.95);
+    private static final Color START_COLOR = Color.hsb(0, 0.5, 0.5);
     /**
-     * the default end color for the color range
+     * the default end color for the color range.
      */
-    private static final Color END_COLOR = Color.hsb(0.9, 0.5 , 0.95);
+    private static final Color END_COLOR = Color.hsb(170, 0.5, 0.5);
 
     /**
      * Creates a SunburstRingSegment.
@@ -51,9 +51,9 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      *            the scaling factor
      */
     public SunburstRingSegment(final PhylogeneticTreeItem value,
-            final int layer, final double degreeStart,
-            final double degreeEnd, final Point2D center,
-            final double scale, final Color parentColor, double fraction) {
+            final int layer, final double degreeStart, final double degreeEnd,
+            final Point2D center, final double scale, final Color parentColor,
+            double fraction) {
         // set the value, and create the text and semi-circle
         setValue(value);
         String name = getValue().getName();
@@ -65,8 +65,7 @@ public class SunburstRingSegment extends AbstractSunburstNode {
             tooltip = name + "\nDistance: " + distance;
         }
         setName(new Tooltip(tooltip));
-        setDisplay(createRing(layer, degreeStart, degreeEnd
-                   , center, scale, parentColor, fraction));
+                / 2;
         // add the text and semicircle to the group
         getChildren().add(getDisplay());
     }
@@ -90,8 +89,8 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      * @return a semi-circle with the specified dimensions
      */
     private Shape createRing(final int layer, final double degreeStart,
-        final double degreeEnd, final Point2D center, final double scale,
-        final Color parentColor, double fraction) {
+            final double degreeEnd, final Point2D center, final double scale,
+            final Color parentColor, double fraction) {
 
         Path result = new Path();
 
@@ -99,7 +98,8 @@ public class SunburstRingSegment extends AbstractSunburstNode {
         result.setFillRule(FillRule.EVEN_ODD);
 
         // check if this is a large arc
-        double arcSize = AbstractSunburstNode.calculateAngle(degreeStart, degreeEnd);
+        double arcSize = AbstractSunburstNode.calculateAngle(degreeStart,
+                degreeEnd);
         boolean largeArc = arcSize > (AbstractSunburstNode.CIRCLEDEGREES / 2);
 
         // calculate the radii of the two arcs
@@ -208,7 +208,8 @@ public class SunburstRingSegment extends AbstractSunburstNode {
             return START_COLOR.interpolate(END_COLOR, fraction);
         } else if (sequence == null) {
             Color result = parentColor.interpolate(END_COLOR, fraction);
-            return result.brighter();
+            //result = result.brighter();
+            return result;
         } else {
             return SequenceColor.getColor(sequence);
         }
