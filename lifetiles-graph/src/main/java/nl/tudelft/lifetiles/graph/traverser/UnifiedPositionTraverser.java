@@ -27,11 +27,6 @@ public final class UnifiedPositionTraverser {
     }
 
     /**
-     * Graph which is being traversed.
-     */
-    private Graph<SequenceSegment> graph;
-
-    /**
      * Traverses the graph, calculates the unified position. Unified positions
      * are needed to visualize a comprehensible model of the graph.
      *
