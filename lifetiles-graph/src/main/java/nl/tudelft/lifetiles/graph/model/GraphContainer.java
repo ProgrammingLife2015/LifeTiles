@@ -52,7 +52,7 @@ public class GraphContainer {
     /**
      * The amount of vertices to be placed in one bucket.
      */
-    private static final int NUM_Vertices_Bucket = Integer.parseInt(Settings
+    private static final int NUM_VERTICES_BUCKET = Integer.parseInt(Settings
             .get("num_vertices_bucket"));
 
     /**
@@ -72,7 +72,7 @@ public class GraphContainer {
         findMutations(reference);
 
         segmentBuckets = new BucketCache(graph.getAllVertices().size()
-                / NUM_Vertices_Bucket, this.graph);
+                / NUM_VERTICES_BUCKET, this.graph);
         visibles = graph.getAllVertices();
 
     }
