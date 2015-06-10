@@ -2,6 +2,7 @@ package nl.tudelft.lifetiles.tree.view;
 
 
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.control.Control;
 import javafx.scene.input.MouseButton;
 import nl.tudelft.lifetiles.tree.controller.TreeController;
@@ -25,22 +26,17 @@ public class SunburstView extends Control {
      * the current node we use as the center of the view.
      */
     private PhylogeneticTreeItem currentItem;
-
     /**
-     * the center X coordinate of the view.
+     * The center coordinates of this view
      */
-    private double centerX;
-    /**
-     * the center Y coordinate of the view.
-     */
-    private double centerY;
+    private Point2D center;
     /**
      * the {@link TreeController} controlling this SunburstView.
      */
-     private TreeController controller;
-     /**
-     * the scaling factor to calculate coordinates, starts at 1.
-     */
+    private TreeController controller;
+    /**
+    * the scaling factor to calculate coordinates, starts at 1.
+    */
     private double scale = 1d;
     /**
      * The bounds for this view, used to scale content to fit.
@@ -53,8 +49,7 @@ public class SunburstView extends Control {
      */
     public SunburstView() {
         super();
-        centerX = getWidth() / 2d;
-        centerY = getHeight() / 2d;
+        center = new Point2D(getWidth() / 2d, getHeight() / 2d);
     }
 
     /**
@@ -111,12 +106,11 @@ public class SunburstView extends Control {
         // remove the old elements
         getChildren().clear();
 
-        centerX = getWidth() / 2d;
-        centerY = getHeight() / 2d;
+        center = new Point2D(getWidth() / 2d, getHeight() / 2d);
 
         // add a center unit
         SunburstCenter center = new SunburstCenter(currentItem, scale);
-        center.setOnMouseClicked((mouseEvent) -> {
+        center.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 selectNode(currentItem.getParent());
                 controller.shoutVisible(currentItem.getChildSequences());
@@ -143,9 +137,9 @@ public class SunburstView extends Control {
      *
      * @param node
      *            the {@link PhylogeneticTreeItem} that this
-     *            {@link SunburstRingSegment} will represent.
+     *            SunburstRingSegment will represent.
      * @param layer
-     *            the layer on which this {@link SunburstRingSegment} is located
+     *            the layer on which this SunburstRingSegment is located
      * @param degreeStart
      *            the start point in degrees
      * @param degreeEnd
@@ -155,8 +149,8 @@ public class SunburstView extends Control {
             final int layer, final double degreeStart, final double degreeEnd) {
         // generate ring
         SunburstRingSegment ringUnit = new SunburstRingSegment(node, layer,
-                degreeStart, degreeEnd, centerX, centerY, scale);
-        ringUnit.setOnMouseClicked((mouseEvent) -> {
+                degreeStart, degreeEnd, center, scale);
+        ringUnit.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 selectNode(node);
                 controller.shoutVisible(currentItem.getChildSequences());
@@ -183,7 +177,7 @@ public class SunburstView extends Control {
 
     /**
      * Calculate the scaling factor needed for rendering the full tree
-     * in the avialable space.
+     * in the available space.
      * @return a double between 0 and 1
      */
     private double calculateScale() {
@@ -194,10 +188,7 @@ public class SunburstView extends Control {
         double maxRadius = AbstractSunburstNode.CENTER_RADIUS;
         maxRadius += depth * AbstractSunburstNode.RING_WIDTH;
 
-        double scale = minSize / (maxRadius * 2);
-        if (scale > 1) {
-            scale = 1d;
-        }
+        double scale = Math.min(1, minSize / (maxRadius * 2));
         return scale;
     }
 
