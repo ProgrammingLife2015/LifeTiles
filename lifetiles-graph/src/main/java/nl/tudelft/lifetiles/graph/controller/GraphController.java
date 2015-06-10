@@ -151,7 +151,7 @@ public class GraphController extends AbstractController {
                     if (!subject.equals("annotations")) {
                         return;
                     }
-                    assert args[1] instanceof File;
+                    assert args[0] instanceof File;
 
                     if (graph == null) {
                         shout(NotificationController.NOTIFY,
@@ -160,7 +160,7 @@ public class GraphController extends AbstractController {
                                         "Graph not loaded while attempting to add annotations.")));
                     } else {
                         try {
-                            insertAnnotations((File) args[1]);
+                            insertAnnotations((File) args[0]);
                         } catch (IOException exception) {
                             shout(NotificationController.NOTIFY, "",
                                     notFact.getNotification(exception));
