@@ -58,7 +58,7 @@ public class BucketCache {
         this.numberBuckets = numberBuckets;
         this.graph = graph;
         maxUnifiedEnd = getMaxUnifiedEnd();
-        bucketWidth = maxUnifiedEnd / this.numberBuckets + 1;
+        bucketWidth = (int) Math.pow(2, Math.ceil(Math.log(numberBuckets) / Math.log(2)));
         cacheGraph();
     }
 
@@ -142,7 +142,7 @@ public class BucketCache {
      */
     public final Set<SequenceSegment> getSegments(final int start, final int end) {
         Set<SequenceSegment> set = new TreeSet<SequenceSegment>();
-        for (Set<SequenceSegment> bucket : buckets.subList(start, end)) {
+        for (Set<SequenceSegment> bucket : buckets.subList(Math.max(0, start), Math.min(numberBuckets, end))) {
             set.addAll(bucket);
         }
         return set;
