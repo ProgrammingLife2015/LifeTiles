@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.sequence.controller;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -8,26 +9,15 @@ import java.util.Set;
 
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.MenuItem;
-import javafx.scene.paint.Color;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
-import nl.tudelft.lifetiles.core.util.ColorUtils;
 import nl.tudelft.lifetiles.core.util.Message;
-import nl.tudelft.lifetiles.graph.controller.GraphController;
-import nl.tudelft.lifetiles.graph.model.Graph;
-import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
-import nl.tudelft.lifetiles.graph.traverser.ReferencePositionTraverser;
-import nl.tudelft.lifetiles.notification.controller.NotificationController;
-import nl.tudelft.lifetiles.notification.model.AbstractNotification;
-import nl.tudelft.lifetiles.notification.model.NotificationFactory;
-import nl.tudelft.lifetiles.sequence.SequenceColor;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
-import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
+import nl.tudelft.lifetiles.sequence.model.SequenceEntry;
 
 /**
  * The controller of the data view.
@@ -111,18 +101,19 @@ public final class SequenceController extends AbstractController {
      * Register the shout listeners.
      */
     private void registerShoutListeners() {
-        listen(Message.LOADED, (sender, subject, args) -> {
-            if (!subject.equals("sequences")) {
-                return;
-            }
-                        assert (args[0] instanceof Map<?, ?>);
-
-                        Map<String, Sequence> newSequences = (Map<String, Sequence>) args[0];
-                        load(newSequences);
+        listen(Message.LOADED,
+                (sender, subject, args) -> {
+                    if (!subject.equals("sequences")) {
+                        return;
                     }
+                    assert (args[0] instanceof Map<?, ?>);
+
+                    Map<String, Sequence> newSequences = (Map<String, Sequence>) args[0];
+                    load(newSequences);
+
                 });
 
-        listen(Message.FILTERED, (sender, args) -> {
+        listen(Message.FILTERED, (sender, subject, args) -> {
             assert args.length == 1;
             assert (args[0] instanceof Set<?>);
 
@@ -130,7 +121,7 @@ public final class SequenceController extends AbstractController {
         });
 
         listen(Message.RESET, (sender, subject, args) -> {
-            setVisible(new HashSet<Sequence>(sequences.values()), true);
+            updateVisible(new HashSet<Sequence>(sequences.values()));
         });
     }
 
@@ -251,7 +242,7 @@ public final class SequenceController extends AbstractController {
                         String identifier = entry.getIdentifier();
                         reference = identifier;
 
-                        shout(SequenceController.REFERENCE_SET,
+                        shout(SequenceController.REFERENCE_SET, "",
                                 sequences.get(identifier));
                     }
                 });
