@@ -121,7 +121,9 @@ public final class SequenceController extends AbstractController {
         });
 
         listen(Message.RESET, (sender, subject, args) -> {
-            updateVisible(new HashSet<Sequence>(sequences.values()));
+            Set<Sequence> visibleSet = new HashSet<>(sequences.values());
+            updateVisible(visibleSet);
+            shout(Message.FILTERED, "", visibleSet);
         });
     }
 
@@ -189,8 +191,7 @@ public final class SequenceController extends AbstractController {
     }
 
     /**
-     * Add listener to the visible and reference properties of a sequence
-     * entry.
+     * Add listener to the visible and reference properties of a sequence entry.
      *
      * @param entry
      *            the sequence entry
