@@ -27,8 +27,10 @@ import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.model.GraphContainer;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
 import nl.tudelft.lifetiles.graph.model.GraphParser;
+import nl.tudelft.lifetiles.graph.model.StackedMutationContainer;
 import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
 import nl.tudelft.lifetiles.graph.traverser.ReferencePositionTraverser;
+import nl.tudelft.lifetiles.graph.view.DiagramView;
 import nl.tudelft.lifetiles.graph.view.TileView;
 import nl.tudelft.lifetiles.graph.view.VertexView;
 import nl.tudelft.lifetiles.notification.controller.NotificationController;
@@ -125,6 +127,16 @@ public class GraphController extends AbstractController {
     private static final int MAXZOOM = 10;
 
     /**
+     * The model of the diagram.
+     */
+    private StackedMutationContainer diagram;
+
+    /**
+     * The view of the diagram.
+     */
+    private DiagramView diagramView;
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -169,22 +181,23 @@ public class GraphController extends AbstractController {
 
         NotificationFactory notFact = new NotificationFactory();
 
-        listen(Message.OPENED, (controller, subject, args) -> {
+        listen(Message.OPENED,
+                (controller, subject, args) -> {
 
-            assert controller instanceof MenuController;
-            if (!"graph".equals(subject)) {
-                return;
-            }
-            assert args.length == 2;
-            assert args[0] instanceof File && args[1] instanceof File;
+                    assert controller instanceof MenuController;
+                    if (!"graph".equals(subject)) {
+                        return;
+                    }
+                    assert args.length == 2;
+                    assert args[0] instanceof File && args[1] instanceof File;
 
-            try {
-                loadGraph((File) args[0], (File) args[1]);
-            } catch (IOException exception) {
-                shout(NotificationController.NOTIFY, "", notFact
-                        .getNotification(exception));
-            }
-        });
+                    try {
+                        loadGraph((File) args[0], (File) args[1]);
+                    } catch (IOException exception) {
+                        shout(NotificationController.NOTIFY, "",
+                                notFact.getNotification(exception));
+                    }
+                });
 
         listen(Message.FILTERED, (controller, subject, args) -> {
             assert args.length == 1;
@@ -223,29 +236,30 @@ public class GraphController extends AbstractController {
                         try {
                             insertAnnotations((File) args[0]);
                         } catch (IOException exception) {
-                            shout(NotificationController.NOTIFY, "", notFact
-                                    .getNotification(exception));
+                            shout(NotificationController.NOTIFY, "",
+                                    notFact.getNotification(exception));
                         }
                     }
                 });
 
-        listen(ANNOTATIONS, (controller, subject, args) -> {
-            assert controller instanceof MenuController;
-            assert args[0] instanceof File;
+        listen(ANNOTATIONS,
+                (controller, subject, args) -> {
+                    assert controller instanceof MenuController;
+                    assert args[0] instanceof File;
 
-            if (graph == null) {
-                shout(NotificationController.NOTIFY, "", notFact
-                        .getNotification(new IllegalStateException(
-                                "Graph not loaded.")));
-            } else {
-                try {
-                    insertAnnotations((File) args[0]);
-                } catch (IOException exception) {
-                    shout(NotificationController.NOTIFY, "", notFact
-                            .getNotification(exception));
-                }
-            }
-        });
+                    if (graph == null) {
+                        shout(NotificationController.NOTIFY, "", notFact
+                                .getNotification(new IllegalStateException(
+                                        "Graph not loaded.")));
+                    } else {
+                        try {
+                            insertAnnotations((File) args[0]);
+                        } catch (IOException exception) {
+                            shout(NotificationController.NOTIFY, "",
+                                    notFact.getNotification(exception));
+                        }
+                    }
+                });
     }
 
     /**
@@ -311,7 +325,11 @@ public class GraphController extends AbstractController {
             if (model == null) {
                 model = new GraphContainer(graph);
             }
+            if (diagram == null) {
+                diagram = new StackedMutationContainer(model.getBucketCache());
+            }
             view = new TileView(this);
+            diagramView = new DiagramView();
 
             scrollPane.hvalueProperty().addListener(
                     (observable, oldValue, newValue) -> {
@@ -358,6 +376,14 @@ public class GraphController extends AbstractController {
      *            Position in the scrollPane.
      */
     private void repaintPosition(final double position) {
+        Group diagramDrawing = new Group();
+        diagramDrawing.getChildren().add(
+                diagramView.drawDiagram(diagram, zoomLevel));
+        diagramDrawing.getChildren().add(
+                new Rectangle(getMaxUnifiedEnd(graph) * scale
+                        * VertexView.HORIZONTALSCALE, 0));
+        scrollPane.setContent(diagramDrawing);
+
         int[] bucketLocations = getStartandEndBucket(position);
 
         int startBucket = bucketLocations[0];
@@ -445,8 +471,9 @@ public class GraphController extends AbstractController {
      * @return Group object to be drawn on the screen
      */
     public final Group drawGraph(final int startBucket, final int endBucket) {
-        Group test = view.drawGraph(model.getVisibleSegments(startBucket,
-                endBucket), graph, annotations, scale);
+        Group test = view.drawGraph(
+                model.getVisibleSegments(startBucket, endBucket), graph,
+                annotations, scale);
 
         return test;
     }
@@ -475,7 +502,5 @@ public class GraphController extends AbstractController {
     // with javafx 8
     public void hovered(final SequenceSegment segment, final Boolean hovering) {
         // TODO: Message to say that a segment is hovered over
-
     }
-
 }
