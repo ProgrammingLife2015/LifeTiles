@@ -1,5 +1,6 @@
 package nl.tudelft.lifetiles.tree.view;
 
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.FillRule;
@@ -40,29 +41,32 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      *            the start position in degrees
      * @param degreeEnd
      *            the end position in degrees
-     * @param centerX
-     *            the X coordinate of the center of the circle
-     * @param centerY
-     *            the Y coordinate of the center of the circle
+     * @param center
+     *            the coordinates of the center of the circle
+     * @param scale
+     *            the scaling factor
      */
-    public SunburstRingSegment(final PhylogeneticTreeItem value, final int layer,
-            final double degreeStart, final double degreeEnd,
-            final double centerX, final double centerY) {
+    public SunburstRingSegment(final PhylogeneticTreeItem value,
+            final int layer, final double degreeStart,
+            final double degreeEnd, final Point2D center,
+            final double scale) {
         // set the value, and create the text and semi-circle
         setValue(value);
         setName(new Text(getValue().getName()));
-        setDisplay(createRing(layer, degreeStart, degreeEnd, centerX, centerY));
+        setDisplay(createRing(layer, degreeStart, degreeEnd
+                   , center, scale));
 
         // calculate the positon of the text
-        double radius = CENTER_RADIUS + (layer * RING_WIDTH) + (RING_WIDTH / 2);
+        double radius = scale * (CENTER_RADIUS + (layer * RING_WIDTH)
+                      + (RING_WIDTH / 2));
 
         double degreeCenter = degreeStart
                 + AbstractSunburstNode.calculateAngle(degreeStart, degreeEnd) / 2;
         //convert to radians
         double angle = Math.toRadians(degreeCenter);
 
-        double pointRingCenterX = centerX + radius * Math.sin(angle);
-        double pointRingCenterY = centerY - radius * Math.cos(angle);
+        double pointRingCenterX = center.getX() + radius * Math.sin(angle);
+        double pointRingCenterY = center.getY() - radius * Math.cos(angle);
 
         // move the text into position
         getName().relocate(pointRingCenterX, pointRingCenterY);
@@ -83,14 +87,14 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      *            the start position in degrees
      * @param degreeEnd
      *            the end position in degrees
-     * @param centerX
-     *            the X coordinate of the center of the circle
-     * @param centerY
-     *            the Y coordinate of the center of the circle
+     * @param center
+     *            the coordinates of the center of the circle
+     * @param scale
+     *            the scaling factor
      * @return a semi-circle with the specified dimensions
      */
     private Shape createRing(final int layer, final double degreeStart,
-            final double degreeEnd, final double centerX, final double centerY) {
+            final double degreeEnd, final Point2D center, final double scale) {
         Path result = new Path();
 
         result.setFill(createColor());
@@ -101,8 +105,8 @@ public class SunburstRingSegment extends AbstractSunburstNode {
         boolean largeArc = arcSize > (AbstractSunburstNode.CIRCLEDEGREES / 2);
 
         // calculate the radii of the two arcs
-        double innerRadius = CENTER_RADIUS + (layer * RING_WIDTH);
-        double outerRadius = innerRadius + RING_WIDTH;
+        double innerRadius = scale * (CENTER_RADIUS + (layer * RING_WIDTH));
+        double outerRadius = innerRadius + scale * RING_WIDTH;
 
         // convert degrees to radians for Math.sin and Math.cos
         double angleAlpha = Math.toRadians(degreeStart);
@@ -110,24 +114,23 @@ public class SunburstRingSegment extends AbstractSunburstNode {
 
         // draw the semi-circle
         // first go to the start point
-        double startX = centerX + innerRadius * Math.sin(angleAlpha);
-        double startY = centerY - innerRadius * Math.cos(angleAlpha);
+        double startX = center.getX() + innerRadius * Math.sin(angleAlpha);
+        double startY = center.getY() - innerRadius * Math.cos(angleAlpha);
         MoveTo move1 = new MoveTo(startX, startY);
 
         // draw a line from point 1 to point 2
-        LineTo line1To2 = createLine(outerRadius, centerX, centerY, angleAlpha);
+        LineTo line1To2 = createLine(outerRadius, center, angleAlpha);
 
         // draw an arc from point 2 to point 3
-        ArcTo arc2To3 = createArc(outerRadius, centerX, centerY,
-                angleAlphaNext, true, largeArc);
+        ArcTo arc2To3 = createArc(outerRadius, center, angleAlphaNext, true,
+                largeArc);
 
         // draw a line from point 3 to point 4
-        LineTo line3To4 = createLine(innerRadius, centerX, centerY,
-                angleAlphaNext);
+        LineTo line3To4 = createLine(innerRadius, center, angleAlphaNext);
 
         // draw an arc from point 4 back to point 1
-        ArcTo arc4To1 = createArc(innerRadius, centerX, centerY, angleAlpha,
-                false, largeArc);
+        ArcTo arc4To1 = createArc(innerRadius, center, angleAlpha, false,
+                largeArc);
 
         // add all elements to the path
         result.getElements()
@@ -144,10 +147,8 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      *
      * @param radius
      *            The radius of the arc.
-     * @param centerX
-     *            The center X coordinate of the arc.
-     * @param centerY
-     *            The center Y coordinate of the arc.
+     * @param center
+     *            The center coordinates of the arc.
      * @param angle
      *            The angle of the end point.
      * @param sweep
@@ -156,12 +157,11 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      *            if true draw an arc larger than 180 degrees.
      * @return an ArcTo with the specified parameters.
      */
-    private ArcTo createArc(final double radius, final double centerX,
-            final double centerY, final double angle, final boolean sweep,
-            final boolean largeArc) {
+    private ArcTo createArc(final double radius, final Point2D center,
+            final double angle, final boolean sweep, final boolean largeArc) {
         // calculate the end point of the arc
-        double endX = centerX + radius * Math.sin(angle);
-        double endY = centerY - radius * Math.cos(angle);
+        double endX = center.getX() + radius * Math.sin(angle);
+        double endY = center.getY() - radius * Math.cos(angle);
 
         // create the arc
         ArcTo result = new ArcTo();
@@ -183,19 +183,17 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      *
      * @param radius
      *            The radius of the arc.
-     * @param centerX
-     *            The center X coordinate of the arc.
-     * @param centerY
-     *            The center Y coordinate of the arc.
+     * @param center
+     *            The center coordinates of the arc.
      * @param angle
      *            The angle of the end point.
      * @return the LineTo with the specified parameters.
      */
-    private LineTo createLine(final double radius, final double centerX,
-            final double centerY, final double angle) {
+    private LineTo createLine(final double radius, final Point2D center,
+            final double angle) {
         // calculate the end point coordinates
-        double endX = centerX + radius * Math.sin(angle);
-        double endY = centerY - radius * Math.cos(angle);
+        double endX = center.getX() + radius * Math.sin(angle);
+        double endY = center.getY() - radius * Math.cos(angle);
 
         return new LineTo(endX, endY);
     }
