@@ -3,6 +3,7 @@ package nl.tudelft.lifetiles.graph.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,25 +68,24 @@ public class GraphController extends AbstractController {
     private Graph<SequenceSegment> graph;
 
     /**
-     * Group used to draw the tileGraph on.
+     * Current end position of a bucket.
      */
-    private Group root;
+    private int currEndPosition = -1;
 
     /**
-     * Graph node used to draw the update graph based on bucket cache technique.
+     * Current start position of a bucket.
      */
-    private Group graphNode;
-
-    /**
-     * currentPosition of the view in the scrollPane, should only redraw if
-     * position has changed.
-     */
-    private int currentPosition = -1;
+    private int currStartPosition = -1;
 
     /**
      * boolean to indicate if the controller must repaint the current position.
      */
-    private boolean forceRepaintPosition;
+    private boolean repaintNow;
+
+    /**
+     * The current scale to resize the graph.
+     */
+    private double scale = 1;
 
     /**
      * The currently inserted annotations.
@@ -98,6 +98,29 @@ public class GraphController extends AbstractController {
     public static final Message ANNOTATIONS = Message.create("annotations");
 
     /**
+     * The current zoom level.
+     */
+    // Suppressed bcause zoomLevel is called within a lambda and PMD does not
+    // understand this.
+    @SuppressWarnings("PMD.SingularField")
+    private int zoomLevel;
+
+    /**
+     * The factor that each zoom in step that updates the current scale.
+     */
+    private static final double ZOOMINFACTOR = 2;
+
+    /**
+     * The factor that each zoom out step that updates the current scale.
+     */
+    private static final double ZOOMOUTFACTOR = 0.5;
+
+    /**
+     * Maximal zoomed in level.
+     */
+    private static final int MAXZOOM = 50;
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -105,32 +128,34 @@ public class GraphController extends AbstractController {
             final ResourceBundle resources) {
 
         NotificationFactory notFact = new NotificationFactory();
-        forceRepaintPosition = false;
+        repaintNow = false;
 
-        listen(Message.OPENED,
-                (controller, subject, args) -> {
-                    assert controller instanceof MenuController;
-                    if (!subject.equals("graph")) {
-                        return;
-                    }
-                    assert args.length == 2;
-                    assert args[0] instanceof File && args[1] instanceof File;
+        // Temporary until there is a way to start of totally out zoomed
+        zoomLevel = MAXZOOM / 2;
+        listen(Message.OPENED, (controller, subject, args) -> {
 
-                    try {
-                        loadGraph((File) args[0], (File) args[1]);
-                    } catch (IOException exception) {
-                        shout(NotificationController.NOTIFY, "",
-                                notFact.getNotification(exception));
-                    }
+            assert controller instanceof MenuController;
+            if (!subject.equals("graph")) {
+                return;
+            }
+            assert args.length == 2;
+            assert args[0] instanceof File && args[1] instanceof File;
 
-                });
+            try {
+                loadGraph((File) args[0], (File) args[1]);
+            } catch (IOException exception) {
+                shout(NotificationController.NOTIFY, "", notFact
+                        .getNotification(exception));
+            }
+        });
+        zoomLevel = MAXZOOM / 2;
 
         listen(Message.FILTERED, (controller, subject, args) -> {
             assert args.length == 1;
             assert (args[0] instanceof Set<?>);
 
             model.setVisible((Set<Sequence>) args[0]);
-            forceRepaintPosition = true;
+            repaintNow = true;
             repaint();
         });
 
@@ -162,11 +187,43 @@ public class GraphController extends AbstractController {
                         try {
                             insertAnnotations((File) args[0]);
                         } catch (IOException exception) {
-                            shout(NotificationController.NOTIFY, "",
-                                    notFact.getNotification(exception));
+                            shout(NotificationController.NOTIFY, "", notFact
+                                    .getNotification(exception));
                         }
                     }
                 });
+
+        listen(Message.ZOOM, (controller, subject, args) -> {
+            assert args.length == 1;
+            assert args[0] instanceof Integer;
+
+            if ((Integer) args[0] == -1 && zoomLevel != 0) {
+                zoomLevel -= 1;
+                zoom(ZOOMOUTFACTOR);
+            } else if (zoomLevel != MAXZOOM) {
+                zoomLevel += 1;
+                zoom(ZOOMINFACTOR);
+            }
+
+        });
+
+        listen(ANNOTATIONS, (controller, subject, args) -> {
+            assert controller instanceof MenuController;
+            assert args[0] instanceof File;
+
+            if (graph == null) {
+                shout(NotificationController.NOTIFY, "", notFact
+                        .getNotification(new IllegalStateException(
+                                "Graph not loaded.")));
+            } else {
+                try {
+                    insertAnnotations((File) args[0]);
+                } catch (IOException exception) {
+                    shout(NotificationController.NOTIFY, "", notFact
+                            .getNotification(exception));
+                }
+            }
+        });
     }
 
     /**
@@ -220,8 +277,8 @@ public class GraphController extends AbstractController {
                 ResistanceAnnotationParser.parseAnnotations(file), reference);
 
         timer.stopAndLog("Inserting annotations");
-        forceRepaintPosition = true;
-        repaintPosition(root, wrapper.hvalueProperty().doubleValue());
+        repaintNow = true;
+        repaintPosition(wrapper.hvalueProperty().doubleValue());
     }
 
     /**
@@ -234,42 +291,88 @@ public class GraphController extends AbstractController {
             }
             view = new TileView(this);
 
-            root = new Group();
-
             wrapper.hvalueProperty().addListener(
                     (observable, oldValue, newValue) -> {
-                        repaintPosition(root, newValue.doubleValue());
+                        repaintPosition(newValue.doubleValue());
                     });
 
-            Rectangle clip = new Rectangle(getMaxUnifiedEnd(graph)
-                    * VertexView.HORIZONTALSCALE, 0);
-            root.getChildren().add(clip);
-
-            repaintPosition(root, wrapper.hvalueProperty().doubleValue());
+            repaintPosition(wrapper.hvalueProperty().doubleValue());
         }
+    }
+
+    /**
+     * Find the start and end bucket on the screenm given the position of the
+     * scrollbar.
+     *
+     * @param position
+     *            horizontal position of the scrollbar
+     * @return an array where the first element is the start bucket and the last
+     *         one is the end bucket
+     */
+    private int[] getStartandEndBucket(final double position) {
+        List<Integer> bucketLocations = new ArrayList<Integer>();
+
+        double scaledVertex = scale * VertexView.HORIZONTALSCALE;
+        double graphWidth = getMaxUnifiedEnd(graph) * scaledVertex;
+        double screenWidth = wrapper.getViewportBounds().getWidth();
+        double scaledScreenWidth = 2d * screenWidth * scale;
+
+        double relativePosition = (position * screenWidth) / 2d + position
+                * graphWidth;
+
+        double start = (relativePosition - scaledScreenWidth) / scaledVertex;
+        double end = (relativePosition + scaledScreenWidth) / scaledVertex;
+
+        bucketLocations.add(getStartBucketPosition(start));
+        bucketLocations.add(getEndBucketPosition(end) + 1);
+
+        int[] buckets = new int[] {
+                getStartBucketPosition(start), getEndBucketPosition(end) + 1
+        };
+
+        return buckets;
     }
 
     /**
      * Repaints the view indicated by the bucket in the given position.
      *
-     * @param root
-     *            Root group used to store the visualized graph in.
      * @param position
      *            Position in the scrollPane.
      */
-    private void repaintPosition(final Group root, final double position) {
-        int nextPosition = getBucketPosition(position);
-        if (currentPosition != nextPosition || forceRepaintPosition) {
-            if (graphNode != null) {
-                graphNode.getChildren().clear();
-            }
-            graphNode = new Group();
-            graphNode.getChildren().add(drawGraph(nextPosition));
-            root.getChildren().add(graphNode);
-            wrapper.setContent(root);
-            currentPosition = nextPosition;
-            forceRepaintPosition = false;
+    private void repaintPosition(final double position) {
+        int[] bucketLocations = getStartandEndBucket(position);
+
+        int startBucket = bucketLocations[0];
+        int endBucket = bucketLocations[1];
+
+        if (currEndPosition != endBucket && currStartPosition != startBucket
+                || repaintNow) {
+            Group graphDrawing = new Group();
+            graphDrawing.getChildren().add(drawGraph(startBucket, endBucket));
+            graphDrawing.getChildren().add(
+                    new Rectangle(getMaxUnifiedEnd(graph) * scale
+                            * VertexView.HORIZONTALSCALE, 0));
+
+            wrapper.setContent(graphDrawing);
+
+            currEndPosition = endBucket;
+            currStartPosition = startBucket;
+
+            repaintNow = false;
         }
+    }
+
+    /**
+     * Zoom on the current graph given a zoomFactor.
+     *
+     * @param zoomFactor
+     *            factor bigger than 1 makes the graph bigger
+     *            between 0 and 1 makes the graph smaller
+     */
+    private void zoom(final double zoomFactor) {
+        scale *= zoomFactor;
+        repaintNow = true;
+        repaint();
     }
 
     /**
@@ -290,26 +393,43 @@ public class GraphController extends AbstractController {
     }
 
     /**
-     * Return the position in the bucket.
+     * Return the start position in the bucket.
      *
      * @param position
      *            Position in the scrollPane.
      * @return position in the bucket.
      */
-    private int getBucketPosition(final double position) {
-        return model.getBucketCache().bucketPercentagePosition(position);
+    private int getStartBucketPosition(final double position) {
+        return model.getBucketCache().bucketStartPosition(position);
+    }
+
+    /**
+     * Return the end position in the bucket.
+     *
+     * @param position
+     *            Position in the scrollPane.
+     * @return position in the bucket.
+     */
+    private int getEndBucketPosition(final double position) {
+        return model.getBucketCache().bucketEndPosition(position);
     }
 
     /**
      * Creates a drawable object of the graph from the model.
      *
-     * @param position
-     *            Bucket position of the scrollPane.
+     * It will draw from the startBucket all the way to the endBucket.
+     *
+     * @param startBucket
+     *            the first buket
+     * @param endBucket
+     *            the last bucket
      * @return Group object to be drawn on the screen
      */
-    public final Group drawGraph(final int position) {
-        return view.drawGraph(model.getVisibleSegments(position), graph,
-                annotations);
+    public final Group drawGraph(final int startBucket, final int endBucket) {
+        Group test = view.drawGraph(model.getVisibleSegments(startBucket,
+                endBucket), graph, annotations, scale);
+
+        return test;
     }
 
     /**

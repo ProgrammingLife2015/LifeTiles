@@ -50,9 +50,10 @@ public class GraphContainer {
     private Set<Sequence> visibleSequences;
 
     /**
-     * The amount of buckets the graph is cached in.
+     * The amount of vertices to be placed in one bucket.
      */
-    private static final int NUMBER_OF_BUCKETS = 1000;
+    private static final int NUM_VERTICES_BUCKET = Integer.parseInt(Settings
+            .get("num_vertices_bucket"));
 
     /**
      * create a new Tile.
@@ -70,7 +71,8 @@ public class GraphContainer {
         alignGraph();
         findMutations(reference);
 
-        segmentBuckets = new BucketCache(NUMBER_OF_BUCKETS, this.graph);
+        segmentBuckets = new BucketCache(graph.getAllVertices().size()
+                / NUM_VERTICES_BUCKET, this.graph);
         visibles = graph.getAllVertices();
 
     }
@@ -128,14 +130,17 @@ public class GraphContainer {
     /**
      * Get the visible segments that this model is holding.
      *
-     * @param position
-     *            bucket position in the scrollPane.
+     * @param start
+     *            starting bucket position
+     * @param end
+     *            the last bucket position
      * @return graph
      */
-    public final Set<SequenceSegment> getVisibleSegments(final int position) {
+    public final Set<SequenceSegment> getVisibleSegments(final int start,
+            final int end) {
 
         Set<SequenceSegment> copy = new TreeSet<SequenceSegment>();
-        for (SequenceSegment seg : segmentBuckets.getSegments(position)) {
+        for (SequenceSegment seg : segmentBuckets.getSegments(start, end)) {
             try {
                 copy.add(seg.clone());
             } catch (CloneNotSupportedException e) {
