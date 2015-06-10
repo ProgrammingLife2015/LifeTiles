@@ -23,9 +23,13 @@ import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
 public class SunburstRingSegment extends AbstractSunburstNode {
     /**
-     * the default color for this segment.
+     * the default start color for the color range.
      */
-    private static final Color DEFAULT_COLOR = Color.RED;
+    private static final Color START_COLOR = Color.hsb(0.1, 0.5 , 0.95);
+    /**
+     * the default end color for the color range
+     */
+    private static final Color END_COLOR = Color.hsb(0.9, 0.5 , 0.95);
 
     /**
      * Creates a SunburstRingSegment.
@@ -49,7 +53,7 @@ public class SunburstRingSegment extends AbstractSunburstNode {
     public SunburstRingSegment(final PhylogeneticTreeItem value,
             final int layer, final double degreeStart,
             final double degreeEnd, final Point2D center,
-            final double scale) {
+            final double scale, final Color parentColor, double fraction) {
         // set the value, and create the text and semi-circle
         setValue(value);
         String name = getValue().getName();
@@ -62,8 +66,7 @@ public class SunburstRingSegment extends AbstractSunburstNode {
         }
         setName(new Tooltip(tooltip));
         setDisplay(createRing(layer, degreeStart, degreeEnd
-                   , center, scale));
-
+                   , center, scale, parentColor, fraction));
         // add the text and semicircle to the group
         getChildren().add(getDisplay());
     }
@@ -87,10 +90,12 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      * @return a semi-circle with the specified dimensions
      */
     private Shape createRing(final int layer, final double degreeStart,
-            final double degreeEnd, final Point2D center, final double scale) {
+        final double degreeEnd, final Point2D center, final double scale,
+        final Color parentColor, double fraction) {
+
         Path result = new Path();
 
-        result.setFill(createColor());
+        result.setFill(createColor(parentColor, fraction));
         result.setFillRule(FillRule.EVEN_ODD);
 
         // check if this is a large arc
@@ -197,10 +202,13 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      *
      * @return a Color object that specifies what color this node will be.
      */
-    private Color createColor() {
+    private Color createColor(Color parentColor, final double fraction) {
         Sequence sequence = getValue().getSequence();
-        if (sequence == null) {
-            return DEFAULT_COLOR;
+        if (parentColor == null) {
+            return START_COLOR.interpolate(END_COLOR, fraction);
+        } else if (sequence == null) {
+            Color result = parentColor.interpolate(END_COLOR, fraction);
+            return result.brighter();
         } else {
             return SequenceColor.getColor(sequence);
         }
