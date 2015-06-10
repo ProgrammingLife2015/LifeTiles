@@ -27,6 +27,11 @@ public final class Message {
     public static final Message RESET = create("reset");
 
     /**
+     * A shout message indicating there is a zoom action
+     */
+    public static final Message ZOOM = create("zoom");
+
+    /**
      * The value.
      */
     private final String value;

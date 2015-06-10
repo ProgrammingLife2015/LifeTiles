@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
@@ -47,6 +48,11 @@ public class TileView {
     private List<Long> lanes;
 
     /**
+     * The factor to apply on the vertices and bookmarks to resize them.
+     */
+    private double scale;
+
+    /**
      * Controller for the View.
      */
     private final GraphController controller;
@@ -75,21 +81,25 @@ public class TileView {
      *            Graph to base the edges on
      * @param annotations
      *            Map from segment to annotations.
+     * @param scale
+     *            the scale to resize all elements of the graph
      * @return the elements that must be displayed on the screen
      */
     public final Group drawGraph(final Set<SequenceSegment> segments,
             final Graph<SequenceSegment> graph,
-            final Map<SequenceSegment, List<ResistanceAnnotation>> annotations) {
+            final Map<SequenceSegment, List<ResistanceAnnotation>> annotations,
+            final double scale) {
         Group root = new Group();
 
         lanes = new ArrayList<Long>();
+        this.scale = scale;
 
         for (SequenceSegment segment : segments) {
-            List<ResistanceAnnotation> segmentAnnotations = null;
+            List<ResistanceAnnotation> segAnnotations = null;
             if (annotations != null && annotations.containsKey(segment)) {
-                segmentAnnotations = annotations.get(segment);
+                segAnnotations = annotations.get(segment);
             }
-            drawVertexLane(segment, segmentAnnotations);
+            drawVertexLane(segment, segAnnotations);
         }
 
         // TODO toggle edge drawing in the settings
@@ -189,8 +199,9 @@ public class TileView {
         long height = segment.getSources().size();
 
         Color color = sequenceColor(segment.getMutation());
+        Point2D topleft = new Point2D(start, index);
 
-        VertexView vertex = new VertexView(text, start, index, width, height,
+        VertexView vertex = new VertexView(text, topleft, width, height, scale,
                 color);
 
         nodemap.put(segment, vertex);
@@ -204,7 +215,7 @@ public class TileView {
                 long segmentPosition = annotation.getGenomePosition()
                         - segment.getStart();
                 Bookmark bookmark = new Bookmark(vertex, annotation,
-                        segmentPosition);
+                        segmentPosition, scale);
                 bookmarks.getChildren().add(bookmark);
             }
         }

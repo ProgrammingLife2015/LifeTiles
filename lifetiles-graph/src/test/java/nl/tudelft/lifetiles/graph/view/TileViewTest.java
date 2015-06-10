@@ -2,13 +2,23 @@ package nl.tudelft.lifetiles.graph.view;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 import javafx.event.Event;
 import javafx.scene.Group;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.shape.Rectangle;
+import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
+import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationMapper;
+import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationParser;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
 import nl.tudelft.lifetiles.graph.model.BucketCache;
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
@@ -50,22 +60,24 @@ public class TileViewTest {
     public void drawGraphVerticesDrawGenericTest() {
         creategraph();
         buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0), gr, null);
+        Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
+                1);
         assertEquals(4, ((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().size());
     }
 
-    //@Test TODO integrate this in the edge drwaing settings
+    // @Test TODO integrate this in the edge drawing settings
     public void drawGraphEdgesDrawGenericTest() {
         creategraph();
         buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0), gr, null);
+        Group result = tileview.drawGraph(buckets.getSegments(0, 0), gr, null,
+                1);
         assertEquals(3, ((Group) result.getChildrenUnmodifiable().get(1))
                 .getChildrenUnmodifiable().size());
     }
 
     @Test
-    public void drawVerticesTest() {
+    public void drawVerticeTest() {
         GraphFactory<SequenceSegment> gf = FactoryProducer
                 .getFactory("JGraphT");
 
@@ -82,7 +94,8 @@ public class TileViewTest {
         graph.addVertex(v1);
 
         BucketCache buckets = new BucketCache(1, graph);
-        Group result = tileview.drawGraph(buckets.getSegments(0), graph, null);
+        Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
+                1);
         VertexView vView1 = (VertexView) ((Group) result
                 .getChildrenUnmodifiable().get(0)).getChildrenUnmodifiable()
                 .get(0);
@@ -95,10 +108,62 @@ public class TileViewTest {
     }
 
     @Test
+    public void drawAnnotationTest() throws IOException {
+        GraphFactory<SequenceSegment> gf = FactoryProducer
+                .getFactory("JGraphT");
+
+        Graph<SequenceSegment> graph;
+
+        SequenceSegment v1;
+        v1 = new SequenceSegment(new HashSet<Sequence>(Arrays.asList(s1, s2)),
+                0, 20, new SegmentEmpty(20));
+
+        v1.setUnifiedStart(0);
+        v1.setUnifiedEnd(20);
+
+        graph = gf.getGraph();
+        graph.addVertex(v1);
+
+        BucketCache buckets = new BucketCache(1, graph);
+
+        File file = new File(
+                "./src/test/resources/data/test_annotations/simple_annotations.txt");
+
+        List<ResistanceAnnotation> parse = ResistanceAnnotationParser
+                .parseAnnotations(file);
+        Sequence reference = graph.getSources().iterator().next().getSources()
+                .iterator().next();
+
+        Map<SequenceSegment, List<ResistanceAnnotation>> annotations = ResistanceAnnotationMapper
+                .mapAnnotations(graph, parse, reference);
+
+        // Hack so you make a tooltip, javafx toolkit need to be initialised for
+        // that
+        JFXPanel panel = new JFXPanel();
+        Platform.runLater(() -> {
+
+            Group result = tileview.drawGraph(buckets.getSegments(0, 1), graph,
+                    annotations, 1);
+
+            Rectangle rec = (Rectangle) ((Group) result
+                    .getChildrenUnmodifiable().get(2))
+                    .getChildrenUnmodifiable().get(0);
+
+            VertexView vView1 = (VertexView) ((Group) result
+                    .getChildrenUnmodifiable().get(0))
+                    .getChildrenUnmodifiable().get(0);
+
+            assertEquals(rec.getHeight(), vView1.getHeight(), 1e-10);
+        });
+
+    }
+
+    @Test
     public void clickVertexTest() {
         creategraph();
         buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0), gr, null);
+        Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
+                1);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
                 MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
@@ -111,7 +176,8 @@ public class TileViewTest {
     public void hoveringEnterVertexText() {
         creategraph();
         buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0), gr, null);
+        Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
+                1);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
                 MouseEvent.MOUSE_ENTERED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
@@ -124,7 +190,8 @@ public class TileViewTest {
     public void hoveringExitVertexText() {
         creategraph();
         buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0), gr, null);
+        Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
+                1);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
                 MouseEvent.MOUSE_EXITED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
