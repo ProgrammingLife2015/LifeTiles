@@ -370,7 +370,7 @@ public class GraphController extends AbstractController {
      *            between 0 and 1 makes the graph smaller
      */
     private void zoom(final double zoomFactor) {
-        scale = scale * zoomFactor;
+        scale *= zoomFactor;
         repaintNow = true;
         repaint();
     }
