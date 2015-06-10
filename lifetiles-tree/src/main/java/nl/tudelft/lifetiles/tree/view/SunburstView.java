@@ -122,8 +122,8 @@ public class SunburstView extends Control {
         // add the ring units
         double totalDescendants = currentItem.numberDescendants();
         double degreeStart = 0d;
-        double fraction = 0d;
-        double fractionSize = 1 / currentItem.getChildren().size();
+        double fractionSize = 1d / currentItem.getChildren().size();
+        double fraction = fractionSize;
         for (PhylogeneticTreeItem child : currentItem.getChildren()) {
             double sectorSize = (child.numberDescendants() + 1)
                     / totalDescendants;
@@ -131,7 +131,7 @@ public class SunburstView extends Control {
             double degreeEnd = degreeStart
                     + (AbstractSunburstNode.CIRCLEDEGREES * sectorSize);
 
-            drawRingRecursive(child, 0, degreeStart, degreeEnd, null,fraction);
+            drawRingRecursive(child, 0, degreeStart, degreeEnd, null, fraction);
             degreeStart = degreeEnd;
             fraction += fractionSize;
         }
@@ -177,7 +177,7 @@ public class SunburstView extends Control {
                     / totalDescendants;
             double end = start + (sectorAngle * sectorSize);
 
-            drawRingRecursive(child, layer + 1, start, end, ringUnit.getColor(),newFraction);
+            drawRingRecursive(child, layer + 1, start, end, ringUnit.getColor(), newFraction);
             start = end;
             newFraction += newFractionSize;
         }
