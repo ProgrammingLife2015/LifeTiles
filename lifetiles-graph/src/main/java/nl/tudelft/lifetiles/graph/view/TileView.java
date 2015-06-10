@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
@@ -198,9 +199,10 @@ public class TileView {
         long height = segment.getSources().size();
 
         Color color = sequenceColor(segment.getMutation());
+        Point2D topleft = new Point2D(start, index);
 
-        VertexView vertex = new VertexView(text, start, index, width, height,
-                scale, color);
+        VertexView vertex = new VertexView(text, topleft, width, height, scale,
+                color);
 
         nodemap.put(segment, vertex);
         vertex.setOnMouseClicked(event -> controller.clicked(segment));

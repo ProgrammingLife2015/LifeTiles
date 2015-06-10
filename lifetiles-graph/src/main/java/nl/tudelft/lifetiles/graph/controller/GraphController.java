@@ -3,6 +3,7 @@ package nl.tudelft.lifetiles.graph.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,11 +68,6 @@ public class GraphController extends AbstractController {
     private Graph<SequenceSegment> graph;
 
     /**
-     * Graph node used to draw the update graph based on bucket cache technique.
-     */
-    private Group graphNode;
-
-    /**
      * Current end position of a bucket.
      */
     private int currEndPosition = -1;
@@ -134,7 +130,10 @@ public class GraphController extends AbstractController {
         NotificationFactory notFact = new NotificationFactory();
         repaintNow = false;
 
+        // Temporary until there is a way to start of totally out zoomed
+        zoomLevel = MAXZOOM / 2;
         listen(Message.OPENED, (controller, subject, args) -> {
+
             assert controller instanceof MenuController;
             if (!subject.equals("graph")) {
                 return;
@@ -200,10 +199,10 @@ public class GraphController extends AbstractController {
 
             if ((Integer) args[0] == -1 && zoomLevel != 0) {
                 zoomLevel -= 1;
-                zoomOut();
+                zoom(ZOOMOUTFACTOR);
             } else if (zoomLevel != MAXZOOM) {
                 zoomLevel += 1;
-                zoomIn();
+                zoom(ZOOMINFACTOR);
             }
 
         });
@@ -302,47 +301,59 @@ public class GraphController extends AbstractController {
     }
 
     /**
+     * Find the start and end bucket on the screenm given the position of the
+     * scrollbar.
+     *
+     * @param position
+     *            horizontal position of the scrollbar
+     * @return an array where the first element is the start bucket and the last
+     *         one is the end bucket
+     */
+    private int[] getStartandEndBucket(final double position) {
+        List<Integer> bucketLocations = new ArrayList<Integer>();
+
+        double scaledVertex = scale * VertexView.HORIZONTALSCALE;
+        double graphWidth = getMaxUnifiedEnd(graph) * scaledVertex;
+        double screenWidth = wrapper.getViewportBounds().getWidth();
+        double scaledScreenWidth = 2d * screenWidth * scale;
+
+        double relativePosition = (position * screenWidth) / 2d + position
+                * graphWidth;
+
+        double start = (relativePosition - scaledScreenWidth) / scaledVertex;
+        double end = (relativePosition + scaledScreenWidth) / scaledVertex;
+
+        bucketLocations.add(getStartBucketPosition(start));
+        bucketLocations.add(getEndBucketPosition(end) + 1);
+
+        int[] buckets = new int[] {
+                getStartBucketPosition(start), getEndBucketPosition(end) + 1
+        };
+
+        return buckets;
+    }
+
+    /**
      * Repaints the view indicated by the bucket in the given position.
      *
      * @param position
      *            Position in the scrollPane.
      */
     private void repaintPosition(final double position) {
-        double graphWidth = getMaxUnifiedEnd(graph)
-                * VertexView.HORIZONTALSCALE * scale;
+        int[] bucketLocations = getStartandEndBucket(position);
 
-        double screenWidth = wrapper.getViewportBounds().getWidth();
-        double diffWidth = graphWidth - screenWidth;
-        double scaledScreenWidth = screenWidth * 2 * scale;
-
-        double newPosition = (position * (screenWidth / 2 + diffWidth))
-                / graphWidth;
-
-        double start = ((newPosition * graphWidth - scaledScreenWidth) / scale)
-                / VertexView.HORIZONTALSCALE;
-
-        double end = ((newPosition * graphWidth + scaledScreenWidth) / scale)
-                / VertexView.HORIZONTALSCALE;
-
-        int startBucket = getStartBucketPosition(start);
-        int endBucket = getEndBucketPosition(end) + 1;
+        int startBucket = bucketLocations[0];
+        int endBucket = bucketLocations[1];
 
         if (currEndPosition != endBucket && currStartPosition != startBucket
                 || repaintNow) {
-            if (graphNode != null) {
-                graphNode.getChildren().clear();
-            }
-            graphNode = new Group();
+            Group graphDrawing = new Group();
+            graphDrawing.getChildren().add(drawGraph(startBucket, endBucket));
+            graphDrawing.getChildren().add(
+                    new Rectangle(getMaxUnifiedEnd(graph) * scale
+                            * VertexView.HORIZONTALSCALE, 0));
 
-            graphNode.getChildren().add(drawGraph(startBucket, endBucket));
-
-            Rectangle clip = new Rectangle(graphWidth, 0);
-
-            Group newRoot = new Group();
-            newRoot.getChildren().add(clip);
-            newRoot.getChildren().add(graphNode);
-
-            wrapper.setContent(newRoot);
+            wrapper.setContent(graphDrawing);
 
             currEndPosition = endBucket;
             currStartPosition = startBucket;
@@ -352,25 +363,16 @@ public class GraphController extends AbstractController {
     }
 
     /**
-     * Zoom in on the current graph.
+     * Zoom on the current graph given a zoomFactor.
+     *
+     * @param zoomFactor
+     *            factor bigger than 1 makes the graph bigger
+     *            between 0 and 1 makes the graph smaller
      */
-    private void zoomIn() {
-        this.scale = scale * ZOOMINFACTOR;
-
+    private void zoom(final double zoomFactor) {
+        scale = scale * zoomFactor;
         repaintNow = true;
         repaint();
-
-    }
-
-    /**
-     * Zoom out on the current graph.
-     */
-    private void zoomOut() {
-        this.scale = scale * ZOOMOUTFACTOR;
-
-        repaintNow = true;
-        repaint();
-
     }
 
     /**

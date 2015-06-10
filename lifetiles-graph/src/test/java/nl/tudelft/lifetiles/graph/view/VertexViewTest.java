@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.graph.view;
 
 import static org.junit.Assert.assertEquals;
+import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 
 import org.junit.Before;
@@ -12,7 +13,8 @@ public class VertexViewTest {
 
     @Before
     public void setup() {
-        vertex = new VertexView("ATCG", 0, 0, 10, 10, 1, Color.RED);
+        Point2D topleft = new Point2D(0, 0);
+        vertex = new VertexView("ATCG", topleft, 10, 10, 1, Color.RED);
     }
 
     @Test
