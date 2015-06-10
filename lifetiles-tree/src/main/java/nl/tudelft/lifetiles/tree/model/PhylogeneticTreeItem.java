@@ -73,6 +73,18 @@ public class PhylogeneticTreeItem {
 
         return result;
     }
+    /**
+     * Method to determine the maximum amount of layers.
+     * @return the amount of layers
+     */
+    public final int maxDepth() {
+        int result = 0;
+        for (PhylogeneticTreeItem child: children) {
+            result = Math.max(result, child.maxDepth() + 1);
+        }
+
+        return result;
+    }
 
     /**
      * creates a Set containing this nodes sequence, and the sequences of its
