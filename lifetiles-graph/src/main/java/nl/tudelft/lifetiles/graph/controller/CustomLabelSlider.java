@@ -44,7 +44,7 @@ public class CustomLabelSlider extends Slider {
              */
             @Override
             public Double fromString(final String string) {
-                return null;
+                return function.apply(Double.parseDouble(string));
             }
         });
     }

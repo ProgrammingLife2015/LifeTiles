@@ -2,7 +2,6 @@ package nl.tudelft.lifetiles.graph.controller;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
@@ -10,12 +9,12 @@ import javafx.scene.control.ToolBar;
 
 /**
  * Creates a new Toolbar with two buttons and a slider.
- * These can be used to zoom.
+ * The buttons will adjust the slider and you can get the value of the slider.
  *
  * @author AC Langerak
  *
  */
-public class ZoomToolbar {
+public class Zoombar {
 
     /**
      * The javafx toolbar.
@@ -39,7 +38,7 @@ public class ZoomToolbar {
      * @param zoom
      *            the maximal value of the zoom
      */
-    public ZoomToolbar(final int zoom) {
+    public Zoombar(final int zoom) {
         maxzoom = zoom;
         zoomLevel = new SimpleIntegerProperty();
         // 5 is temporary, until graph can start at the highest zoom level
@@ -47,12 +46,9 @@ public class ZoomToolbar {
         Slider slider = createSlider();
         slider.getStyleClass().add("slider");
         slider.valueProperty().addListener(
-                (ChangeListener<Number>) (obserVal, oldVal, newVal) -> {
-                    if (oldVal.intValue() > newVal.intValue()
+                (obserVal, oldVal, newVal) -> {
+                    if (oldVal.intValue() != newVal.intValue()
                             && newVal.intValue() <= maxzoom) {
-                        zoomLevel.set(newVal.intValue());
-                    }
-                    if (oldVal.intValue() < newVal.intValue()) {
                         zoomLevel.set(newVal.intValue());
                     }
                 });
@@ -112,10 +108,8 @@ public class ZoomToolbar {
         slider.setSnapToTicks(true);
         slider.setMinHeight(Slider.USE_PREF_SIZE);
 
-        slider.valueChangingProperty().addListener(observable -> {
-            slider.setValue(Math.round(slider.getValue()));
-
-        });
+        slider.valueChangingProperty().addListener(
+                observable -> slider.setValue(Math.round(slider.getValue())));
 
         return slider;
     }
