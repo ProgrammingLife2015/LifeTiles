@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
+import java.util.Set;
 
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
@@ -19,10 +19,12 @@ public class StackedMutationContainer {
 
     /**
      * List with the stacked quantity of mutations.
-     * [0] -> total bases.
-     * [1] -> insertion bases.
-     * [2] -> deletion bases.
-     * [3] -> polymorphism bases.
+     * <dl>
+     * <dt>[0] -> total bases.</dt>
+     * <dt>[1] -> insertion bases.</dt>
+     * <dt>[2] -> deletion bases.</dt>
+     * <dt>[3] -> polymorphism bases.</dt>
+     * </dl>
      */
     private List<List<Long>> stackedMutations;
 
@@ -48,9 +50,8 @@ public class StackedMutationContainer {
      *            container.
      */
     public StackedMutationContainer(final BucketCache buckets) {
-        this.level =(int) Math.ceil(Math.log(buckets.getNumberBuckets())
-                / Math.log(2)) + 1;
-        fillStackedMutationContainer(getLevel(), buckets);
+        this.level = (int) (Math.log(buckets.getNumberBuckets()) / Math.log(2) + 1);
+        fillStackedMutationContainer(this.level, buckets);
     }
 
     /**
@@ -65,7 +66,7 @@ public class StackedMutationContainer {
      */
     private StackedMutationContainer(final int level, final BucketCache buckets) {
         this.level = level;
-        fillStackedMutationContainer(this.getLevel(), buckets);
+        fillStackedMutationContainer(this.level, buckets);
     }
 
     /**
@@ -81,7 +82,7 @@ public class StackedMutationContainer {
     private void fillStackedMutationContainer(final int level,
             final BucketCache buckets) {
         this.level = level;
-        if (this.getLevel() <= 1) {
+        if (this.level <= 1) {
             child = null;
             stackedMutations = new ArrayList<List<Long>>();
             insertBuckets(buckets);
@@ -119,7 +120,7 @@ public class StackedMutationContainer {
      */
     private List<Long> insertStackedContainer(final List<Long> left,
             final List<Long> right) {
-        ArrayList<Long> stack = new ArrayList<Long>();
+        List<Long> stack = new ArrayList<Long>();
         stack.add(left.get(0) + right.get(0));
         stack.add(left.get(1) + right.get(1));
         stack.add(left.get(2) + right.get(2));
@@ -144,7 +145,7 @@ public class StackedMutationContainer {
      *            container.
      */
     private void insertBuckets(final BucketCache buckets) {
-        for (SortedSet<SequenceSegment> bucket : buckets.getBuckets()) {
+        for (Set<SequenceSegment> bucket : buckets.getBuckets()) {
             stackedMutations.add(insertBucket(bucket));
         }
     }
@@ -158,44 +159,47 @@ public class StackedMutationContainer {
      * @return
      *         Stacked mutation quantity list for this bucket.
      */
-    private List<Long> insertBucket(final SortedSet<SequenceSegment> bucket) {
-        ArrayList<Long> list = new ArrayList<Long>();
-        long total = 0;
-        long insertion = 0;
-        long deletion = 0;
-        long polymorphism = 0;
+    private List<Long> insertBucket(final Set<SequenceSegment> bucket) {
+        List<Long> list = new ArrayList<Long>(4);
+        list.add((long) 0);
+        list.add((long) 0);
+        list.add((long) 0);
+        list.add((long) 0);
+
         for (SequenceSegment segment : bucket) {
-            long size = segment.getContent().getLength() * segment.getSources().size();
+            long size = segment.getContent().getLength()
+                    * segment.getSources().size();
             if (segment.getMutation() != null) {
                 switch (segment.getMutation()) {
                 case INSERTION:
-                    insertion += size;
+                    list.set(1, list.get(1) + size);
                     break;
                 case DELETION:
-                    deletion += size;
+                    list.set(2, list.get(2) + size);
                     break;
                 case POLYMORPHISM:
-                    polymorphism += size;
+                    list.set(3, list.get(3) + size);
                     break;
                 default: // noop
                     break;
                 }
             }
-            total += size;
+            list.set(0, list.get(0) + size);
         }
-        list.add(total);
-        list.add(insertion);
-        list.add(deletion);
-        list.add(polymorphism);
         return list;
     }
-    
+
+    /**
+     * Return the maximum number of mutations in one of the stacks.
+     *
+     * @return the maximum number of mutations in one of the stacks.
+     */
     public Long getMaxMutations() {
-    	long max = 0;
-    	for (List<Long> stack : stackedMutations) {
-    		max = Math.max(max, stack.get(1) + stack.get(2) + stack.get(3));
-    	}
-    	return max;
+        long max = 0;
+        for (List<Long> stack : stackedMutations) {
+            max = Math.max(max, stack.get(1) + stack.get(2) + stack.get(3));
+        }
+        return max;
     }
 
     /**
@@ -215,11 +219,11 @@ public class StackedMutationContainer {
 
     }
 
-	/**
-	 * @return the level
-	 */
-	public int getLevel() {
-		return level;
-	}
+    /**
+     * @return the level
+     */
+    public int getLevel() {
+        return level;
+    }
 
 }
