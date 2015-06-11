@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.event.Event;
 import javafx.scene.Group;
@@ -106,8 +107,11 @@ public class TileViewTest {
 
     }
 
+    private Rectangle rec;
+    private VertexView vView1;
+
     @Test
-    public void drawAnnotationTest() throws IOException {
+    public void drawAnnotationTest() throws IOException, InterruptedException {
         GraphFactory<SequenceSegment> gf = FactoryProducer
                 .getFactory("JGraphT");
 
@@ -139,19 +143,21 @@ public class TileViewTest {
         // Hack so you make a tooltip, javafx toolkit need to be initialised for
         // that
         JFXPanel panel = new JFXPanel();
+        Platform.runLater(() -> {
 
-        Group result = tileview.drawGraph(buckets.getSegments(0, 1), graph,
-                annotations, 1);
+            Group result = tileview.drawGraph(buckets.getSegments(0, 1), graph,
+                    annotations, 1);
 
-        Rectangle rec = (Rectangle) ((Group) result.getChildrenUnmodifiable()
-                .get(2)).getChildrenUnmodifiable().get(0);
+            rec = (Rectangle) ((Group) result.getChildrenUnmodifiable().get(2))
+                    .getChildrenUnmodifiable().get(0);
 
-        VertexView vView1 = (VertexView) ((Group) result
-                .getChildrenUnmodifiable().get(0)).getChildrenUnmodifiable()
-                .get(0);
+            vView1 = (VertexView) ((Group) result.getChildrenUnmodifiable()
+                    .get(0)).getChildrenUnmodifiable().get(0);
 
+        });
+
+        Thread.sleep(1000);
         assertEquals(rec.getHeight(), vView1.getHeight(), 1e-10);
-
     }
 
     @Test
