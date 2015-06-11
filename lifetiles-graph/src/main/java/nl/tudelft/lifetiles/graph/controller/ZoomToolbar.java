@@ -26,7 +26,7 @@ public class ZoomToolbar {
      * Integer which holds the current selected zoomlevel.
      * Can be listened to.
      */
-    private IntegerProperty zoomLevel;
+    private final IntegerProperty zoomLevel;
 
     /**
      * The maximal amount of zooming.
@@ -35,20 +35,24 @@ public class ZoomToolbar {
 
     /**
      * Create a new Toolbar.
+     *
+     * @param zoom
+     *            the maximal value of the zoom
      */
     public ZoomToolbar(final int zoom) {
         maxzoom = zoom;
         zoomLevel = new SimpleIntegerProperty();
+        // 5 is temporary, until graph can start at the highest zoom level
         zoomLevel.set(5);
         Slider slider = createSlider();
         slider.valueProperty().addListener(
-                (ChangeListener<Number>) (ov, old_val, new_val) -> {
-                    if (old_val.intValue() > new_val.intValue()
-                            && new_val.intValue() <= maxzoom) {
-                        zoomLevel.set(new_val.intValue());
+                (ChangeListener<Number>) (obserVal, oldVal, newVal) -> {
+                    if (oldVal.intValue() > newVal.intValue()
+                            && newVal.intValue() <= maxzoom) {
+                        zoomLevel.set(newVal.intValue());
                     }
-                    if (old_val.intValue() < new_val.intValue()) {
-                        zoomLevel.set(new_val.intValue());
+                    if (oldVal.intValue() < newVal.intValue()) {
+                        zoomLevel.set(newVal.intValue());
                     }
                 });
 
@@ -71,14 +75,14 @@ public class ZoomToolbar {
      *
      * @return javafx toolbar that is constructed
      */
-    public ToolBar getToolBar() {
+    public final ToolBar getToolBar() {
         return toolbar;
     }
 
     /**
      * @return the zoomlevel property
      */
-    public IntegerProperty getZoomlevel() {
+    public final IntegerProperty getZoomlevel() {
         return zoomLevel;
     }
 
@@ -89,8 +93,8 @@ public class ZoomToolbar {
      * @return the new slider
      */
     private Slider createSlider() {
-        final CustomLabelSlider slider = new CustomLabelSlider(x -> Math
-                .abs(x - 10));
+        final CustomLabelSlider slider = new CustomLabelSlider(value -> Math
+                .abs(value - maxzoom));
 
         slider.setOrientation(Orientation.VERTICAL);
         slider.setMin(0);
