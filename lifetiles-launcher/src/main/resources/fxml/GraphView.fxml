@@ -35,6 +35,7 @@
 		<URL value="@../styles/GraphStyle.css" />
 		<URL value="@../styles/EdgeStyle.css" />
 		<URL value="@../styles/VertexStyle.css" />
+		<URL value="@../styles/ToolBarStyle.css" />
 	</stylesheets>
 </BorderPane>
 
