@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import nl.tudelft.lifetiles.sequence.model.DefaultSequence;
 import nl.tudelft.lifetiles.sequence.model.SegmentEmpty;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
@@ -24,12 +26,15 @@ public class StackedMutationContainerTest {
         gf = FactoryProducer.getFactory("JGraphT");
         gr = gf.getGraph();
 
-        v1 = new SequenceSegment(new HashSet<Sequence>(), 1, 11,
+        Set<Sequence> s  = new HashSet<Sequence>();
+        s.add(new DefaultSequence("reference"));
+
+        v1 = new SequenceSegment(s, 1, 11,
                 new SegmentEmpty(10));
         v1.setUnifiedStart(1);
         v1.setUnifiedEnd(11);
 
-        v2 = new SequenceSegment(new HashSet<Sequence>(), 31, 41,
+        v2 = new SequenceSegment(s, 31, 41,
                 new SegmentEmpty(10));
         v2.setUnifiedStart(31);
         v2.setUnifiedEnd(41);
@@ -106,7 +111,7 @@ public class StackedMutationContainerTest {
         StackedMutationContainer s = new StackedMutationContainer(b);
 
         ArrayList<Long> stack = new ArrayList<Long>();
-        stack.add((long) 220);
+        stack.add((long) 20);
         stack.add((long) 0);
         stack.add((long) 0);
         stack.add((long) 0);
@@ -128,7 +133,7 @@ public class StackedMutationContainerTest {
     }
 
     @Test
-    public void emptyMultipleleBucketTest() {
+    public void emptyMultipleBucketTest() {
         BucketCache b = new BucketCache(1024, gr);
         StackedMutationContainer s = new StackedMutationContainer(b);
         assertEquals(11, s.mapLevelStackedMutation().size());
