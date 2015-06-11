@@ -23,6 +23,8 @@ public class CustomLabelSlider extends Slider {
      *            slider values)
      */
     public CustomLabelSlider(DoubleFunction<Double> function) {
+
+        // for 'snapping' to the values
         valueProperty().addListener(
                 (observable, oldVal, newVal) -> setValue(newVal.intValue()));
 
