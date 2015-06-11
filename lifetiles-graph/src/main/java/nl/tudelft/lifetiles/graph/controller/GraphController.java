@@ -28,8 +28,6 @@ import nl.tudelft.lifetiles.graph.model.GraphContainer;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
 import nl.tudelft.lifetiles.graph.model.GraphParser;
 import nl.tudelft.lifetiles.graph.model.StackedMutationContainer;
-import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
-import nl.tudelft.lifetiles.graph.traverser.ReferencePositionTraverser;
 import nl.tudelft.lifetiles.graph.view.DiagramView;
 import nl.tudelft.lifetiles.graph.view.TileView;
 import nl.tudelft.lifetiles.graph.view.VertexView;
@@ -49,6 +47,7 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 public class GraphController extends AbstractController {
 
     /**
+<<<<<<< HEAD
      * The pane that will be used to draw the scrollpane and toolbar on the
      * screen.
      */
@@ -70,6 +69,16 @@ public class GraphController extends AbstractController {
      * The view of the graph.
      */
     private TileView view;
+
+    /**
+     * The model of the diagram.
+     */
+    private StackedMutationContainer diagram;
+
+    /**
+     * The view of the diagram.
+     */
+    private DiagramView diagramView;
 
     /**
      * The view controller.
@@ -97,6 +106,11 @@ public class GraphController extends AbstractController {
     private double scale = 1;
 
     /**
+     * The current zoom level, used to only redraw if the zoomlevel changes.
+     */
+    private int currentZoomLevel = 1;
+
+    /**
      * The currently inserted annotations.
      */
     private Map<SequenceSegment, List<ResistanceAnnotation>> annotations;
@@ -115,6 +129,11 @@ public class GraphController extends AbstractController {
      * The factor that each zoom in step that updates the current scale.
      */
     private static final double ZOOM_IN_FACTOR = 2;
+    
+    /**
+     * The current reference in the graph, shouted by the sequence control.
+     */
+    private Sequence reference;
 
     /**
      * The factor that each zoom out step that updates the current scale.
@@ -124,17 +143,12 @@ public class GraphController extends AbstractController {
     /**
      * Maximal zoomed in level.
      */
-    private static final int MAXZOOM = 10;
+    private static final int MAXZOOM = 50;
 
     /**
-     * The model of the diagram.
+     * The boundary in zoom level between the TileView and the DiagramView.
      */
-    private StackedMutationContainer diagram;
-
-    /**
-     * The view of the diagram.
-     */
-    private DiagramView diagramView;
+    private static final int SWITCH_ZOOM_LEVEL = 17;
 
     /**
      * {@inheritDoc}
@@ -142,7 +156,6 @@ public class GraphController extends AbstractController {
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-
         initListeners();
         initZoomToolBar();
 
@@ -152,7 +165,6 @@ public class GraphController extends AbstractController {
 
         // Temporary until there is a way to start of totally out zoomed
         zoomLevel = 5;
-
     }
 
     /**
@@ -171,7 +183,6 @@ public class GraphController extends AbstractController {
                 zoomGraph(Math.pow(ZOOM_IN_FACTOR, diffLevel));
             }
         });
-
     }
 
     /**
@@ -212,11 +223,12 @@ public class GraphController extends AbstractController {
                 (controller, subject, args) -> {
                     assert args.length == 1;
                     assert args[0] instanceof Sequence;
-                    Sequence sequence = (Sequence) args[0];
-                    ReferencePositionTraverser.referenceMapGraph(graph,
-                            sequence);
-                    MutationIndicationTraverser.indicateGraphMutations(graph,
-                            sequence);
+                    reference = (Sequence) args[0];                
+                    model = new GraphContainer(graph, reference);
+                    diagram = new StackedMutationContainer(model
+                            .getBucketCache());
+                    repaintNow = true;
+                    repaint();
                 });
 
         listen(Message.OPENED,
@@ -241,7 +253,7 @@ public class GraphController extends AbstractController {
                         }
                     }
                 });
-
+        
         listen(ANNOTATIONS,
                 (controller, subject, args) -> {
                     assert controller instanceof MenuController;
@@ -307,8 +319,6 @@ public class GraphController extends AbstractController {
      */
     private void insertAnnotations(final File file) throws IOException {
         Timer timer = Timer.getAndStart();
-        Sequence reference = this.graph.getSources().iterator().next()
-                .getSources().iterator().next();
         annotations = ResistanceAnnotationMapper.mapAnnotations(graph,
                 ResistanceAnnotationParser.parseAnnotations(file), reference);
 
@@ -323,7 +333,7 @@ public class GraphController extends AbstractController {
     private void repaint() {
         if (graph != null) {
             if (model == null) {
-                model = new GraphContainer(graph);
+                model = new GraphContainer(graph, reference);
             }
             if (diagram == null) {
                 diagram = new StackedMutationContainer(model.getBucketCache());
@@ -350,7 +360,6 @@ public class GraphController extends AbstractController {
      *         one is the end bucket
      */
     private int[] getStartandEndBucket(final double position) {
-
         double scaledVertex = scale * VertexView.HORIZONTALSCALE;
         double graphWidth = getMaxUnifiedEnd(graph) * scaledVertex;
         double screenWidth = scrollPane.getViewportBounds().getWidth();
@@ -361,7 +370,6 @@ public class GraphController extends AbstractController {
 
         double start = (relativePosition - scaledScreenWidth) / scaledVertex;
         double end = (relativePosition + scaledScreenWidth) / scaledVertex;
-
         int[] buckets = new int[] {
                 getStartBucketPosition(start), getEndBucketPosition(end) + 1
         };
@@ -376,34 +384,42 @@ public class GraphController extends AbstractController {
      *            Position in the scrollPane.
      */
     private void repaintPosition(final double position) {
-        Group diagramDrawing = new Group();
-        diagramDrawing.getChildren().add(
-                diagramView.drawDiagram(diagram, zoomLevel));
-        diagramDrawing.getChildren().add(
-                new Rectangle(getMaxUnifiedEnd(graph) * scale
-                        * VertexView.HORIZONTALSCALE, 0));
-        scrollPane.setContent(diagramDrawing);
+        if (zoomLevel < SWITCH_ZOOM_LEVEL) {
+            if (currentZoomLevel != zoomLevel || repaintNow) {
+                Group diagramDrawing = new Group();
+                double width = getMaxUnifiedEnd(graph) * scale
+                        * VertexView.HORIZONTALSCALE;
+                diagramDrawing.getChildren().add(
+                        diagramView.drawDiagram(diagram, 2 + diagram.getLevel()
+                                - zoomLevel, width));
+                diagramDrawing.getChildren().add(new Rectangle(width, 0));
+                scrollPane.setContent(diagramDrawing);
 
-        int[] bucketLocations = getStartandEndBucket(position);
+                currentZoomLevel = zoomLevel;
+                repaintNow = false;
+            }
+        } else {
+            int[] bucketLocations = getStartandEndBucket(position);
 
-        int startBucket = bucketLocations[0];
-        int endBucket = bucketLocations[1];
+            int startBucket = bucketLocations[0];
+            int endBucket = bucketLocations[1];
 
-        if (currEndPosition != endBucket && currStartPosition != startBucket
-                || repaintNow) {
-            Group graphDrawing = new Group();
-            graphDrawing.getChildren().add(drawGraph(startBucket, endBucket));
-            graphDrawing.getChildren().add(
-                    new Rectangle(getMaxUnifiedEnd(graph) * scale
-                            * VertexView.HORIZONTALSCALE, 0));
+            if (currEndPosition != endBucket && currStartPosition != startBucket
+                    || repaintNow) {
+                Group graphDrawing = new Group();
+                graphDrawing.getChildren().add(drawGraph(startBucket, endBucket));
+                graphDrawing.getChildren().add(
+                        new Rectangle(getMaxUnifiedEnd(graph) * scale
+                                * VertexView.HORIZONTALSCALE, 0));
 
-            scrollPane.setContent(graphDrawing);
-            wrapper.setCenter(scrollPane);
+                scrollPane.setContent(graphDrawing);
+                wrapper.setCenter(scrollPane);
 
-            currEndPosition = endBucket;
-            currStartPosition = startBucket;
+                currEndPosition = endBucket;
+                currStartPosition = startBucket;
 
-            repaintNow = false;
+                repaintNow = false;
+            }
         }
     }
 
