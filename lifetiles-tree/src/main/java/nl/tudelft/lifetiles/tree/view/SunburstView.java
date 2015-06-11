@@ -27,7 +27,7 @@ public class SunburstView extends Control {
      */
     private PhylogeneticTreeItem currentItem;
     /**
-     * The center coordinates of this view
+     * The center coordinates of this view.
      */
     private Point2D center;
     /**
@@ -124,6 +124,7 @@ public class SunburstView extends Control {
         for (PhylogeneticTreeItem child : currentItem.getChildren()) {
             double sectorSize = (child.numberDescendants() + 1)
                     / totalDescendants;
+
             double degreeEnd = degreeStart
                     + (AbstractSunburstNode.CIRCLEDEGREES * sectorSize);
 
@@ -148,7 +149,7 @@ public class SunburstView extends Control {
     private void drawRingRecursive(final PhylogeneticTreeItem node,
             final int layer, final double degreeStart, final double degreeEnd) {
         // generate ring
-        SunburstRingSegment ringUnit = new SunburstRingSegment(node, layer,
+       SunburstRingSegment ringUnit = new SunburstRingSegment(node, layer,
                 degreeStart, degreeEnd, center, scale);
         ringUnit.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
@@ -191,5 +192,4 @@ public class SunburstView extends Control {
         double scale = Math.min(1, minSize / (maxRadius * 2));
         return scale;
     }
-
 }

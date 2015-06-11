@@ -2,8 +2,8 @@ package nl.tudelft.lifetiles.tree.view;
 
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 import javafx.scene.Group;
+import javafx.scene.control.Tooltip;
 import javafx.scene.shape.Shape;
-import javafx.scene.text.Text;
 
 /**
  * A sunburst Node represents a displayed node in
@@ -19,12 +19,12 @@ public abstract class AbstractSunburstNode extends Group {
     private PhylogeneticTreeItem value;
 
     /**
-     * A {@link Text} that will show this nodes name.
+     * A {@link Tooltip} that will show this nodes name.
      */
-    private Text name;
+    private Tooltip name;
 
     /**
-     * The {@link Shape} that will be shown in the sunburst vew.
+     * The {@link Shape} that will be shown in the sunburst view.
      *
      */
     private Shape display;
@@ -108,14 +108,15 @@ public abstract class AbstractSunburstNode extends Group {
     /**
      * @return the name
      */
-    protected final Text getName() {
+    protected final Tooltip getName() {
         return name;
     }
 
     /**
-     * @param nameText the name to set
+     * @param nameTooltip the {@link Tooltip} to install;
      */
-    protected final void setName(final Text nameText) {
-        this.name = nameText;
+    protected final void setName(final Tooltip nameTooltip) {
+        Tooltip.install(this, nameTooltip);
+        name = nameTooltip;
     }
 }
