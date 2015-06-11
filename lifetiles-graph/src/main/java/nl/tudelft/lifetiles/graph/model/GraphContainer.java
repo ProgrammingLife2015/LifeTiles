@@ -1,10 +1,12 @@
 package nl.tudelft.lifetiles.graph.model;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
 import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.core.util.Settings;
+import nl.tudelft.lifetiles.core.util.Timer;
 import nl.tudelft.lifetiles.graph.traverser.EmptySegmentTraverser;
 import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
 import nl.tudelft.lifetiles.graph.traverser.ReferencePositionTraverser;
@@ -113,18 +115,24 @@ public class GraphContainer {
      *            the sequences to display
      */
     public final void setVisible(final Set<Sequence> visibleSequences) {
-
+        Timer timer = Timer.getAndStart();
         // Find out which vertices are visible now
         Set<SequenceSegment> vertices = new TreeSet<SequenceSegment>();
-        for (Sequence seq : visibleSequences) {
-            for (SequenceSegment segment : seq.getSegments()) {
+
+        for (SequenceSegment segment: graph.getAllVertices()) {
+            //copy the set of sequences because retainAll modifies the original set
+            Set<Sequence> intersect;
+            intersect = new HashSet<Sequence>(segment.getSources());
+            //check if any of the visible sequences are in this nodes sources
+            intersect.retainAll(visibleSequences);
+            if (!intersect.isEmpty()) {
                 vertices.add(segment);
             }
         }
 
         visibles = vertices;
         this.visibleSequences = visibleSequences;
-
+        timer.stopAndLog("Creating visible graph");
     }
 
     /**

@@ -14,6 +14,7 @@ import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.controller.MenuController;
 import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.core.util.Message;
+import nl.tudelft.lifetiles.core.util.Timer;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeParser;
@@ -187,7 +188,9 @@ public class TreeController extends AbstractController {
      */
     private void setVisible(final Set<Sequence> visible) {
         visibleSequences = visible;
+        Timer timer = Timer.getAndStart();
         visibleTree = subTree(tree);
+        timer.stopAndLog("creating subtree");
         repaint();
     }
 
