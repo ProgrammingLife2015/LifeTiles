@@ -152,6 +152,92 @@ public class TestPhylogeneticTreeItem {
         assertEquals("maxDepth did not match for sub tree",1, current.maxDepth());        
         assertEquals("maxDepth did not match for childless tree",0,test2.maxDepth());
     }
+    
+    /**
+     * Test for subTree
+     */
+    @Test
+    public void testSubTree(){
+        // create the test tree
+        // (A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5)F;
+        // root node
+        PhylogeneticTreeItem root = new PhylogeneticTreeItem();
+        root.setName("F");
+        // add 3 child nodes
+        PhylogeneticTreeItem current = new PhylogeneticTreeItem();
+        current.setParent(root);
+        current.setName("A");
+        current.setSequence(new DefaultSequence("A"));
+        current.setDistance(0.1);
+        current = new PhylogeneticTreeItem();
+        current.setName("B");
+        current.setSequence(new DefaultSequence("B"));
+        current.setDistance(0.2);
+        current.setParent(root);
+        current = new PhylogeneticTreeItem();
+        current.setParent(root);
+        current.setName("E");
+        current.setDistance(0.5);
+        // add 2 child nodes to the third node
+        PhylogeneticTreeItem current2 = new PhylogeneticTreeItem();
+        current2.setParent(current);
+        current2.setName("C");
+        current2.setSequence(new DefaultSequence("C"));
+        current2.setDistance(0.3);
+        current2 = new PhylogeneticTreeItem();
+        current2.setParent(current);
+        current2.setName("D");
+        current2.setSequence(new DefaultSequence("D"));
+        current2.setDistance(0.4);
+        
+        root.populateChildSequences();
+        
+        //generate test Sets
+        Set<Sequence> set1 = new HashSet<Sequence>();
+        set1.add(new DefaultSequence("A"));
+        
+        Set<Sequence> set2 = new HashSet<Sequence>();
+        set2.add(new DefaultSequence("C"));
+        set2.add(new DefaultSequence("D"));
+        
+        Set<Sequence> set3 = new HashSet<Sequence>();
+        set3.addAll(set2);
+        set3.addAll(set1);
+        
+        //generate expected output
+        PhylogeneticTreeItem test1 = new PhylogeneticTreeItem();
+        test1.setName("A");
+        test1.setSequence(new DefaultSequence("A"));
+        test1.setDistance(0.1);
+        
+        PhylogeneticTreeItem test2 = new PhylogeneticTreeItem();
+        test2.setDistance(0.5);
+        // add 2 child nodes to the third node
+        PhylogeneticTreeItem temp = new PhylogeneticTreeItem();
+        temp.setParent(test2);
+        temp.setName("C");
+        temp.setSequence(new DefaultSequence("C"));
+        temp.setDistance(0.3);
+        temp = new PhylogeneticTreeItem();
+        temp.setParent(test2);
+        temp.setName("D");
+        temp.setSequence(new DefaultSequence("D"));
+        temp.setDistance(0.4);
+        
+
+        PhylogeneticTreeItem test3 = new PhylogeneticTreeItem();
+        //actual testing
+        PhylogeneticTreeItem subtree1 = root.subTree(set1);
+        assertEquals("Trees did not match",test1, subtree1);
+        
+        PhylogeneticTreeItem subtree2 = root.subTree(set2);
+        assertEquals("Trees did not match",test2, subtree2);
+        
+        test2.setParent(test3);
+        test1.setParent(test3);
+        PhylogeneticTreeItem subtree3 = root.subTree(set3);
+        assertEquals("Trees did not match",test3, subtree3);
+    }
 	
 	/**
 	 * Test for equals.

@@ -3,6 +3,7 @@ package nl.tudelft.lifetiles.tree.controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -128,7 +129,7 @@ public class TreeController extends AbstractController {
         // parse the string into a tree
         tree = PhylogeneticTreeParser.parse(fileString);
         linkSequence(sequences, tree);
-        populateChildSequences(tree);
+        tree.populateChildSequences();
         visibleTree = tree;
 
         repaint();
@@ -166,20 +167,6 @@ public class TreeController extends AbstractController {
     }
 
     /**
-     * Fills the set containing the sequences that descend from this node. the
-     * sequences should already have been added to the tree.
-     *
-     * @param node
-     *            the root of a phylogenetic tree
-     */
-    private void populateChildSequences(final PhylogeneticTreeItem node) {
-        for (PhylogeneticTreeItem child : node.getChildren()) {
-            populateChildSequences(child);
-        }
-        node.setChildSequences();
-    }
-
-    /**
      * Sets the sequences in the set to visible, and creates a tree that only
      * contains the visible sequences.
      *
@@ -189,7 +176,11 @@ public class TreeController extends AbstractController {
     private void setVisible(final Set<Sequence> visible) {
         visibleSequences = visible;
         Timer timer = Timer.getAndStart();
-        visibleTree = subTree(tree);
+        visibleTree = tree.subTree(visibleSequences);
+
+        linkSequence(sequences, visibleTree);
+        visibleTree.populateChildSequences();
+
         timer.stopAndLog("creating subtree");
         repaint();
     }
@@ -203,50 +194,5 @@ public class TreeController extends AbstractController {
     public final void shoutVisible(final Set<Sequence> visible) {
         shout(Message.FILTERED, "", visible);
     }
-
-    /**
-     * Creates a new tree that only contains the visible nodes. When a node has
-     * only one child, it is removed from the tree and its child is returned
-     * instead. When a node has no children, and is not visible, null is
-     * returned.
-     *
-     * @param node
-     *            the root of a tree that we want a subtree of
-     * @return the new root of a subtree.
-     */
-    private PhylogeneticTreeItem subTree(final PhylogeneticTreeItem node) {
-        // copy the node
-        PhylogeneticTreeItem result = new PhylogeneticTreeItem();
         result.setDistance(node.getDistance());
-        if (visibleSequences.contains(node.getSequence())) {
-            result.setName(node.getName());
-        } else if (node.getChildren().isEmpty()) {
-            return null;
-        }
-        // copy the children when they are needed
-        for (PhylogeneticTreeItem child : node.getChildren()) {
-            // check if this child is needed
-            for (Sequence sequence : visibleSequences) {
-                if (node.getChildSequences().contains(sequence)) {
-                    PhylogeneticTreeItem subtree = subTree(child);
-                    if (subtree != null) {
-                        subtree.setParent(result);
-                    }
-                    break;
-                }
-            }
-        }
-        // remove useless nodes(nodes with at single child can be removed from
-        // the subtree)
-        if (result.getChildren().isEmpty() && result.getName() == null) {
-            return null;
-        }
-        if (result.getChildren().size() == 1) {
-            result = result.getChildren().get(0);
-        }
-        // fix sequences
-        linkSequence(sequences, result);
-        populateChildSequences(result);
-        return result;
-    }
 }
