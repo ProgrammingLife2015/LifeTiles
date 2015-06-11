@@ -45,6 +45,7 @@ public class ZoomToolbar {
         // 5 is temporary, until graph can start at the highest zoom level
         zoomLevel.set(5);
         Slider slider = createSlider();
+        slider.getStyleClass().add("slider");
         slider.valueProperty().addListener(
                 (ChangeListener<Number>) (obserVal, oldVal, newVal) -> {
                     if (oldVal.intValue() > newVal.intValue()
@@ -57,16 +58,20 @@ public class ZoomToolbar {
                 });
 
         Button plus = new Button("+");
+        plus.getStyleClass().add("plusButton");
         plus.setOnMouseClicked((event) -> {
             slider.setValue(slider.getValue() - slider.getMajorTickUnit());
         });
 
         Button minus = new Button("-");
+        minus.getStyleClass().add("minusButton");
         minus.setOnMouseClicked((event) -> {
             slider.setValue(slider.getValue() + slider.getMajorTickUnit());
         });
 
         toolbar = new ToolBar();
+        toolbar.getStyleClass().add("toolbar");
+
         toolbar.getItems().addAll(minus, slider, plus);
         toolbar.setOrientation(Orientation.VERTICAL);
     }
