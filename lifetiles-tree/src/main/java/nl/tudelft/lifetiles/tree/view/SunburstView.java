@@ -27,7 +27,7 @@ public class SunburstView extends Control {
      */
     private PhylogeneticTreeItem currentItem;
     /**
-     * The center coordinates of this view
+     * The center coordinates of this view.
      */
     private Point2D center;
     /**
@@ -124,6 +124,7 @@ public class SunburstView extends Control {
         for (PhylogeneticTreeItem child : currentItem.getChildren()) {
             double sectorSize = (child.numberDescendants() + 1)
                     / totalDescendants;
+
             double degreeEnd = degreeStart
                     + (AbstractSunburstNode.CIRCLEDEGREES * sectorSize);
 
@@ -188,8 +189,6 @@ public class SunburstView extends Control {
         double maxRadius = AbstractSunburstNode.CENTER_RADIUS;
         maxRadius += depth * AbstractSunburstNode.RING_WIDTH;
 
-        double scale = Math.min(1, minSize / (maxRadius * 2));
-        return scale;
+        return Math.min(1, minSize / (maxRadius * 2));
     }
-
 }

@@ -1,8 +1,8 @@
 package nl.tudelft.lifetiles.tree.view;
 
+import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
 import nl.tudelft.lifetiles.sequence.SequenceColor;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
@@ -31,8 +31,11 @@ public class SunburstCenter extends AbstractSunburstNode {
     public SunburstCenter(final PhylogeneticTreeItem value, final double scale) {
         setValue(value);
         setDisplay(new Circle(scale * CENTER_RADIUS,  createColor()));
-        setName(new Text(getValue().getName()));
-        this.getChildren().addAll(getDisplay(), getName());
+        String name = getValue().getName();
+        if (name != null) {
+            setName(new Tooltip(name));
+        }
+        this.getChildren().add(getDisplay());
     }
 
     /**
