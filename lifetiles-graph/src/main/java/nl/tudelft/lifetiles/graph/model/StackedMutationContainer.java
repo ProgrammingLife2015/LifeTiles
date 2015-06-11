@@ -183,8 +183,8 @@ public class StackedMutationContainer {
 
         Map<Mutation, Integer> mutations = new HashMap<>();
         mutations.put(Mutation.INSERTION, 1);
-        mutations.put(Mutation.DELETION, 1);
-        mutations.put(Mutation.POLYMORPHISM, 1);
+        mutations.put(Mutation.DELETION, 2);
+        mutations.put(Mutation.POLYMORPHISM, 3);
 
         for (SequenceSegment segment : bucket) {
             Set<Sequence> sources = new HashSet<>(segment.getSources());
