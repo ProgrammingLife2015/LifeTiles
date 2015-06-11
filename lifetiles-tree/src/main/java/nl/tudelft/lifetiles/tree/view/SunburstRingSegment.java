@@ -52,11 +52,11 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      */
     public SunburstRingSegment(final PhylogeneticTreeItem value,
             final int layer, final double degreeStart, final double degreeEnd,
-            final Point2D center, final double scale, final Color parentColor,
-            double fraction) {
+            final Point2D center, final double scale) {
         // set the value, and create the text and semi-circle
         setValue(value);
         String name = getValue().getName();
+        setDisplay(createRing(layer, degreeStart, degreeEnd, center, scale));
         double distance = getValue().getDistance();
         String tooltip;
         if (name == null) {
@@ -65,7 +65,6 @@ public class SunburstRingSegment extends AbstractSunburstNode {
             tooltip = name + "\nDistance: " + distance;
         }
         setName(new Tooltip(tooltip));
-                / 2;
         // add the text and semicircle to the group
         getChildren().add(getDisplay());
     }
@@ -89,12 +88,11 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      * @return a semi-circle with the specified dimensions
      */
     private Shape createRing(final int layer, final double degreeStart,
-            final double degreeEnd, final Point2D center, final double scale,
-            final Color parentColor, double fraction) {
+            final double degreeEnd, final Point2D center, final double scale) {
 
         Path result = new Path();
 
-        result.setFill(createColor(parentColor, fraction));
+        result.setFill(createColor(degreeStart, layer));
         result.setFillRule(FillRule.EVEN_ODD);
 
         // check if this is a large arc
@@ -202,14 +200,12 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      *
      * @return a Color object that specifies what color this node will be.
      */
-    private Color createColor(Color parentColor, final double fraction) {
+    private Color createColor(double degrees, int layer) {
         Sequence sequence = getValue().getSequence();
-        if (parentColor == null) {
-            return START_COLOR.interpolate(END_COLOR, fraction);
-        } else if (sequence == null) {
-            Color result = parentColor.interpolate(END_COLOR, fraction);
-            //result = result.brighter();
-            return result;
+        if (sequence == null) {
+            double brightness = Math.min(0.8, 1d / layer);
+            brightness = Math.abs(brightness - 1);
+            return Color.hsb(degrees, 0.9d, brightness);
         } else {
             return SequenceColor.getColor(sequence);
         }
