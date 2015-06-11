@@ -230,7 +230,7 @@ public class GraphController extends AbstractController {
                 (controller, subject, args) -> {
                     assert args.length == 1;
                     assert args[0] instanceof Sequence;
-                    reference = (Sequence) args[0];                
+                    reference = (Sequence) args[0];
                     model = new GraphContainer(graph, reference);
                     model.setVisible(visibleSequences);
                     diagram = new StackedMutationContainer(model

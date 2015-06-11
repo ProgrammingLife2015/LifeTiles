@@ -3,9 +3,7 @@ package nl.tudelft.lifetiles.graph.model;
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import nl.tudelft.lifetiles.sequence.model.DefaultSequence;
@@ -43,7 +41,7 @@ public class StackedMutationContainerTest {
     @Test
     public void exampleContentBucketTest() {
         BucketCache b = new BucketCache(8, gr);
-        StackedMutationContainer s = new StackedMutationContainer(b);
+        StackedMutationContainer s = new StackedMutationContainer(b, null);
         assertEquals(8, s.mapLevelStackedMutation().get(1).getStack().size());
         assertEquals(4, s.mapLevelStackedMutation().get(2).getStack().size());
         assertEquals(2, s.mapLevelStackedMutation().get(3).getStack().size());
@@ -55,7 +53,7 @@ public class StackedMutationContainerTest {
     public void singleBucketSingleContentTest() {
         gr.addVertex(v1);
         BucketCache b = new BucketCache(1, gr);
-        StackedMutationContainer s = new StackedMutationContainer(b);
+        StackedMutationContainer s = new StackedMutationContainer(b, null);
         ArrayList<Long> stack = new ArrayList<Long>();
         stack.add((long) 10);
         stack.add((long) 0);
@@ -69,7 +67,7 @@ public class StackedMutationContainerTest {
         gr.addVertex(v1);
         gr.addVertex(v2);
         BucketCache b = new BucketCache(1, gr);
-        StackedMutationContainer s = new StackedMutationContainer(b);
+        StackedMutationContainer s = new StackedMutationContainer(b, null);
         ArrayList<Long> stack = new ArrayList<Long>();
         stack.add((long) 20);
         stack.add((long) 0);
@@ -83,7 +81,7 @@ public class StackedMutationContainerTest {
         gr.addVertex(v1);
         gr.addVertex(v2);
         BucketCache b = new BucketCache(2, gr);
-        StackedMutationContainer s = new StackedMutationContainer(b);
+        StackedMutationContainer s = new StackedMutationContainer(b, null);
 
         ArrayList<Long> stack = new ArrayList<Long>();
         stack.add((long) 10);
@@ -108,7 +106,7 @@ public class StackedMutationContainerTest {
         gr.addVertex(v1);
         gr.addVertex(v2);
         BucketCache b = new BucketCache(1000, gr);
-        StackedMutationContainer s = new StackedMutationContainer(b);
+        StackedMutationContainer s = new StackedMutationContainer(b, null);
 
         ArrayList<Long> stack = new ArrayList<Long>();
         stack.add((long) 20);
@@ -121,21 +119,21 @@ public class StackedMutationContainerTest {
     @Test
     public void emptyBucketTest() {
         BucketCache b = new BucketCache(1, gr);
-        StackedMutationContainer s = new StackedMutationContainer(b);
+        StackedMutationContainer s = new StackedMutationContainer(b, null);
         assertEquals(1, s.mapLevelStackedMutation().size());
     }
 
     @Test
     public void emptyDoubleBucketTest() {
         BucketCache b = new BucketCache(2, gr);
-        StackedMutationContainer s = new StackedMutationContainer(b);
+        StackedMutationContainer s = new StackedMutationContainer(b, null);
         assertEquals(2, s.mapLevelStackedMutation().size());
     }
 
     @Test
     public void emptyMultipleBucketTest() {
         BucketCache b = new BucketCache(1024, gr);
-        StackedMutationContainer s = new StackedMutationContainer(b);
+        StackedMutationContainer s = new StackedMutationContainer(b, null);
         assertEquals(11, s.mapLevelStackedMutation().size());
     }
 
