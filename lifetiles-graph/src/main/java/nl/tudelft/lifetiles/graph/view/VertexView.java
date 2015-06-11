@@ -55,7 +55,7 @@ public class VertexView extends Group {
     /**
      * this is the DNA strain the display on the vertex.
      */
-    private Text text;
+    private final Text text;
 
     /**
      * Creates a new Block to be displayed on the screen. The width is already

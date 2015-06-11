@@ -22,20 +22,28 @@ public class CustomLabelSlider extends Slider {
      *            x+1 offsets the values on the labels by one compared to the
      *            slider values)
      */
-    public CustomLabelSlider(DoubleFunction<Double> function) {
+    public CustomLabelSlider(final DoubleFunction<Double> function) {
+
+        super();
 
         // for 'snapping' to the values
         valueProperty().addListener(
                 (observable, oldVal, newVal) -> setValue(newVal.intValue()));
 
         setLabelFormatter(new StringConverter<Double>() {
+            /**
+             * {@inheritDoc}
+             */
             @Override
-            public String toString(Double x) {
-                return String.format("%1$.0f", function.apply(x));
+            public String toString(final Double number) {
+                return String.format("%1$.0f", function.apply(number));
             }
 
+            /**
+             * {@inheritDoc}
+             */
             @Override
-            public Double fromString(String s) {
+            public Double fromString(final String string) {
                 return null;
             }
         });

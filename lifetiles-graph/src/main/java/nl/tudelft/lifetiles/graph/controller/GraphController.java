@@ -3,7 +3,6 @@ package nl.tudelft.lifetiles.graph.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +46,10 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
  */
 public class GraphController extends AbstractController {
 
+    /**
+     * The pane that will be used to draw the scrollpane and toolbar on the
+     * screen.
+     */
     @FXML
     private BorderPane wrapper;
 
@@ -128,22 +131,51 @@ public class GraphController extends AbstractController {
     public final void initialize(final URL location,
             final ResourceBundle resources) {
 
-        NotificationFactory notFact = new NotificationFactory();
+        initListeners();
+        initZoomToolBar();
+
         repaintNow = false;
-
-        ZoomToolbar toolbar = new ZoomToolbar(MAXZOOM);
-
-        wrapper.setRight(toolbar.getToolBar());
 
         scrollPane = new ScrollPane();
 
         // Temporary until there is a way to start of totally out zoomed
         zoomLevel = 5;
 
+    }
+
+    /**
+     * Initialize the zoom toolbar.
+     */
+    private void initZoomToolBar() {
+        ZoomToolbar toolbar = new ZoomToolbar(MAXZOOM);
+        wrapper.setRight(toolbar.getToolBar());
+
+        toolbar.getZoomlevel().addListener((observeVal, oldVal, newVal) -> {
+
+            int diffLevel = oldVal.intValue() - newVal.intValue();
+            zoomLevel = Math.abs(newVal.intValue());
+            if (diffLevel < 0) {
+                zoom(Math.pow(ZOOMOUTFACTOR, diffLevel * -1));
+
+            } else if (diffLevel > 0) {
+                zoom(Math.pow(ZOOMINFACTOR, diffLevel));
+
+            }
+        });
+
+    }
+
+    /**
+     * Initialize the listeners.
+     */
+    private void initListeners() {
+
+        NotificationFactory notFact = new NotificationFactory();
+
         listen(Message.OPENED, (controller, subject, args) -> {
 
             assert controller instanceof MenuController;
-            if (!subject.equals("graph")) {
+            if (!"graph".equals(subject)) {
                 return;
             }
             assert args.length == 2;
@@ -199,19 +231,6 @@ public class GraphController extends AbstractController {
                         }
                     }
                 });
-
-        toolbar.getZoomlevel().addListener((observeVal, oldVal, newVal) -> {
-
-            int diffLevel = oldVal.intValue() - newVal.intValue();
-            zoomLevel = Math.abs(newVal.intValue());
-            if (diffLevel < 0) {
-                zoom(Math.pow(ZOOMOUTFACTOR, diffLevel * -1));
-
-            } else if (diffLevel > 0) {
-                zoom(Math.pow(ZOOMINFACTOR, diffLevel));
-
-            }
-        });
 
         listen(ANNOTATIONS, (controller, subject, args) -> {
             assert controller instanceof MenuController;
@@ -316,7 +335,6 @@ public class GraphController extends AbstractController {
      *         one is the end bucket
      */
     private int[] getStartandEndBucket(final double position) {
-        List<Integer> bucketLocations = new ArrayList<Integer>();
 
         double scaledVertex = scale * VertexView.HORIZONTALSCALE;
         double graphWidth = getMaxUnifiedEnd(graph) * scaledVertex;
@@ -328,9 +346,6 @@ public class GraphController extends AbstractController {
 
         double start = (relativePosition - scaledScreenWidth) / scaledVertex;
         double end = (relativePosition + scaledScreenWidth) / scaledVertex;
-
-        bucketLocations.add(getStartBucketPosition(start));
-        bucketLocations.add(getEndBucketPosition(end) + 1);
 
         int[] buckets = new int[] {
                 getStartBucketPosition(start), getEndBucketPosition(end) + 1
