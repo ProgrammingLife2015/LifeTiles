@@ -62,17 +62,21 @@ public class GraphContainer {
      *
      * @param graph
      *            The initial graph
+     * @param reference
+     *            Reference currently active in the graph controller.
      */
-    public GraphContainer(final Graph<SequenceSegment> graph) {
+    public GraphContainer(final Graph<SequenceSegment> graph,
+            final Sequence reference) {
         this.graph = graph;
-
-        // TODO: Temporary line until sequence selection is implemented.
-        Sequence reference = this.graph.getSources().iterator().next()
-                .getSources().iterator().next();
-
+        for (SequenceSegment segment : this.graph.getAllVertices()) {
+            segment.setReferenceStart(1);
+            segment.setReferenceEnd(Long.MAX_VALUE);
+            segment.setMutation(null);
+        }
         alignGraph();
-        findMutations(reference);
-
+        if (reference != null) {
+            findMutations(reference);
+        }
         segmentBuckets = new BucketCache(graph.getAllVertices().size()
                 / NUM_VERTICES_BUCKET, this.graph);
         visibles = graph.getAllVertices();
