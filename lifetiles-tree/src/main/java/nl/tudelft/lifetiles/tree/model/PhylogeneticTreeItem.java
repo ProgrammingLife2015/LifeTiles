@@ -116,6 +116,59 @@ public class PhylogeneticTreeItem {
     }
 
     /**
+     * Creates a new tree that only contains the visible nodes. When a node has
+     * only one child, it is removed from the tree and its child is returned
+     * instead. When a node has no children, and is not visible, null is
+     * returned.
+     *
+     * @param visibleSequences
+     *            the sequences that need to be in this tree.
+     * @return the new root of a subtree.
+     */
+    public final PhylogeneticTreeItem subTree(final Set<Sequence> visibleSequences) {
+        // copy the node
+        PhylogeneticTreeItem result = new PhylogeneticTreeItem();
+        result.setDistance(distance);
+        if (visibleSequences.contains(sequence)) {
+            result.setName(name);
+        } else if (children.isEmpty()) {
+            return null;
+        }
+        // copy the children when they are needed
+        for (PhylogeneticTreeItem child : children) {
+            // check if this child is needed
+            Set<Sequence> intersect = new HashSet<Sequence>(childSequences);
+            intersect.retainAll(visibleSequences);
+            if (!intersect.isEmpty()) {
+                PhylogeneticTreeItem subtree = child.subTree(visibleSequences);
+                if (subtree != null) {
+                    subtree.setParent(result);
+                }
+            }
+        }
+        // remove useless nodes(nodes with at single child can be removed from
+        // the subtree)
+        if (result.getChildren().isEmpty() && result.getName() == null) {
+            return null;
+        }
+        if (result.getChildren().size() == 1) {
+            result = result.getChildren().get(0);
+        }
+        return result;
+    }
+
+    /**
+     * Fills the set containing the sequences that descend from this node. the
+     * sequences should already have been added to the tree.
+     */
+    public final void populateChildSequences() {
+        for (PhylogeneticTreeItem child : children) {
+            child.populateChildSequences();
+        }
+        setChildSequences();
+    }
+
+    /**
      * Compares this with another Object. returns true when both are the same.
      * two PhylogeneticTreeItems are considered the same when both have the
      * same:
