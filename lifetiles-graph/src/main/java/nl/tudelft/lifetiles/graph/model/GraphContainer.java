@@ -128,7 +128,9 @@ public class GraphContainer {
             Set<Sequence> intersect;
             intersect = new HashSet<Sequence>(segment.getSources());
             //check if any of the visible sequences are in this nodes sources
-            intersect.retainAll(visibleSequences);
+            if (visibleSequences != null) {
+            	intersect.retainAll(visibleSequences);
+            }
             if (!intersect.isEmpty()) {
                 vertices.add(segment);
             }
