@@ -123,13 +123,13 @@ public class GraphContainer {
         // Find out which vertices are visible now
         Set<SequenceSegment> vertices = new TreeSet<SequenceSegment>();
 
-        for (SequenceSegment segment: graph.getAllVertices()) {
-            //copy the set of sequences because retainAll modifies the original set
+        for (SequenceSegment segment : graph.getAllVertices()) {
+            // copy the set of sequences because retainAll modifies the original set
             Set<Sequence> intersect;
             intersect = new HashSet<Sequence>(segment.getSources());
-            //check if any of the visible sequences are in this nodes sources
+            // check if any of the visible sequences are in this nodes sources
             if (visibleSequences != null) {
-            	intersect.retainAll(visibleSequences);
+                intersect.retainAll(visibleSequences);
             }
             if (!intersect.isEmpty()) {
                 vertices.add(segment);

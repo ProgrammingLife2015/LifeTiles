@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import nl.tudelft.lifetiles.sequence.Mutation;
 import nl.tudelft.lifetiles.sequence.model.DefaultSequence;
 import nl.tudelft.lifetiles.sequence.model.SegmentEmpty;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
@@ -65,12 +66,13 @@ public class StackedMutationContainerTest {
     @Test
     public void singleBucketMultipleContentTest() {
         gr.addVertex(v1);
+        v1.setMutation(Mutation.INSERTION);
         gr.addVertex(v2);
         BucketCache b = new BucketCache(1, gr);
         StackedMutationContainer s = new StackedMutationContainer(b, null);
         ArrayList<Long> stack = new ArrayList<Long>();
         stack.add((long) 20);
-        stack.add((long) 0);
+        stack.add((long) 10);
         stack.add((long) 0);
         stack.add((long) 0);
         assertEquals(stack, s.getStack().get(0));
@@ -135,6 +137,33 @@ public class StackedMutationContainerTest {
         BucketCache b = new BucketCache(1024, gr);
         StackedMutationContainer s = new StackedMutationContainer(b, null);
         assertEquals(11, s.mapLevelStackedMutation().size());
+    }
+    
+    @Test
+    public void maxMutationTest() {
+        gr.addVertex(v1);
+        gr.addVertex(v2);
+        BucketCache b = new BucketCache(1024, gr);
+        StackedMutationContainer s = new StackedMutationContainer(b, null);
+        assertEquals(0, s.getMaxMutations().longValue());
+    }
+    
+    @Test
+    public void invisibleBucketTest() {
+        gr.addVertex(v1);
+        gr.addVertex(v2);
+        BucketCache b = new BucketCache(1, gr);
+
+        Set<Sequence> set  = new HashSet<Sequence>();
+        set.add(new DefaultSequence("empty"));
+
+        ArrayList<Long> stack = new ArrayList<Long>();
+        stack.add((long) 0);
+        stack.add((long) 0);
+        stack.add((long) 0);
+        stack.add((long) 0);
+        StackedMutationContainer s = new StackedMutationContainer(b, set);
+        assertEquals(stack, s.getStack().get(0));
     }
 
 }
