@@ -1,9 +1,12 @@
 package nl.tudelft.lifetiles.sequence.controller;
 
+import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -15,9 +18,14 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
+import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.core.util.Message;
+import nl.tudelft.lifetiles.notification.controller.NotificationController;
+import nl.tudelft.lifetiles.notification.model.AbstractNotification;
+import nl.tudelft.lifetiles.notification.model.NotificationFactory;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceEntry;
+import nl.tudelft.lifetiles.sequence.model.SequenceMetaParser;
 
 /**
  * The controller of the data view.
@@ -125,6 +133,46 @@ public final class SequenceController extends AbstractController {
             updateVisible(visibleSet);
             shout(Message.FILTERED, "", visibleSet);
         });
+
+        listen(Message.OPENED,
+                (sender, subject, args) -> {
+                    if (!subject.equals("meta")) {
+                        return;
+                    }
+                    assert args[0] instanceof File;
+
+                    SequenceMetaParser parser = new SequenceMetaParser();
+                    try {
+                        parser.parse((File) args[0]);
+                        addMetaData(parser.getColumns(), parser.getData());
+                    } catch (Exception exception) {
+                        Logging.exception(exception);
+                        AbstractNotification notification = new NotificationFactory()
+                                .getNotification(exception);
+                        shout(NotificationController.NOTIFY, "", notification);
+                    }
+                });
+    }
+
+    /**
+     * Add the meta data to the appropriate sequence entries.
+     *
+     * @param columns
+     *            The column names
+     * @param data
+     *            The actual data
+     */
+    private void addMetaData(final List<String> columns,
+            final Map<String, Map<String, String>> data) {
+        for (Entry<String, Map<String, String>> sequenceMeta : data.entrySet()) {
+            String identifier = sequenceMeta.getKey();
+            if (sequenceEntries.containsKey(identifier)) {
+                SequenceEntry sequenceEntry = sequenceEntries.get(identifier);
+                sequenceEntry.setMetaData(sequenceMeta.getValue());
+            }
+        }
+
+        addMetaColumns(columns);
     }
 
     /**
@@ -162,6 +210,22 @@ public final class SequenceController extends AbstractController {
         referenceColumn.setCellFactory(CheckBoxTableCell
                 .forTableColumn(referenceColumn));
         referenceColumn.setEditable(true);
+    }
+
+    /**
+     * Add the meta data columns to the table.
+     *
+     * @param columns
+     *            the names of the columns
+     */
+    private void addMetaColumns(final List<String> columns) {
+        for (String columnName : columns) {
+            TableColumn<SequenceEntry, String> column = new TableColumn<>(
+                    columnName);
+            column.setCellValueFactory(entry -> entry.getValue().metaProperty(
+                    columnName));
+            sequenceTable.getColumns().add(column);
+        }
     }
 
     /**
