@@ -39,11 +39,14 @@ public class MenuController extends AbstractController {
      * Extension of the edge file.
      */
     private static final String EDGE_EXTENSION = ".edge.graph";
-
     /**
      * Extension of the tree file.
      */
     private static final String TREE_EXTENSION = ".nwk";
+    /**
+     * Extension of the sequence meta data file.
+     */
+    private static final String META_EXTENSION = ".meta";
 
     /**
      * The initial x-coordinate of the window.
@@ -113,6 +116,7 @@ public class MenuController extends AbstractController {
         loadGraph(directory);
         loadTree(directory);
         loadAnnotations(directory);
+        loadMetaData(directory);
     }
 
     /**
@@ -130,6 +134,22 @@ public class MenuController extends AbstractController {
         File edgeFile = FileUtils.getSingleFileByExtension(directory,
                 EDGE_EXTENSION);
         shout(Message.OPENED, "graph", nodeFile, edgeFile);
+    }
+
+    /**
+     * Loads the sequence meta-data file in the specified directory.
+     *
+     * @param directory
+     *            The directory in which to locate the files.
+     * @throws IOException
+     *             When the directory does not contain exactly one graph file
+     *             and one node file.
+     */
+    private void loadMetaData(final File directory) throws IOException {
+        File metaDataFile = loadOrWarn(directory, META_EXTENSION);
+        if (metaDataFile != null) {
+            shout(Message.OPENED, "meta", metaDataFile);
+        }
     }
 
     /**

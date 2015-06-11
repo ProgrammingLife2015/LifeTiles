@@ -1,5 +1,9 @@
 package nl.tudelft.lifetiles.sequence.model;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -24,6 +28,10 @@ public final class SequenceEntry {
      * The reference property.
      */
     private final Property<Boolean> reference = new SimpleBooleanProperty();
+    /**
+     * The meta data.
+     */
+    private final Map<String, Property<String>> metaData = new HashMap<>();
 
     /**
      * Create a new sequence entry.
@@ -41,6 +49,7 @@ public final class SequenceEntry {
         visibleProperty().setValue(visible);
         referenceProperty().setValue(reference);
     }
+
     /**
      * Get the identifier.
      *
@@ -107,6 +116,44 @@ public final class SequenceEntry {
      */
     public Property<Boolean> referenceProperty() {
         return reference;
+    }
+
+    /**
+     * Set the meta data.
+     *
+     * @param metaData
+     *            the meta data
+     */
+    public void setMetaData(final Map<String, String> metaData) {
+        for (Entry<String, String> metaValue : metaData.entrySet()) {
+            Property<String> value = new SimpleStringProperty(
+                    metaValue.getValue());
+            this.metaData.put(metaValue.getKey(), value);
+        }
+    }
+
+    /**
+     * Get the meta data for a key.
+     *
+     * @param key
+     *            the key
+     * @return the value
+     */
+    public String getMeta(final String key) {
+        assert metaData.containsKey(key);
+        return metaProperty(key).getValue();
+    }
+
+    /**
+     * Get the meta data property.
+     *
+     * @param key
+     *            the key
+     * @return the property
+     */
+    public Property<String> metaProperty(final String key) {
+        assert metaData.containsKey(key);
+        return metaData.get(key);
     }
 
     /**
