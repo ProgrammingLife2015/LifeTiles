@@ -10,9 +10,15 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import nl.tudelft.lifetiles.annotation.model.KnownMutation;
 import nl.tudelft.lifetiles.annotation.model.KnownMutationMapper;
@@ -27,6 +33,7 @@ import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.model.GraphContainer;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
 import nl.tudelft.lifetiles.graph.model.GraphParser;
+import nl.tudelft.lifetiles.graph.model.MiniMapScrollPaneSkin;
 import nl.tudelft.lifetiles.graph.model.StackedMutationContainer;
 import nl.tudelft.lifetiles.graph.view.DiagramView;
 import nl.tudelft.lifetiles.graph.view.TileView;
@@ -151,6 +158,13 @@ public class GraphController extends AbstractController {
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
+        MiniMapScrollPaneSkin skin = new MiniMapScrollPaneSkin(scrollPane);
+        ScrollBar minimap = skin.getHorizontalScrollBar();
+        minimap.setBackground(new Background(new BackgroundFill(Color.WHITE,
+                CornerRadii.EMPTY, Insets.EMPTY)));
+
+        scrollPane.setSkin(skin);
+
         initListeners();
         initZoomToolBar();
 
