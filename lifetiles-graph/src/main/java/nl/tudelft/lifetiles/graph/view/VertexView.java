@@ -43,6 +43,11 @@ public class VertexView extends Group {
     private static final double VERTICALSCALE = 40;
 
     /**
+     * The minimal size of the text before it is drawn.
+     */
+    private static final double MINTEXTSIZE = 10;
+
+    /**
      * Name of the font used in the Vertex View.
      */
     private static final String FONTNAME = "Oxygen Mono";
@@ -73,18 +78,19 @@ public class VertexView extends Group {
     public VertexView(final String string, final Point2D topLeftPoint,
             final double width, final double height, final double scale,
             final Color color) {
+
+        clip = new Rectangle(width * HORIZONTALSCALE * scale, height
+                * VERTICALSCALE * scale);
+
         text = new Text(string);
         text.setFont(Font.font("Oxygen Mono", HORIZONTALSCALE));
         text.getStyleClass().add("vertexText");
+        text.setClip(clip);
 
         rectangle = new Rectangle(width * HORIZONTALSCALE * scale, height
                 * VERTICALSCALE * scale);
         rectangle.setStyle("-fx-fill:" + ColorUtils.webCode(color));
         rectangle.getStyleClass().add("vertexText");
-
-        clip = new Rectangle(width * HORIZONTALSCALE * scale, height
-                * VERTICALSCALE * scale);
-        text.setClip(clip);
 
         setLayoutX(topLeftPoint.getX() * HORIZONTALSCALE * scale);
         setLayoutY(topLeftPoint.getY() * VERTICALSCALE * scale);
@@ -123,16 +129,17 @@ public class VertexView extends Group {
         double height = rectangle.getHeight();
 
         double fontWidth = text.getLayoutBounds().getWidth();
-
         text.setFont(Font.font(FONTNAME, (HORIZONTALSCALE) * width / fontWidth));
+
+        text.setLayoutX(width / 2 - text.getLayoutBounds().getWidth() / 2);
+        text.setLayoutY(height / 2);
+
+        text.setVisible(HORIZONTALSCALE * width / fontWidth >= MINTEXTSIZE);
 
         clip.setWidth(width);
         clip.setHeight(height);
         clip.setLayoutX(0);
         clip.setLayoutY(-height / 2);
-
-        text.setLayoutX(width / 2 - text.getLayoutBounds().getWidth() / 2);
-        text.setLayoutY(height / 2);
     }
 
     /**

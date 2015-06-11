@@ -1,0 +1,23 @@
+/* Stylesheet for the Toolbar */
+
+* {
+   -fx-defaultcolor: rgb(100.0,150.0,255.0);
+}
+
+.plusButton{
+    -fx-background-color: -fx-defaultcolor;
+    -fx-text-fill: white;
+ }
+
+.minusButton{
+   -fx-background-color: -fx-defaultcolor;
+       -fx-text-fill: white;
+}
+
+.slider{
+    -fx-background: -fx-defaultcolor;
+}
+
+.toolbar{
+    -fx-background: rgb(255.0,255.0,255.0);
+}

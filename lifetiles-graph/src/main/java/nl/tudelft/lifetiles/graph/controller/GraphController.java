@@ -3,7 +3,6 @@ package nl.tudelft.lifetiles.graph.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +12,7 @@ import java.util.Set;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Rectangle;
 import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
 import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationMapper;
@@ -47,10 +47,17 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 public class GraphController extends AbstractController {
 
     /**
-     * The wrapper element.
+     * The pane that will be used to draw the scrollpane and toolbar on the
+     * screen.
      */
     @FXML
-    private ScrollPane wrapper;
+    private BorderPane wrapper;
+
+    /**
+     * The scrollPane element.
+     */
+    @FXML
+    private ScrollPane scrollPane;
 
     /**
      * The model of the graph.
@@ -100,25 +107,22 @@ public class GraphController extends AbstractController {
     /**
      * The current zoom level.
      */
-    // Suppressed bcause zoomLevel is called within a lambda and PMD does not
-    // understand this.
-    @SuppressWarnings("PMD.SingularField")
     private int zoomLevel;
 
     /**
      * The factor that each zoom in step that updates the current scale.
      */
-    private static final double ZOOMINFACTOR = 2;
+    private static final double ZOOM_IN_FACTOR = 2;
 
     /**
      * The factor that each zoom out step that updates the current scale.
      */
-    private static final double ZOOMOUTFACTOR = 0.5;
+    private static final double ZOOM_OUT_FACTOR = 0.5;
 
     /**
      * Maximal zoomed in level.
      */
-    private static final int MAXZOOM = 50;
+    private static final int MAXZOOM = 10;
 
     /**
      * {@inheritDoc}
@@ -127,15 +131,48 @@ public class GraphController extends AbstractController {
     public final void initialize(final URL location,
             final ResourceBundle resources) {
 
-        NotificationFactory notFact = new NotificationFactory();
+        initListeners();
+        initZoomToolBar();
+
         repaintNow = false;
 
+        scrollPane = new ScrollPane();
+
         // Temporary until there is a way to start of totally out zoomed
-        zoomLevel = MAXZOOM / 2;
+        zoomLevel = 5;
+
+    }
+
+    /**
+     * Initialize the zoom toolbar.
+     */
+    private void initZoomToolBar() {
+        Zoombar toolbar = new Zoombar(MAXZOOM);
+        wrapper.setRight(toolbar.getToolBar());
+
+        toolbar.getZoomlevel().addListener((observeVal, oldVal, newVal) -> {
+            int diffLevel = oldVal.intValue() - newVal.intValue();
+            zoomLevel = Math.abs(newVal.intValue());
+            if (diffLevel < 0) {
+                zoomGraph(Math.pow(ZOOM_OUT_FACTOR, diffLevel * -1));
+            } else if (diffLevel > 0) {
+                zoomGraph(Math.pow(ZOOM_IN_FACTOR, diffLevel));
+            }
+        });
+
+    }
+
+    /**
+     * Initialize the listeners.
+     */
+    private void initListeners() {
+
+        NotificationFactory notFact = new NotificationFactory();
+
         listen(Message.OPENED, (controller, subject, args) -> {
 
             assert controller instanceof MenuController;
-            if (!subject.equals("graph")) {
+            if (!"graph".equals(subject)) {
                 return;
             }
             assert args.length == 2;
@@ -148,7 +185,6 @@ public class GraphController extends AbstractController {
                         .getNotification(exception));
             }
         });
-        zoomLevel = MAXZOOM / 2;
 
         listen(Message.FILTERED, (controller, subject, args) -> {
             assert args.length == 1;
@@ -192,20 +228,6 @@ public class GraphController extends AbstractController {
                         }
                     }
                 });
-
-        listen(Message.ZOOM, (controller, subject, args) -> {
-            assert args.length == 1;
-            assert args[0] instanceof Integer;
-
-            if ((Integer) args[0] == -1 && zoomLevel != 0) {
-                zoomLevel -= 1;
-                zoom(ZOOMOUTFACTOR);
-            } else if (zoomLevel != MAXZOOM) {
-                zoomLevel += 1;
-                zoom(ZOOMINFACTOR);
-            }
-
-        });
 
         listen(ANNOTATIONS, (controller, subject, args) -> {
             assert controller instanceof MenuController;
@@ -278,7 +300,7 @@ public class GraphController extends AbstractController {
 
         timer.stopAndLog("Inserting annotations");
         repaintNow = true;
-        repaintPosition(wrapper.hvalueProperty().doubleValue());
+        repaintPosition(scrollPane.hvalueProperty().doubleValue());
     }
 
     /**
@@ -291,12 +313,12 @@ public class GraphController extends AbstractController {
             }
             view = new TileView(this);
 
-            wrapper.hvalueProperty().addListener(
+            scrollPane.hvalueProperty().addListener(
                     (observable, oldValue, newValue) -> {
                         repaintPosition(newValue.doubleValue());
                     });
 
-            repaintPosition(wrapper.hvalueProperty().doubleValue());
+            repaintPosition(scrollPane.hvalueProperty().doubleValue());
         }
     }
 
@@ -310,11 +332,10 @@ public class GraphController extends AbstractController {
      *         one is the end bucket
      */
     private int[] getStartandEndBucket(final double position) {
-        List<Integer> bucketLocations = new ArrayList<Integer>();
 
         double scaledVertex = scale * VertexView.HORIZONTALSCALE;
         double graphWidth = getMaxUnifiedEnd(graph) * scaledVertex;
-        double screenWidth = wrapper.getViewportBounds().getWidth();
+        double screenWidth = scrollPane.getViewportBounds().getWidth();
         double scaledScreenWidth = 2d * screenWidth * scale;
 
         double relativePosition = (position * screenWidth) / 2d + position
@@ -322,9 +343,6 @@ public class GraphController extends AbstractController {
 
         double start = (relativePosition - scaledScreenWidth) / scaledVertex;
         double end = (relativePosition + scaledScreenWidth) / scaledVertex;
-
-        bucketLocations.add(getStartBucketPosition(start));
-        bucketLocations.add(getEndBucketPosition(end) + 1);
 
         int[] buckets = new int[] {
                 getStartBucketPosition(start), getEndBucketPosition(end) + 1
@@ -353,7 +371,8 @@ public class GraphController extends AbstractController {
                     new Rectangle(getMaxUnifiedEnd(graph) * scale
                             * VertexView.HORIZONTALSCALE, 0));
 
-            wrapper.setContent(graphDrawing);
+            scrollPane.setContent(graphDrawing);
+            wrapper.setCenter(scrollPane);
 
             currEndPosition = endBucket;
             currStartPosition = startBucket;
@@ -369,7 +388,7 @@ public class GraphController extends AbstractController {
      *            factor bigger than 1 makes the graph bigger
      *            between 0 and 1 makes the graph smaller
      */
-    private void zoom(final double zoomFactor) {
+    private void zoomGraph(final double zoomFactor) {
         scale *= zoomFactor;
         repaintNow = true;
         repaint();
