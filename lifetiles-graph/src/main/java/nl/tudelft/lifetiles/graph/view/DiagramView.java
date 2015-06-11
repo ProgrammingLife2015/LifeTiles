@@ -1,66 +1,47 @@
 package nl.tudelft.lifetiles.graph.view;
 
-import javafx.application.Application;
-
-import java.io.File;
-import java.util.Iterator;
 import java.util.Map;
 
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
-import javafx.stage.Stage;
-import nl.tudelft.lifetiles.graph.controller.GraphController;
-import nl.tudelft.lifetiles.graph.model.BucketCache;
-import nl.tudelft.lifetiles.graph.model.DefaultGraphParser;
-import nl.tudelft.lifetiles.graph.model.FactoryProducer;
-import nl.tudelft.lifetiles.graph.model.Graph;
-import nl.tudelft.lifetiles.graph.model.GraphFactory;
 import nl.tudelft.lifetiles.graph.model.StackedMutationContainer;
-import nl.tudelft.lifetiles.graph.traverser.EmptySegmentTraverser;
-import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
-import nl.tudelft.lifetiles.graph.traverser.ReferencePositionTraverser;
-import nl.tudelft.lifetiles.graph.traverser.UnifiedPositionTraverser;
-import nl.tudelft.lifetiles.sequence.model.Sequence;
-import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
+import javafx.scene.Group;
 
 /**
  * Diagram view which contains a view of the stacked mutation diagram, which is
  * a stacked representation of the percentage of mutations in a bucket or a
  * merged bucket.
- * 
+ *
  * @author Jos
  *
  */
 public class DiagramView {
 
-    
-    static final double SPACING = 2;
-	/**
-	 * Controller which holds the graph.
-	 */
-	private GraphController controller;
-	private Map<Integer, StackedMutationContainer> containers;
-	private int zoomLevel;
-	
-	/**
-	 * Draws the diagram view to the screen.
-	 * 
-	 * @param container
-	 * @param zoomLevel
-	 * @return
-	 */
-	public Group drawDiagram(StackedMutationContainer container, int zoomLevel) {
-		containers = container.mapLevelStackedMutation();
-		Group root = new Group();
-
-		int scale = 4;
-		StackedMutationContainer stack = containers.get(scale);
-		for (int index = 0; index < stack.getStack().size(); index++) {
-			StackView stackView = new StackView(stack.getStack().get(index), zoomLevel, stack.getMaxMutations());
-			stackView.setLayoutX((index * (SPACING * zoomLevel + StackView.HORIZONTAL_SCALE * zoomLevel)));
-			root.getChildren().add(stackView);
-		}
-		return root;
-	}
+    /**
+     * Draws the diagram view to the screen.
+     *
+     * @param container
+     *            The stacked mutation model which contains the data to display.
+     * @param zoomLevel
+     *            The zoom level of the graph controller used to determine the
+     *            stacked mutation container layer to display.
+     * @param width
+     *            The width of the diagram view based on the scale in the graph
+     *            controller.
+     * @return a group containing the stack views to draw.
+     */
+    public Group drawDiagram(final StackedMutationContainer container,
+            final int zoomLevel, final double width) {
+        Map<Integer, StackedMutationContainer> containers = container
+                .mapLevelStackedMutation();
+        Group root = new Group();
+        StackedMutationContainer stack = containers.get(Math.max(1,
+                Math.min(zoomLevel, container.getLevel() - 1)));
+        int stacks = stack.getStack().size();
+        for (int index = 0; index < stacks; index++) {
+            StackView stackView = new StackView(stack.getStack().get(index),
+                    (width / stacks), stack.getMaxMutations());
+            stackView.setLayoutX(index * (width / stacks));
+            root.getChildren().add(stackView);
+        }
+        return root;
+    }
 }
