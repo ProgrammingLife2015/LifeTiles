@@ -130,14 +130,11 @@ public class VertexView extends Group {
 
         double fontWidth = text.getLayoutBounds().getWidth();
         text.setFont(Font.font(FONTNAME, (HORIZONTALSCALE) * width / fontWidth));
+
         text.setLayoutX(width / 2 - text.getLayoutBounds().getWidth() / 2);
         text.setLayoutY(height / 2);
 
-        if ((HORIZONTALSCALE * width / fontWidth) < MINTEXTSIZE) {
-            text.setVisible(false);
-        } else {
-            text.setVisible(true);
-        }
+        text.setVisible(HORIZONTALSCALE * width / fontWidth >= MINTEXTSIZE);
 
         clip.setWidth(width);
         clip.setHeight(height);

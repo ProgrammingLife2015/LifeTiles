@@ -112,12 +112,12 @@ public class GraphController extends AbstractController {
     /**
      * The factor that each zoom in step that updates the current scale.
      */
-    private static final double ZOOMINFACTOR = 2;
+    private static final double ZOOM_IN_FACTOR = 2;
 
     /**
      * The factor that each zoom out step that updates the current scale.
      */
-    private static final double ZOOMOUTFACTOR = 0.5;
+    private static final double ZOOM_OUT_FACTOR = 0.5;
 
     /**
      * Maximal zoomed in level.
@@ -147,19 +147,16 @@ public class GraphController extends AbstractController {
      * Initialize the zoom toolbar.
      */
     private void initZoomToolBar() {
-        ZoomToolbar toolbar = new ZoomToolbar(MAXZOOM);
+        Zoombar toolbar = new Zoombar(MAXZOOM);
         wrapper.setRight(toolbar.getToolBar());
 
         toolbar.getZoomlevel().addListener((observeVal, oldVal, newVal) -> {
-
             int diffLevel = oldVal.intValue() - newVal.intValue();
             zoomLevel = Math.abs(newVal.intValue());
             if (diffLevel < 0) {
-                zoom(Math.pow(ZOOMOUTFACTOR, diffLevel * -1));
-
+                zoomGraph(Math.pow(ZOOM_OUT_FACTOR, diffLevel * -1));
             } else if (diffLevel > 0) {
-                zoom(Math.pow(ZOOMINFACTOR, diffLevel));
-
+                zoomGraph(Math.pow(ZOOM_IN_FACTOR, diffLevel));
             }
         });
 
@@ -391,7 +388,7 @@ public class GraphController extends AbstractController {
      *            factor bigger than 1 makes the graph bigger
      *            between 0 and 1 makes the graph smaller
      */
-    private void zoom(final double zoomFactor) {
+    private void zoomGraph(final double zoomFactor) {
         scale *= zoomFactor;
         repaintNow = true;
         repaint();
