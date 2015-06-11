@@ -244,6 +244,7 @@ public final class SequenceController extends AbstractController {
                 sequenceEntry = SequenceEntry
                         .fromSequence(sequence, true, true);
                 reference = identifier;
+                shout(SequenceController.REFERENCE_SET, "", sequence);
             } else {
                 sequenceEntry = SequenceEntry.fromSequence(sequence);
             }
