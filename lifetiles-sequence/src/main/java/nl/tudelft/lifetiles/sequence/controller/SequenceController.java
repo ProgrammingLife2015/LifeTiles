@@ -144,7 +144,7 @@ public final class SequenceController extends AbstractController {
                     SequenceMetaParser parser = new SequenceMetaParser();
                     try {
                         parser.parse((File) args[0]);
-                        addMetaData(parser);
+                        addMetaData(parser.getColumns(), parser.getData());
                     } catch (Exception exception) {
                         Logging.exception(exception);
                         AbstractNotification notification = new NotificationFactory()
@@ -157,14 +157,14 @@ public final class SequenceController extends AbstractController {
     /**
      * Add the meta data to the appropriate sequence entries.
      *
-     * @param parser
-     *            the parser to retrieve the data from
+     * @param columns
+     *            The column names
+     * @param data
+     *            The actual data
      */
-    private void addMetaData(final SequenceMetaParser parser) {
-        assert parser.isParsed();
-
-        for (Entry<String, Map<String, String>> sequenceMeta : parser.getData()
-                .entrySet()) {
+    private void addMetaData(final List<String> columns,
+            final Map<String, Map<String, String>> data) {
+        for (Entry<String, Map<String, String>> sequenceMeta : data.entrySet()) {
             String identifier = sequenceMeta.getKey();
             if (sequenceEntries.containsKey(identifier)) {
                 SequenceEntry sequenceEntry = sequenceEntries.get(identifier);
@@ -172,7 +172,7 @@ public final class SequenceController extends AbstractController {
             }
         }
 
-        addMetaColumns(parser.getColumns());
+        addMetaColumns(columns);
     }
 
     /**
