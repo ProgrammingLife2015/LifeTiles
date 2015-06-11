@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.tree.view;
 
 import javafx.geometry.Point2D;
+import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.FillRule;
@@ -8,7 +9,6 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Shape;
-import javafx.scene.text.Text;
 import nl.tudelft.lifetiles.sequence.SequenceColor;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
@@ -52,27 +52,19 @@ public class SunburstRingSegment extends AbstractSunburstNode {
             final double scale) {
         // set the value, and create the text and semi-circle
         setValue(value);
-        setName(new Text(getValue().getName()));
+        String name = getValue().getName();
+        String tooltip;
+        if (name == null) {
+            tooltip = "Distance: " + getValue().getDistance();
+        } else {
+            tooltip = name + "\nDistance: " + getValue().getDistance();
+        }
+        setName(new Tooltip(tooltip));
         setDisplay(createRing(layer, degreeStart, degreeEnd
                    , center, scale));
 
-        // calculate the positon of the text
-        double radius = scale * (CENTER_RADIUS + (layer * RING_WIDTH)
-                      + (RING_WIDTH / 2));
-
-        double degreeCenter = degreeStart
-                + AbstractSunburstNode.calculateAngle(degreeStart, degreeEnd) / 2;
-        //convert to radians
-        double angle = Math.toRadians(degreeCenter);
-
-        double pointRingCenterX = center.getX() + radius * Math.sin(angle);
-        double pointRingCenterY = center.getY() - radius * Math.cos(angle);
-
-        // move the text into position
-        getName().relocate(pointRingCenterX, pointRingCenterY);
-
         // add the text and semicircle to the group
-        getChildren().addAll(getDisplay(), getName());
+        getChildren().add(getDisplay());
     }
 
     /**

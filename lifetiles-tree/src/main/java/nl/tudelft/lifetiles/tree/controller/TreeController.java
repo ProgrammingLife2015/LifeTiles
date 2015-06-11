@@ -214,9 +214,9 @@ public class TreeController extends AbstractController {
     private PhylogeneticTreeItem subTree(final PhylogeneticTreeItem node) {
         // copy the node
         PhylogeneticTreeItem result = new PhylogeneticTreeItem();
+        result.setDistance(node.getDistance());
         if (visibleSequences.contains(node.getSequence())) {
             result.setName(node.getName());
-            result.setDistance(node.getDistance());
         } else if (node.getChildren().isEmpty()) {
             return null;
         }
