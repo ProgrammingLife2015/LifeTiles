@@ -20,7 +20,6 @@
 		<children>
 			<fx:include fx:id="menuContent" source="MenuView.fxml" />
 			<fx:include fx:id="windowControlContent" source="WindowControlView.fxml" />
-			<fx:include fx:id="toolbar" source="ToolBarView.fxml" />
 		</children>
 	</AnchorPane>
 

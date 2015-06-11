@@ -107,8 +107,11 @@ public class TileViewTest {
 
     }
 
+    private Rectangle rec;
+    private VertexView vView1;
+
     @Test
-    public void drawAnnotationTest() throws IOException {
+    public void drawAnnotationTest() throws IOException, InterruptedException {
         GraphFactory<SequenceSegment> gf = FactoryProducer
                 .getFactory("JGraphT");
 
@@ -145,17 +148,16 @@ public class TileViewTest {
             Group result = tileview.drawGraph(buckets.getSegments(0, 1), graph,
                     annotations, 1);
 
-            Rectangle rec = (Rectangle) ((Group) result
-                    .getChildrenUnmodifiable().get(2))
+            rec = (Rectangle) ((Group) result.getChildrenUnmodifiable().get(2))
                     .getChildrenUnmodifiable().get(0);
 
-            VertexView vView1 = (VertexView) ((Group) result
-                    .getChildrenUnmodifiable().get(0))
-                    .getChildrenUnmodifiable().get(0);
+            vView1 = (VertexView) ((Group) result.getChildrenUnmodifiable()
+                    .get(0)).getChildrenUnmodifiable().get(0);
 
-            assertEquals(rec.getHeight(), vView1.getHeight(), 1e-10);
         });
 
+        Thread.sleep(1000);
+        assertEquals(rec.getHeight(), vView1.getHeight(), 1e-10);
     }
 
     @Test
@@ -166,9 +168,9 @@ public class TileViewTest {
                 1);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
-                MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                true, true, true, true, true, true, true, true, true, true,
-                null));
+                        MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
+                        true, true, true, true, true, true, true, true, true, true,
+                        null));
         Mockito.verify(controller).clicked(Mockito.any());
     }
 
@@ -180,9 +182,9 @@ public class TileViewTest {
                 1);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
-                MouseEvent.MOUSE_ENTERED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                true, true, true, true, true, true, true, true, true, true,
-                null));
+                        MouseEvent.MOUSE_ENTERED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
+                        true, true, true, true, true, true, true, true, true, true,
+                        null));
         Mockito.verify(controller).hovered(Mockito.any(), Mockito.eq(true));
     }
 
@@ -194,9 +196,9 @@ public class TileViewTest {
                 1);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
-                MouseEvent.MOUSE_EXITED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                true, true, true, true, true, true, true, true, true, true,
-                null));
+                        MouseEvent.MOUSE_EXITED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
+                        true, true, true, true, true, true, true, true, true, true,
+                        null));
         Mockito.verify(controller).hovered(Mockito.any(), Mockito.eq(false));
     }
 

@@ -34,7 +34,7 @@ public class GraphContainer {
     /**
      * The Current graph that this model is holding.
      */
-    private Graph<SequenceSegment> graph;
+    private final Graph<SequenceSegment> graph;
 
     /**
      * The Current graph that this model is holding in bucket cache form.
