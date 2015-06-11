@@ -41,6 +41,7 @@ public class BucketCacheTest {
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
         BucketCache bc = new BucketCache(1, gr);
+        assertEquals(1, bc.getNumberBuckets());
         assertEquals(2, bc.getBuckets().get(0).size());
     }
 
@@ -50,6 +51,7 @@ public class BucketCacheTest {
         gr.addVertex(v2);
         gr.addEdge(v1, v2);
         BucketCache bc = new BucketCache(2, gr);
+        assertEquals(2, bc.getNumberBuckets());
         assertEquals(1, bc.getBuckets().get(0).size());
         assertEquals(1, bc.getBuckets().get(1).size());
     }
