@@ -39,7 +39,7 @@ public class DiagramView {
         for (int index = 0; index < stacks; index++) {
             StackView stackView = new StackView(stack.getStack().get(index),
                     (width / stacks), stack.getMaxMutations());
-            stackView.setLayoutX(index * (width / stacks));
+            stackView.setLayoutX(index * width / stacks);
             root.getChildren().add(stackView);
         }
         return root;

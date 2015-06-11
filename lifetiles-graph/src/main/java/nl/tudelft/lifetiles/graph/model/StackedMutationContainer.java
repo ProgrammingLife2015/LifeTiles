@@ -88,14 +88,13 @@ public class StackedMutationContainer {
     private void fillStackedMutationContainer(final int level,
             final BucketCache buckets, final Set<Sequence> visibleSequences) {
         this.level = level;
+        stackedMutations = new ArrayList<>();
         if (this.level <= 1) {
             child = null;
-            stackedMutations = new ArrayList<List<Long>>();
             insertBuckets(buckets, visibleSequences);
         } else {
             child = new StackedMutationContainer(level - 1, buckets,
                     visibleSequences);
-            stackedMutations = new ArrayList<List<Long>>();
             insertStackedMutationContainers(child);
         }
     }
@@ -127,11 +126,10 @@ public class StackedMutationContainer {
      */
     private List<Long> insertStackedContainer(final List<Long> left,
             final List<Long> right) {
-        List<Long> stack = new ArrayList<Long>();
-        stack.add(left.get(0) + right.get(0));
-        stack.add(left.get(1) + right.get(1));
-        stack.add(left.get(2) + right.get(2));
-        stack.add(left.get(3) + right.get(3));
+        List<Long> stack = new ArrayList<>();
+        for(int index = 0; index < left.size(); index++) {
+            stack.add(left.get(index) + right.get(index));
+        }
         return stack;
     }
 
@@ -172,7 +170,7 @@ public class StackedMutationContainer {
      */
     private List<Long> insertBucket(final Set<SequenceSegment> bucket,
             Set<Sequence> visibleSequences) {
-        List<Long> list = new ArrayList<Long>(4);
+        List<Long> list = new ArrayList<>(4);
         list.add((long) 0);
         list.add((long) 0);
         list.add((long) 0);
