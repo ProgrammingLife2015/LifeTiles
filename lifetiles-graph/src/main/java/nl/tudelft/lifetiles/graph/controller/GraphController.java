@@ -126,6 +126,11 @@ public class GraphController extends AbstractController {
     private Sequence reference;
 
     /**
+     * Visible sequences in the graph.
+     */
+    private Set<Sequence> visibleSequences;
+
+    /**
      * The factor that each zoom in step that updates the current scale.
      */
     private static final double ZOOMINFACTOR = 2;
@@ -180,7 +185,10 @@ public class GraphController extends AbstractController {
             assert args.length == 1;
             assert (args[0] instanceof Set<?>);
 
-            model.setVisible((Set<Sequence>) args[0]);
+            visibleSequences = (Set<Sequence>) args[0];
+            model.setVisible(visibleSequences);
+            diagram = new StackedMutationContainer(model
+                    .getBucketCache(), visibleSequences);
             repaintNow = true;
             repaint();
         });
@@ -191,8 +199,9 @@ public class GraphController extends AbstractController {
                     assert args[0] instanceof Sequence;
                     reference = (Sequence) args[0];                
                     model = new GraphContainer(graph, reference);
+                    model.setVisible(visibleSequences);
                     diagram = new StackedMutationContainer(model
-                            .getBucketCache());
+                            .getBucketCache(), visibleSequences);
                     repaintNow = true;
                     repaint();
                 });
@@ -284,6 +293,9 @@ public class GraphController extends AbstractController {
         graph = parser.parseGraph(vertexfile, edgefile, factory);
         annotations = new HashMap<>();
 
+        model = new GraphContainer(graph, reference);
+        diagram = new StackedMutationContainer(model.getBucketCache(), visibleSequences);
+
         shout(Message.LOADED, "sequences", parser.getSequences());
         repaint();
 
@@ -316,7 +328,7 @@ public class GraphController extends AbstractController {
                 model = new GraphContainer(graph, reference);
             }
             if (diagram == null) {
-                diagram = new StackedMutationContainer(model.getBucketCache());
+                diagram = new StackedMutationContainer(model.getBucketCache(), visibleSequences);
             }
             view = new TileView(this);
             diagramView = new DiagramView();

@@ -2,10 +2,12 @@ package nl.tudelft.lifetiles.graph.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
@@ -49,9 +51,10 @@ public class StackedMutationContainer {
      *            BucketCache to be used to generate the stacked mutation
      *            container.
      */
-    public StackedMutationContainer(final BucketCache buckets) {
+    public StackedMutationContainer(final BucketCache buckets,
+            final Set<Sequence> visibleSequences) {
         this.level = (int) (Math.log(buckets.getNumberBuckets()) / Math.log(2) + 1);
-        fillStackedMutationContainer(this.level, buckets);
+        fillStackedMutationContainer(this.level, buckets, visibleSequences);
     }
 
     /**
@@ -64,9 +67,10 @@ public class StackedMutationContainer {
      * @param buckets
      *            The bucketCache to insert into this stackedMutationContainer.
      */
-    private StackedMutationContainer(final int level, final BucketCache buckets) {
+    private StackedMutationContainer(final int level,
+            final BucketCache buckets, final Set<Sequence> visibleSequences) {
         this.level = level;
-        fillStackedMutationContainer(this.level, buckets);
+        fillStackedMutationContainer(this.level, buckets, visibleSequences);
     }
 
     /**
@@ -78,16 +82,19 @@ public class StackedMutationContainer {
      * @param buckets
      *            BucketCache to be inserted into this stacked mutation
      *            container.
+     * @param visibleSequences
+     *            The visible sequences in the graph.
      */
     private void fillStackedMutationContainer(final int level,
-            final BucketCache buckets) {
+            final BucketCache buckets, final Set<Sequence> visibleSequences) {
         this.level = level;
         if (this.level <= 1) {
             child = null;
             stackedMutations = new ArrayList<List<Long>>();
-            insertBuckets(buckets);
+            insertBuckets(buckets, visibleSequences);
         } else {
-            child = new StackedMutationContainer(level - 1, buckets);
+            child = new StackedMutationContainer(level - 1, buckets,
+                    visibleSequences);
             stackedMutations = new ArrayList<List<Long>>();
             insertStackedMutationContainers(child);
         }
@@ -143,10 +150,13 @@ public class StackedMutationContainer {
      * @param buckets
      *            BucketCache which needs to be added to the stacked mutation
      *            container.
+     * @param visibleSequences
+     *            The visible sequences in the graph.
      */
-    private void insertBuckets(final BucketCache buckets) {
+    private void insertBuckets(final BucketCache buckets,
+            Set<Sequence> visibleSequences) {
         for (Set<SequenceSegment> bucket : buckets.getBuckets()) {
-            stackedMutations.add(insertBucket(bucket));
+            stackedMutations.add(insertBucket(bucket, visibleSequences));
         }
     }
 
@@ -156,10 +166,12 @@ public class StackedMutationContainer {
      * @param bucket
      *            Bucket from bucketCache which needs to be added to the stacked
      *            mutation container.
-     * @return
-     *         Stacked mutation quantity list for this bucket.
+     * @param visibleSequences
+     *            The visible sequences in the graph.
+     * @return stacked mutation quantity list for this bucket.
      */
-    private List<Long> insertBucket(final Set<SequenceSegment> bucket) {
+    private List<Long> insertBucket(final Set<SequenceSegment> bucket,
+            Set<Sequence> visibleSequences) {
         List<Long> list = new ArrayList<Long>(4);
         list.add((long) 0);
         list.add((long) 0);
@@ -167,8 +179,11 @@ public class StackedMutationContainer {
         list.add((long) 0);
 
         for (SequenceSegment segment : bucket) {
-            long size = segment.getContent().getLength()
-                    * segment.getSources().size();
+            Set<Sequence> sources = new HashSet<>(segment.getSources());
+            if (visibleSequences != null) {
+                sources.retainAll(visibleSequences);
+            }
+            long size = segment.getContent().getLength() * sources.size();
             if (segment.getMutation() != null) {
                 switch (segment.getMutation()) {
                 case INSERTION:
