@@ -5,6 +5,7 @@ import java.util.TreeSet;
 
 import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.core.util.Settings;
+import nl.tudelft.lifetiles.core.util.Timer;
 import nl.tudelft.lifetiles.graph.traverser.EmptySegmentTraverser;
 import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
 import nl.tudelft.lifetiles.graph.traverser.ReferencePositionTraverser;
@@ -113,7 +114,7 @@ public class GraphContainer {
      *            the sequences to display
      */
     public final void setVisible(final Set<Sequence> visibleSequences) {
-
+        Timer timer = Timer.getAndStart();
         // Find out which vertices are visible now
         Set<SequenceSegment> vertices = new TreeSet<SequenceSegment>();
         for (Sequence seq : visibleSequences) {
@@ -124,7 +125,7 @@ public class GraphContainer {
 
         visibles = vertices;
         this.visibleSequences = visibleSequences;
-
+        timer.stopAndLog("Creating visible graph");
     }
 
     /**
