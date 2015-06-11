@@ -32,7 +32,6 @@ public class SunburstCenter extends AbstractSunburstNode {
         setValue(value);
         setDisplay(new Circle(scale * CENTER_RADIUS,  createColor()));
         String name = getValue().getName();
-        String tooltip;
         if (name != null) {
             setName(new Tooltip(name));
         }

@@ -69,7 +69,7 @@ public class TreeController extends AbstractController {
         // load the tree when the files are opened
         listen(Message.OPENED, (controller, subject, args) -> {
             assert controller instanceof MenuController;
-            if (!subject.equals("tree")) {
+            if (!"tree".equals(subject)) {
                 return;
             }
             assert args.length == 1;
@@ -82,7 +82,7 @@ public class TreeController extends AbstractController {
         });
 
         listen(Message.LOADED, (controller, subject, args) -> {
-            if (!subject.equals("sequences")) {
+            if (!"sequences".equals(subject)) {
                 return;
             }
             assert (args[0] instanceof Map<?, ?>);
