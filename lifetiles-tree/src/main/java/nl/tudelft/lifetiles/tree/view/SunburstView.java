@@ -122,8 +122,6 @@ public class SunburstView extends Control {
         // add the ring units
         double totalDescendants = currentItem.numberDescendants();
         double degreeStart = 0d;
-        double fractionSize = 1d / currentItem.getChildren().size();
-        double fraction = fractionSize;
         for (PhylogeneticTreeItem child : currentItem.getChildren()) {
             double sectorSize = (child.numberDescendants() + 1)
                     / totalDescendants;
@@ -131,9 +129,8 @@ public class SunburstView extends Control {
             double degreeEnd = degreeStart
                     + (AbstractSunburstNode.CIRCLEDEGREES * sectorSize);
 
-            drawRingRecursive(child, 0, degreeStart, degreeEnd, null, fraction);
+            drawRingRecursive(child, 0, degreeStart, degreeEnd);
             degreeStart = degreeEnd;
-            fraction += fractionSize;
         }
     }
 
@@ -151,11 +148,10 @@ public class SunburstView extends Control {
      *            the end point in degrees
      */
     private void drawRingRecursive(final PhylogeneticTreeItem node,
-            final int layer, final double degreeStart, final double degreeEnd,
-            final Color parentColor, double fraction) {
+            final int layer, final double degreeStart, final double degreeEnd) {
         // generate ring
         SunburstRingSegment ringUnit = new SunburstRingSegment(node, layer,
-                degreeStart, degreeEnd, center, scale, parentColor, fraction);
+                degreeStart, degreeEnd, center, scale);
         ringUnit.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 selectNode(node);
@@ -170,16 +166,13 @@ public class SunburstView extends Control {
                 degreeEnd);
 
         // generate rings for child nodes
-        double newFractionSize = fraction / node.getChildren().size();
-        double newFraction = fraction;
         for (PhylogeneticTreeItem child : node.getChildren()) {
             double sectorSize = (child.numberDescendants() + 1)
                     / totalDescendants;
             double end = start + (sectorAngle * sectorSize);
 
-            drawRingRecursive(child, layer + 1, start, end, ringUnit.getColor(), newFraction);
+            drawRingRecursive(child, layer + 1, start, end);
             start = end;
-            newFraction += newFractionSize;
         }
 
     }
