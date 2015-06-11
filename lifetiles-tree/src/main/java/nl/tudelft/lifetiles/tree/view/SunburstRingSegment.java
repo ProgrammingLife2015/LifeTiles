@@ -53,11 +53,12 @@ public class SunburstRingSegment extends AbstractSunburstNode {
         // set the value, and create the text and semi-circle
         setValue(value);
         String name = getValue().getName();
+        double distance = getValue().getDistance();
         String tooltip;
         if (name == null) {
-            tooltip = "Distance: " + getValue().getDistance();
+            tooltip = "Distance: " + distance;
         } else {
-            tooltip = name + "\nDistance: " + getValue().getDistance();
+            tooltip = name + "\nDistance: " + distance;
         }
         setName(new Tooltip(tooltip));
         setDisplay(createRing(layer, degreeStart, degreeEnd

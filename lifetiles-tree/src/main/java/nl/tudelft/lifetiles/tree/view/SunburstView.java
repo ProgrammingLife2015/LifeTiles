@@ -149,7 +149,7 @@ public class SunburstView extends Control {
     private void drawRingRecursive(final PhylogeneticTreeItem node,
             final int layer, final double degreeStart, final double degreeEnd) {
         // generate ring
-       SunburstRingSegment ringUnit = new SunburstRingSegment(node, layer,
+        SunburstRingSegment ringUnit = new SunburstRingSegment(node, layer,
                 degreeStart, degreeEnd, center, scale);
         ringUnit.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
