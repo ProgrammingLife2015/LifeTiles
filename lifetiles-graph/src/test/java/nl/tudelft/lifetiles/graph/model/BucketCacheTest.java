@@ -3,10 +3,12 @@ package nl.tudelft.lifetiles.graph.model;
 import static org.junit.Assert.assertEquals;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
+import nl.tudelft.lifetiles.sequence.model.DefaultSequence;
 import nl.tudelft.lifetiles.sequence.model.SegmentEmpty;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
@@ -24,12 +26,14 @@ public class BucketCacheTest {
         gf = FactoryProducer.getFactory("JGraphT");
         gr = gf.getGraph();
 
-        v1 = new SequenceSegment(new HashSet<Sequence>(), 1, 11,
+        Set<Sequence> s  = new HashSet<Sequence>();
+        s.add(new DefaultSequence("reference"));
+        v1 = new SequenceSegment(s, 1, 11,
                 new SegmentEmpty(10));
         v1.setUnifiedStart(1);
         v1.setUnifiedEnd(11);
 
-        v2 = new SequenceSegment(new HashSet<Sequence>(), 31, 41,
+        v2 = new SequenceSegment(s, 31, 41,
                 new SegmentEmpty(10));
         v2.setUnifiedStart(31);
         v2.setUnifiedEnd(41);

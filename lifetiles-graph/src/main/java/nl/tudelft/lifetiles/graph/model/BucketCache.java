@@ -90,10 +90,12 @@ public class BucketCache {
     private void cacheVertex(final SequenceSegment vertex) {
         int startBucket = bucketStartPosition(vertex.getUnifiedStart());
         int endBucket = bucketEndPosition(vertex.getUnifiedEnd());
-
         for (SortedSet<SequenceSegment> bucket : buckets.subList(startBucket,
                 endBucket)) {
             bucket.add(vertex);
+        }
+        if (startBucket == endBucket) {
+            buckets.get(startBucket - 1).add(vertex);
         }
     }
 
