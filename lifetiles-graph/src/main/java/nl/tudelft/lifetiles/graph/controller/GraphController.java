@@ -119,7 +119,7 @@ public class GraphController extends AbstractController {
     /**
      * Maximal zoomed in level.
      */
-    private static final int MAXZOOM = 50;
+    private static final int MAXZOOM = 10;
 
     /**
      * {@inheritDoc}
@@ -131,7 +131,7 @@ public class GraphController extends AbstractController {
         NotificationFactory notFact = new NotificationFactory();
         repaintNow = false;
 
-        ZoomToolbar toolbar = new ZoomToolbar();
+        ZoomToolbar toolbar = new ZoomToolbar(MAXZOOM);
 
         wrapper.setRight(toolbar.getToolBar());
 

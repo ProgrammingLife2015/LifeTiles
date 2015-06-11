@@ -31,19 +31,20 @@ public class ZoomToolbar {
     /**
      * The maximal amount of zooming.
      */
-    private final static int MAXZOOM = 10;
+    private final int maxzoom;
 
     /**
      * Create a new Toolbar.
      */
-    public ZoomToolbar() {
+    public ZoomToolbar(final int zoom) {
+        maxzoom = zoom;
         zoomLevel = new SimpleIntegerProperty();
         zoomLevel.set(5);
         Slider slider = createSlider();
         slider.valueProperty().addListener(
                 (ChangeListener<Number>) (ov, old_val, new_val) -> {
                     if (old_val.intValue() > new_val.intValue()
-                            && new_val.intValue() <= MAXZOOM) {
+                            && new_val.intValue() <= maxzoom) {
                         zoomLevel.set(new_val.intValue());
                     }
                     if (old_val.intValue() < new_val.intValue()) {
@@ -61,7 +62,8 @@ public class ZoomToolbar {
             slider.setValue(slider.getValue() + slider.getMajorTickUnit());
         });
 
-        toolbar = new ToolBar(minus, slider, plus);
+        toolbar = new ToolBar();
+        toolbar.getItems().addAll(minus, slider, plus);
         toolbar.setOrientation(Orientation.VERTICAL);
     }
 
@@ -93,7 +95,7 @@ public class ZoomToolbar {
         slider.setOrientation(Orientation.VERTICAL);
         slider.setMin(0);
         slider.setValue(zoomLevel.intValue());
-        slider.setMax(MAXZOOM);
+        slider.setMax(maxzoom);
         slider.setMajorTickUnit(1);
         slider.setMinorTickCount(0);
         slider.setShowTickMarks(true);
