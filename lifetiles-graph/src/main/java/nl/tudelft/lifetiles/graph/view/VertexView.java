@@ -43,7 +43,7 @@ public class VertexView extends Group {
     /**
      * Vertical scale for each coordinate.
      */
-    private static final double VERTICALSCALE = 40;
+    public static double VERTICALSCALE = 40;
 
     /**
      * The minimal size of the text before it is drawn.
@@ -153,6 +153,7 @@ public class VertexView extends Group {
         clip.setHeight(height);
         clip.setLayoutX(0);
         clip.setLayoutY(-height / 2);
+
     }
 
     /**

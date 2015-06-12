@@ -43,7 +43,9 @@ public class Zoombar {
     public Zoombar(final int currentZoom, final int maxZoom) {
         maxzoom = maxZoom;
         zoomLevel = new SimpleIntegerProperty();
+
         zoomLevel.set(currentZoom);
+
         Slider slider = createSlider();
         slider.getStyleClass().add("slider");
         slider.valueProperty().addListener(
@@ -66,6 +68,14 @@ public class Zoombar {
             slider.setValue(slider.getValue() + slider.getMajorTickUnit());
         });
 
+        zoomLevel.addListener((obserVal, oldVal, newVal) -> {
+            if (oldVal.intValue() > newVal.intValue()) {
+                slider.setValue(slider.getValue() - slider.getMajorTickUnit());
+            } else if (oldVal.intValue() < newVal.intValue()) {
+                slider.setValue(slider.getValue() + slider.getMajorTickUnit());
+            }
+        });
+
         toolbar = new ToolBar();
         toolbar.getStyleClass().add("toolbar");
 
@@ -79,6 +89,20 @@ public class Zoombar {
      */
     public ToolBar getToolBar() {
         return toolbar;
+    }
+
+    public final void incrementZoom() {
+        int zoom = zoomLevel.get();
+        if (zoomLevel.get() > 0) {
+            zoomLevel.set(zoom - 1);
+        }
+    }
+
+    public final void decrementZoom() {
+        int zoom = zoomLevel.get();
+        if (zoom < maxzoom) {
+            zoomLevel.set(zoom + 1);
+        }
     }
 
     /**
@@ -95,8 +119,8 @@ public class Zoombar {
      * @return the new slider
      */
     private Slider createSlider() {
-        final CustomLabelSlider slider = new CustomLabelSlider(
-                value -> Math.abs(value - maxzoom));
+        final CustomLabelSlider slider = new CustomLabelSlider(value -> Math
+                .abs(value - maxzoom));
 
         slider.setOrientation(Orientation.VERTICAL);
         slider.setMin(0);

@@ -181,6 +181,8 @@ public class GraphController extends AbstractController {
      */
     private static final int MAX_ZOOM = 50;
 
+    private Zoombar toolbar;
+
     /**
      * {@inheritDoc}
      */
@@ -191,6 +193,23 @@ public class GraphController extends AbstractController {
 
         repaintNow = false;
         scrollPane = new ScrollPane();
+
+        scrollPane.setOnScroll(event -> {
+            event.consume();
+
+            if (event.getDeltaY() > 0) {
+                toolbar.incrementZoom();
+                System.out.println("Scroll Up");
+            } else {
+                toolbar.decrementZoom();
+                System.out.println("Scroll Down");
+            }
+
+        });
+
+        // Temporary until there is a way to start of totally out zoomed
+        zoomLevel = 5;
+
     }
 
     /**
@@ -198,6 +217,7 @@ public class GraphController extends AbstractController {
      */
     private void initZoomToolBar() {
         Zoombar toolbar = new Zoombar(zoomLevel, MAX_ZOOM);
+
         wrapper.setRight(toolbar.getToolBar());
 
         toolbar.getZoomlevel().addListener((observeVal, oldVal, newVal) -> {
@@ -226,6 +246,7 @@ public class GraphController extends AbstractController {
      */
     @SuppressWarnings("checkstyle:genericwhitespace")
     private void initListeners() {
+
         notifyFactory = new NotificationFactory();
         listen(Message.OPENED, (controller, subject, args) -> {
             assert controller instanceof MenuController;
@@ -242,6 +263,7 @@ public class GraphController extends AbstractController {
             default:
                 return;
             }
+
         });
 
         listen(Message.FILTERED, (controller, subject, args) -> {
@@ -286,8 +308,8 @@ public class GraphController extends AbstractController {
         try {
             loadGraph((File) args[0], (File) args[1]);
         } catch (IOException exception) {
-            shout(NotificationController.NOTIFY, "",
-                    notifyFactory.getNotification(exception));
+            shout(NotificationController.NOTIFY, "", notifyFactory
+                    .getNotification(exception));
         }
     }
 
@@ -302,17 +324,17 @@ public class GraphController extends AbstractController {
         assert args[0] instanceof File;
 
         if (graph == null) {
-            shout(NotificationController.NOTIFY, "",
-                    notifyFactory.getNotification(new IllegalStateException(
-                            NOT_LOADED_MSG)));
+            shout(NotificationController.NOTIFY, "", notifyFactory
+                    .getNotification(new IllegalStateException(NOT_LOADED_MSG)));
         } else {
             try {
                 insertKnownMutations((File) args[0]);
             } catch (IOException exception) {
-                shout(NotificationController.NOTIFY, "",
-                        notifyFactory.getNotification(exception));
+                shout(NotificationController.NOTIFY, "", notifyFactory
+                        .getNotification(exception));
             }
         }
+
     }
 
     /**
@@ -329,14 +351,14 @@ public class GraphController extends AbstractController {
             shout(NotificationController.NOTIFY,
                     "",
                     notifyFactory
-                            .getNotification(new IllegalStateException(
-                                    "Graph not loaded while attempting to add annotations.")));
+                    .getNotification(new IllegalStateException(
+                            "Graph not loaded while attempting to add annotations.")));
         } else {
             try {
                 insertAnnotations((File) args[0]);
             } catch (IOException exception) {
-                shout(NotificationController.NOTIFY, "",
-                        notifyFactory.getNotification(exception));
+                shout(NotificationController.NOTIFY, "", notifyFactory
+                        .getNotification(exception));
             }
         }
     }
@@ -452,7 +474,8 @@ public class GraphController extends AbstractController {
                 diagram = new StackedMutationContainer(model.getBucketCache(),
                         visibleSequences);
             }
-            view = new TileView(this);
+
+            view = new TileView(this, 240);
             diagramView = new DiagramView();
 
             scrollPane.hvalueProperty().addListener(
@@ -486,7 +509,9 @@ public class GraphController extends AbstractController {
         double start = (relativePosition - scaledScreenWidth) / scaledVertex;
         double end = (relativePosition + scaledScreenWidth) / scaledVertex;
         int[] buckets = new int[] {
-                getStartBucketPosition(start), getEndBucketPosition(end) + 1
+                getStartBucketPosition(start),
+                Math.min(model.getBucketCache().getNumberBuckets(),
+                        getEndBucketPosition(end) + 1)
         };
 
         return buckets;
@@ -606,9 +631,9 @@ public class GraphController extends AbstractController {
      * @return Group object to be drawn on the screen
      */
     public Group drawGraph(final int startBucket, final int endBucket) {
-        Group test = view.drawGraph(
-                model.getVisibleSegments(startBucket, endBucket), graph,
-                knownMutations, mappedAnnotations, scale);
+
+        Group test = view.drawGraph(model.getVisibleSegments(startBucket,
+                endBucket), graph, knownMutations, mappedAnnotations, scale);
 
         return test;
     }
