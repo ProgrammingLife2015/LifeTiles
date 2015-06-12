@@ -175,7 +175,7 @@ public class GraphController extends AbstractController {
      * Initialize the zoom toolbar.
      */
     private void initZoomToolBar() {
-        Zoombar toolbar = new Zoombar(MAXZOOM);
+        Zoombar toolbar = new Zoombar(MAX_ZOOM);
         wrapper.setRight(toolbar.getToolBar());
 
         toolbar.getZoomlevel().addListener((observeVal, oldVal, newVal) -> {
