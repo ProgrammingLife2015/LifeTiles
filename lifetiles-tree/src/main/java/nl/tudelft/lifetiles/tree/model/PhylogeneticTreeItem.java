@@ -273,7 +273,7 @@ public class PhylogeneticTreeItem {
      * @return true if both are the same, otherwise false
      */
     @Override
-    public boolean equals(Object obj) {
+    public final boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -301,7 +301,7 @@ public class PhylogeneticTreeItem {
             }
         } else if (!(children.size() == other.getChildren().size())) {
             return false;
-        } else if (!children.containsAll(other.getChildren())){
+        } else if (!children.containsAll(other.getChildren())) {
             return false;
         }
         return true;
