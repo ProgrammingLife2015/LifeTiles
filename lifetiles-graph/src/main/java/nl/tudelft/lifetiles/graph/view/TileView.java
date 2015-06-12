@@ -110,6 +110,7 @@ public class TileView {
             final Map<SequenceSegment, List<GeneAnnotation>> mappedAnnotations,
             final double scale) {
         Group root = new Group();
+        VertexView.VERTICALSCALE = 50;
 
         lanes = new ArrayList<Long>();
         this.scale = scale;
