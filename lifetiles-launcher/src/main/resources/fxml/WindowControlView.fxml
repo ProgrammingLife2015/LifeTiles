@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Label?>
+
+<BorderPane id="BorderPane" maxHeight="-Infinity" maxWidth="-Infinity"
+	minHeight="-Infinity" minWidth="-Infinity" prefHeight="29.0"
+	xmlns:fx="http://javafx.com/fxml" AnchorPane.topAnchor="0.0"
+	AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0"
+	fx:controller="nl.tudelft.lifetiles.core.controller.WindowControlController">
+	<top>
+		<AnchorPane prefHeight="29.0">
+			<children>
+				<Button id="window_close" styleClass="control_button"
+					mnemonicParsing="false" AnchorPane.rightAnchor="0.0" fx:id="windowClose"
+					onAction="#closeWindowAction" />
+				<Button id="window_resize" styleClass="control_button"
+					mnemonicParsing="false" AnchorPane.rightAnchor="29.0" fx:id="windowResize"
+					onAction="#resizeWindowAction" />
+				<Button id="window_minimize" styleClass="control_button"
+					mnemonicParsing="false" AnchorPane.rightAnchor="58.0" fx:id="windowMinimize"
+					onAction="#minimizeWindowAction" />
+			</children>
+		</AnchorPane>
+	</top>
+
+	<stylesheets>
+		<URL value="@../styles/WindowControlStyle.css" />
+	</stylesheets>
+</BorderPane>

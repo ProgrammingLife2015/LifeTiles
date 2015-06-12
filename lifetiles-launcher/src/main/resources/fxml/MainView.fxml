@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Label?>
+
+<AnchorPane id="wrapper" prefHeight="720" prefWidth="1280"
+	maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+	minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="nl.tudelft.lifetiles.core.controller.MainController">
+
+	<AnchorPane prefHeight="39.0" id="window_controls"
+		AnchorPane.topAnchor="0.0" AnchorPane.rightAnchor="0.0"
+		AnchorPane.leftAnchor="0.0">
+		<children>
+			<fx:include fx:id="menuContent" source="MenuView.fxml" />
+			<fx:include fx:id="windowControlContent" source="WindowControlView.fxml" />
+		</children>
+	</AnchorPane>
+
+	<SplitPane id="mainSplitPane" fx:id="mainSplitPane"
+		prefHeight="681.0" prefWidth="1280" focusTraversable="true"
+		dividerPositions="0.5" orientation="VERTICAL" AnchorPane.topAnchor="39.0"
+		AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0"
+		AnchorPane.leftAnchor="0.0">
+		<items>
+			<fx:include fx:id="graphContent" source="GraphView.fxml" />
+			<SplitPane id="innerSplitPane" prefWidth="1280"
+				focusTraversable="true" dividerPositions="0.5" orientation="HORIZONTAL">
+				<fx:include fx:id="sequenceContent" source="SequenceView.fxml"
+					GridPane.columnIndex="0" GridPane.rowIndex="1" />
+				<fx:include fx:id="treeContent" source="TreeView.fxml"
+					GridPane.columnIndex="1" GridPane.rowIndex="1" />
+			</SplitPane>
+		</items>
+	</SplitPane>
+
+	<HBox fx:id="splashPane" prefWidth="1280.0" alignment="CENTER"
+		AnchorPane.topAnchor="39.0" AnchorPane.rightAnchor="0.0"
+		AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0">
+		<children>
+			<Label text="Graph not loaded yet. " />
+		</children>
+	</HBox>
+	
+    <fx:include fx:id="notificationContent" source="NotificationView.fxml"
+        AnchorPane.topAnchor="39.0" AnchorPane.rightAnchor="0.0"
+        AnchorPane.leftAnchor="0.0" />
+
+	<stylesheets>
+		<URL value="@../styles/MainStyle.css" />
+	</stylesheets>
+</AnchorPane>
