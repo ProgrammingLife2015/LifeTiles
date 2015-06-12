@@ -3,7 +3,6 @@ package nl.tudelft.lifetiles.tree.controller;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Scanner;
