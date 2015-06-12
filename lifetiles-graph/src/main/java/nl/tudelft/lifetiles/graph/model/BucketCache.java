@@ -56,7 +56,7 @@ public class BucketCache {
     public BucketCache(final int numberBuckets,
             final Graph<SequenceSegment> graph) {
         // Number of buckets is ceiled to a power of 2. Needed for diagram view.
-        this.numberBuckets = (int) Math.pow(2, Math.ceil(Math.log(numberBuckets) / Math.log(2)));
+        this.numberBuckets = (int) Math.round(Math.pow(2, Math.ceil(Math.log(numberBuckets) / Math.log(2))));
         this.graph = graph;
         maxUnifiedEnd = getMaxUnifiedEnd();
         bucketWidth = maxUnifiedEnd / this.numberBuckets;
