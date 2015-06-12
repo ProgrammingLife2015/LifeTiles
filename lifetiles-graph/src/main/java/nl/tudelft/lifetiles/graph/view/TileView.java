@@ -240,9 +240,9 @@ public class TileView {
 
         // Change the VerticalScale for all vertices if one is drawn outside the
         // screen height
-        // if (VertexView.VERTICALSCALE * height * scale > screenHeight) {
-        // VertexView.VERTICALSCALE = screenHeight / (height * scale);
-        // }
+        if (VertexView.VERTICALSCALE * height * scale > screenHeight) {
+            VertexView.VERTICALSCALE = screenHeight / (height * scale);
+        }
 
         VertexView vertex = new VertexView(text, topleft, width, height, scale,
                 color);
