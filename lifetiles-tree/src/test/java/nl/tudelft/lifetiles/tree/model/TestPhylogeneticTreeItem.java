@@ -479,7 +479,18 @@ public class TestPhylogeneticTreeItem {
         
         assertFalse("a node should not be equal to null",node.equals(null));
     }
-    
+    /**
+     * Test for equals.
+     * tests equals with a different type of Object
+     */
+    @Test
+    public void testEqualsObject(){
+     // set up
+        PhylogeneticTreeItem node = new PhylogeneticTreeItem();
+        String test = "(,,(,));\nCeci n'est pas un arbre";
+        
+        assertFalse("a node should not be equal to an Object of a different type",node.equals(test));
+    }
     /**
      * Test for hashCode.
      * tests hashCode with 2 empty nodes
