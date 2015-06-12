@@ -128,7 +128,7 @@ public class GraphController extends AbstractController {
      * The factor that each zoom in step that updates the current scale.
      */
     private static final double ZOOM_IN_FACTOR = 2;
-    
+
     /**
      * Visible sequences in the graph.
      */
@@ -152,7 +152,7 @@ public class GraphController extends AbstractController {
     /**
      * The boundary in zoom level between the TileView and the DiagramView.
      */
-    private static final int SWITCH_ZOOM_LEVEL = 17;
+    private static final int SWITCH_ZOOM_LEVEL = 13;
 
     /**
      * {@inheritDoc}
@@ -261,7 +261,7 @@ public class GraphController extends AbstractController {
                         }
                     }
                 });
-        
+
         listen(ANNOTATIONS,
                 (controller, subject, args) -> {
                     assert controller instanceof MenuController;
@@ -395,14 +395,15 @@ public class GraphController extends AbstractController {
      *            Position in the scrollPane.
      */
     private void repaintPosition(final double position) {
-        if (zoomLevel < SWITCH_ZOOM_LEVEL) {
+        if (zoomLevel > SWITCH_ZOOM_LEVEL) {
             if (currentZoomLevel != zoomLevel || repaintNow) {
                 Group diagramDrawing = new Group();
                 double width = getMaxUnifiedEnd(graph) * scale
                         * VertexView.HORIZONTALSCALE;
+                System.out.println(zoomLevel);
+                int diagramLevel = (zoomLevel - SWITCH_ZOOM_LEVEL) / 2;
                 diagramDrawing.getChildren().add(
-                        diagramView.drawDiagram(diagram, 2 + diagram.getLevel()
-                                - zoomLevel, width));
+                        diagramView.drawDiagram(diagram, diagramLevel, width));
                 diagramDrawing.getChildren().add(new Rectangle(width, 0));
                 scrollPane.setContent(diagramDrawing);
 
