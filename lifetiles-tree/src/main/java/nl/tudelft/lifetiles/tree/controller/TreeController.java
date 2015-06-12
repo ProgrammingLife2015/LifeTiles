@@ -194,5 +194,4 @@ public class TreeController extends AbstractController {
     public final void shoutVisible(final Set<Sequence> visible) {
         shout(Message.FILTERED, "", visible);
     }
-        result.setDistance(node.getDistance());
 }
