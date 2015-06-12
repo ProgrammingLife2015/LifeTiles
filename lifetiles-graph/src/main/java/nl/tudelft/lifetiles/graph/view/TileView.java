@@ -67,18 +67,26 @@ public class TileView {
     private final GraphController controller;
 
     /**
+     * The maximal screen height.
+     */
+    private final double screenHeight;
+
+    /**
      * Create the TileView by initializing the groups where the to be drawn
      * vertices and edges are stored.
      *
      * @param control
      *            The controller for the TileView
+     * @param height
+     *            the maximum allowed height in pixels to draw
      */
-    public TileView(final GraphController control) {
+    public TileView(final GraphController control, final double height) {
         controller = control;
 
         nodemap = new HashMap<SequenceSegment, VertexView>();
         edges = new Group();
         bookmarks = new Group();
+        screenHeight = height;
     }
 
     /**
@@ -229,6 +237,12 @@ public class TileView {
         }
 
         Point2D topleft = new Point2D(start, index);
+
+        // Change the VerticalScale for all vertices if one is drawn outside the
+        // screen height
+        // if (VertexView.VERTICALSCALE * height * scale > screenHeight) {
+        // VertexView.VERTICALSCALE = screenHeight / (height * scale);
+        // }
 
         VertexView vertex = new VertexView(text, topleft, width, height, scale,
                 color);
