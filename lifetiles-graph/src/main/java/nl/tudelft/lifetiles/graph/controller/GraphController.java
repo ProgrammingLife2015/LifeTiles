@@ -152,7 +152,7 @@ public class GraphController extends AbstractController {
     /**
      * The boundary in zoom level between the TileView and the DiagramView.
      */
-    private static final int SWITCH_ZOOM_LEVEL = 13;
+    private static final int SWITCH_ZOOM_LEVEL = 12;
 
     /**
      * {@inheritDoc}
@@ -220,8 +220,8 @@ public class GraphController extends AbstractController {
 
             visibleSequences = (Set<Sequence>) args[0];
             model.setVisible(visibleSequences);
-            diagram = new StackedMutationContainer(model
-                    .getBucketCache(), visibleSequences);
+            diagram = new StackedMutationContainer(model.getBucketCache(),
+                    visibleSequences);
             repaintNow = true;
             repaint();
         });
@@ -313,7 +313,8 @@ public class GraphController extends AbstractController {
         annotations = new HashMap<>();
 
         model = new GraphContainer(graph, reference);
-        diagram = new StackedMutationContainer(model.getBucketCache(), visibleSequences);
+        diagram = new StackedMutationContainer(model.getBucketCache(),
+                visibleSequences);
 
         shout(Message.LOADED, "sequences", parser.getSequences());
         repaint();
@@ -347,7 +348,8 @@ public class GraphController extends AbstractController {
                 model = new GraphContainer(graph, reference);
             }
             if (diagram == null) {
-                diagram = new StackedMutationContainer(model.getBucketCache(), visibleSequences);
+                diagram = new StackedMutationContainer(model.getBucketCache(),
+                        visibleSequences);
             }
             view = new TileView(this);
             diagramView = new DiagramView();
@@ -400,7 +402,6 @@ public class GraphController extends AbstractController {
                 Group diagramDrawing = new Group();
                 double width = getMaxUnifiedEnd(graph) * scale
                         * VertexView.HORIZONTALSCALE;
-                System.out.println(zoomLevel);
                 int diagramLevel = (zoomLevel - SWITCH_ZOOM_LEVEL) / 2;
                 diagramDrawing.getChildren().add(
                         diagramView.drawDiagram(diagram, diagramLevel, width));
@@ -416,10 +417,11 @@ public class GraphController extends AbstractController {
             int startBucket = bucketLocations[0];
             int endBucket = bucketLocations[1];
 
-            if (currEndPosition != endBucket && currStartPosition != startBucket
-                    || repaintNow) {
+            if (currEndPosition != endBucket
+                    && currStartPosition != startBucket || repaintNow) {
                 Group graphDrawing = new Group();
-                graphDrawing.getChildren().add(drawGraph(startBucket, endBucket));
+                graphDrawing.getChildren().add(
+                        drawGraph(startBucket, endBucket));
                 graphDrawing.getChildren().add(
                         new Rectangle(getMaxUnifiedEnd(graph) * scale
                                 * VertexView.HORIZONTALSCALE, 0));
