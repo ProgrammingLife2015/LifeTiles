@@ -449,6 +449,25 @@ public class TestPhylogeneticTreeItem {
         assertFalse("two different nodes should not match",node3.equals(node1));
     }
     
+    @Test
+    public void testEqualsDifferentChildren() {
+        PhylogeneticTreeItem node1 = new PhylogeneticTreeItem();
+        PhylogeneticTreeItem node2 = new PhylogeneticTreeItem();
+        PhylogeneticTreeItem node3 = new PhylogeneticTreeItem();
+        PhylogeneticTreeItem node4 = new PhylogeneticTreeItem();
+        PhylogeneticTreeItem node5 = new PhylogeneticTreeItem();
+        
+        node2.setParent(node1);
+        node4.setName("not the same");
+        node4.setParent(node5);
+        
+        assertFalse("two different nodes should not match",node1.equals(node3));
+        assertFalse("two different nodes should not match",node3.equals(node1));
+        
+        assertFalse("two different nodes should not match",node1.equals(node5));
+        assertFalse("two different nodes should not match",node5.equals(node1));
+    }
+    
     /**
      * Test for equals.
      * tests equals with itself
