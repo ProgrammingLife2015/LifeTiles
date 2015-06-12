@@ -90,7 +90,8 @@ public class Zoombar {
 
     public final void incrementZoom() {
         int zoom = zoomLevel.get();
-        if (zoom < maxzoom) {
+        System.out.println(zoom);
+        if (zoom > 0) {
             zoomLevel.set(zoom + 1);
             slider.setValue(slider.getValue() - slider.getMajorTickUnit());
         }
@@ -98,7 +99,7 @@ public class Zoombar {
 
     public final void decrementZoom() {
         int zoom = zoomLevel.get();
-        if (zoomLevel.get() > 0) {
+        if (zoom < maxzoom) {
             zoomLevel.set(zoom - 1);
             slider.setValue(slider.getValue() + slider.getMajorTickUnit());
         }
