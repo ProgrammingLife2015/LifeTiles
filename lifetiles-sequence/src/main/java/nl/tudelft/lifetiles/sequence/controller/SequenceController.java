@@ -33,7 +33,7 @@ import nl.tudelft.lifetiles.sequence.model.SequenceMetaParser;
  * @author Joren Hammudoglu
  *
  */
-public final class SequenceController extends AbstractController {
+public class SequenceController extends AbstractController {
 
     /**
      * Shout message indicating a sequence has been set as reference.

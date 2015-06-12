@@ -76,14 +76,14 @@ public class Zoombar {
      *
      * @return javafx toolbar that is constructed
      */
-    public final ToolBar getToolBar() {
+    public ToolBar getToolBar() {
         return toolbar;
     }
 
     /**
      * @return the zoomlevel property
      */
-    public final IntegerProperty getZoomlevel() {
+    public IntegerProperty getZoomlevel() {
         return zoomLevel;
     }
 

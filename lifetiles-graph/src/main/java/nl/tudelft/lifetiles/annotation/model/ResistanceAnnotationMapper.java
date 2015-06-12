@@ -47,7 +47,7 @@ public final class ResistanceAnnotationMapper {
         Set<SequenceSegment> segments = selectReference(graph, reference);
         Map<SequenceSegment, List<ResistanceAnnotation>> annotatedSegments = new HashMap<>();
         for (ResistanceAnnotation annotation : annotations) {
-             SequenceSegment segment = annotation.mapOntoSequence(segments,
+            SequenceSegment segment = annotation.mapOntoSequence(segments,
                     reference);
             if (segment != null) {
                 if (!annotatedSegments.containsKey(segment)) {

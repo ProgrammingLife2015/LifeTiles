@@ -270,7 +270,7 @@ public class MenuController extends AbstractController {
     }
 
     @Override
-    public final void initialize(final URL location,
+    public void initialize(final URL location,
             final ResourceBundle resources) {
         addDraggableNode(menuBar);
         nf = new NotificationFactory();

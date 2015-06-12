@@ -114,7 +114,7 @@ public class GraphContainer {
      * @param visibleSequences
      *            the sequences to display
      */
-    public final void setVisible(final Set<Sequence> visibleSequences) {
+    public void setVisible(final Set<Sequence> visibleSequences) {
         Timer timer = Timer.getAndStart();
         // Find out which vertices are visible now
         Set<SequenceSegment> vertices = new TreeSet<SequenceSegment>();
@@ -144,7 +144,7 @@ public class GraphContainer {
      *            the last bucket position
      * @return graph
      */
-    public final Set<SequenceSegment> getVisibleSegments(final int start,
+    public Set<SequenceSegment> getVisibleSegments(final int start,
             final int end) {
 
         Set<SequenceSegment> copy = new TreeSet<SequenceSegment>();
@@ -174,7 +174,7 @@ public class GraphContainer {
      *
      * @return the bucketCache of the graph.
      */
-    public final BucketCache getBucketCache() {
+    public BucketCache getBucketCache() {
         return segmentBuckets;
     }
 

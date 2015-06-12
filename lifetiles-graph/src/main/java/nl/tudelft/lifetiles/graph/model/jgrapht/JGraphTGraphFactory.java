@@ -38,7 +38,7 @@ public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
      * @return a new empty Graph.
      */
     @Override
-    public final Graph<V> getGraph() {
+    public Graph<V> getGraph() {
         return new JGraphTGraphAdapter<V>(edgeFact);
     }
 
@@ -52,7 +52,7 @@ public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
      *             if the base graph is not a JGraphT library
      */
     @Override
-    public final Graph<V> getSubGraph(final Graph<V> base,
+    public Graph<V> getSubGraph(final Graph<V> base,
             final Set<V> vertexSubSet) throws NotAJGraphTAdapterException {
 
         if (base instanceof JGraphTGraphAdapter) {
@@ -73,7 +73,7 @@ public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
      * {@inheritDoc}
      */
     @Override
-    public final Graph<V> deepcopy(final Graph<V> graph) {
+    public Graph<V> deepcopy(final Graph<V> graph) {
         Graph<V> copygraph = new JGraphTGraphAdapter<V>(edgeFact);
 
         Map<Object, Object> convertVertices = new HashMap<Object, Object>();
@@ -107,7 +107,7 @@ public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
      * {@inheritDoc}
      */
     @Override
-    public final Graph<V> copy(final Graph<V> graph) {
+    public Graph<V> copy(final Graph<V> graph) {
         Graph<V> copyGraph = new JGraphTGraphAdapter<V>(edgeFact);
         for (V vertex : graph.getAllVertices()) {
             copyGraph.addVertex(vertex);
