@@ -28,6 +28,11 @@ public class SunburstRingSegment extends AbstractSunburstNode {
     private static final Color DEFAULT_COLOR = Color.RED;
 
     /**
+     * The default name for distance.
+     */
+    private static final String DISTANCE_NAME = "Branch Length: ";
+
+    /**
      * Creates a SunburstRingSegment.
      *
      *
@@ -54,11 +59,9 @@ public class SunburstRingSegment extends AbstractSunburstNode {
         setValue(value);
         String name = getValue().getName();
         double distance = getValue().getDistance();
-        String tooltip;
-        if (name == null) {
-            tooltip = "Distance: " + distance;
-        } else {
-            tooltip = name + "\nDistance: " + distance;
+        String tooltip = DISTANCE_NAME + distance;
+        if (name != null) {
+            tooltip = name + System.lineSeparator() + tooltip;
         }
         setName(new Tooltip(tooltip));
         setDisplay(createRing(layer, degreeStart, degreeEnd
