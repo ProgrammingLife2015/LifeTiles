@@ -168,56 +168,6 @@ public class PhylogeneticTreeItem {
         setChildSequences();
     }
 
-    /**
-     * Compares this with another Object. returns true when both are the same.
-     * two PhylogeneticTreeItems are considered the same when both have the
-     * same:
-     *
-     * <ol>
-     * <li>name or both have no name</li>
-     * <li>distance</li>
-     * <li>children, order does not matter</li>
-     * </ol>
-     *
-     * @param other
-     *            the object to compare with
-     *
-     * @return true if both are the same, otherwise false
-     */
-
-    @Override
-    public final boolean equals(final Object other) {
-        if (other == null) {
-            return false;
-        } else if (other == this) {
-            return true;
-        } else if (other instanceof PhylogeneticTreeItem) {
-            PhylogeneticTreeItem that = (PhylogeneticTreeItem) other;
-            boolean res;
-            // compare name
-            if (name == null && that.getName() == null) {
-                // both are empty and thus the same
-                res = true;
-            } else if (name == null) {
-                // the names are not both empty so not the same
-                res = false;
-            } else {
-                // name is not null check if it is the same
-                res = name.equals(that.getName());
-            }
-
-            // compare distance
-            res = res && Double.compare(distance, that.getDistance()) == 0;
-
-            // compare children
-            for (PhylogeneticTreeItem child : children) {
-                res = res && that.getChildren().contains(child);
-            }
-            return res;
-        } else {
-            return false;
-        }
-    }
 
     /**
      * Returns the ArrayList of children.
@@ -304,6 +254,57 @@ public class PhylogeneticTreeItem {
      */
     public final void setName(final String name) {
         this.name = name;
+    }
+
+    /**
+     * Compares this with another Object. returns true when both are the same.
+     * two PhylogeneticTreeItems are considered the same when both have the
+     * same:
+     *
+     * <ol>
+     * <li>name or both have no name</li>
+     * <li>distance</li>
+     * <li>children, order does not matter</li>
+     * </ol>
+     *
+     * @param other
+     *            the object to compare with
+     *
+     * @return true if both are the same, otherwise false
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof PhylogeneticTreeItem)) {
+            return false;
+        }
+        PhylogeneticTreeItem other = (PhylogeneticTreeItem) obj;
+        if (Double.doubleToLongBits(distance) != Double
+                .doubleToLongBits(other.distance)) {
+            return false;
+        }
+        if (name == null) {
+            if (other.name != null) {
+                return false;
+            }
+        } else if (!name.equals(other.name)) {
+            return false;
+        }
+        if (children.isEmpty()) {
+            if (!other.children.isEmpty()) {
+                return false;
+            }
+        } else if (!(children.size() == other.getChildren().size())) {
+            return false;
+        } else if (!children.containsAll(other.getChildren())){
+            return false;
+        }
+        return true;
     }
 
     /**
