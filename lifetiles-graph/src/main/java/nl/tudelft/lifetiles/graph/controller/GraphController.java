@@ -147,7 +147,7 @@ public class GraphController extends AbstractController {
     /**
      * Maximal zoomed in level.
      */
-    private static final int MAXZOOM = 50;
+    private static final int MAX_ZOOM = 50;
 
     /**
      * The boundary in zoom level between the TileView and the DiagramView.
