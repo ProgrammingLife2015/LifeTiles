@@ -33,6 +33,11 @@ public class Zoombar {
     private final int maxzoom;
 
     /**
+     * The slider on the zoombar.
+     */
+    private Slider slider;
+
+    /**
      * Create a new Toolbar.
      *
      * @param currentZoom
@@ -45,8 +50,8 @@ public class Zoombar {
         zoomLevel = new SimpleIntegerProperty();
 
         zoomLevel.set(currentZoom);
-
         Slider slider = createSlider();
+
         slider.getStyleClass().add("slider");
         slider.valueProperty().addListener(
                 (obserVal, oldVal, newVal) -> {
@@ -68,14 +73,6 @@ public class Zoombar {
             slider.setValue(slider.getValue() + slider.getMajorTickUnit());
         });
 
-        zoomLevel.addListener((obserVal, oldVal, newVal) -> {
-            if (oldVal.intValue() > newVal.intValue()) {
-                slider.setValue(slider.getValue() - slider.getMajorTickUnit());
-            } else if (oldVal.intValue() < newVal.intValue()) {
-                slider.setValue(slider.getValue() + slider.getMajorTickUnit());
-            }
-        });
-
         toolbar = new ToolBar();
         toolbar.getStyleClass().add("toolbar");
 
@@ -93,15 +90,17 @@ public class Zoombar {
 
     public final void incrementZoom() {
         int zoom = zoomLevel.get();
-        if (zoomLevel.get() > 0) {
-            zoomLevel.set(zoom - 1);
+        if (zoom < maxzoom) {
+            zoomLevel.set(zoom + 1);
+            slider.setValue(slider.getValue() - slider.getMajorTickUnit());
         }
     }
 
     public final void decrementZoom() {
         int zoom = zoomLevel.get();
-        if (zoom < maxzoom) {
-            zoomLevel.set(zoom + 1);
+        if (zoomLevel.get() > 0) {
+            zoomLevel.set(zoom - 1);
+            slider.setValue(slider.getValue() + slider.getMajorTickUnit());
         }
     }
 
