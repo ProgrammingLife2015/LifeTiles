@@ -27,7 +27,7 @@ public class SegmentEmpty implements SegmentContent {
      * @return length of the empty content of the segment.
      */
     @Override
-    public final long getLength() {
+    public long getLength() {
         return this.length;
     }
 
@@ -35,7 +35,7 @@ public class SegmentEmpty implements SegmentContent {
      * @return string representation of the empty segment.
      */
     @Override
-    public final String toString() {
+    public String toString() {
         return new String(new char[(int) this.length]).replace("\0", "_");
     }
 
@@ -43,7 +43,7 @@ public class SegmentEmpty implements SegmentContent {
      * @return that the segment content is an empty node.
      */
     @Override
-    public final boolean isEmpty() {
+    public boolean isEmpty() {
         return true;
     }
 

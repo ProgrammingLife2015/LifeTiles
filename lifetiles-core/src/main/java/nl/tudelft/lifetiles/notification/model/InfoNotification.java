@@ -36,7 +36,7 @@ public class InfoNotification extends AbstractNotification {
      * {@inheritDoc}
      */
     @Override
-    public final Color getColor() {
+    public Color getColor() {
         return Color.AQUA;
     }
 
@@ -44,7 +44,7 @@ public class InfoNotification extends AbstractNotification {
      * {@inheritDoc}
      */
     @Override
-    public final int getPriority() {
+    public int getPriority() {
         return PRIORITY;
     }
 

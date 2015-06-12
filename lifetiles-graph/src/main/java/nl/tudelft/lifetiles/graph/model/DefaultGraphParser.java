@@ -84,7 +84,7 @@ public class DefaultGraphParser implements GraphParser {
      * @return A map of sequences.
      */
     @Override
-    public final Map<String, Sequence> getSequences() {
+    public Map<String, Sequence> getSequences() {
         if (sequences.isEmpty()) {
             throw new UnsupportedOperationException("Graph not parsed yet.");
         }
@@ -124,7 +124,7 @@ public class DefaultGraphParser implements GraphParser {
      *
      */
     @Override
-    public final Graph<SequenceSegment> parseGraph(final File vertexfile,
+    public Graph<SequenceSegment> parseGraph(final File vertexfile,
             final File edgefile, final GraphFactory<SequenceSegment> gfact)
             throws IOException {
         Timer timer = Timer.getAndStart();

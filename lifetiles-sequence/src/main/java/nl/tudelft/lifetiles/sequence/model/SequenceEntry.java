@@ -14,7 +14,7 @@ import javafx.beans.property.SimpleStringProperty;
  * @author Joren Hammudoglu
  *
  */
-public final class SequenceEntry {
+public class SequenceEntry {
 
     /**
      * The sequence identifier property.

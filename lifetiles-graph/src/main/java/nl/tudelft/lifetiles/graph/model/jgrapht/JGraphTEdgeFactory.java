@@ -31,7 +31,7 @@ public class JGraphTEdgeFactory<V> implements EdgeFactory<V> {
      *            The internal edge to use.
      * @return a new edge.
      */
-    public final Edge<V> getEdge(final DefaultEdge edge) {
+    public Edge<V> getEdge(final DefaultEdge edge) {
         return new JGraphTEdgeAdapter<V>(edge);
     }
 
@@ -43,7 +43,7 @@ public class JGraphTEdgeFactory<V> implements EdgeFactory<V> {
      *            The destination vertex.
      */
     @Override
-    public final Edge<V> getEdge(final V source, final V destination) {
+    public Edge<V> getEdge(final V source, final V destination) {
         return new JGraphTEdgeAdapter<V>(internalFactory.createEdge(source, destination));
 
     }

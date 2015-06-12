@@ -34,7 +34,7 @@ public abstract class AbstractAnnotation {
      *
      * @return position of the annotation on the genome.
      */
-    public final long getGenomePosition() {
+    public long getGenomePosition() {
         return genomePosition;
     }
 

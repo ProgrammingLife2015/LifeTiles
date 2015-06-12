@@ -133,7 +133,7 @@ public class EdgeLine extends Group {
      *
      * @return drawn line
      */
-    public final Line getLine() {
+    public Line getLine() {
         return line;
     }
 
