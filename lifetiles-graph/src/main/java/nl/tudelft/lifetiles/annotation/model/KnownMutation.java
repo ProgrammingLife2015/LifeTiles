@@ -7,13 +7,13 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
- * Resistance annotation which annotates a drug resistant mutation onto a
+ * Known mutation which annotates a drug resistant mutation onto a
  * sequence.
  *
  * @author Jos
  *
  */
-public class ResistanceAnnotation extends AbstractAnnotation {
+public class KnownMutation extends AbstractBookmark {
 
     /**
      * Name of the gene.
@@ -41,7 +41,7 @@ public class ResistanceAnnotation extends AbstractAnnotation {
     private final String drugResistance;
 
     /**
-     * Construct a resistance annotation.
+     * Construct a known mutation.
      *
      * @param geneName
      *            Name of the gene.
@@ -56,10 +56,9 @@ public class ResistanceAnnotation extends AbstractAnnotation {
      * @param drugResistance
      *            Drug resistance, which drug is mutation resistant to.
      */
-    public ResistanceAnnotation(final String geneName,
-            final String typeOfMutation, final String change,
-            final String filter, final long genomePosition,
-            final String drugResistance) {
+    public KnownMutation(final String geneName, final String typeOfMutation,
+            final String change, final String filter,
+            final long genomePosition, final String drugResistance) {
         super(genomePosition);
         this.geneName = geneName;
         this.typeOfMutation = typeOfMutation;
@@ -104,7 +103,7 @@ public class ResistanceAnnotation extends AbstractAnnotation {
     }
 
     /**
-     * Maps resistance annotations onto a set of segments.
+     * Maps known mutation onto a set of segments.
      *
      * @param segments
      *            Segments to map the annotation to.
@@ -126,8 +125,8 @@ public class ResistanceAnnotation extends AbstractAnnotation {
     }
 
     /**
-     * Returns the String representation for the annotation to be displayed in
-     * the tooltip of it's bookmark.
+     * Returns the String representation for the known mutation to be displayed
+     * in the tooltip of it's bookmark.
      *
      * @return
      *         Tooltip string representation.
@@ -139,9 +138,9 @@ public class ResistanceAnnotation extends AbstractAnnotation {
                 .format("Gene Name: %1$s%nGene Position: %2$s%nMutation Type: %3$s%nChange: %4$s%nFilter: %5$s%nDrug Resistance: %6$s",
                         geneName, getGenomePosition(), typeOfMutation, change,
                         filter, drugResistance);
-        String annotation = formatter.toString();
+        String knownMutation = formatter.toString();
         formatter.close();
-        return annotation;
+        return knownMutation;
     }
 
 }
