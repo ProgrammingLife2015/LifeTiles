@@ -33,6 +33,11 @@ public class MenuController extends AbstractController {
      */
     private static final String KNOWN_MUTATION_EXTENSION = ".txt";
     /**
+     * Constant annotations extension, currently as defined by client:
+     * '.gff'.
+     */
+    private static final String ANNOTATIONS_EXTENSION = ".gff";
+    /**
      * Extension of the node file.
      */
     private static final String NODE_EXTENSION = ".node.graph";
@@ -117,6 +122,7 @@ public class MenuController extends AbstractController {
         loadGraph(directory);
         loadTree(directory);
         loadKnownMutations(directory);
+        loadAnnotations(directory);
         loadMetaData(directory);
     }
 
@@ -163,6 +169,19 @@ public class MenuController extends AbstractController {
         File annotationFile = loadOrWarn(directory, KNOWN_MUTATION_EXTENSION);
         if (annotationFile != null) {
             shout(Message.OPENED, "known mutations", annotationFile);
+        }
+    }
+
+    /**
+     * Loads the annotations from a file in the specified directory.
+     *
+     * @param directory
+     *            The directory from which to load annotations.
+     */
+    private void loadAnnotations(final File directory) {
+        File annotationFile = loadOrWarn(directory, ANNOTATIONS_EXTENSION);
+        if (annotationFile != null) {
+            shout(Message.OPENED, "annotations", annotationFile);
         }
     }
 
@@ -241,6 +260,44 @@ public class MenuController extends AbstractController {
         }
 
         shout(Message.OPENED, "known mutations", file);
+    }
+
+    /**
+     * Handle action to "Insert Annotations" menu item.
+     *
+     * @param event
+     *            Event on "Insert Annotations" item.
+     */
+    @FXML
+    private void insertAnnotationsAction(final ActionEvent event) {
+        try {
+            loadAnnotationsFile();
+        } catch (IOException e) {
+            AbstractNotification notification = nf.getNotification(e);
+            shout(NotificationController.NOTIFY, "", notification);
+        }
+    }
+
+    /**
+     * Perform functionality associated with opening and inserting a known
+     * mutations file.
+     *
+     * @throws IOException
+     *             throws <code>IOException</code> if any of the files were not
+     *             found
+     */
+    private void loadAnnotationsFile() throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open file containing annotations");
+        Window window = menuBar.getScene().getWindow();
+        File file = fileChooser.showOpenDialog(window);
+
+        // user aborted
+        if (file == null) {
+            return;
+        }
+
+        shout(Message.OPENED, "annotations", file);
     }
 
     /**
