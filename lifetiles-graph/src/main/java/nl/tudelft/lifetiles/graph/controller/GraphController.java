@@ -27,8 +27,8 @@ import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.model.GraphContainer;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
 import nl.tudelft.lifetiles.graph.model.GraphParser;
-import nl.tudelft.lifetiles.graph.traverser.MutationIndicationTraverser;
-import nl.tudelft.lifetiles.graph.traverser.ReferencePositionTraverser;
+import nl.tudelft.lifetiles.graph.model.StackedMutationContainer;
+import nl.tudelft.lifetiles.graph.view.DiagramView;
 import nl.tudelft.lifetiles.graph.view.TileView;
 import nl.tudelft.lifetiles.graph.view.VertexView;
 import nl.tudelft.lifetiles.notification.controller.NotificationController;
@@ -70,6 +70,16 @@ public class GraphController extends AbstractController {
     private TileView view;
 
     /**
+     * The model of the diagram.
+     */
+    private StackedMutationContainer diagram;
+
+    /**
+     * The view of the diagram.
+     */
+    private DiagramView diagramView;
+
+    /**
      * The view controller.
      */
     private Graph<SequenceSegment> graph;
@@ -90,9 +100,19 @@ public class GraphController extends AbstractController {
     private boolean repaintNow;
 
     /**
+     * The current zoom level.
+     */
+    private int zoomLevel = 45;
+
+    /**
+     * The current zoom level, used to only redraw if the zoomlevel changes.
+     */
+    private int currentZoomLevel = 0;
+
+    /**
      * The current scale to resize the graph.
      */
-    private double scale = 1;
+    private double scale = Math.pow(ZOOM_OUT_FACTOR, zoomLevel - 5);
 
     /**
      * The currently inserted annotations.
@@ -105,24 +125,29 @@ public class GraphController extends AbstractController {
     public static final Message ANNOTATIONS = Message.create("annotations");
 
     /**
-     * The current zoom level.
-     */
-    private int zoomLevel;
-
-    /**
      * The factor that each zoom in step that updates the current scale.
      */
-    private static final double ZOOM_IN_FACTOR = 2;
+    private static final double ZOOM_IN_FACTOR = 21.0 / 16.0;
+
+    /**
+     * Visible sequences in the graph.
+     */
+    private Set<Sequence> visibleSequences;
+
+    /**
+     * The current reference in the graph, shouted by the sequence control.
+     */
+    private Sequence reference;
 
     /**
      * The factor that each zoom out step that updates the current scale.
      */
-    private static final double ZOOM_OUT_FACTOR = 0.5;
+    private static final double ZOOM_OUT_FACTOR = 1 / ZOOM_IN_FACTOR;
 
     /**
      * Maximal zoomed in level.
      */
-    private static final int MAXZOOM = 10;
+    private static final int MAX_ZOOM = 50;
 
     /**
      * {@inheritDoc}
@@ -130,24 +155,18 @@ public class GraphController extends AbstractController {
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-
         initListeners();
         initZoomToolBar();
 
         repaintNow = false;
-
         scrollPane = new ScrollPane();
-
-        // Temporary until there is a way to start of totally out zoomed
-        zoomLevel = 5;
-
     }
 
     /**
      * Initialize the zoom toolbar.
      */
     private void initZoomToolBar() {
-        Zoombar toolbar = new Zoombar(MAXZOOM);
+        Zoombar toolbar = new Zoombar(zoomLevel, MAX_ZOOM);
         wrapper.setRight(toolbar.getToolBar());
 
         toolbar.getZoomlevel().addListener((observeVal, oldVal, newVal) -> {
@@ -159,7 +178,6 @@ public class GraphController extends AbstractController {
                 zoomGraph(Math.pow(ZOOM_IN_FACTOR, diffLevel));
             }
         });
-
     }
 
     /**
@@ -169,28 +187,32 @@ public class GraphController extends AbstractController {
 
         NotificationFactory notFact = new NotificationFactory();
 
-        listen(Message.OPENED, (controller, subject, args) -> {
+        listen(Message.OPENED,
+                (controller, subject, args) -> {
 
-            assert controller instanceof MenuController;
-            if (!"graph".equals(subject)) {
-                return;
-            }
-            assert args.length == 2;
-            assert args[0] instanceof File && args[1] instanceof File;
+                    assert controller instanceof MenuController;
+                    if (!"graph".equals(subject)) {
+                        return;
+                    }
+                    assert args.length == 2;
+                    assert args[0] instanceof File && args[1] instanceof File;
 
-            try {
-                loadGraph((File) args[0], (File) args[1]);
-            } catch (IOException exception) {
-                shout(NotificationController.NOTIFY, "", notFact
-                        .getNotification(exception));
-            }
-        });
+                    try {
+                        loadGraph((File) args[0], (File) args[1]);
+                    } catch (IOException exception) {
+                        shout(NotificationController.NOTIFY, "",
+                                notFact.getNotification(exception));
+                    }
+                });
 
         listen(Message.FILTERED, (controller, subject, args) -> {
             assert args.length == 1;
             assert (args[0] instanceof Set<?>);
 
-            model.setVisible((Set<Sequence>) args[0]);
+            visibleSequences = (Set<Sequence>) args[0];
+            model.setVisible(visibleSequences);
+            diagram = new StackedMutationContainer(model.getBucketCache(),
+                    visibleSequences);
             repaintNow = true;
             repaint();
         });
@@ -199,11 +221,13 @@ public class GraphController extends AbstractController {
                 (controller, subject, args) -> {
                     assert args.length == 1;
                     assert args[0] instanceof Sequence;
-                    Sequence sequence = (Sequence) args[0];
-                    ReferencePositionTraverser.referenceMapGraph(graph,
-                            sequence);
-                    MutationIndicationTraverser.indicateGraphMutations(graph,
-                            sequence);
+                    reference = (Sequence) args[0];
+                    model = new GraphContainer(graph, reference);
+                    model.setVisible(visibleSequences);
+                    diagram = new StackedMutationContainer(model
+                            .getBucketCache(), visibleSequences);
+                    repaintNow = true;
+                    repaint();
                 });
 
         listen(Message.OPENED,
@@ -223,29 +247,30 @@ public class GraphController extends AbstractController {
                         try {
                             insertAnnotations((File) args[0]);
                         } catch (IOException exception) {
-                            shout(NotificationController.NOTIFY, "", notFact
-                                    .getNotification(exception));
+                            shout(NotificationController.NOTIFY, "",
+                                    notFact.getNotification(exception));
                         }
                     }
                 });
 
-        listen(ANNOTATIONS, (controller, subject, args) -> {
-            assert controller instanceof MenuController;
-            assert args[0] instanceof File;
+        listen(ANNOTATIONS,
+                (controller, subject, args) -> {
+                    assert controller instanceof MenuController;
+                    assert args[0] instanceof File;
 
-            if (graph == null) {
-                shout(NotificationController.NOTIFY, "", notFact
-                        .getNotification(new IllegalStateException(
-                                "Graph not loaded.")));
-            } else {
-                try {
-                    insertAnnotations((File) args[0]);
-                } catch (IOException exception) {
-                    shout(NotificationController.NOTIFY, "", notFact
-                            .getNotification(exception));
-                }
-            }
-        });
+                    if (graph == null) {
+                        shout(NotificationController.NOTIFY, "", notFact
+                                .getNotification(new IllegalStateException(
+                                        "Graph not loaded.")));
+                    } else {
+                        try {
+                            insertAnnotations((File) args[0]);
+                        } catch (IOException exception) {
+                            shout(NotificationController.NOTIFY, "",
+                                    notFact.getNotification(exception));
+                        }
+                    }
+                });
     }
 
     /**
@@ -278,9 +303,13 @@ public class GraphController extends AbstractController {
         graph = parser.parseGraph(vertexfile, edgefile, factory);
         annotations = new HashMap<>();
 
-        shout(Message.LOADED, "sequences", parser.getSequences());
-        repaint();
+        model = new GraphContainer(graph, reference);
+        diagram = new StackedMutationContainer(model.getBucketCache(),
+                visibleSequences);
 
+        shout(Message.LOADED, "sequences", parser.getSequences());
+        repaintNow = true;
+        repaint();
     }
 
     /**
@@ -293,8 +322,6 @@ public class GraphController extends AbstractController {
      */
     private void insertAnnotations(final File file) throws IOException {
         Timer timer = Timer.getAndStart();
-        Sequence reference = this.graph.getSources().iterator().next()
-                .getSources().iterator().next();
         annotations = ResistanceAnnotationMapper.mapAnnotations(graph,
                 ResistanceAnnotationParser.parseAnnotations(file), reference);
 
@@ -309,9 +336,14 @@ public class GraphController extends AbstractController {
     private void repaint() {
         if (graph != null) {
             if (model == null) {
-                model = new GraphContainer(graph);
+                model = new GraphContainer(graph, reference);
+            }
+            if (diagram == null) {
+                diagram = new StackedMutationContainer(model.getBucketCache(),
+                        visibleSequences);
             }
             view = new TileView(this);
+            diagramView = new DiagramView();
 
             scrollPane.hvalueProperty().addListener(
                     (observable, oldValue, newValue) -> {
@@ -332,7 +364,6 @@ public class GraphController extends AbstractController {
      *         one is the end bucket
      */
     private int[] getStartandEndBucket(final double position) {
-
         double scaledVertex = scale * VertexView.HORIZONTALSCALE;
         double graphWidth = getMaxUnifiedEnd(graph) * scaledVertex;
         double screenWidth = scrollPane.getViewportBounds().getWidth();
@@ -343,7 +374,6 @@ public class GraphController extends AbstractController {
 
         double start = (relativePosition - scaledScreenWidth) / scaledVertex;
         double end = (relativePosition + scaledScreenWidth) / scaledVertex;
-
         int[] buckets = new int[] {
                 getStartBucketPosition(start), getEndBucketPosition(end) + 1
         };
@@ -358,26 +388,45 @@ public class GraphController extends AbstractController {
      *            Position in the scrollPane.
      */
     private void repaintPosition(final double position) {
-        int[] bucketLocations = getStartandEndBucket(position);
+        int zoomSwitchLevel = MAX_ZOOM - diagram.getLevel();
+        if (zoomLevel > zoomSwitchLevel) {
+            if (currentZoomLevel != zoomLevel || repaintNow) {
+                Group diagramDrawing = new Group();
+                double width = getMaxUnifiedEnd(graph) * scale
+                        * VertexView.HORIZONTALSCALE;
+                int diagramLevel = zoomLevel - zoomSwitchLevel;
+                diagramDrawing.getChildren().add(
+                        diagramView.drawDiagram(diagram, diagramLevel, width));
+                diagramDrawing.getChildren().add(new Rectangle(width, 0));
+                scrollPane.setContent(diagramDrawing);
+                wrapper.setCenter(scrollPane);
 
-        int startBucket = bucketLocations[0];
-        int endBucket = bucketLocations[1];
+                currentZoomLevel = zoomLevel;
+                repaintNow = false;
+            }
+        } else {
+            int[] bucketLocations = getStartandEndBucket(position);
 
-        if (currEndPosition != endBucket && currStartPosition != startBucket
-                || repaintNow) {
-            Group graphDrawing = new Group();
-            graphDrawing.getChildren().add(drawGraph(startBucket, endBucket));
-            graphDrawing.getChildren().add(
-                    new Rectangle(getMaxUnifiedEnd(graph) * scale
-                            * VertexView.HORIZONTALSCALE, 0));
+            int startBucket = bucketLocations[0];
+            int endBucket = bucketLocations[1];
 
-            scrollPane.setContent(graphDrawing);
-            wrapper.setCenter(scrollPane);
+            if (currEndPosition != endBucket
+                    && currStartPosition != startBucket || repaintNow) {
+                Group graphDrawing = new Group();
+                graphDrawing.getChildren().add(
+                        drawGraph(startBucket, endBucket));
+                graphDrawing.getChildren().add(
+                        new Rectangle(getMaxUnifiedEnd(graph) * scale
+                                * VertexView.HORIZONTALSCALE, 0));
 
-            currEndPosition = endBucket;
-            currStartPosition = startBucket;
+                scrollPane.setContent(graphDrawing);
+                wrapper.setCenter(scrollPane);
 
-            repaintNow = false;
+                currEndPosition = endBucket;
+                currStartPosition = startBucket;
+
+                repaintNow = false;
+            }
         }
     }
 
@@ -445,8 +494,9 @@ public class GraphController extends AbstractController {
      * @return Group object to be drawn on the screen
      */
     public final Group drawGraph(final int startBucket, final int endBucket) {
-        Group test = view.drawGraph(model.getVisibleSegments(startBucket,
-                endBucket), graph, annotations, scale);
+        Group test = view.drawGraph(
+                model.getVisibleSegments(startBucket, endBucket), graph,
+                annotations, scale);
 
         return test;
     }
@@ -475,7 +525,5 @@ public class GraphController extends AbstractController {
     // with javafx 8
     public void hovered(final SequenceSegment segment, final Boolean hovering) {
         // TODO: Message to say that a segment is hovered over
-
     }
-
 }
