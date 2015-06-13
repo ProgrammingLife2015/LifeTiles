@@ -25,9 +25,8 @@ public final class Message {
      * A shout message indicating that the filters have been reset.
      */
     public static final Message RESET = create("reset");
-
     /**
-     * A shout message indicating there is a zoom action
+     * A shout message indicating there is a zoom action.
      */
     public static final Message ZOOM = create("zoom");
 

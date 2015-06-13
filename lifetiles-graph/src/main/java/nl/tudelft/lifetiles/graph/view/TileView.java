@@ -10,7 +10,7 @@ import java.util.Set;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
+import nl.tudelft.lifetiles.annotation.model.KnownMutation;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.sequence.Mutation;
@@ -79,15 +79,15 @@ public class TileView {
      *            Graph to be drawn
      * @param graph
      *            Graph to base the edges on
-     * @param annotations
-     *            Map from segment to annotations.
+     * @param knownMutations
+     *            Map from segment to known mutations.
      * @param scale
      *            the scale to resize all elements of the graph
      * @return the elements that must be displayed on the screen
      */
     public final Group drawGraph(final Set<SequenceSegment> segments,
             final Graph<SequenceSegment> graph,
-            final Map<SequenceSegment, List<ResistanceAnnotation>> annotations,
+            final Map<SequenceSegment, List<KnownMutation>> knownMutations,
             final double scale) {
         Group root = new Group();
 
@@ -95,11 +95,11 @@ public class TileView {
         this.scale = scale;
 
         for (SequenceSegment segment : segments) {
-            List<ResistanceAnnotation> segAnnotations = null;
-            if (annotations != null && annotations.containsKey(segment)) {
-                segAnnotations = annotations.get(segment);
+            List<KnownMutation> segKnownMutations = null;
+            if (knownMutations != null && knownMutations.containsKey(segment)) {
+                segKnownMutations = knownMutations.get(segment);
             }
-            drawVertexLane(segment, segAnnotations);
+            drawVertexLane(segment, segKnownMutations);
         }
 
         // TODO toggle edge drawing in the settings
@@ -136,20 +136,20 @@ public class TileView {
      *
      * @param segment
      *            segment to be drawn
-     * @param annotations
-     *            List of annotations in this segment
+     * @param knownMutations
+     *            List of known mutations in this segment
      */
     private void drawVertexLane(final SequenceSegment segment,
-            final List<ResistanceAnnotation> annotations) {
+            final List<KnownMutation> knownMutations) {
         for (int index = 0; index < lanes.size(); index++) {
             if (lanes.get(index) <= segment.getUnifiedStart()
                     && segmentFree(index, segment)) {
-                drawVertex(index, segment, annotations);
+                drawVertex(index, segment, knownMutations);
                 segmentInsert(index, segment);
                 return;
             }
         }
-        drawVertex(lanes.size(), segment, annotations);
+        drawVertex(lanes.size(), segment, knownMutations);
         segmentInsert(lanes.size(), segment);
     }
 
@@ -188,11 +188,11 @@ public class TileView {
      *            top left y coordinate
      * @param segment
      *            the segment to be drawn in the vertex
-     * @param annotations
-     *            the annotations of the vertex
+     * @param knownMutations
+     *            the known mutations of the vertex
      */
     private void drawVertex(final double index, final SequenceSegment segment,
-            final List<ResistanceAnnotation> annotations) {
+            final List<KnownMutation> knownMutations) {
         String text = segment.getContent().toString();
         long start = segment.getUnifiedStart();
         long width = segment.getContent().getLength();
@@ -210,11 +210,11 @@ public class TileView {
         vertex.setOnMouseEntered(event -> controller.hovered(segment, true));
         vertex.setOnMouseExited(event -> controller.hovered(segment, false));
 
-        if (annotations != null) {
-            for (ResistanceAnnotation annotation : annotations) {
-                long segmentPosition = annotation.getGenomePosition()
+        if (knownMutations != null) {
+            for (KnownMutation knownMutation : knownMutations) {
+                long segmentPosition = knownMutation.getGenomePosition()
                         - segment.getStart();
-                Bookmark bookmark = new Bookmark(vertex, annotation,
+                Bookmark bookmark = new Bookmark(vertex, knownMutation,
                         segmentPosition, scale);
                 bookmarks.getChildren().add(bookmark);
             }

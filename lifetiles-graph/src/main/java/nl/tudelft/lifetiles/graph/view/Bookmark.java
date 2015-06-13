@@ -3,10 +3,10 @@ package nl.tudelft.lifetiles.graph.view;
 import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
+import nl.tudelft.lifetiles.annotation.model.KnownMutation;
 
 /**
- * A bookmark is the equivalent of a annotation mapped onto the graph.
+ * A bookmark is the equivalent of a known mutation mapped onto the graph.
  *
  * @author Jos
  *
@@ -28,15 +28,15 @@ public class Bookmark extends Rectangle {
      *
      * @param vertex
      *            The vertex the bookmark is placed on.
-     * @param annotation
-     *            The annotation which is visualized using this bookmark.
+     * @param knownMutation
+     *            The known mutation which is visualized using this bookmark.
      * @param segmentPosition
      *            The position of the bookmark on the segment.
      * @param scale
      *            the factor to resize this bookmark
      */
     public Bookmark(final VertexView vertex,
-            final ResistanceAnnotation annotation, final long segmentPosition,
+            final KnownMutation knownMutation, final long segmentPosition,
             final double scale) {
         super(vertex.HORIZONTALSCALE * scale, vertex.getHeight());
         setLayoutX(vertex.getLayoutX() + segmentPosition
@@ -45,7 +45,7 @@ public class Bookmark extends Rectangle {
         setOpacity(OPACITY);
         setFill(STANDARD_COLOR);
 
-        Tooltip tooltip = new Tooltip(annotation.toString());
+        Tooltip tooltip = new Tooltip(knownMutation.toString());
         Tooltip.install(this, tooltip);
     }
 }

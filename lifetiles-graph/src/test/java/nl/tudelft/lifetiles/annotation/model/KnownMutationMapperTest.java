@@ -20,9 +20,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class ResistanceAnnotationMapperTest {
-    private List<ResistanceAnnotation> annotations;
-    private ResistanceAnnotation r1, r2, r3;
+public class KnownMutationMapperTest {
+    private List<KnownMutation> annotations;
+    private KnownMutation r1, r2, r3;
     GraphFactory<SequenceSegment> gf;
     static Set<Sequence> s1;
     static DefaultSequence reference;
@@ -38,10 +38,10 @@ public class ResistanceAnnotationMapperTest {
 
     @Before
     public void setUp() throws Exception {
-        annotations = new ArrayList<ResistanceAnnotation>();
-        r1 = new ResistanceAnnotation(null, null, null, null, 5, null);
-        r2 = new ResistanceAnnotation(null, null, null, null, 15, null);
-        r3 = new ResistanceAnnotation(null, null, null, null, 16, null);
+        annotations = new ArrayList<KnownMutation>();
+        r1 = new KnownMutation(null, null, null, null, 5, null);
+        r2 = new KnownMutation(null, null, null, null, 15, null);
+        r3 = new KnownMutation(null, null, null, null, 16, null);
         annotations.add(r1);
         annotations.add(r2);
         annotations.add(r3);
@@ -56,7 +56,7 @@ public class ResistanceAnnotationMapperTest {
     @Test
     public void mapSingleNodePositiveGraphTest() {
         gr.addVertex(v1);
-        Map<SequenceSegment, List<ResistanceAnnotation>> mappedAnnotations = ResistanceAnnotationMapper
+        Map<SequenceSegment, List<KnownMutation>> mappedAnnotations = KnownMutationMapper
                 .mapAnnotations(gr, annotations, reference);
         assertEquals(1, mappedAnnotations.size());
         assertEquals(r1, mappedAnnotations.get(v1).get(0));
@@ -65,7 +65,7 @@ public class ResistanceAnnotationMapperTest {
     @Test
     public void mapSingleNodeNegativeGraphTest() {
         gr.addVertex(v3);
-        Map<SequenceSegment, List<ResistanceAnnotation>> mappedAnnotations = ResistanceAnnotationMapper
+        Map<SequenceSegment, List<KnownMutation>> mappedAnnotations = KnownMutationMapper
                 .mapAnnotations(gr, annotations, reference);
         assertEquals(0, mappedAnnotations.size());
     }
@@ -74,7 +74,7 @@ public class ResistanceAnnotationMapperTest {
     public void mapMultipleNodeGraphTest() {
         gr.addVertex(v1);
         gr.addVertex(v2);
-        Map<SequenceSegment, List<ResistanceAnnotation>> mappedAnnotations = ResistanceAnnotationMapper
+        Map<SequenceSegment, List<KnownMutation>> mappedAnnotations = KnownMutationMapper
                 .mapAnnotations(gr, annotations, reference);
         assertEquals(2, mappedAnnotations.size());
         assertEquals(r1, mappedAnnotations.get(v1).get(0));
@@ -85,7 +85,7 @@ public class ResistanceAnnotationMapperTest {
     public void mapMultipleAssertionsNodeGraphTest() {
         gr.addVertex(v1);
         gr.addVertex(v2);
-        Map<SequenceSegment, List<ResistanceAnnotation>> mappedAnnotations = ResistanceAnnotationMapper
+        Map<SequenceSegment, List<KnownMutation>> mappedAnnotations = KnownMutationMapper
                 .mapAnnotations(gr, annotations, reference);
         assertEquals(2, mappedAnnotations.size());
         assertEquals(r1, mappedAnnotations.get(v1).get(0));
@@ -95,12 +95,12 @@ public class ResistanceAnnotationMapperTest {
 
     @Test
     public void mapBoundaryGraphTest() {
-        ResistanceAnnotation r4 = new ResistanceAnnotation(null, null, null, null, 11, null);
-        annotations = new ArrayList<ResistanceAnnotation>();
+        KnownMutation r4 = new KnownMutation(null, null, null, null, 11, null);
+        annotations = new ArrayList<KnownMutation>();
         annotations.add(r4);
         gr.addVertex(v1);
         gr.addVertex(v2);
-        Map<SequenceSegment, List<ResistanceAnnotation>> mappedAnnotations = ResistanceAnnotationMapper
+        Map<SequenceSegment, List<KnownMutation>> mappedAnnotations = KnownMutationMapper
                 .mapAnnotations(gr, annotations, reference);
         assertEquals(1, mappedAnnotations.size());
         assertEquals(r4, mappedAnnotations.get(v2).get(0));

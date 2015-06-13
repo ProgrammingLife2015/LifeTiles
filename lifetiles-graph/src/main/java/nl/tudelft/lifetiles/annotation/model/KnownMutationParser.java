@@ -8,54 +8,55 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Resistance Annotation Parser which parses annotations from a file into a
- * annotation list.
+ * Known Mutation Parser which parses known mutations from a file into a
+ * known mutations list.
  *
  * @author Jos
  *
  */
-public final class ResistanceAnnotationParser {
+public final class KnownMutationParser {
 
     /**
      * Static class can not have a public or default constructor.
      */
-    private ResistanceAnnotationParser() {
+    private KnownMutationParser() {
         // noop
     }
 
     /**
-     * Parses a annotation file and returns a list of resistance annotations.
+     * Parses a known mutations file and returns a list of resistance
+     * annotations.
      *
-     * @param annotationFile
-     *            The annotation file to be parsed.
+     * @param knownMutationFile
+     *            The known mutations file to be parsed.
      * @throws IOException
      *             When there is an error reading the specified file.
      * @return list of parsed resistance annotations.
      */
-    public static List<ResistanceAnnotation> parseAnnotations(
-            final File annotationFile) throws IOException {
-        List<ResistanceAnnotation> annotations = new ArrayList<ResistanceAnnotation>();
-        Iterator<String> iterator = Files.lines(annotationFile.toPath())
+    public static List<KnownMutation> parseKnownMutations(
+            final File knownMutationFile) throws IOException {
+        List<KnownMutation> knownMutations = new ArrayList<KnownMutation>();
+        Iterator<String> iterator = Files.lines(knownMutationFile.toPath())
                 .iterator();
         String line;
         while (iterator.hasNext()) {
             line = iterator.next();
             if (!line.startsWith("##")) {
-                parseAnnotation(line);
-                annotations.add(parseAnnotation(line));
+                knownMutations.add(parseKnownMutation(line));
             }
         }
-        return annotations;
+        return knownMutations;
     }
 
     /**
-     * Parses a single annotation from a line.
+     * Parses a single known mutation from a line.
      *
      * @param line
-     *            Line which contains a single annotation and is not a comment.
-     * @return parsed annotation in the given line.
+     *            Line which contains a single known mutation and is not a
+     *            comment.
+     * @return parsed known mutation in the given line.
      */
-    private static ResistanceAnnotation parseAnnotation(final String line) {
+    private static KnownMutation parseKnownMutation(final String line) {
         String[] genomeResistance = line.split("\t");
         String drugResistance = genomeResistance[1];
         String[] genome = genomeResistance[0].split(",");
@@ -65,7 +66,7 @@ public final class ResistanceAnnotationParser {
         String[] mutation = genome[0].split(":");
         String geneName = mutation[0];
         String typeOfMutation = mutation[1];
-        return new ResistanceAnnotation(geneName, typeOfMutation, change,
-                filter, genomePosition, drugResistance);
+        return new KnownMutation(geneName, typeOfMutation, change, filter,
+                genomePosition, drugResistance);
     }
 }

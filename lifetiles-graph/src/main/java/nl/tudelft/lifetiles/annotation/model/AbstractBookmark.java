@@ -6,26 +6,26 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
- * Abstract class for Annotation. An annotation is a point on the genome with
+ * Abstract class for Bookmarks. A bookmark is a point on the genome with
  * some information attached to it.
  *
  * @author Jos
  *
  */
-public abstract class AbstractAnnotation {
+public abstract class AbstractBookmark {
 
     /**
-     * Position of the annotation on the genome.
+     * Position of the bookmark on the genome.
      */
     private final long genomePosition;
 
     /**
-     * Constructs an annotation.
+     * Constructs a bookmark.
      *
      * @param genomePosition
      *            Position of the annotation on the genome.
      */
-    protected AbstractAnnotation(final long genomePosition) {
+    protected AbstractBookmark(final long genomePosition) {
         this.genomePosition = genomePosition;
     }
 

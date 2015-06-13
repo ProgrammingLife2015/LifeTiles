@@ -16,9 +16,9 @@ import javafx.scene.Group;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
-import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
-import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationMapper;
-import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationParser;
+import nl.tudelft.lifetiles.annotation.model.KnownMutation;
+import nl.tudelft.lifetiles.annotation.model.KnownMutationMapper;
+import nl.tudelft.lifetiles.annotation.model.KnownMutationParser;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
 import nl.tudelft.lifetiles.graph.model.BucketCache;
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
@@ -132,12 +132,12 @@ public class TileViewTest {
         File file = new File(
                 "./src/test/resources/data/test_annotations/simple_annotations.txt");
 
-        List<ResistanceAnnotation> parse = ResistanceAnnotationParser
-                .parseAnnotations(file);
+        List<KnownMutation> parse = KnownMutationParser
+                .parseKnownMutations(file);
         Sequence reference = graph.getSources().iterator().next().getSources()
                 .iterator().next();
 
-        Map<SequenceSegment, List<ResistanceAnnotation>> annotations = ResistanceAnnotationMapper
+        Map<SequenceSegment, List<KnownMutation>> annotations = KnownMutationMapper
                 .mapAnnotations(graph, parse, reference);
 
         // Hack so you make a tooltip, javafx toolkit need to be initialised for

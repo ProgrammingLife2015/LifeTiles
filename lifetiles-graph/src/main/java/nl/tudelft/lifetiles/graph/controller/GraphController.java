@@ -14,9 +14,9 @@ import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Rectangle;
-import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
-import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationMapper;
-import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationParser;
+import nl.tudelft.lifetiles.annotation.model.KnownMutation;
+import nl.tudelft.lifetiles.annotation.model.KnownMutationMapper;
+import nl.tudelft.lifetiles.annotation.model.KnownMutationParser;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.controller.MenuController;
 import nl.tudelft.lifetiles.core.util.Message;
@@ -42,6 +42,7 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
  *
  * @author Joren Hammudoglu
  * @author AC Langerak
+ * @author Jos Winter
  *
  */
 public class GraphController extends AbstractController {
@@ -115,14 +116,9 @@ public class GraphController extends AbstractController {
     private double scale = Math.pow(ZOOM_OUT_FACTOR, zoomLevel - 5);
 
     /**
-     * The currently inserted annotations.
+     * The currently inserted known mutations.
      */
-    private Map<SequenceSegment, List<ResistanceAnnotation>> annotations;
-
-    /**
-     * A shout message indicating annotations have been inserted.
-     */
-    public static final Message ANNOTATIONS = Message.create("annotations");
+    private Map<SequenceSegment, List<KnownMutation>> knownMutations;
 
     /**
      * The factor that each zoom in step that updates the current scale.
@@ -233,7 +229,7 @@ public class GraphController extends AbstractController {
         listen(Message.OPENED,
                 (controller, subject, args) -> {
                     assert controller instanceof MenuController;
-                    if (!subject.equals("annotations")) {
+                    if (!subject.equals("known mutations")) {
                         return;
                     }
                     assert args[0] instanceof File;
@@ -242,26 +238,7 @@ public class GraphController extends AbstractController {
                         shout(NotificationController.NOTIFY,
                                 "",
                                 notFact.getNotification(new IllegalStateException(
-                                        "Graph not loaded while attempting to add annotations.")));
-                    } else {
-                        try {
-                            insertAnnotations((File) args[0]);
-                        } catch (IOException exception) {
-                            shout(NotificationController.NOTIFY, "",
-                                    notFact.getNotification(exception));
-                        }
-                    }
-                });
-
-        listen(ANNOTATIONS,
-                (controller, subject, args) -> {
-                    assert controller instanceof MenuController;
-                    assert args[0] instanceof File;
-
-                    if (graph == null) {
-                        shout(NotificationController.NOTIFY, "", notFact
-                                .getNotification(new IllegalStateException(
-                                        "Graph not loaded.")));
+                                        "Graph not loaded while attempting to add known mutations.")));
                     } else {
                         try {
                             insertAnnotations((File) args[0]);
@@ -301,7 +278,7 @@ public class GraphController extends AbstractController {
         GraphFactory<SequenceSegment> factory = FactoryProducer.getFactory();
         GraphParser parser = new DefaultGraphParser();
         graph = parser.parseGraph(vertexfile, edgefile, factory);
-        annotations = new HashMap<>();
+        knownMutations = new HashMap<>();
 
         model = new GraphContainer(graph, reference);
         diagram = new StackedMutationContainer(model.getBucketCache(),
@@ -322,8 +299,8 @@ public class GraphController extends AbstractController {
      */
     private void insertAnnotations(final File file) throws IOException {
         Timer timer = Timer.getAndStart();
-        annotations = ResistanceAnnotationMapper.mapAnnotations(graph,
-                ResistanceAnnotationParser.parseAnnotations(file), reference);
+        knownMutations = KnownMutationMapper.mapAnnotations(graph,
+                KnownMutationParser.parseKnownMutations(file), reference);
 
         timer.stopAndLog("Inserting annotations");
         repaintNow = true;
@@ -496,7 +473,7 @@ public class GraphController extends AbstractController {
     public final Group drawGraph(final int startBucket, final int endBucket) {
         Group test = view.drawGraph(
                 model.getVisibleSegments(startBucket, endBucket), graph,
-                annotations, scale);
+                knownMutations, scale);
 
         return test;
     }
