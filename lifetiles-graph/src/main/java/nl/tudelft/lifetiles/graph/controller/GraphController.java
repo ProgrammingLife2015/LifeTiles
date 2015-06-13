@@ -100,14 +100,19 @@ public class GraphController extends AbstractController {
     private boolean repaintNow;
 
     /**
-     * The current scale to resize the graph.
+     * The current zoom level.
      */
-    private double scale = 1;
+    private int zoomLevel = 45;
 
     /**
      * The current zoom level, used to only redraw if the zoomlevel changes.
      */
-    private int currentZoomLevel = 1;
+    private int currentZoomLevel = 0;
+
+    /**
+     * The current scale to resize the graph.
+     */
+    private double scale = Math.pow(ZOOM_OUT_FACTOR, zoomLevel - 5);
 
     /**
      * The currently inserted annotations.
@@ -120,14 +125,9 @@ public class GraphController extends AbstractController {
     public static final Message ANNOTATIONS = Message.create("annotations");
 
     /**
-     * The current zoom level.
-     */
-    private int zoomLevel;
-
-    /**
      * The factor that each zoom in step that updates the current scale.
      */
-    private static final double ZOOM_IN_FACTOR = 2;
+    private static final double ZOOM_IN_FACTOR = 21.0 / 16.0;
 
     /**
      * Visible sequences in the graph.
@@ -142,17 +142,12 @@ public class GraphController extends AbstractController {
     /**
      * The factor that each zoom out step that updates the current scale.
      */
-    private static final double ZOOM_OUT_FACTOR = 0.5;
+    private static final double ZOOM_OUT_FACTOR = 1 / ZOOM_IN_FACTOR;
 
     /**
      * Maximal zoomed in level.
      */
     private static final int MAX_ZOOM = 50;
-
-    /**
-     * The boundary in zoom level between the TileView and the DiagramView.
-     */
-    private static final int SWITCH_ZOOM_LEVEL = 12;
 
     /**
      * {@inheritDoc}
@@ -164,18 +159,14 @@ public class GraphController extends AbstractController {
         initZoomToolBar();
 
         repaintNow = false;
-
         scrollPane = new ScrollPane();
-
-        // Temporary until there is a way to start of totally out zoomed
-        zoomLevel = 5;
     }
 
     /**
      * Initialize the zoom toolbar.
      */
     private void initZoomToolBar() {
-        Zoombar toolbar = new Zoombar(MAX_ZOOM);
+        Zoombar toolbar = new Zoombar(zoomLevel, MAX_ZOOM);
         wrapper.setRight(toolbar.getToolBar());
 
         toolbar.getZoomlevel().addListener((observeVal, oldVal, newVal) -> {
@@ -317,8 +308,8 @@ public class GraphController extends AbstractController {
                 visibleSequences);
 
         shout(Message.LOADED, "sequences", parser.getSequences());
+        repaintNow = true;
         repaint();
-
     }
 
     /**
@@ -397,16 +388,18 @@ public class GraphController extends AbstractController {
      *            Position in the scrollPane.
      */
     private void repaintPosition(final double position) {
-        if (zoomLevel > SWITCH_ZOOM_LEVEL) {
+        int zoomSwitchLevel = MAX_ZOOM - diagram.getLevel();
+        if (zoomLevel > zoomSwitchLevel) {
             if (currentZoomLevel != zoomLevel || repaintNow) {
                 Group diagramDrawing = new Group();
                 double width = getMaxUnifiedEnd(graph) * scale
                         * VertexView.HORIZONTALSCALE;
-                int diagramLevel = (zoomLevel - SWITCH_ZOOM_LEVEL) / 2;
+                int diagramLevel = zoomLevel - zoomSwitchLevel;
                 diagramDrawing.getChildren().add(
                         diagramView.drawDiagram(diagram, diagramLevel, width));
                 diagramDrawing.getChildren().add(new Rectangle(width, 0));
                 scrollPane.setContent(diagramDrawing);
+                wrapper.setCenter(scrollPane);
 
                 currentZoomLevel = zoomLevel;
                 repaintNow = false;
