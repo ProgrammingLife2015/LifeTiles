@@ -55,10 +55,11 @@ public class BucketCache {
      */
     public BucketCache(final int numberBuckets,
             final Graph<SequenceSegment> graph) {
-        this.numberBuckets = numberBuckets;
+        // Number of buckets is ceiled to a power of 2. Needed for diagram view.
+        this.numberBuckets = (int) Math.round(Math.pow(2, Math.ceil(Math.log(numberBuckets) / Math.log(2))));
         this.graph = graph;
         maxUnifiedEnd = getMaxUnifiedEnd();
-        bucketWidth = maxUnifiedEnd / this.numberBuckets + 1;
+        bucketWidth = maxUnifiedEnd / this.numberBuckets;
         cacheGraph();
     }
 
@@ -89,10 +90,12 @@ public class BucketCache {
     private void cacheVertex(final SequenceSegment vertex) {
         int startBucket = bucketStartPosition(vertex.getUnifiedStart());
         int endBucket = bucketEndPosition(vertex.getUnifiedEnd());
-
         for (SortedSet<SequenceSegment> bucket : buckets.subList(startBucket,
                 endBucket)) {
             bucket.add(vertex);
+        }
+        if (startBucket == endBucket) {
+            buckets.get(startBucket - 1).add(vertex);
         }
     }
 
@@ -142,7 +145,9 @@ public class BucketCache {
      */
     public final Set<SequenceSegment> getSegments(final int start, final int end) {
         Set<SequenceSegment> set = new TreeSet<SequenceSegment>();
-        for (Set<SequenceSegment> bucket : buckets.subList(start, end)) {
+        int startBucket = Math.max(0, start);
+        int endBucket = Math.min(numberBuckets, end);
+        for (Set<SequenceSegment> bucket : buckets.subList(startBucket, endBucket)) {
             set.addAll(bucket);
         }
         return set;
