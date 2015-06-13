@@ -77,39 +77,35 @@ public class GraphContainer {
         if (reference != null) {
             findMutations(reference);
         }
-        segmentBuckets = new BucketCache(graph.getAllVertices().size()
-                / NUM_VERTICES_BUCKET, this.graph);
+        segmentBuckets = new BucketCache(Math.max(1, graph.getAllVertices()
+                .size() / NUM_VERTICES_BUCKET), this.graph);
         visibles = graph.getAllVertices();
-
     }
 
     /**
-     * Align the graph.
+     * Aligns the graph by calculating the unified positions of the segments
+     * and if set also generates the empty segments.
      */
     private void alignGraph() {
-
         UnifiedPositionTraverser.unifyGraph(graph);
-
         if (Settings.getBoolean(SETTING_EMPTY)) {
             EmptySegmentTraverser.addEmptySegmentsGraph(graph);
         }
-
     }
 
     /**
-     * Find the mutations on the graph.
+     * Find the mutations on the graph if set, by calculating the reference
+     * positions of the segments.
      *
      * @param reference
      *            Reference of the graph which is used to indicate mutations.
      */
     private void findMutations(final Sequence reference) {
-
         if (!Settings.getBoolean(SETTING_MUTATION)) {
             return;
         }
         ReferencePositionTraverser.referenceMapGraph(graph, reference);
         MutationIndicationTraverser.indicateGraphMutations(graph, reference);
-
     }
 
     /**
@@ -124,7 +120,8 @@ public class GraphContainer {
         Set<SequenceSegment> vertices = new TreeSet<SequenceSegment>();
 
         for (SequenceSegment segment : graph.getAllVertices()) {
-            // copy the set of sequences because retainAll modifies the original set
+            // copy the set of sequences because retainAll modifies the original
+            // set
             Set<Sequence> intersect;
             intersect = new HashSet<Sequence>(segment.getSources());
             // check if any of the visible sequences are in this nodes sources
@@ -135,7 +132,6 @@ public class GraphContainer {
                 vertices.add(segment);
             }
         }
-
         visibles = vertices;
         this.visibleSequences = visibleSequences;
         timer.stopAndLog("Creating visible graph");
@@ -152,7 +148,6 @@ public class GraphContainer {
      */
     public final Set<SequenceSegment> getVisibleSegments(final int start,
             final int end) {
-
         Set<SequenceSegment> copy = new TreeSet<SequenceSegment>();
         for (SequenceSegment seg : segmentBuckets.getSegments(start, end)) {
             try {
@@ -161,17 +156,14 @@ public class GraphContainer {
                 Logging.exception(e);
             }
         }
-
         // Keep only the sequencesegments that are visible
         copy.retainAll(visibles);
-
         // Set the sources so they only contain the visible sequences
         if (visibleSequences != null) {
             for (SequenceSegment vertex : copy) {
                 vertex.getSources().retainAll(visibleSequences);
             }
         }
-
         return copy;
     }
 
