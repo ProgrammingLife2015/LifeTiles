@@ -34,7 +34,7 @@ public class DiagramView {
         Map<Integer, StackedMutationContainer> containers = container
                 .mapLevelStackedMutation();
         int stackLevel = Math.max(1,
-                Math.min(zoomLevel, container.getLevel() - 1));
+                Math.min(zoomLevel, container.getLevel()));
         StackedMutationContainer stack = containers.get(stackLevel);
         return drawStackContainer(stack, width);
     }
@@ -52,10 +52,11 @@ public class DiagramView {
             final double width) {
         Group root = new Group();
         int stacks = stack.getStack().size();
+        double stackWidth = width / stacks;
         for (int index = 0; index < stacks; index++) {
             StackView stackView = new StackView(stack.getStack().get(index),
-                    width / stacks, stack.getMaxMutations());
-            stackView.setLayoutX(index * width / stacks);
+                    stackWidth, stack.getMaxMutations());
+            stackView.setLayoutX(index * stackWidth);
             root.getChildren().add(stackView);
         }
         return root;

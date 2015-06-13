@@ -21,12 +21,36 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 public class StackedMutationContainer {
 
     /**
+     * Mapping value of the insertion mutation.
+     */
+    private static final Integer INSERTION_MAP = 1;
+
+    /**
+     * Mapping value of the deletion mutation.
+     */
+    private static final Integer DELETION_MAP = 2;
+
+    /**
+     * Mapping value of the polymorphism mutation.
+     */
+    private static final Integer POLYMORPHISM_MAP = 3;
+
+    /**
+     * The number of values being counted by the stacked mutation container.
+     */
+    private static final int NUMBER_OF_VALUES = 4;
+
+    /**
      * List with the stacked quantity of mutations.
      * <dl>
-     * <dt>[0] -> total bases.</dt>
-     * <dt>[1] -> insertion bases.</dt>
-     * <dt>[2] -> deletion bases.</dt>
-     * <dt>[3] -> polymorphism bases.</dt>
+     * <dt>[0]</dt>
+     * <dd>total bases.</dd>
+     * <dt>[1]</dt>
+     * <dd>insertion bases.</dd>
+     * <dt>[2]</dt>
+     * <dd>deletion bases.</dd>
+     * <dt>[3]</dt>
+     * <dd>polymorphism bases.</dd>
      * </dl>
      */
     private List<List<Long>> stackedMutations;
@@ -56,7 +80,8 @@ public class StackedMutationContainer {
      */
     public StackedMutationContainer(final BucketCache buckets,
             final Set<Sequence> visibleSequences) {
-        this.level = (int) Math.round(Math.log(buckets.getNumberBuckets()) / Math.log(2) + 1);
+        this.level = (int) Math.round(Math.log(buckets.getNumberBuckets())
+                / Math.log(2) + 1);
         fillStackedMutationContainer(this.level, buckets, visibleSequences);
     }
 
@@ -175,16 +200,15 @@ public class StackedMutationContainer {
      */
     private List<Long> insertBucket(final Set<SequenceSegment> bucket,
             final Set<Sequence> visibleSequences) {
-        List<Long> list = new ArrayList<>(4);
-        list.add((long) 0);
-        list.add((long) 0);
-        list.add((long) 0);
-        list.add((long) 0);
+        List<Long> list = new ArrayList<>(NUMBER_OF_VALUES);
+        for (int index = 0; index < NUMBER_OF_VALUES; index++) {
+            list.add((long) 0);
+        }
 
-        Map<Mutation, Integer> mutations = new HashMap<>();
-        mutations.put(Mutation.INSERTION, 1);
-        mutations.put(Mutation.DELETION, 2);
-        mutations.put(Mutation.POLYMORPHISM, 3);
+        Map<Mutation, Integer> mutations = new HashMap<>(3);
+        mutations.put(Mutation.INSERTION, INSERTION_MAP);
+        mutations.put(Mutation.DELETION, DELETION_MAP);
+        mutations.put(Mutation.POLYMORPHISM, POLYMORPHISM_MAP);
 
         for (SequenceSegment segment : bucket) {
             Set<Sequence> sources = new HashSet<>(segment.getSources());

@@ -145,7 +145,9 @@ public class BucketCache {
      */
     public final Set<SequenceSegment> getSegments(final int start, final int end) {
         Set<SequenceSegment> set = new TreeSet<SequenceSegment>();
-        for (Set<SequenceSegment> bucket : buckets.subList(Math.max(0, start), Math.min(numberBuckets, end))) {
+        int startBucket = Math.max(0, start);
+        int endBucket = Math.min(numberBuckets, end);
+        for (Set<SequenceSegment> bucket : buckets.subList(startBucket, endBucket)) {
             set.addAll(bucket);
         }
         return set;

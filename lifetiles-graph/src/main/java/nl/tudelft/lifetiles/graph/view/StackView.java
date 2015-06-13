@@ -1,6 +1,6 @@
 package nl.tudelft.lifetiles.graph.view;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import nl.tudelft.lifetiles.sequence.Mutation;
@@ -38,7 +38,7 @@ public class StackView extends Group {
     /**
      * Width of the rectangle.
      */
-    private double rectangleWidth;
+    private final double rectangleWidth;
 
     /**
      * Constructs a stack view, which contains a single stacked column of the
@@ -58,10 +58,8 @@ public class StackView extends Group {
 
         getChildren().add(drawPart(VERTICAL_SCALE, 0.0, defaultColor));
 
-        List<Paint> colors = new ArrayList<>();
-        colors.add(Mutation.INSERTION.getColor());
-        colors.add(Mutation.DELETION.getColor());
-        colors.add(Mutation.POLYMORPHISM.getColor());
+        List<Paint> colors = Arrays.asList(Mutation.INSERTION.getColor(),
+                Mutation.DELETION.getColor(), Mutation.POLYMORPHISM.getColor());
 
         double offset = 0.0;
         for (int index = 1; index <= 3; index++) {

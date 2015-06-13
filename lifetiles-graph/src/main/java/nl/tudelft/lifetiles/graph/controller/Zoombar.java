@@ -35,14 +35,15 @@ public class Zoombar {
     /**
      * Create a new Toolbar.
      *
-     * @param zoom
-     *            the maximal value of the zoom
+     * @param currentZoom
+     *            the current starting zoom level.
+     * @param maxZoom
+     *            the maximal value of the zoom.
      */
-    public Zoombar(final int zoom) {
-        maxzoom = zoom;
+    public Zoombar(final int currentZoom, final int maxZoom) {
+        maxzoom = maxZoom;
         zoomLevel = new SimpleIntegerProperty();
-        // 5 is temporary, until graph can start at the highest zoom level
-        zoomLevel.set(5);
+        zoomLevel.set(currentZoom);
         Slider slider = createSlider();
         slider.getStyleClass().add("slider");
         slider.valueProperty().addListener(
@@ -94,8 +95,8 @@ public class Zoombar {
      * @return the new slider
      */
     private Slider createSlider() {
-        final CustomLabelSlider slider = new CustomLabelSlider(value -> Math
-                .abs(value - maxzoom));
+        final CustomLabelSlider slider = new CustomLabelSlider(
+                value -> Math.abs(value - maxzoom));
 
         slider.setOrientation(Orientation.VERTICAL);
         slider.setMin(0);
