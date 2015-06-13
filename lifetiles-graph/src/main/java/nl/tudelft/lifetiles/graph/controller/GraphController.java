@@ -14,6 +14,8 @@ import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Rectangle;
+import nl.tudelft.lifetiles.annotation.model.GeneAnnotation;
+import nl.tudelft.lifetiles.annotation.model.GeneAnnotationParser;
 import nl.tudelft.lifetiles.annotation.model.KnownMutation;
 import nl.tudelft.lifetiles.annotation.model.KnownMutationMapper;
 import nl.tudelft.lifetiles.annotation.model.KnownMutationParser;
@@ -119,6 +121,11 @@ public class GraphController extends AbstractController {
      * The currently inserted known mutations.
      */
     private Map<SequenceSegment, List<KnownMutation>> knownMutations;
+
+    /**
+     * The currently inserted annotations.
+     */
+    private Map<String, GeneAnnotation> annotations;
 
     /**
      * The factor that each zoom in step that updates the current scale.
@@ -256,6 +263,29 @@ public class GraphController extends AbstractController {
                                         "Graph not loaded while attempting to add known mutations.")));
                     } else {
                         try {
+                            insertKnownMutations((File) args[0]);
+                        } catch (IOException exception) {
+                            shout(NotificationController.NOTIFY, "",
+                                    notFact.getNotification(exception));
+                        }
+                    }
+                });
+
+        listen(Message.OPENED,
+                (controller, subject, args) -> {
+                    assert controller instanceof MenuController;
+                    if (!subject.equals("annotations")) {
+                        return;
+                    }
+                    assert args[0] instanceof File;
+
+                    if (graph == null) {
+                        shout(NotificationController.NOTIFY,
+                                "",
+                                notFact.getNotification(new IllegalStateException(
+                                        "Graph not loaded while attempting to add annotations.")));
+                    } else {
+                        try {
                             insertAnnotations((File) args[0]);
                         } catch (IOException exception) {
                             shout(NotificationController.NOTIFY, "",
@@ -294,6 +324,7 @@ public class GraphController extends AbstractController {
         GraphParser parser = new DefaultGraphParser();
         graph = parser.parseGraph(vertexfile, edgefile, factory);
         knownMutations = new HashMap<>();
+        annotations = new HashMap<>();
 
         model = new GraphContainer(graph, reference);
         diagram = new StackedMutationContainer(model.getBucketCache(),
@@ -302,6 +333,24 @@ public class GraphController extends AbstractController {
         shout(Message.LOADED, "sequences", parser.getSequences());
         repaintNow = true;
         repaint();
+    }
+
+    /**
+     * Inserts a list of known mutations onto the graph from the specified file.
+     *
+     * @param file
+     *            The file to get known mutations from.
+     * @throws IOException
+     *             When an IO error occurs while reading one of the files.
+     */
+    private void insertKnownMutations(final File file) throws IOException {
+        Timer timer = Timer.getAndStart();
+        knownMutations = KnownMutationMapper.mapAnnotations(graph,
+                KnownMutationParser.parseKnownMutations(file), reference);
+
+        timer.stopAndLog("Inserting annotations");
+        repaintNow = true;
+        repaintPosition(scrollPane.hvalueProperty().doubleValue());
     }
 
     /**
@@ -314,8 +363,7 @@ public class GraphController extends AbstractController {
      */
     private void insertAnnotations(final File file) throws IOException {
         Timer timer = Timer.getAndStart();
-        knownMutations = KnownMutationMapper.mapAnnotations(graph,
-                KnownMutationParser.parseKnownMutations(file), reference);
+        annotations = GeneAnnotationParser.parseGeneAnnotations(file);
 
         timer.stopAndLog("Inserting annotations");
         repaintNow = true;
