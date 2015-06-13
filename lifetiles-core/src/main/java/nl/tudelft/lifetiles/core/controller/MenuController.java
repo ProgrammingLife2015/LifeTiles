@@ -28,9 +28,10 @@ import nl.tudelft.lifetiles.notification.model.NotificationFactory;
 public class MenuController extends AbstractController {
 
     /**
-     * Constant annotation extension, currently as defined by client: '.txt'.
+     * Constant known mutation extension, currently as defined by client:
+     * '.txt'.
      */
-    private static final String ANNOTATION_EXTENSION = ".txt";
+    private static final String KNOWN_MUTATION_EXTENSION = ".txt";
     /**
      * Extension of the node file.
      */
@@ -115,7 +116,7 @@ public class MenuController extends AbstractController {
         }
         loadGraph(directory);
         loadTree(directory);
-        loadAnnotations(directory);
+        loadKnownMutations(directory);
         loadMetaData(directory);
     }
 
@@ -153,15 +154,15 @@ public class MenuController extends AbstractController {
     }
 
     /**
-     * Loads the annotations from a file in the specified directory.
+     * Loads the known mutations from a file in the specified directory.
      *
      * @param directory
      *            The directory from which to load annotations.
      */
-    private void loadAnnotations(final File directory) {
-        File annotationFile = loadOrWarn(directory, ANNOTATION_EXTENSION);
+    private void loadKnownMutations(final File directory) {
+        File annotationFile = loadOrWarn(directory, KNOWN_MUTATION_EXTENSION);
         if (annotationFile != null) {
-            shout(Message.OPENED, "annotations", annotationFile);
+            shout(Message.OPENED, "known mutations", annotationFile);
         }
     }
 
@@ -205,15 +206,15 @@ public class MenuController extends AbstractController {
     }
 
     /**
-     * Handle action to "Insert Annotations" menu item.
+     * Handle action to "Insert Known Mutations" menu item.
      *
      * @param event
-     *            Event on "Insert Annotations" item.
+     *            Event on "Insert Known Mutations" item.
      */
     @FXML
-    private void insertAnnotationsAction(final ActionEvent event) {
+    private void insertKnownMutationAction(final ActionEvent event) {
         try {
-            loadAnnotationsFile();
+            loadKnownMutationsFile();
         } catch (IOException e) {
             AbstractNotification notification = nf.getNotification(e);
             shout(NotificationController.NOTIFY, "", notification);
@@ -221,16 +222,16 @@ public class MenuController extends AbstractController {
     }
 
     /**
-     * Perform functionality associated with opening and inserting a annotation
-     * file.
+     * Perform functionality associated with opening and inserting a known
+     * mutations file.
      *
      * @throws IOException
      *             throws <code>IOException</code> if any of the files were not
      *             found
      */
-    private void loadAnnotationsFile() throws IOException {
+    private void loadKnownMutationsFile() throws IOException {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open file containing annotations");
+        fileChooser.setTitle("Open file containing known mutations");
         Window window = menuBar.getScene().getWindow();
         File file = fileChooser.showOpenDialog(window);
 
@@ -239,7 +240,7 @@ public class MenuController extends AbstractController {
             return;
         }
 
-        shout(Message.OPENED, "annotations", file);
+        shout(Message.OPENED, "known mutations", file);
     }
 
     /**

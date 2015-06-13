@@ -5,13 +5,13 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ResistanceAnnotationTest {
+public class KnownMutationTest {
 
-    private ResistanceAnnotation annotation;
+    private KnownMutation annotation;
 
     @Before
     public void setUp() {
-        annotation = new ResistanceAnnotation("a", "b", "c", "d", 0, "e");
+        annotation = new KnownMutation("a", "b", "c", "d", 0, "e");
     }
 
     @Test

@@ -12,18 +12,18 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
- * Static class which maps a list of resistance annotations to a graph and
- * returns a map which maps a segment to a list of resistance annotations.
+ * Static class which maps a list of known mutations to a graph and
+ * returns a map which maps a segment to a list of known mutations.
  *
  * @author Jos
  *
  */
-public final class ResistanceAnnotationMapper {
+public final class KnownMutationMapper {
 
     /**
      * A static class can't have a public or default constructor.
      */
-    private ResistanceAnnotationMapper() {
+    private KnownMutationMapper() {
         // noop
     }
 
@@ -32,28 +32,27 @@ public final class ResistanceAnnotationMapper {
      *
      * @param graph
      *            Graph to annotate the annotations onto.
-     * @param annotations
-     *            List of annotations to map.
+     * @param knownMutations
+     *            List of known mutations to map.
      * @param reference
      *            Reference to map to, resistanceAnnotations only can map to the
      *            reference sequence.
      * @return
-     *         Map which maps segments to a list of annotations.
+     *         Map which maps segments to a list of known mutations.
      */
-    public static Map<SequenceSegment, List<ResistanceAnnotation>> mapAnnotations(
+    public static Map<SequenceSegment, List<KnownMutation>> mapAnnotations(
             final Graph<SequenceSegment> graph,
-            final List<ResistanceAnnotation> annotations,
-            final Sequence reference) {
+            final List<KnownMutation> knownMutations, final Sequence reference) {
         Set<SequenceSegment> segments = selectReference(graph, reference);
-        Map<SequenceSegment, List<ResistanceAnnotation>> annotatedSegments = new HashMap<>();
-        for (ResistanceAnnotation annotation : annotations) {
-             SequenceSegment segment = annotation.mapOntoSequence(segments,
+        Map<SequenceSegment, List<KnownMutation>> annotatedSegments = new HashMap<>();
+        for (KnownMutation knownMutation : knownMutations) {
+            SequenceSegment segment = knownMutation.mapOntoSequence(segments,
                     reference);
             if (segment != null) {
                 if (!annotatedSegments.containsKey(segment)) {
                     annotatedSegments.put(segment, new ArrayList<>());
                 }
-                annotatedSegments.get(segment).add(annotation);
+                annotatedSegments.get(segment).add(knownMutation);
             }
         }
         return annotatedSegments;
