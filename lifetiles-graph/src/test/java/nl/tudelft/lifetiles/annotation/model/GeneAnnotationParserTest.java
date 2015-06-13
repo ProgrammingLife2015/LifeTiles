@@ -8,16 +8,16 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-public class GenomeAnnotationParserTest {
-    static final String testGenomeFilename = "/data/test_annotations/simple_genomes";
-    private Map<String, GenomeAnnotation> genomes;
+public class GeneAnnotationParserTest {
+    static final String testGenomeFilename = "/data/test_annotations/simple_annotations";
+    private Map<String, GeneAnnotation> genomes;
 
     @Before
     public void setUp() throws Exception {
         File genomeFile = new File(this.getClass()
                 .getResource(testGenomeFilename + ".gff").toURI());
 
-        genomes = GenomeAnnotationParser.parseGenomeAnnotations(genomeFile);
+        genomes = GeneAnnotationParser.parseGeneAnnotations(genomeFile);
     }
 
     @Test
@@ -27,7 +27,7 @@ public class GenomeAnnotationParserTest {
 
     @Test
     public void parseGenomeSingleTest() throws Exception {
-        GenomeAnnotation genome = genomes.get("test1");
+        GeneAnnotation genome = genomes.get("test1");
         assertEquals("test1", genome.getName());
         assertEquals(1, genome.getStart());
         assertEquals(1000, genome.getEnd());
