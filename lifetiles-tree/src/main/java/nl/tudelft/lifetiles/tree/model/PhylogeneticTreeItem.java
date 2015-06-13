@@ -116,55 +116,58 @@ public class PhylogeneticTreeItem {
     }
 
     /**
-     * Compares this with another Object. returns true when both are the same.
-     * two PhylogeneticTreeItems are considered the same when both have the
-     * same:
+     * Creates a new tree that only contains the visible nodes. When a node has
+     * only one child, it is removed from the tree and its child is returned
+     * instead. When a node has no children, and is not visible, null is
+     * returned.
      *
-     * <ol>
-     * <li>name or both have no name</li>
-     * <li>distance</li>
-     * <li>children, order does not matter</li>
-     * </ol>
-     *
-     * @param other
-     *            the object to compare with
-     *
-     * @return true if both are the same, otherwise false
+     * @param visibleSequences
+     *            the sequences that need to be in this tree.
+     * @return the new root of a subtree.
      */
-
-    @Override
-    public final boolean equals(final Object other) {
-        if (other == null) {
-            return false;
-        } else if (other == this) {
-            return true;
-        } else if (other instanceof PhylogeneticTreeItem) {
-            PhylogeneticTreeItem that = (PhylogeneticTreeItem) other;
-            boolean res;
-            // compare name
-            if (name == null && that.getName() == null) {
-                // both are empty and thus the same
-                res = true;
-            } else if (name == null) {
-                // the names are not both empty so not the same
-                res = false;
-            } else {
-                // name is not null check if it is the same
-                res = name.equals(that.getName());
-            }
-
-            // compare distance
-            res = res && Double.compare(distance, that.getDistance()) == 0;
-
-            // compare children
-            for (PhylogeneticTreeItem child : children) {
-                res = res && that.getChildren().contains(child);
-            }
-            return res;
-        } else {
-            return false;
+    public final PhylogeneticTreeItem subTree(final Set<Sequence> visibleSequences) {
+        // copy the node
+        PhylogeneticTreeItem result = new PhylogeneticTreeItem();
+        result.setDistance(distance);
+        if (visibleSequences.contains(sequence)) {
+            result.setName(name);
+        } else if (children.isEmpty()) {
+            return null;
         }
+        // copy the children when they are needed
+        for (PhylogeneticTreeItem child : children) {
+            // check if this child is needed
+            Set<Sequence> intersect = new HashSet<Sequence>(childSequences);
+            intersect.retainAll(visibleSequences);
+            if (!intersect.isEmpty()) {
+                PhylogeneticTreeItem subtree = child.subTree(visibleSequences);
+                if (subtree != null) {
+                    subtree.setParent(result);
+                }
+            }
+        }
+        // remove useless nodes(nodes with at single child can be removed from
+        // the subtree)
+        if (result.getChildren().isEmpty() && result.getName() == null) {
+            return null;
+        }
+        if (result.getChildren().size() == 1) {
+            result = result.getChildren().get(0);
+        }
+        return result;
     }
+
+    /**
+     * Fills the set containing the sequences that descend from this node. the
+     * sequences should already have been added to the tree.
+     */
+    public final void populateChildSequences() {
+        for (PhylogeneticTreeItem child : children) {
+            child.populateChildSequences();
+        }
+        setChildSequences();
+    }
+
 
     /**
      * Returns the ArrayList of children.
@@ -251,6 +254,57 @@ public class PhylogeneticTreeItem {
      */
     public final void setName(final String name) {
         this.name = name;
+    }
+
+    /**
+     * Compares this with another Object. returns true when both are the same.
+     * two PhylogeneticTreeItems are considered the same when both have the
+     * same:
+     *
+     * <ol>
+     * <li>name or both have no name</li>
+     * <li>distance</li>
+     * <li>children, order does not matter</li>
+     * </ol>
+     *
+     * @param other
+     *            the object to compare with
+     *
+     * @return true if both are the same, otherwise false
+     */
+    @Override
+    public final boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (!(obj instanceof PhylogeneticTreeItem)) {
+            return false;
+        }
+        PhylogeneticTreeItem other = (PhylogeneticTreeItem) obj;
+        if (Double.doubleToLongBits(distance) != Double
+                .doubleToLongBits(other.distance)) {
+            return false;
+        }
+        if (name == null) {
+            if (other.name != null) {
+                return false;
+            }
+        } else if (!name.equals(other.name)) {
+            return false;
+        }
+        if (children.isEmpty()) {
+            if (!other.children.isEmpty()) {
+                return false;
+            }
+        } else if (!(children.size() == other.getChildren().size())) {
+            return false;
+        } else if (!children.containsAll(other.getChildren())) {
+            return false;
+        }
+        return true;
     }
 
     /**
