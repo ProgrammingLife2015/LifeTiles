@@ -17,7 +17,7 @@
 		<Menu text="File">
 			<items>
 				<MenuItem text="Open" onAction="#openAction" />
-				<MenuItem text="Insert Annotations" onAction="#insertAnnotationsAction" />
+				<MenuItem text="Insert Known Mutations" onAction="#insertKnownMutationAction" />
 			</items>
 		</Menu>
 		<Menu text="View">

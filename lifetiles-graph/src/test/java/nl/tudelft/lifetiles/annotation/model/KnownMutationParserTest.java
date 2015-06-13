@@ -8,17 +8,16 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ResistanceAnnotationParserTest {
+public class KnownMutationParserTest {
     static final String testAnnotationFilename = "/data/test_annotations/simple_annotations";
-    private List<ResistanceAnnotation> annotations;
+    private List<KnownMutation> annotations;
 
     @Before
     public void setUp() throws Exception {
         File annotationFile = new File(this.getClass()
                 .getResource(testAnnotationFilename + ".txt").toURI());
 
-        annotations = ResistanceAnnotationParser
-                .parseAnnotations(annotationFile);
+        annotations = KnownMutationParser.parseKnownMutations(annotationFile);
     }
 
     @Test
@@ -28,7 +27,7 @@ public class ResistanceAnnotationParserTest {
 
     @Test
     public void parseAnnotationsSingleTest() throws Exception {
-        ResistanceAnnotation annotation = annotations.get(0);
+        KnownMutation annotation = annotations.get(0);
         assertEquals("test1", annotation.getGeneName());
         assertEquals("mut1", annotation.getTypeOfMutation());
         assertEquals("NNN", annotation.getChange());
