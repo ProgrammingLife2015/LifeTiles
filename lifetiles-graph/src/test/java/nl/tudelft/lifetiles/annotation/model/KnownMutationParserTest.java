@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class KnownMutationParserTest {
-    static final String testAnnotationFilename = "/data/test_annotations/simple_annotations";
+    static final String testAnnotationFilename = "/data/test_annotations/simple_known_mutations";
     private List<KnownMutation> annotations;
 
     @Before

@@ -145,7 +145,7 @@ public class TileViewTest {
         BucketCache buckets = new BucketCache(1, graph);
 
         File file = new File(
-                "./src/test/resources/data/test_annotations/simple_annotations.txt");
+                "./src/test/resources/data/test_annotations/simple_known_mutations.txt");
 
         List<KnownMutation> parse = KnownMutationParser
                 .parseKnownMutations(file);

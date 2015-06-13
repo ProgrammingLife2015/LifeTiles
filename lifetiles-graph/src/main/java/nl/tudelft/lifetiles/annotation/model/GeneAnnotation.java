@@ -1,35 +1,35 @@
 package nl.tudelft.lifetiles.annotation.model;
 
 /**
- * Annotation of a genome onto the graph.
+ * Annotation of a gene onto the graph.
  *
  * @author Jos
  *
  */
-public class GenomeAnnotation extends AbstractAnnotation {
+public class GeneAnnotation extends AbstractAnnotation {
 
     /**
-     * Name of the genome.
+     * Name of the gene.
      */
     private final String name;
 
     /**
-     * Construct a genome annotation.
+     * Construct a gene annotation.
      *
      * @param start
      *            Start coordinate of the domain annotation.
      * @param end
      *            End coordinate of the domain annotation.
      * @param name
-     *            Name of the genome.
+     *            Name of the gene.
      */
-    public GenomeAnnotation(final long start, final long end, final String name) {
+    public GeneAnnotation(final long start, final long end, final String name) {
         super(start, end);
         this.name = name;
     }
 
     /**
-     * @return name of the genome.
+     * @return name of the gene.
      */
     public String getName() {
         return name;
