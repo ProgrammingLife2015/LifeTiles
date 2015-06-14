@@ -34,14 +34,14 @@ public final class GeneAnnotationParser {
     public static Map<String, GeneAnnotation> parseGeneAnnotations(
             final File file) throws IOException {
         Map<String, GeneAnnotation> genomeAnnotations = new HashMap<String, GeneAnnotation>();
-        Stream<String> annotationFile = Files.lines(file.toPath());
-        annotationFile.forEach(line -> {
-            GeneAnnotation genome = parseGeneAnnotation(line);
-            if (genome != null) {
-                genomeAnnotations.put(genome.getName(), genome);
-            }
-        });
-        annotationFile.close();
+        Stream<String> annotationLines = Files.lines(file.toPath());
+        annotationLines
+                .map(GeneAnnotationParser::parseGeneAnnotation)
+                .filter(genome -> genome != null)
+                .forEach(
+                        genome -> genomeAnnotations.put(genome.getName(),
+                                genome));
+        annotationLines.close();
         return genomeAnnotations;
     }
 
