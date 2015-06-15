@@ -3,11 +3,11 @@ package nl.tudelft.lifetiles.graph.view;
 import java.util.Arrays;
 import java.util.List;
 
-import nl.tudelft.lifetiles.sequence.Mutation;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import nl.tudelft.lifetiles.sequence.Mutation;
 
 /**
  * Stack view class which contains a single stacked column of the diagram view.
@@ -62,7 +62,7 @@ public class StackView extends Group {
                 Mutation.DELETION.getColor(), Mutation.POLYMORPHISM.getColor());
 
         double offset = 0.0;
-        for (int index = 1; index <= 3; index++) {
+        for (int index = 1; index <= colors.size(); index++) {
             double height = VERTICAL_SCALE * quantities.get(index) / max;
             getChildren().add(drawPart(height, offset, colors.get(index - 1)));
             offset += height;

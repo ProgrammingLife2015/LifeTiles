@@ -168,7 +168,7 @@ public class StackedMutationContainer {
      *
      * @return all columns in the stacked mutation diagram.
      */
-    public List<List<Long>> getStack() {
+    public final List<List<Long>> getStack() {
         return stackedMutations;
     }
 
@@ -230,7 +230,7 @@ public class StackedMutationContainer {
      *
      * @return the maximum number of mutations in one of the stacks.
      */
-    public Long getMaxMutations() {
+    public final Long getMaxMutations() {
         long max = 0;
         for (List<Long> stack : stackedMutations) {
             max = Math.max(max, stack.get(1) + stack.get(2) + stack.get(3));
@@ -243,7 +243,7 @@ public class StackedMutationContainer {
      *
      * @return map from level to stacked container.
      */
-    public Map<Integer, StackedMutationContainer> mapLevelStackedMutation() {
+    public final Map<Integer, StackedMutationContainer> mapLevelStackedMutation() {
         Map<Integer, StackedMutationContainer> map;
         if (child == null) {
             map = new HashMap<>();
@@ -258,7 +258,7 @@ public class StackedMutationContainer {
     /**
      * @return the level
      */
-    public int getLevel() {
+    public final int getLevel() {
         return level;
     }
 
