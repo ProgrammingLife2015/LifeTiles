@@ -33,6 +33,10 @@ public final class Message {
      * A shout message indicating the bookmark sidebar needs to appear.
      */
     public static final Message BOOKMARKS = create("bookmarks");
+    /**
+     * A shout message indicating we want to move to a location in the genome.
+     */
+    public static final Message GOTO = create("goto");
 
     /**
      * The value.
