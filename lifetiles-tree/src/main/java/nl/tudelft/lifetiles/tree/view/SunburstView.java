@@ -5,7 +5,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Control;
 import javafx.scene.input.MouseButton;
-import javafx.scene.paint.Color;
 import nl.tudelft.lifetiles.tree.controller.TreeController;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 

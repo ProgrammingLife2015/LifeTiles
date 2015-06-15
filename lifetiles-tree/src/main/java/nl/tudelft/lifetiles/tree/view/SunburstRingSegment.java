@@ -23,14 +23,13 @@ import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
 public class SunburstRingSegment extends AbstractSunburstNode {
     /**
-     * the default start color for the color range.
+     * the max brightness for the color of a Node.
      */
-    private static final Color START_COLOR = Color.hsb(0, 0.5, 0.5);
+    private static final double MAX_BRIGHTNESS = 0.8d;
     /**
-     * the default end color for the color range.
+     * The default saturation of the color of a Node.
      */
-    private static final Color END_COLOR = Color.hsb(170, 0.5, 0.5);
-
+    private static final double SATURATION = 0.9d;
     /**
      * Creates a SunburstRingSegment.
      *
@@ -198,14 +197,20 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      * Creates a {@link Color} for this node. the color will be red by default,
      * and the color associated with the sequence when the node has a sequence.
      *
+     * @param degrees
+     *            the location where the ringSeqment is drawn, will become the
+     *            hue of the color.
+     * @param layer
+     *            the layer where the ringSegment is drawn, is used for the
+     *            brightness
      * @return a Color object that specifies what color this node will be.
      */
-    private Color createColor(double degrees, int layer) {
+    private Color createColor(final double degrees, final int layer) {
         Sequence sequence = getValue().getSequence();
         if (sequence == null) {
-            double brightness = Math.min(0.8, 1d / layer);
+            double brightness = Math.min(MAX_BRIGHTNESS, 1d / layer);
             brightness = Math.abs(brightness - 1);
-            return Color.hsb(degrees, 0.9d, brightness);
+            return Color.hsb(degrees, SATURATION, brightness);
         } else {
             return SequenceColor.getColor(sequence);
         }
