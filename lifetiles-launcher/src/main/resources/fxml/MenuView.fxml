@@ -27,6 +27,11 @@
 				<MenuItem text="Undo Filter" onAction="#undoFilterAction"/>
 			</items>
 		</Menu>
+		<Menu text="Bookmarks">
+			<items>
+				<MenuItem text="Show Bookmarks" onAction="#bookmarksAction" />
+			</items>
+		</Menu>
 	</menus>
 
 	<stylesheets>

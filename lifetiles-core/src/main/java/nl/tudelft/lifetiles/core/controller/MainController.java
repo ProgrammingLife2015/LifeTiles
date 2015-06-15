@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import nl.tudelft.lifetiles.core.util.Message;
 
 /**

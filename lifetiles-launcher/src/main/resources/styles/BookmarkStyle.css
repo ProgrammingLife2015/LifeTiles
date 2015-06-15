@@ -1,0 +1,24 @@
+/* Stylesheet for the Bookmark view. */
+
+#search {
+	-fx-min-width: 22;
+    -fx-min-height: 22;
+    -fx-padding: 0;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+}
+
+#close {
+    -fx-background-color: Inherit;
+    -fx-background-repeat: no-repeat;
+    -fx-min-width: 22;
+    -fx-min-height: 22;
+    -fx-padding: 0;
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+
+}
+
+#close:hover {
+    -fx-cursor: HAND;
+}

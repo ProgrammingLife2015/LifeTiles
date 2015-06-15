@@ -118,6 +118,11 @@ public class MenuController extends AbstractController {
     private void resetAction(final ActionEvent event) {
         shout(Message.RESET, "");
     }
+    
+    @FXML
+    private void bookmarksAction() {
+        shout(Message.BOOKMARKS, "");
+    }
 
     /**
      * Handle clicks on the Undo item in the Filter menu.
