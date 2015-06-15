@@ -100,7 +100,8 @@ public final class MiniMap {
 
         List<Stop> stops = new ArrayList<>();
         for (int index = 0; index < colors.size(); index++) {
-            double offset = (double) index / (double) numColors;
+            double correction = (double) index / (double) numColors;
+            double offset = (double) (index + correction) / (double) numColors;
             stops.add(new Stop(offset, colors.get(index)));
         }
 
