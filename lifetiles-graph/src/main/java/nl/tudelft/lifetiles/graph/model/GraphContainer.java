@@ -59,7 +59,7 @@ public class GraphContainer {
     /**
      * The amount of vertices to be placed in one bucket.
      */
-    private static final int NUM_VERTICES_BUCKET = Integer.parseInt(Settings
+    private static final int VERTICES_BUCKET = Integer.parseInt(Settings
             .get("num_vertices_bucket"));
 
     /**
@@ -83,7 +83,7 @@ public class GraphContainer {
             findMutations(reference);
         }
         segmentBuckets = new BucketCache(Math.max(1, graph.getAllVertices()
-                .size() / NUM_VERTICES_BUCKET), this.graph);
+                .size() / VERTICES_BUCKET), this.graph);
         visibles = graph.getAllVertices();
     }
 
@@ -136,9 +136,11 @@ public class GraphContainer {
 
         for (SequenceSegment segment : graph.getAllVertices()) {
             // copy the set of sequences because retainAll modifies the original
-            // set
-            Set<Sequence> intersect;
-            intersect = new HashSet<Sequence>(segment.getSources());
+            // set. This is somewhat inefficient but its the best known way to
+            // do this
+            @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+            Set<Sequence> intersect = new HashSet<Sequence>(
+                    segment.getSources());
             // check if any of the visible sequences are in this nodes sources
             if (visibleSequences != null) {
                 intersect.retainAll(visibleSequences);

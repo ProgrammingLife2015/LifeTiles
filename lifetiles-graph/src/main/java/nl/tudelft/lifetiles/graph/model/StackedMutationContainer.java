@@ -216,7 +216,8 @@ public class StackedMutationContainer {
             if (visibleSequences != null) {
                 sources.retainAll(visibleSequences);
             }
-            long size = segment.getContent().getLength() * sources.size();
+            int sourceSize = sources.size();
+            long size = segment.getContent().getLength() * sourceSize;
             if (mutations.containsKey(segment.getMutation())) {
                 int index = mutations.get(segment.getMutation());
                 list.set(index, list.get(index) + size);

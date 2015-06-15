@@ -262,7 +262,7 @@ public class GraphController extends AbstractController {
         listen(Message.OPENED,
                 (controller, subject, args) -> {
                     assert controller instanceof MenuController;
-                    if (!subject.equals("known mutations")) {
+                    if (!"known mutations".equals(subject)) {
                         return;
                     }
                     assert args[0] instanceof File;
