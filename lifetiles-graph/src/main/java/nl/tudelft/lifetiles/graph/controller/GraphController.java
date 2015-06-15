@@ -344,6 +344,7 @@ public class GraphController extends AbstractController {
 
             repaintPosition(scrollPane.hvalueProperty().doubleValue());
         }
+        getMiniMapController().drawMiniMap();
     }
 
     /**
@@ -420,8 +421,6 @@ public class GraphController extends AbstractController {
                 repaintNow = false;
             }
         }
-
-        getMiniMapController().drawMiniMap();
     }
 
     /**

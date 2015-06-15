@@ -94,6 +94,8 @@ public final class MiniMap {
      *
      * @return an array of {@link Stop}
      */
+    // There is no other way but to create objects in a loop in this case
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public List<Stop> getStops() {
         List<Color> colors = getColors();
         int numColors = colors.size();
