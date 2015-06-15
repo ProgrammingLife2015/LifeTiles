@@ -52,6 +52,11 @@ public class GraphContainer {
     private Set<Sequence> visibleSequences;
 
     /**
+     * The minimap model.
+     */
+    private MiniMap miniMap;
+
+    /**
      * The amount of vertices to be placed in one bucket.
      */
     private static final int NUM_VERTICES_BUCKET = Integer.parseInt(Settings
@@ -80,6 +85,16 @@ public class GraphContainer {
         segmentBuckets = new BucketCache(Math.max(1, graph.getAllVertices()
                 .size() / NUM_VERTICES_BUCKET), this.graph);
         visibles = graph.getAllVertices();
+    }
+
+    /**
+     * @return the {@link MiniMap} model
+     */
+    public final MiniMap getMiniMap() {
+        if (this.miniMap == null) {
+            miniMap = new MiniMap(segmentBuckets);
+        }
+        return miniMap;
     }
 
     /**

@@ -19,6 +19,9 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import nl.tudelft.lifetiles.annotation.model.KnownMutation;
 import nl.tudelft.lifetiles.annotation.model.KnownMutationMapper;
@@ -33,9 +36,9 @@ import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.model.GraphContainer;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
 import nl.tudelft.lifetiles.graph.model.GraphParser;
-import nl.tudelft.lifetiles.graph.model.MiniMapScrollPaneSkin;
 import nl.tudelft.lifetiles.graph.model.StackedMutationContainer;
 import nl.tudelft.lifetiles.graph.view.DiagramView;
+import nl.tudelft.lifetiles.graph.view.MiniMapScrollPaneSkin;
 import nl.tudelft.lifetiles.graph.view.TileView;
 import nl.tudelft.lifetiles.graph.view.VertexView;
 import nl.tudelft.lifetiles.notification.controller.NotificationController;
@@ -143,6 +146,11 @@ public class GraphController extends AbstractController {
     private Sequence reference;
 
     /**
+     * The scrollbar / minimap control.
+     */
+    private ScrollBar scrollBar;
+
+    /**
      * The factor that each zoom out step that updates the current scale.
      */
     private static final double ZOOM_OUT_FACTOR = 1 / ZOOM_IN_FACTOR;
@@ -167,6 +175,7 @@ public class GraphController extends AbstractController {
 
         initListeners();
         initZoomToolBar();
+        initializeScrollBar();
 
         repaintNow = false;
         scrollPane = new ScrollPane();
@@ -188,6 +197,46 @@ public class GraphController extends AbstractController {
                 zoomGraph(Math.pow(ZOOM_IN_FACTOR, diffLevel));
             }
         });
+    }
+
+    /**
+     * Initialize the scrollBar.
+     */
+    private void initializeScrollBar() {
+        MiniMapScrollPaneSkin skin = new MiniMapScrollPaneSkin(scrollPane);
+        scrollPane.setSkin(skin);
+        scrollBar = skin.getHorizontalScrollBar();
+    }
+
+    /**
+     * Draw the miniMap onto the horizontal scrollbar.
+     */
+    private void drawMiniMap() {
+        Background background = getMiniMapBackground();
+        scrollBar.setBackground(background);
+    }
+
+    /**
+     * Initializes the MiniMap.
+     *
+     * @return the minimap background
+     */
+    private Background getMiniMapBackground() {
+        return new Background(new BackgroundFill(getGradient(), null, null));
+    }
+
+    /**
+     * Get the generated linear gradient from the bucket interestingness.
+     *
+     * @return the {@link LinearGradient}.
+     */
+    private LinearGradient getGradient() {
+        List<Stop> stops = model.getMiniMap().getStops();
+
+        LinearGradient gradient = new LinearGradient(0, 0, 1, 0, true,
+                CycleMethod.NO_CYCLE, stops);
+
+        return gradient;
     }
 
     /**
@@ -419,6 +468,8 @@ public class GraphController extends AbstractController {
                 repaintNow = false;
             }
         }
+
+        drawMiniMap();
     }
 
     /**
