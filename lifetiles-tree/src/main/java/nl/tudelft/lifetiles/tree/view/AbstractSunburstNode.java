@@ -3,7 +3,6 @@ package nl.tudelft.lifetiles.tree.view;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 import javafx.scene.Group;
 import javafx.scene.control.Tooltip;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 
 /**
@@ -48,13 +47,6 @@ public abstract class AbstractSunburstNode extends Group {
      * the number of degrees in a circle.
      */
     protected static final double CIRCLEDEGREES = 360.0d;
-
-    /**
-     * @return the color of this node
-     */
-    public Color getColor() {
-        return (Color) display.getFill();
-    }
 
     /*
      * Helpers
