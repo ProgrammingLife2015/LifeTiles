@@ -72,6 +72,8 @@ public class BucketCache {
         Timer timer = Timer.getAndStart();
         buckets = new ArrayList<Bucket>();
         for (int index = 0; index < numberBuckets; index++) {
+            // We do actually need to instantiate here.
+            @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
             buckets.add(index, new Bucket());
         }
         for (SequenceSegment vertex : graph.getAllVertices()) {
