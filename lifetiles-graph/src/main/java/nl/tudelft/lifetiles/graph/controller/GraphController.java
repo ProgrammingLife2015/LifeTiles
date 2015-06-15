@@ -10,16 +10,9 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.CycleMethod;
-import javafx.scene.paint.LinearGradient;
-import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
 import nl.tudelft.lifetiles.annotation.model.KnownMutation;
 import nl.tudelft.lifetiles.annotation.model.KnownMutationMapper;
@@ -36,7 +29,6 @@ import nl.tudelft.lifetiles.graph.model.GraphFactory;
 import nl.tudelft.lifetiles.graph.model.GraphParser;
 import nl.tudelft.lifetiles.graph.model.StackedMutationContainer;
 import nl.tudelft.lifetiles.graph.view.DiagramView;
-import nl.tudelft.lifetiles.graph.view.MiniMapScrollPaneSkin;
 import nl.tudelft.lifetiles.graph.view.TileView;
 import nl.tudelft.lifetiles.graph.view.VertexView;
 import nl.tudelft.lifetiles.notification.controller.NotificationController;
@@ -144,9 +136,9 @@ public class GraphController extends AbstractController {
     private Sequence reference;
 
     /**
-     * The scrollbar / minimap control.
+     * The mini map controller.
      */
-    private ScrollBar scrollBar;
+    private MiniMapController miniMapController;
 
     /**
      * The factor that each zoom out step that updates the current scale.
@@ -190,48 +182,13 @@ public class GraphController extends AbstractController {
     }
 
     /**
-     * Initialize the MiniMap.
+     * @return the mini map controller
      */
-    private void initMiniMap() {
-        MiniMapScrollPaneSkin skin = new MiniMapScrollPaneSkin(scrollPane);
-        scrollPane.setSkin(skin);
-        scrollBar = skin.getHorizontalScrollBar();
-    }
-
-    /**
-     * Draw the miniMap onto the horizontal scrollbar.
-     */
-    private void drawMiniMap() {
-        if (scrollBar == null) {
-            initMiniMap();
+    private MiniMapController getMiniMapController() {
+        if (miniMapController == null) {
+            miniMapController = new MiniMapController(scrollPane, model);
         }
-        Background background = getMiniMapBackground();
-        scrollBar.setBackground(background);
-    }
-
-    /**
-     * Gets the MiniMap background gradient.
-     *
-     * @return the minimap background
-     */
-    private Background getMiniMapBackground() {
-        double buttonWidth = javafx.scene.text.Font.getDefault().getSize();
-        Insets insets = new Insets(0.0, buttonWidth, 0.0, buttonWidth);
-        return new Background(new BackgroundFill(getGradient(), null, insets));
-    }
-
-    /**
-     * Get the generated linear gradient from the bucket interestingness.
-     *
-     * @return the {@link LinearGradient}.
-     */
-    private LinearGradient getGradient() {
-        List<Stop> stops = model.getMiniMap().getStops();
-
-        LinearGradient gradient = new LinearGradient(0, 0, 1, 0, true,
-                CycleMethod.NO_CYCLE, stops);
-
-        return gradient;
+        return miniMapController;
     }
 
     /**
@@ -464,7 +421,7 @@ public class GraphController extends AbstractController {
             }
         }
 
-        drawMiniMap();
+        getMiniMapController().drawMiniMap();
     }
 
     /**

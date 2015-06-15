@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
+import javafx.embed.swing.JFXPanel;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 import org.junit.Before;
@@ -20,6 +21,8 @@ public class MiniMapTest {
 
     @Before
     public void setUp() throws URISyntaxException, IOException {
+        new JFXPanel(); // force to initialize Toolkit
+
         GraphFactory<SequenceSegment> factory = FactoryProducer.getFactory();
         DefaultGraphParser parser = new DefaultGraphParser();
 
