@@ -29,6 +29,8 @@ public final class Message {
      * A shout message indicating there is a zoom action.
      */
     public static final Message ZOOM = create("zoom");
+    
+    public static final Message BOOKMARKS = create("bookmarks");
 
     /**
      * The value.
