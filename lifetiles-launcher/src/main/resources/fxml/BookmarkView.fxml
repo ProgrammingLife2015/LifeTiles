@@ -8,14 +8,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.Label?>
-<?import nl.tudelft.lifetiles.tree.view.SunburstView?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.BorderPane?>
-<?import com.sun.javafx.charts.Legend?>
 
 <VBox xmlns:fx="http://javafx.com/fxml/1" minHeight="0.0"
 	minWidth="0.0" prefHeight="720" prefWidth="300.0" maxWidth="500.0"
@@ -30,16 +28,15 @@
 				<Button id="close" text="[X]" onMouseClicked="#closeAction" />
 			</right>
 		</BorderPane>	
-		<BorderPane>
-			<left>
-				<TextField fx:id="searchBox" promptText="Search ..."></TextField>
-			</left>
-			<right>
+		<HBox>
+			<children>
+				<TextField fx:id="searchBox" promptText="Search ..." 
+					onAction="#searchAction" HBox.hgrow="ALWAYS"/>
 				<Button text="Search" onMouseClicked="#searchAction" />
-			</right>
-		</BorderPane>		
+			</children>
+		</HBox>		
 		<Separator ></Separator>
-		<ListView fx:id="bookmarkList"></ListView>
+		<ListView fx:id="bookmarkList" VBox.vgrow="ALWAYS"></ListView>
 	</children>
 	
 

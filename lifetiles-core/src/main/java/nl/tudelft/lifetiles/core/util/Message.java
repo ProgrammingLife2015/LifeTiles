@@ -29,7 +29,9 @@ public final class Message {
      * A shout message indicating there is a zoom action.
      */
     public static final Message ZOOM = create("zoom");
-    
+    /**
+     * A shout message indicating the bookmark sidebar needs to appear.
+     */
     public static final Message BOOKMARKS = create("bookmarks");
 
     /**
