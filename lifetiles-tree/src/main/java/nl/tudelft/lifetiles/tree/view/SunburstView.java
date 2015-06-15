@@ -120,7 +120,7 @@ public class SunburstView extends Control {
 
         // add the ring units
         double totalDescendants = currentItem.numberDescendants();
-        double degreeStart = 0;
+        double degreeStart = 0d;
         for (PhylogeneticTreeItem child : currentItem.getChildren()) {
             double sectorSize = (child.numberDescendants() + 1)
                     / totalDescendants;
