@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.sequence.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -91,7 +92,7 @@ public final class SequenceController extends AbstractController {
     /**
      * The listeners for the visible properties.
      */
-    private Map<SequenceEntry, ChangeListener<? super Boolean>> visibilityListeners;
+    private Map<SequenceEntry, ChangeListener<? super Boolean>> visibleListeners;
 
     /**
      * {@inheritDoc}
@@ -101,7 +102,7 @@ public final class SequenceController extends AbstractController {
         registerShoutListeners();
         initializeTable();
 
-        visibilityListeners = new HashMap<>();
+        visibleListeners = new HashMap<>();
     }
 
     /**
@@ -109,16 +110,18 @@ public final class SequenceController extends AbstractController {
      */
     private void registerShoutListeners() {
         listen(Message.LOADED, (sender, subject, args) -> {
-            if (!subject.equals("sequences")) {
+            if ("sequences".equals(subject)) {
                 return;
             }
-            assert (args[0] instanceof Map<?, ?>);
+            // eclipse and PMD disagree on whether parentheses are
+            // needed
+                assert (args[0] instanceof Map<?, ?>);
 
-            @SuppressWarnings("unchecked")
-            Map<String, Sequence> sequences = (Map<String, Sequence>) args[0];
-            load(sequences);
+                @SuppressWarnings("unchecked")
+                Map<String, Sequence> sequences = (Map<String, Sequence>) args[0];
+                load(sequences);
 
-        });
+            });
 
         listen(Message.FILTERED, (sender, subject, args) -> {
             assert args.length == 1;
@@ -145,7 +148,7 @@ public final class SequenceController extends AbstractController {
                     try {
                         parser.parse((File) args[0]);
                         addMetaData(parser.getColumns(), parser.getData());
-                    } catch (Exception exception) {
+                    } catch (IOException exception) {
                         Logging.exception(exception);
                         shout(NotificationController.NOTIFY, "",
                                 new NotificationFactory()
@@ -220,6 +223,8 @@ public final class SequenceController extends AbstractController {
      */
     private void addMetaColumns(final List<String> columns) {
         for (String columnName : columns) {
+            // purpose of this method is to create these.
+            @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
             TableColumn<SequenceEntry, String> column = new TableColumn<>(
                     columnName);
             column.setCellValueFactory(entry -> entry.getValue().metaProperty(
@@ -263,8 +268,8 @@ public final class SequenceController extends AbstractController {
      */
     private void addVisibilityListener(final SequenceEntry entry) {
         final ChangeListener<? super Boolean> visibilityListener;
-        if (visibilityListeners.containsKey(entry)) {
-            visibilityListener = visibilityListeners.get(entry);
+        if (visibleListeners.containsKey(entry)) {
+            visibilityListener = visibleListeners.get(entry);
         } else {
             visibilityListener = (value, previous, current) -> {
                 if (previous != current) {
@@ -272,7 +277,7 @@ public final class SequenceController extends AbstractController {
                     shout(Message.FILTERED, "", visibleSequences);
                 }
             };
-            visibilityListeners.put(entry, visibilityListener);
+            visibleListeners.put(entry, visibilityListener);
         }
 
         entry.visibleProperty().addListener(visibilityListener);
@@ -285,11 +290,11 @@ public final class SequenceController extends AbstractController {
      *            the entry
      */
     private void removeVisibilityListener(final SequenceEntry entry) {
-        if (!visibilityListeners.containsKey(entry)) {
+        if (!visibleListeners.containsKey(entry)) {
             throw new IllegalArgumentException("Entry " + entry.getIdentifier()
                     + " has no listener");
         }
-        entry.visibleProperty().removeListener(visibilityListeners.get(entry));
+        entry.visibleProperty().removeListener(visibleListeners.get(entry));
     }
 
     /**

@@ -2,11 +2,11 @@ package nl.tudelft.lifetiles.graph.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import nl.tudelft.lifetiles.core.util.SetUtils;
 import nl.tudelft.lifetiles.sequence.Mutation;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
@@ -212,11 +212,14 @@ public class StackedMutationContainer {
         mutations.put(Mutation.POLYMORPHISM, POLYMORPHISM_MAP);
 
         for (SequenceSegment segment : bucket) {
-            Set<Sequence> sources = new HashSet<>(segment.getSources());
-            if (visibleSequences != null) {
-                sources.retainAll(visibleSequences);
+            int sourceSize;
+            if (visibleSequences == null) {
+                sourceSize = segment.getSources().size();
+            } else {
+                sourceSize = SetUtils.intersectionSize(segment.getSources(),
+                        visibleSequences);
             }
-            int sourceSize = sources.size();
+
             long size = segment.getContent().getLength() * sourceSize;
             if (mutations.containsKey(segment.getMutation())) {
                 int index = mutations.get(segment.getMutation());

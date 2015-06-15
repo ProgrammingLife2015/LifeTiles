@@ -1,10 +1,10 @@
 package nl.tudelft.lifetiles.graph.model;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
 import nl.tudelft.lifetiles.core.util.Logging;
+import nl.tudelft.lifetiles.core.util.SetUtils;
 import nl.tudelft.lifetiles.core.util.Settings;
 import nl.tudelft.lifetiles.core.util.Timer;
 import nl.tudelft.lifetiles.graph.traverser.EmptySegmentTraverser;
@@ -135,17 +135,14 @@ public class GraphContainer {
         Set<SequenceSegment> vertices = new TreeSet<SequenceSegment>();
 
         for (SequenceSegment segment : graph.getAllVertices()) {
-            // copy the set of sequences because retainAll modifies the original
-            // set. This is somewhat inefficient but its the best known way to
-            // do this
-            @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-            Set<Sequence> intersect = new HashSet<Sequence>(
-                    segment.getSources());
-            // check if any of the visible sequences are in this nodes sources
-            if (visibleSequences != null) {
-                intersect.retainAll(visibleSequences);
+            int intersectionSize;
+            if (visibleSequences == null) {
+                intersectionSize = segment.getSources().size();
+            } else {
+                intersectionSize = SetUtils.intersectionSize(
+                        segment.getSources(), visibleSequences);
             }
-            if (!intersect.isEmpty()) {
+            if (intersectionSize > 0) {
                 vertices.add(segment);
             }
         }
