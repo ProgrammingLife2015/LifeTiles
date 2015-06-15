@@ -30,6 +30,11 @@ public class Bookmark extends Circle {
     private static final double RADIUS = Double.parseDouble(Settings.get("bookmark_radius"));
 
     /**
+     * Center of the segment so the origin of the circle is placed at the correct segment position.
+     */
+    private static final double SEGMENT_CENTER = 0.5;
+
+    /**
      * Constructs a bookmark from a vertex, a annotation and a segment position.
      *
      * @param vertex
@@ -45,7 +50,7 @@ public class Bookmark extends Circle {
             final KnownMutation knownMutation, final long segmentPosition,
             final double scale) {
         super(RADIUS);
-        setLayoutX(vertex.getLayoutX() + (segmentPosition + 0.5)
+        setLayoutX(vertex.getLayoutX() + (segmentPosition + SEGMENT_CENTER)
                 * vertex.HORIZONTALSCALE * scale);
         setLayoutY(vertex.getLayoutY() + vertex.getHeight() / 2);
         setOpacity(OPACITY);
