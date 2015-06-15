@@ -2,8 +2,9 @@ package nl.tudelft.lifetiles.graph.view;
 
 import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Circle;
 import nl.tudelft.lifetiles.annotation.model.KnownMutation;
+import nl.tudelft.lifetiles.core.util.Settings;
 
 /**
  * A bookmark is the equivalent of a known mutation mapped onto the graph.
@@ -11,17 +12,27 @@ import nl.tudelft.lifetiles.annotation.model.KnownMutation;
  * @author Jos
  *
  */
-public class Bookmark extends Rectangle {
+public class Bookmark extends Circle {
 
     /**
      * The standard opacity of the bookmark overlay.
      */
-    private static final double OPACITY = 0.5;
+    private static final double OPACITY = Double.parseDouble(Settings.get("bookmark_opacity"));
 
     /**
      * The standard color of the bookmark overlay.
      */
     private static final Color STANDARD_COLOR = Color.YELLOW;
+
+    /**
+     * The radius of the bookmark circle.
+     */
+    private static final double RADIUS = Double.parseDouble(Settings.get("bookmark_radius"));
+
+    /**
+     * Center of the segment so the origin of the circle is placed at the correct segment position.
+     */
+    private static final double SEGMENT_CENTER = 0.5;
 
     /**
      * Constructs a bookmark from a vertex, a annotation and a segment position.
@@ -38,10 +49,10 @@ public class Bookmark extends Rectangle {
     public Bookmark(final VertexView vertex,
             final KnownMutation knownMutation, final long segmentPosition,
             final double scale) {
-        super(vertex.HORIZONTALSCALE * scale, vertex.getHeight());
-        setLayoutX(vertex.getLayoutX() + segmentPosition
+        super(RADIUS);
+        setLayoutX(vertex.getLayoutX() + (segmentPosition + SEGMENT_CENTER)
                 * vertex.HORIZONTALSCALE * scale);
-        setLayoutY(vertex.getLayoutY());
+        setLayoutY(vertex.getLayoutY() + vertex.getHeight() / 2);
         setOpacity(OPACITY);
         setFill(STANDARD_COLOR);
 

@@ -405,6 +405,7 @@ public class GraphController extends AbstractController {
             if (currEndPosition != endBucket
                     && currStartPosition != startBucket || repaintNow) {
                 Group graphDrawing = new Group();
+                graphDrawing.setManaged(false);
                 graphDrawing.getChildren().add(
                         drawGraph(startBucket, endBucket));
                 graphDrawing.getChildren().add(
