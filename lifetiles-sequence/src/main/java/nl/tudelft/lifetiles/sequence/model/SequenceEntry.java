@@ -64,7 +64,7 @@ public final class SequenceEntry {
      *
      * @return true if visible, else false.
      */
-    public boolean getVisible() {
+    public boolean isVisible() {
         return visibleProperty().getValue();
     }
 
@@ -97,7 +97,7 @@ public final class SequenceEntry {
      *
      * @return true if reference, else false.
      */
-    public boolean getReference() {
+    public boolean isReference() {
         return referenceProperty().getValue();
     }
 

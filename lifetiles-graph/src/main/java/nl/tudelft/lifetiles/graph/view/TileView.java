@@ -214,6 +214,8 @@ public class TileView {
             for (KnownMutation knownMutation : knownMutations) {
                 long segmentPosition = knownMutation.getGenomePosition()
                         - segment.getStart();
+                // Loop is intended to create these..
+                @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
                 Bookmark bookmark = new Bookmark(vertex, knownMutation,
                         segmentPosition, scale);
                 bookmarks.getChildren().add(bookmark);

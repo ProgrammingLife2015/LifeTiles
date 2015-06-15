@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import nl.tudelft.lifetiles.core.util.SetUtils;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 
 /**
@@ -73,13 +74,15 @@ public class PhylogeneticTreeItem {
 
         return result;
     }
+
     /**
      * Method to determine the maximum amount of layers.
+     *
      * @return the amount of layers
      */
     public final int maxDepth() {
         int result = 0;
-        for (PhylogeneticTreeItem child: children) {
+        for (PhylogeneticTreeItem child : children) {
             result = Math.max(result, child.maxDepth() + 1);
         }
 
@@ -125,7 +128,8 @@ public class PhylogeneticTreeItem {
      *            the sequences that need to be in this tree.
      * @return the new root of a subtree.
      */
-    public final PhylogeneticTreeItem subTree(final Set<Sequence> visibleSequences) {
+    public final PhylogeneticTreeItem subTree(
+            final Set<Sequence> visibleSequences) {
         // copy the node
         PhylogeneticTreeItem result = new PhylogeneticTreeItem();
         result.setDistance(distance);
@@ -137,9 +141,7 @@ public class PhylogeneticTreeItem {
         // copy the children when they are needed
         for (PhylogeneticTreeItem child : children) {
             // check if this child is needed
-            Set<Sequence> intersect = new HashSet<Sequence>(childSequences);
-            intersect.retainAll(visibleSequences);
-            if (!intersect.isEmpty()) {
+            if (SetUtils.intersectionSize(childSequences, visibleSequences) > 0) {
                 PhylogeneticTreeItem subtree = child.subTree(visibleSequences);
                 if (subtree != null) {
                     subtree.setParent(result);
@@ -167,7 +169,6 @@ public class PhylogeneticTreeItem {
         }
         setChildSequences();
     }
-
 
     /**
      * Returns the ArrayList of children.
