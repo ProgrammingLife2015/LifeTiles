@@ -6,7 +6,9 @@ import javafx.scene.control.ScrollPane;
 import com.sun.javafx.scene.control.skin.ScrollPaneSkin;
 
 /**
- * ScrollPane skin capable of customizing the scrollbar.
+ * ScrollPane skin capable of customizing the scrollbar. Note that this is not
+ * API but there is no other way to inject a {@link ScrollBar} into a
+ * {@link ScrollPane}.
  *
  * @author Joren Hammudoglu
  */
@@ -19,7 +21,6 @@ public class MiniMapScrollPaneSkin extends ScrollPaneSkin {
      * @param scrollpane
      *            the scrollpane
      */
-
     public MiniMapScrollPaneSkin(final ScrollPane scrollpane) {
         super(scrollpane);
     }
