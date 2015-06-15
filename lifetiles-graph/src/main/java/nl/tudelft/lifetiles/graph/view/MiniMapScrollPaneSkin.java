@@ -1,4 +1,4 @@
-package nl.tudelft.lifetiles.graph.model;
+package nl.tudelft.lifetiles.graph.view;
 
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
