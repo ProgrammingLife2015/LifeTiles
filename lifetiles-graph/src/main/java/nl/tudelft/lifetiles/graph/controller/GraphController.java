@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
@@ -209,12 +210,14 @@ public class GraphController extends AbstractController {
     }
 
     /**
-     * Initializes the MiniMap.
+     * Gets the MiniMap background gradient.
      *
      * @return the minimap background
      */
     private Background getMiniMapBackground() {
-        return new Background(new BackgroundFill(getGradient(), null, null));
+        double buttonWidth = javafx.scene.text.Font.getDefault().getSize();
+        Insets insets = new Insets(0.0, buttonWidth, 0.0, buttonWidth);
+        return new Background(new BackgroundFill(getGradient(), null, insets));
     }
 
     /**
