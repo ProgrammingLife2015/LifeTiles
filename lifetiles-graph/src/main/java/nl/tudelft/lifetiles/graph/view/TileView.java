@@ -102,6 +102,7 @@ public class TileView {
      *            Map from segment to gene annotations.
      * @param scale
      *            the scale to resize all elements of the graph
+     * @param amountOfSequences
      * @return the elements that must be displayed on the screen
      */
     public Group drawGraph(final Set<SequenceSegment> segments,
@@ -109,8 +110,8 @@ public class TileView {
             final Map<SequenceSegment, List<KnownMutation>> knownMutations,
             final Map<SequenceSegment, List<GeneAnnotation>> mappedAnnotations,
             final double scale) {
+
         Group root = new Group();
-        VertexView.VERTICALSCALE = 50;
 
         lanes = new ArrayList<Long>();
         this.scale = scale;
@@ -134,9 +135,13 @@ public class TileView {
 
         for (Entry<SequenceSegment, VertexView> entry : nodemap.entrySet()) {
             nodes.getChildren().add(entry.getValue());
+            VertexView v = entry.getValue();
+            v.setHeight(entry.getKey().getSources().size()
+                    * (screenHeight / lanes.size()));
         }
 
         root.getChildren().addAll(nodes, edges, bookmarks);
+
         return root;
     }
 
@@ -238,12 +243,6 @@ public class TileView {
         }
 
         Point2D topleft = new Point2D(start, index);
-
-        // Change the VerticalScale for all vertices if one is drawn outside the
-        // screen height
-        if (VertexView.VERTICALSCALE * height * scale > screenHeight) {
-            VertexView.VERTICALSCALE = screenHeight / (height * scale);
-        }
 
         VertexView vertex = new VertexView(text, topleft, width, height, scale,
                 color);

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -11,7 +12,9 @@ import java.util.Set;
 
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Rectangle;
 import nl.tudelft.lifetiles.annotation.model.GeneAnnotation;
@@ -196,15 +199,11 @@ public class GraphController extends AbstractController {
 
         scrollPane.setOnScroll(event -> {
             event.consume();
-
             if (event.getDeltaY() > 0) {
                 toolbar.incrementZoom();
-                System.out.println("Scroll Up");
             } else {
                 toolbar.decrementZoom();
-                System.out.println("Scroll Down");
             }
-
         });
 
         // Temporary until there is a way to start of totally out zoomed
@@ -266,19 +265,33 @@ public class GraphController extends AbstractController {
 
         });
 
+        listen(Message.LOADED, (sender, subject, args) -> {
+            if (!subject.equals("sequences")) {
+                return;
+            }
+            assert (args[0] instanceof Map<?, ?>);
+
+            Map<String, Sequence> sequences = (Map<String, Sequence>) args[0];
+            if (model != null) {
+                model.setVisible(new HashSet<>(sequences.values()));
+            } else {
+                model = new GraphContainer(graph, null);
+            }
+        });
+
         listen(Message.FILTERED, (controller, subject, args) -> {
             assert args.length == 1;
             assert args[0] instanceof Set<?>;
             // unfortunately java doesn't really let us typecheck generics :(
-                @SuppressWarnings("unchecked")
-                Set<Sequence> newSequences = (Set<Sequence>) args[0];
-                visibleSequences = newSequences;
-                model.setVisible(visibleSequences);
-                diagram = new StackedMutationContainer(model.getBucketCache(),
-                        visibleSequences);
-                repaintNow = true;
-                repaint();
-            });
+            @SuppressWarnings("unchecked")
+            Set<Sequence> newSequences = (Set<Sequence>) args[0];
+            visibleSequences = newSequences;
+            model.setVisible(visibleSequences);
+            diagram = new StackedMutationContainer(model.getBucketCache(),
+                    visibleSequences);
+            repaintNow = true;
+            repaint();
+        });
 
         listen(SequenceController.REFERENCE_SET,
                 (controller, subject, args) -> {
@@ -351,8 +364,8 @@ public class GraphController extends AbstractController {
             shout(NotificationController.NOTIFY,
                     "",
                     notifyFactory
-                    .getNotification(new IllegalStateException(
-                            "Graph not loaded while attempting to add annotations.")));
+                            .getNotification(new IllegalStateException(
+                                    "Graph not loaded while attempting to add annotations.")));
         } else {
             try {
                 insertAnnotations((File) args[0]);
@@ -466,6 +479,8 @@ public class GraphController extends AbstractController {
      * Repaints the view.
      */
     private void repaint() {
+
+        wrapper.snapshot(new SnapshotParameters(), new WritableImage(5, 5));
         if (graph != null) {
             if (model == null) {
                 model = new GraphContainer(graph, reference);
@@ -475,7 +490,8 @@ public class GraphController extends AbstractController {
                         visibleSequences);
             }
 
-            view = new TileView(this, 240);
+            view = new TileView(this,
+                    wrapper.getBoundsInParent().getHeight() * 0.9);
             diagramView = new DiagramView();
 
             scrollPane.hvalueProperty().addListener(
@@ -633,6 +649,7 @@ public class GraphController extends AbstractController {
     public Group drawGraph(final int startBucket, final int endBucket) {
 
         Group test = view.drawGraph(model.getVisibleSegments(startBucket,
+
                 endBucket), graph, knownMutations, mappedAnnotations, scale);
 
         return test;

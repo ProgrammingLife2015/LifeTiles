@@ -33,7 +33,7 @@ public class VertexView extends Group {
     /**
      * Horizontal and vertical spacing between rectangles.
      */
-    private static final double SPACING = 2;
+    public static final double SPACING = 2;
 
     /**
      * Horizontal scale for each coordinate.
@@ -43,7 +43,7 @@ public class VertexView extends Group {
     /**
      * Vertical scale for each coordinate.
      */
-    public static double VERTICALSCALE = 40;
+    public static double VERTICALSCALE = 0;
 
     /**
      * The minimal size of the text before it is drawn.
@@ -92,24 +92,20 @@ public class VertexView extends Group {
             final double width, final double height, final double scale,
             final Color color) {
 
-        clip = new Rectangle(width * HORIZONTALSCALE * scale, height
-                * VERTICALSCALE * scale);
+        clip = new Rectangle(width * HORIZONTALSCALE * scale - SPACING, 0);
 
         text = new Text(string);
         text.setFont(Font.font("Oxygen Mono", HORIZONTALSCALE));
         text.getStyleClass().add("vertexText");
         text.setClip(clip);
 
-        rectangle = new Rectangle(width * HORIZONTALSCALE * scale, height
-                * VERTICALSCALE * scale);
+        rectangle = new Rectangle(width * HORIZONTALSCALE * scale - SPACING, 0);
+
         rectangle.setStyle("-fx-fill:" + ColorUtils.webCode(color));
         rectangle.getStyleClass().add("vertexText");
 
         setLayoutX(topLeftPoint.getX() * HORIZONTALSCALE * scale);
-        setLayoutY(topLeftPoint.getY() * VERTICALSCALE * scale);
-
-        setHeight(height * VERTICALSCALE * scale - SPACING);
-        setWidth(width * HORIZONTALSCALE * scale - SPACING);
+        setLayoutY(topLeftPoint.getY() * VERTICALSCALE);
 
         getChildren().addAll(rectangle, text);
 
@@ -142,18 +138,21 @@ public class VertexView extends Group {
         double height = rectangle.getHeight();
 
         double fontWidth = text.getLayoutBounds().getWidth();
-        text.setFont(Font.font(FONTNAME, (HORIZONTALSCALE) * width / fontWidth));
+        double fontHeight = text.getLayoutBounds().getHeight();
 
+        text.setFont(Font.font(FONTNAME, (HORIZONTALSCALE * width) / fontWidth));
         text.setLayoutX(width / 2 - text.getLayoutBounds().getWidth() / 2);
         text.setLayoutY(height / 2);
 
-        text.setVisible(HORIZONTALSCALE * width / fontWidth >= MINTEXTSIZE);
+        // Don't draw text if either the Font size is too small or the text is
+        // partially drawn out of the rectangle.
+        text.setVisible(text.getFont().getSize() >= MINTEXTSIZE
+                && fontHeight <= height);
 
         clip.setWidth(width);
         clip.setHeight(height);
         clip.setLayoutX(0);
         clip.setLayoutY(-height / 2);
-
     }
 
     /**
