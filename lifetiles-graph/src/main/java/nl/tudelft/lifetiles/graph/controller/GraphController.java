@@ -10,15 +10,12 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
@@ -166,16 +163,8 @@ public class GraphController extends AbstractController {
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        MiniMapScrollPaneSkin skin = new MiniMapScrollPaneSkin(scrollPane);
-        ScrollBar minimap = skin.getHorizontalScrollBar();
-        minimap.setBackground(new Background(new BackgroundFill(Color.WHITE,
-                CornerRadii.EMPTY, Insets.EMPTY)));
-
-        scrollPane.setSkin(skin);
-
         initListeners();
         initZoomToolBar();
-        initializeScrollBar();
 
         repaintNow = false;
         scrollPane = new ScrollPane();
@@ -200,9 +189,9 @@ public class GraphController extends AbstractController {
     }
 
     /**
-     * Initialize the scrollBar.
+     * Initialize the MiniMap.
      */
-    private void initializeScrollBar() {
+    private void initMiniMap() {
         MiniMapScrollPaneSkin skin = new MiniMapScrollPaneSkin(scrollPane);
         scrollPane.setSkin(skin);
         scrollBar = skin.getHorizontalScrollBar();
@@ -212,6 +201,9 @@ public class GraphController extends AbstractController {
      * Draw the miniMap onto the horizontal scrollbar.
      */
     private void drawMiniMap() {
+        if (scrollBar == null) {
+            initMiniMap();
+        }
         Background background = getMiniMapBackground();
         scrollBar.setBackground(background);
     }
