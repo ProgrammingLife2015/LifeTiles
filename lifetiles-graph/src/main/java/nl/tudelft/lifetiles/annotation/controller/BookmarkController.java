@@ -8,9 +8,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import nl.tudelft.lifetiles.annotation.model.AbstractBookmark;
 import nl.tudelft.lifetiles.annotation.model.KnownMutation;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
@@ -64,6 +66,30 @@ public class BookmarkController extends AbstractController {
         listItems = FXCollections.observableArrayList();
         filteredItems = new FilteredList<AbstractBookmark>(listItems);
         bookmarkList.setItems(filteredItems);
+
+        bookmarkList.setCellFactory(new Callback<ListView<AbstractBookmark>,
+                ListCell<AbstractBookmark>>() {
+            @Override
+            public ListCell<AbstractBookmark> call(ListView<AbstractBookmark> param) {
+                final ListCell<AbstractBookmark> cell = new ListCell<AbstractBookmark>() {
+                    public void updateItem(AbstractBookmark item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (item != null) {
+                            setText(item.toCellString());
+
+                            setOnMouseClicked(event -> {
+                                if (event.getClickCount() == 2) {
+                                    shout(Message.GOTO, "" ,
+                                            new Long(item.getGenomePosition()));
+                                }
+                            });
+                        }
+                    }
+                };
+                return cell;
+            }
+        });
+        //Initialize shout listeners
         listen(Message.BOOKMARKS, (sender, subject, args) -> {
             show();
         });

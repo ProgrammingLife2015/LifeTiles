@@ -159,4 +159,9 @@ public class KnownMutation extends AbstractBookmark {
         return segmentPosition(mappingSegment);
     }
 
+    @Override
+    public String toCellString() {
+        return typeOfMutation + " in " + geneName + " causing resistance for " + drugResistance;
+    }
+
 }
