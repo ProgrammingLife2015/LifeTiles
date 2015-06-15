@@ -16,9 +16,11 @@ import javafx.scene.Group;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Circle;
 import nl.tudelft.lifetiles.annotation.model.KnownMutation;
 import nl.tudelft.lifetiles.annotation.model.KnownMutationMapper;
 import nl.tudelft.lifetiles.annotation.model.KnownMutationParser;
+import nl.tudelft.lifetiles.core.util.Settings;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
 import nl.tudelft.lifetiles.graph.model.BucketCache;
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
@@ -107,7 +109,7 @@ public class TileViewTest {
 
     }
 
-    private Rectangle rec;
+    private Circle bookmark;
     private VertexView vView1;
 
     @Test
@@ -148,7 +150,7 @@ public class TileViewTest {
             Group result = tileview.drawGraph(buckets.getSegments(0, 1), graph,
                     annotations, 1);
 
-            rec = (Rectangle) ((Group) result.getChildrenUnmodifiable().get(2))
+            bookmark = (Circle) ((Group) result.getChildrenUnmodifiable().get(2))
                     .getChildrenUnmodifiable().get(0);
 
             vView1 = (VertexView) ((Group) result.getChildrenUnmodifiable()
@@ -157,7 +159,7 @@ public class TileViewTest {
         });
 
         Thread.sleep(1000);
-        assertEquals(rec.getHeight(), vView1.getHeight(), 1e-10);
+        assertEquals(bookmark.getRadius(), Double.parseDouble(Settings.get("bookmark_radius")), 1e-10);
     }
 
     @Test
