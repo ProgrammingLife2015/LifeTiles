@@ -82,14 +82,17 @@ public class TreeController extends AbstractController {
             }
         });
 
-        listen(Message.LOADED, (controller, subject, args) -> {
-            if (!"sequences".equals(subject)) {
-                return;
-            }
-            assert (args[0] instanceof Map<?, ?>);
-            sequences = (Map<String, Sequence>) args[0];
-            repaint();
-        });
+        listen(Message.LOADED,
+                (controller, subject, args) -> {
+                    if (!"sequences".equals(subject)) {
+                        return;
+                    }
+                    assert (args[0] instanceof Map<?, ?>);
+                    @SuppressWarnings("unchecked")
+                    Map<String, Sequence> newSequences = (Map<String, Sequence>) args[0];
+                    sequences = newSequences;
+                    repaint();
+                });
 
         listen(Message.FILTERED, (controller, subject, args) -> {
             // check the message is correct
@@ -97,16 +100,19 @@ public class TreeController extends AbstractController {
                 assert (args[0] instanceof Set<?>);
                 if (!(controller instanceof TreeController)) {
                     // create the new tree
-                setVisible((Set<Sequence>) args[0]);
+                @SuppressWarnings("unchecked")
+                Set<Sequence> newSequences = (Set<Sequence>) args[0];
+                setVisible(newSequences);
             }
         });
 
         // inform the sunburst of this controller so filters can be shouted
         view.setController(this);
         view.setBounds(wrapper.layoutBoundsProperty().get());
-        wrapper.layoutBoundsProperty().addListener((observableBounds, oldValue, newValue) -> {
-            view.setBounds(newValue);
-        });
+        wrapper.layoutBoundsProperty().addListener(
+                (observableBounds, oldValue, newValue) -> {
+                    view.setBounds(newValue);
+                });
     }
 
     /**

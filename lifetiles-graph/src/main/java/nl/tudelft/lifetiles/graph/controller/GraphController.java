@@ -236,7 +236,9 @@ public class GraphController extends AbstractController {
             assert args.length == 1;
             assert (args[0] instanceof Set<?>);
             // unfortunately java doesn't really let us typecheck generics :(
-                visibleSequences = (Set<Sequence>) args[0];
+                @SuppressWarnings("unchecked")
+                Set<Sequence> newSequences = (Set<Sequence>) args[0];
+                visibleSequences = newSequences;
                 model.setVisible(visibleSequences);
                 diagram = new StackedMutationContainer(model.getBucketCache(),
                         visibleSequences);
