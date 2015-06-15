@@ -2,7 +2,6 @@ package nl.tudelft.lifetiles.graph.view;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,25 +29,24 @@ public class DiagramViewTest {
     public void setup() {
         gf = FactoryProducer.getFactory("JGraphT");
         gr = gf.getGraph();
-        
-        Set<Sequence> s  = new HashSet<Sequence>();
+
+        Set<Sequence> s = new HashSet<Sequence>();
         s.add(new DefaultSequence("reference"));
-        v1 = new SequenceSegment(s, 1, 11,
-                new SegmentEmpty(10));
+        v1 = new SequenceSegment(s, 1, 11, new SegmentEmpty(10));
         v1.setUnifiedStart(1);
         v1.setUnifiedEnd(11);
-        
-        v2 = new SequenceSegment(s, 31, 41,
-                new SegmentEmpty(10));
+
+        v2 = new SequenceSegment(s, 31, 41, new SegmentEmpty(10));
         v2.setUnifiedStart(31);
         v2.setUnifiedEnd(41);
-        
+
         BucketCache b = new BucketCache(1000, gr);
-        StackedMutationContainer container = new StackedMutationContainer(b, null);
+        StackedMutationContainer container = new StackedMutationContainer(b,
+                null);
         diagram = (new DiagramView()).drawDiagram(container, 1, 100);
     }
-    
-    @Test 
+
+    @Test
     public void childrenTest() {
         assertEquals(1024, diagram.getChildren().size());
     }

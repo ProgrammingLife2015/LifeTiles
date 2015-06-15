@@ -71,7 +71,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      */
     protected JGraphTGraphAdapter(
             final DirectedGraph<V, DefaultEdge> jgraptGraph,
-            final JGraphTEdgeFactory<V> edgeFact, final List vertexIds) {
+            final JGraphTEdgeFactory<V> edgeFact, final List<V> vertexIds) {
         internalGraph = jgraptGraph;
         this.edgeFact = edgeFact;
         vertexIdentifiers = vertexIds;

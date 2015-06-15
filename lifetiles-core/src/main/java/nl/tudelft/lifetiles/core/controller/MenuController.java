@@ -28,6 +28,10 @@ import nl.tudelft.lifetiles.notification.model.NotificationFactory;
 public class MenuController extends AbstractController {
 
     /**
+     * Message to display when file is not found.
+     */
+    private static final String NOT_FOUND_MSG = " file could not be found or multiple files found ";
+    /**
      * Constant known mutation extension, currently as defined by client:
      * '.txt'.
      */
@@ -195,12 +199,8 @@ public class MenuController extends AbstractController {
                     .getSingleFileByExtension(directory, extension);
             return file;
         } catch (IOException e) {
-            shout(NotificationController.NOTIFY,
-                    "",
-                    nf.getNotification(
-                            extension
-                                    + " file could not be found or multiple files found ",
-                            NotificationFactory.WARNING));
+            shout(NotificationController.NOTIFY, "", nf.getNotification(
+                    extension + NOT_FOUND_MSG, NotificationFactory.WARNING));
         }
         return null;
     }

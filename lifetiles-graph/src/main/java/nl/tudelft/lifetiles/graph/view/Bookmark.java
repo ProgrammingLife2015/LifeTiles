@@ -63,7 +63,7 @@ public class Bookmark extends Circle {
             final long segmentPosition, final double scale) {
         super(RADIUS);
         setLayoutX(vertex.getLayoutX() + (segmentPosition + SEGMENT_CENTER)
-                * vertex.HORIZONTALSCALE * scale);
+                * VertexView.HORIZONTALSCALE * scale);
         setLayoutY(vertex.getLayoutY() + vertex.getHeight() / 2);
         setOpacity(OPACITY);
         setFill(STANDARD_COLOR);

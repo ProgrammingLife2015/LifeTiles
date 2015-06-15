@@ -17,6 +17,7 @@ public class ZoombarTest {
     public void clickOnPlus() {
         // Hack because javafx toolkit need to be initialized
         JFXPanel panel = new JFXPanel();
+        panel.contains(0, 0);
         Zoombar toolbar = new Zoombar(5, 10);
 
         ToolBar javafxBar = toolbar.getToolBar();
@@ -35,6 +36,7 @@ public class ZoombarTest {
     public void clickOnMinus() {
         // Hack because javafx toolkit need to be initialized
         JFXPanel panel = new JFXPanel();
+        panel.contains(0, 0);
         Zoombar toolbar = new Zoombar(5, 10);
 
         ToolBar javafxBar = toolbar.getToolBar();
@@ -53,6 +55,7 @@ public class ZoombarTest {
     public void scrolloneUpSlider() {
         // Hack because javafx toolkit need to be initialized
         JFXPanel panel = new JFXPanel();
+        panel.contains(0, 0);
         Zoombar toolbar = new Zoombar(5, 10);
 
         ToolBar javafxBar = toolbar.getToolBar();
@@ -69,6 +72,7 @@ public class ZoombarTest {
     public void scrolloneDownSlider() {
         // Hack because javafx toolkit need to be initialized
         JFXPanel panel = new JFXPanel();
+        panel.contains(0, 0);
         Zoombar toolbar = new Zoombar(5, 10);
 
         ToolBar javafxBar = toolbar.getToolBar();

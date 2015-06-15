@@ -134,10 +134,10 @@ public class KnownMutation extends AbstractBookmark {
     @Override
     public final String toString() {
         Formatter formatter = new Formatter();
-        formatter
-                .format("Gene Name: %1$s%nGene Position: %2$s%nMutation Type: %3$s%nChange: %4$s%nFilter: %5$s%nDrug Resistance: %6$s",
-                        geneName, getGenomePosition(), typeOfMutation, change,
-                        filter, drugResistance);
+        formatter.format("Gene Name: %1$s%nGene Position: %2$s%nMutation Type:"
+                + " %3$s%nChange: %4$s%nFilter: %5$s%nDrug Resistance: %6$s",
+                geneName, getGenomePosition(), typeOfMutation, change, filter,
+                drugResistance);
         String knownMutation = formatter.toString();
         formatter.close();
         return knownMutation;

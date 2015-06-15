@@ -150,6 +150,7 @@ public class TileViewTest {
         // Hack so you make a tooltip, javafx toolkit need to be initialised for
         // that
         JFXPanel panel = new JFXPanel();
+        panel.contains(0, 0);
         Platform.runLater(() -> {
 
             Group result = tileview.drawGraph(buckets.getSegments(0, 1), graph,

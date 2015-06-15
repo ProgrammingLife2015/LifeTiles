@@ -205,7 +205,8 @@ public class StackedMutationContainer {
             list.add((long) 0);
         }
 
-        Map<Mutation, Integer> mutations = new HashMap<>(3);
+        Map<Mutation, Integer> mutations = new HashMap<>(
+                Mutation.values().length);
         mutations.put(Mutation.INSERTION, INSERTION_MAP);
         mutations.put(Mutation.DELETION, DELETION_MAP);
         mutations.put(Mutation.POLYMORPHISM, POLYMORPHISM_MAP);
@@ -233,7 +234,9 @@ public class StackedMutationContainer {
     public final Long getMaxMutations() {
         long max = 0;
         for (List<Long> stack : stackedMutations) {
-            max = Math.max(max, stack.get(1) + stack.get(2) + stack.get(3));
+            for (int i = 1; i <= Mutation.values().length; i++) {
+                max = Math.max(max, stack.get(i));
+            }
         }
         return max;
     }

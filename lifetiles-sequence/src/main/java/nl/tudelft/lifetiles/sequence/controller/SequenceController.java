@@ -21,7 +21,6 @@ import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.notification.controller.NotificationController;
-import nl.tudelft.lifetiles.notification.model.AbstractNotification;
 import nl.tudelft.lifetiles.notification.model.NotificationFactory;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceEntry;
@@ -109,23 +108,24 @@ public final class SequenceController extends AbstractController {
      * Register the shout listeners.
      */
     private void registerShoutListeners() {
-        listen(Message.LOADED,
-                (sender, subject, args) -> {
-                    if (!subject.equals("sequences")) {
-                        return;
-                    }
-                    assert (args[0] instanceof Map<?, ?>);
+        listen(Message.LOADED, (sender, subject, args) -> {
+            if (!subject.equals("sequences")) {
+                return;
+            }
+            assert (args[0] instanceof Map<?, ?>);
 
-                    Map<String, Sequence> newSequences = (Map<String, Sequence>) args[0];
-                    load(newSequences);
+            @SuppressWarnings("unchecked")
+            Map<String, Sequence> sequences = (Map<String, Sequence>) args[0];
+            load(sequences);
 
-                });
+        });
 
         listen(Message.FILTERED, (sender, subject, args) -> {
             assert args.length == 1;
             assert (args[0] instanceof Set<?>);
-
-            updateVisible((Set<Sequence>) args[0]);
+            @SuppressWarnings("unchecked")
+            Set<Sequence> sequences = (Set<Sequence>) args[0];
+            updateVisible(sequences);
         });
 
         listen(Message.RESET, (sender, subject, args) -> {
@@ -147,9 +147,9 @@ public final class SequenceController extends AbstractController {
                         addMetaData(parser.getColumns(), parser.getData());
                     } catch (Exception exception) {
                         Logging.exception(exception);
-                        AbstractNotification notification = new NotificationFactory()
-                                .getNotification(exception);
-                        shout(NotificationController.NOTIFY, "", notification);
+                        shout(NotificationController.NOTIFY, "",
+                                new NotificationFactory()
+                                        .getNotification(exception));
                     }
                 });
     }

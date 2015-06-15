@@ -59,9 +59,9 @@ public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
             JGraphTGraphAdapter<V> baseGraph = (JGraphTGraphAdapter<V>) base;
 
             return new JGraphTGraphAdapter<V>(
-                    new DirectedSubgraph<V, DefaultEdge>(baseGraph
-                            .getInternalGraph(), vertexSubSet, null), edgeFact,
-                    baseGraph.getVertexIdentifiers());
+                    new DirectedSubgraph<V, DefaultEdge>(
+                            baseGraph.getInternalGraph(), vertexSubSet, null),
+                    edgeFact, baseGraph.getVertexIdentifiers());
 
         } else {
             throw new NotAJGraphTAdapterException();
@@ -82,7 +82,9 @@ public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
             try {
                 Method method = vertex.getClass().getMethod("clone");
                 Object copy = method.invoke(vertex);
-                copygraph.addVertex((V) copy);
+                @SuppressWarnings("unchecked")
+                V newVertex = (V) copy;
+                copygraph.addVertex(newVertex);
                 convertVertices.put(vertex, copy);
             } catch (NoSuchMethodException | SecurityException
                     | IllegalAccessException | IllegalArgumentException
@@ -96,8 +98,11 @@ public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
             Object from = convertVertices.get(graph.getSource(edge));
             Object destination = convertVertices
                     .get(graph.getDestination(edge));
-
-            copygraph.addEdge((V) from, (V) destination);
+            @SuppressWarnings("unchecked")
+            V fromVertex = (V) from;
+            @SuppressWarnings("unchecked")
+            V destinationVertex = (V) destination;
+            copygraph.addEdge(fromVertex, destinationVertex);
         }
 
         return copygraph;
@@ -114,7 +119,7 @@ public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
         }
         for (Edge<V> edge : graph.getAllEdges()) {
             copyGraph
-            .addEdge(graph.getSource(edge), graph.getDestination(edge));
+                    .addEdge(graph.getSource(edge), graph.getDestination(edge));
         }
         return copyGraph;
     }

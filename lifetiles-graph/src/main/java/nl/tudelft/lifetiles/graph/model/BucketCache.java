@@ -56,7 +56,8 @@ public class BucketCache {
     public BucketCache(final int numberBuckets,
             final Graph<SequenceSegment> graph) {
         // Number of buckets is ceiled to a power of 2. Needed for diagram view.
-        this.numberBuckets = (int) Math.round(Math.pow(2, Math.ceil(Math.log(numberBuckets) / Math.log(2))));
+        this.numberBuckets = (int) Math.round(Math.pow(2,
+                Math.ceil(Math.log(numberBuckets) / Math.log(2))));
         this.graph = graph;
         maxUnifiedEnd = getMaxUnifiedEnd();
         bucketWidth = maxUnifiedEnd / this.numberBuckets;
@@ -147,7 +148,8 @@ public class BucketCache {
         Set<SequenceSegment> set = new TreeSet<SequenceSegment>();
         int startBucket = Math.max(0, start);
         int endBucket = Math.min(numberBuckets, end);
-        for (Set<SequenceSegment> bucket : buckets.subList(startBucket, endBucket)) {
+        for (Set<SequenceSegment> bucket : buckets.subList(startBucket,
+                endBucket)) {
             set.addAll(bucket);
         }
         return set;
@@ -174,8 +176,8 @@ public class BucketCache {
      * @return position in the bucketCache.
      */
     public final int bucketStartPosition(final double position) {
-        return (int) Math.min(numberBuckets, Math
-                .max(0, position / bucketWidth));
+        return (int) Math.min(numberBuckets,
+                Math.max(0, position / bucketWidth));
     }
 
     /**
@@ -187,7 +189,7 @@ public class BucketCache {
      * @return position in the bucketCache.
      */
     public final int bucketEndPosition(final double position) {
-        return (int) Math.min(numberBuckets, Math.ceil(Math.max(0, position
-                / bucketWidth)));
+        return (int) Math.min(numberBuckets,
+                Math.ceil(Math.max(0, position / bucketWidth)));
     }
 }
