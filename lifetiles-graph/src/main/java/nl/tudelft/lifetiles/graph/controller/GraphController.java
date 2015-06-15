@@ -464,10 +464,11 @@ public class GraphController extends AbstractController {
         Set<GeneAnnotation> annotations = GeneAnnotationParser
                 .parseGeneAnnotations(file);
         shout(Message.LOADED, "annotations", annotations);
-        mappedAnnotations = GeneAnnotationMapper.mapAnnotations(graph,
+Q        mappedAnnotations = GeneAnnotationMapper.mapAnnotations(graph,
                 annotations, reference);
 
         timer.stopAndLog("Inserting annotations");
+        shout(Message.LOADED, "known mutations", knownMutationList);
         repaintNow = true;
         repaintPosition(scrollPane.hvalueProperty().doubleValue());
     }
