@@ -94,8 +94,6 @@ public final class MiniMap {
      *
      * @return an array of {@link Stop}
      */
-    // There is no other way but to create objects in a loop in this case
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public List<Stop> getStops() {
         List<Color> colors = getColors();
         int numColors = colors.size();
@@ -104,7 +102,11 @@ public final class MiniMap {
         for (int index = 0; index < colors.size(); index++) {
             double correction = (double) index / (double) numColors;
             double offset = (double) (index + correction) / (double) numColors;
-            stops.add(new Stop(offset, colors.get(index)));
+
+            // There is no other way but to create objects in a loop in this case
+            @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+            Stop stop = new Stop(offset, colors.get(index));
+            stops.add(stop);
         }
 
         return stops;
