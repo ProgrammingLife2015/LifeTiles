@@ -48,6 +48,11 @@ public class TileViewTest {
     Graph<SequenceSegment> gr;
     BucketCache buckets;
 
+    /**
+     * Final string for radius settings property.
+     */
+    private static final String RADIUS_SETTING = "bookmark_radius";
+
     @Before
     public void setUp() {
         controller = Mockito.mock(GraphController.class);
@@ -110,7 +115,7 @@ public class TileViewTest {
     }
 
     private Circle bookmark;
-    private VertexView vView1;
+    private VertexView vertexView1;
 
     @Test
     public void drawAnnotationTest() throws IOException, InterruptedException {
@@ -150,16 +155,18 @@ public class TileViewTest {
             Group result = tileview.drawGraph(buckets.getSegments(0, 1), graph,
                     annotations, 1);
 
-            bookmark = (Circle) ((Group) result.getChildrenUnmodifiable().get(2))
-                    .getChildrenUnmodifiable().get(0);
+            bookmark = (Circle) ((Group) result.getChildrenUnmodifiable()
+                    .get(2)).getChildrenUnmodifiable().get(0);
 
-            vView1 = (VertexView) ((Group) result.getChildrenUnmodifiable()
-                    .get(0)).getChildrenUnmodifiable().get(0);
+            vertexView1 = (VertexView) ((Group) result
+                    .getChildrenUnmodifiable().get(0))
+                    .getChildrenUnmodifiable().get(0);
 
         });
 
         Thread.sleep(1000);
-        assertEquals(bookmark.getRadius(), Double.parseDouble(Settings.get("bookmark_radius")), 1e-10);
+        assertEquals(bookmark.getRadius(),
+                Double.parseDouble(Settings.get(RADIUS_SETTING)), 1e-10);
     }
 
     @Test
@@ -170,9 +177,9 @@ public class TileViewTest {
                 1);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
-                        MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                        true, true, true, true, true, true, true, true, true, true,
-                        null));
+                MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
+                true, true, true, true, true, true, true, true, true, true,
+                null));
         Mockito.verify(controller).clicked(Mockito.any());
     }
 
@@ -184,9 +191,9 @@ public class TileViewTest {
                 1);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
-                        MouseEvent.MOUSE_ENTERED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                        true, true, true, true, true, true, true, true, true, true,
-                        null));
+                MouseEvent.MOUSE_ENTERED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
+                true, true, true, true, true, true, true, true, true, true,
+                null));
         Mockito.verify(controller).hovered(Mockito.any(), Mockito.eq(true));
     }
 
@@ -198,9 +205,9 @@ public class TileViewTest {
                 1);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
-                        MouseEvent.MOUSE_EXITED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                        true, true, true, true, true, true, true, true, true, true,
-                        null));
+                MouseEvent.MOUSE_EXITED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
+                true, true, true, true, true, true, true, true, true, true,
+                null));
         Mockito.verify(controller).hovered(Mockito.any(), Mockito.eq(false));
     }
 
