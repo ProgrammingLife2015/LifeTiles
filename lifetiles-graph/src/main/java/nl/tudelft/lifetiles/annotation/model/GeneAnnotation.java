@@ -37,6 +37,7 @@ public class GeneAnnotation extends AbstractAnnotation {
     public GeneAnnotation(final long start, final long end, final String name) {
         super(start, end);
         this.name = name;
+        mappingSegments = new HashSet<>();
     }
 
     /**
