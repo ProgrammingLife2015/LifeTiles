@@ -207,19 +207,56 @@ public class GraphController extends AbstractController {
 
         listen(Message.OPENED,
                 (controller, subject, args) -> {
-
                     assert controller instanceof MenuController;
-                    if (!"graph".equals(subject)) {
-                        return;
-                    }
-                    assert args.length == 2;
-                    assert args[0] instanceof File && args[1] instanceof File;
+                    switch (subject) {
+                    case "graph":
+                        assert args.length == 2;
+                        assert args[0] instanceof File
+                                && args[1] instanceof File;
 
-                    try {
-                        loadGraph((File) args[0], (File) args[1]);
-                    } catch (IOException exception) {
-                        shout(NotificationController.NOTIFY, "",
-                                notFact.getNotification(exception));
+                        try {
+                            loadGraph((File) args[0], (File) args[1]);
+                        } catch (IOException exception) {
+                            shout(NotificationController.NOTIFY, "",
+                                    notFact.getNotification(exception));
+                        }
+                        break;
+                    case "known mutations":
+                        assert args[0] instanceof File;
+
+                        if (graph == null) {
+                            shout(NotificationController.NOTIFY,
+                                    "",
+                                    notFact.getNotification(new IllegalStateException(
+                                            "Graph not loaded while attempting to add known mutations.")));
+                        } else {
+                            try {
+                                insertKnownMutations((File) args[0]);
+                            } catch (IOException exception) {
+                                shout(NotificationController.NOTIFY, "",
+                                        notFact.getNotification(exception));
+                            }
+                        }
+                        break;
+                    case "annotations":
+                        assert args[0] instanceof File;
+
+                        if (graph == null) {
+                            shout(NotificationController.NOTIFY,
+                                    "",
+                                    notFact.getNotification(new IllegalStateException(
+                                            "Graph not loaded while attempting to add annotations.")));
+                        } else {
+                            try {
+                                insertAnnotations((File) args[0]);
+                            } catch (IOException exception) {
+                                shout(NotificationController.NOTIFY, "",
+                                        notFact.getNotification(exception));
+                            }
+                        }
+                        break;
+                    default:
+                        return;
                     }
                 });
 
@@ -246,52 +283,6 @@ public class GraphController extends AbstractController {
                             .getBucketCache(), visibleSequences);
                     repaintNow = true;
                     repaint();
-                });
-
-        listen(Message.OPENED,
-                (controller, subject, args) -> {
-                    assert controller instanceof MenuController;
-                    if (!subject.equals("known mutations")) {
-                        return;
-                    }
-                    assert args[0] instanceof File;
-
-                    if (graph == null) {
-                        shout(NotificationController.NOTIFY,
-                                "",
-                                notFact.getNotification(new IllegalStateException(
-                                        "Graph not loaded while attempting to add known mutations.")));
-                    } else {
-                        try {
-                            insertKnownMutations((File) args[0]);
-                        } catch (IOException exception) {
-                            shout(NotificationController.NOTIFY, "",
-                                    notFact.getNotification(exception));
-                        }
-                    }
-                });
-
-        listen(Message.OPENED,
-                (controller, subject, args) -> {
-                    assert controller instanceof MenuController;
-                    if (!subject.equals("annotations")) {
-                        return;
-                    }
-                    assert args[0] instanceof File;
-
-                    if (graph == null) {
-                        shout(NotificationController.NOTIFY,
-                                "",
-                                notFact.getNotification(new IllegalStateException(
-                                        "Graph not loaded while attempting to add annotations.")));
-                    } else {
-                        try {
-                            insertAnnotations((File) args[0]);
-                        } catch (IOException exception) {
-                            shout(NotificationController.NOTIFY, "",
-                                    notFact.getNotification(exception));
-                        }
-                    }
                 });
     }
 

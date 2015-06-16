@@ -143,4 +143,16 @@ public class KnownMutation extends AbstractBookmark {
         return knownMutation;
     }
 
+    @Override
+    public String toCellString() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public long getUnifiedPosition() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
 }

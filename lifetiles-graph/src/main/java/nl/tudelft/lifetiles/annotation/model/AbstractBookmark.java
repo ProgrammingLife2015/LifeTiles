@@ -49,4 +49,21 @@ public abstract class AbstractBookmark {
      */
     public abstract SequenceSegment mapOntoSequence(
             final Set<SequenceSegment> segments, final Sequence reference);
+
+    /**
+     * Abstract method which returns the string representation of the bookmark.
+     * For the bookmark view used to explore the known mutation, genes and
+     * user bookmarks.
+     *
+     * @return cell string representation of the bookmark.
+     */
+    public abstract String toCellString();
+
+    /**
+     * Abstract method which return the unified position of the bookmark in the
+     * unified graph.
+     *
+     * @return unified position of the bookmark in the graph.
+     */
+    public abstract long getUnifiedPosition();
 }

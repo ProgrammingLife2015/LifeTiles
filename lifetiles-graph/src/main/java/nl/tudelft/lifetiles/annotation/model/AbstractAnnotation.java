@@ -7,12 +7,8 @@ package nl.tudelft.lifetiles.annotation.model;
  * @author Jos
  *
  */
-public abstract class AbstractAnnotation {
+public abstract class AbstractAnnotation extends AbstractBookmark {
 
-    /**
-     * Start coordinate of the annotation domain.
-     */
-    private final long start;
     /**
      * End coordinate of the annotation domain.
      */
@@ -27,21 +23,14 @@ public abstract class AbstractAnnotation {
      *            End coordinate for the annotation domain.
      */
     public AbstractAnnotation(final long start, final long end) {
-        this.start = start;
+        super(start);
         this.end = end;
-    }
-
-    /**
-     * @return the start
-     */
-    public long getStart() {
-        return start;
     }
 
     /**
      * @return the end
      */
-    public long getEnd() {
+    public long getGenomeEndPosition() {
         return end;
     }
 }
