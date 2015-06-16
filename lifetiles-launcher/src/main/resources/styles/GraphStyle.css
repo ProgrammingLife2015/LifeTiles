@@ -2,7 +2,7 @@
 
 #graphPane {
     -fx-border-color: #CCCCCC;
-    -fx-border-width: 0 0 1 0;
+    -fx-border-width: 0.0 0.0 1.0 0.0;
     -fx-border-style: solid;
     -fx-fit-to-height: true;
     -fx-fit-to-width: true;
@@ -10,4 +10,13 @@
 
 #graphPaneInner {
     -fx-background-color: #FFFFFF;
+}
+
+#graphPane .scroll-bar:horizontal .thumb {
+    -fx-background-color: rgb(11, 119, 181, 0.8);
+    -fx-background-insets: -5.0;
+    -fx-background-radius: 0.0;
+    -fx-border-color: #CCCCCC;
+    -fx-border-width: 0.0 2.0;
+    -fx-border-insets: -5.0;
 }
