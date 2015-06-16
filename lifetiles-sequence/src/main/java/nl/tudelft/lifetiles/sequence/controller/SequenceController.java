@@ -110,7 +110,7 @@ public final class SequenceController extends AbstractController {
      */
     private void registerShoutListeners() {
         listen(Message.LOADED, (sender, subject, args) -> {
-            if ("sequences".equals(subject)) {
+            if (!"sequences".equals(subject)) {
                 return;
             }
             // eclipse and PMD disagree on whether parentheses are

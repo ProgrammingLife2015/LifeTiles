@@ -24,7 +24,7 @@ public class PhylogeneticTreeItem {
     /**
      * The list of children of this node.
      */
-    private final List<PhylogeneticTreeItem> children;
+    private final Set<PhylogeneticTreeItem> children;
     /**
      * The distance between samples. This is an optinal field.
      */
@@ -57,7 +57,7 @@ public class PhylogeneticTreeItem {
      * the children and assign a new and unique id to the node.
      */
     public PhylogeneticTreeItem() {
-        children = new ArrayList<PhylogeneticTreeItem>();
+        children = new HashSet<PhylogeneticTreeItem>();
         this.ident = nextID.incrementAndGet();
     }
 
@@ -176,7 +176,7 @@ public class PhylogeneticTreeItem {
      * @return the ArrayList containing all children of this node
      */
     public final List<PhylogeneticTreeItem> getChildren() {
-        return children;
+        return new ArrayList<PhylogeneticTreeItem>(children);
     }
 
     /**
@@ -275,37 +275,35 @@ public class PhylogeneticTreeItem {
      */
     @Override
     public final boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
+        System.out.println("PhylogeneticTreeItem.equals()");
+        // if (this == obj) {
+        // return true;
+        // }
+        // if (obj == null) {
+        // return false;
+        // }
+        // if (!(obj instanceof PhylogeneticTreeItem)) {
+        // return false;
+        // }
+        // PhylogeneticTreeItem other = (PhylogeneticTreeItem) obj;
+        // if (Double.compare(this.distance, other.distance) != 0) {
+        // return false;
+        // }
+        // if (name == null) {
+        // if (other.name != null) {
+        // return false;
+        // }
+        // } else if (!name.equals(other.name)) {
+        // return false;
+        // }
+        // System.out.println("checkin gchildren");
+        // return children.containsAll(other.children);
         if (obj == null) {
-            return false;
-        }
-        if (!(obj instanceof PhylogeneticTreeItem)) {
-            return false;
-        }
-        PhylogeneticTreeItem other = (PhylogeneticTreeItem) obj;
-        if (Double.doubleToLongBits(distance) != Double
-                .doubleToLongBits(other.distance)) {
-            return false;
-        }
-        if (name == null) {
-            if (other.name != null) {
+            if (this != null) {
                 return false;
             }
-        } else if (!name.equals(other.name)) {
-            return false;
         }
-        if (children.isEmpty()) {
-            if (!other.children.isEmpty()) {
-                return false;
-            }
-        } else if (children.size() != other.getChildren().size()) {
-            return false;
-        } else if (!children.containsAll(other.getChildren())) {
-            return false;
-        }
-        return true;
+        return this.hashCode() == obj.hashCode();
     }
 
     /**
@@ -347,6 +345,17 @@ public class PhylogeneticTreeItem {
      */
     @Override
     public final String toString() {
+
+        return toStringWithDepth(0);
+    }
+
+    /**
+     * @param depth
+     *            The depth of this treeitem as compared to the depth of the
+     *            treeitem on which toString was called.
+     * @return Recursive string representation.
+     */
+    private String toStringWithDepth(final int depth) {
         String suffix;
         if (parent == null) {
             suffix = ", ROOT ";
@@ -354,8 +363,14 @@ public class PhylogeneticTreeItem {
             suffix = ", parent: " + parent.getId();
         }
         String result = "<Node: " + ident + ", Name: " + name + ", Distance: "
-                + distance + suffix + ">";
-
+                + distance + suffix + " hash: " + this.hashCode() + ">";
+        for (PhylogeneticTreeItem child : children) {
+            result += "\n";
+            for (int i = 0; i <= depth; i++) {
+                result += "\t";
+            }
+            result += child.toStringWithDepth(depth + 1);
+        }
         return result;
     }
 
