@@ -48,7 +48,6 @@ public abstract class AbstractSunburstNode extends Group {
      */
     protected static final double CIRCLEDEGREES = 360.0d;
 
-
     /*
      * Helpers
      */
