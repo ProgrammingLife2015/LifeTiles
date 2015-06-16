@@ -25,11 +25,11 @@ public class SunburstRingSegment extends AbstractSunburstNode {
     /**
      * the max brightness for the color of a Node.
      */
-    private static final double MAX_BRIGHTNESS = 0.8d;
+    private static final double MAX_BRIGHTNESS = 0.8;
     /**
      * The default saturation of the color of a Node.
      */
-    private static final double SATURATION = 0.9d;
+    private static final double SATURATION = 0.9;
     /**
      * Creates a SunburstRingSegment.
      *
@@ -97,7 +97,7 @@ public class SunburstRingSegment extends AbstractSunburstNode {
         // check if this is a large arc
         double arcSize = AbstractSunburstNode.calculateAngle(degreeStart,
                 degreeEnd);
-        boolean largeArc = arcSize > (AbstractSunburstNode.CIRCLEDEGREES / 2);
+        boolean largeArc = arcSize > AbstractSunburstNode.CIRCLEDEGREES / 2;
 
         // calculate the radii of the two arcs
         double innerRadius = scale * (CENTER_RADIUS + (layer * RING_WIDTH));
