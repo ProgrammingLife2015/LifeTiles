@@ -1,5 +1,7 @@
 package nl.tudelft.lifetiles.annotation.model;
 
+import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
+
 /**
  * Abstract class for Bookmarks. A bookmark is a point on the genome with
  * some information attached to it.
@@ -31,6 +33,18 @@ public abstract class AbstractBookmark {
      */
     public long getGenomePosition() {
         return genomePosition;
+    }
+
+    /**
+     * Returns the position of the bookmark mapped to a sequence segment.
+     *
+     * @param segment
+     *            Sequence segment which bookmark is mapped to.
+     * @return position of bookmark on segment.
+     */
+    protected long segmentPosition(final SequenceSegment segment) {
+        return segment.getUnifiedStart() + getGenomePosition()
+                - segment.getStart();
     }
 
     /**

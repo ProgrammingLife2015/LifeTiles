@@ -162,8 +162,7 @@ public class KnownMutation extends AbstractBookmark {
      */
     @Override
     public final long getUnifiedPosition() {
-        return mappingSegment.getUnifiedStart() + getGenomePosition()
-                - mappingSegment.getStart();
+        return segmentPosition(mappingSegment);
     }
 
 }
