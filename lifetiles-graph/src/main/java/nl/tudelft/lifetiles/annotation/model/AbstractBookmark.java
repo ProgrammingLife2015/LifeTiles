@@ -1,10 +1,5 @@
 package nl.tudelft.lifetiles.annotation.model;
 
-import java.util.Set;
-
-import nl.tudelft.lifetiles.sequence.model.Sequence;
-import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
-
 /**
  * Abstract class for Bookmarks. A bookmark is a point on the genome with
  * some information attached to it.
@@ -37,18 +32,6 @@ public abstract class AbstractBookmark {
     public long getGenomePosition() {
         return genomePosition;
     }
-
-    /**
-     * Abstract method which maps this annotation to a sequence.
-     *
-     * @param segments
-     *            Segments to map the annotation to.
-     * @param reference
-     *            The current reference used in the list of segments.
-     * @return segment which annotation should be mapped to.
-     */
-    public abstract SequenceSegment mapOntoSequence(
-            final Set<SequenceSegment> segments, final Sequence reference);
 
     /**
      * Abstract method which returns the string representation of the bookmark.

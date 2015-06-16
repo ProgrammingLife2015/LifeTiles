@@ -11,6 +11,7 @@ import java.util.Set;
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
+import nl.tudelft.lifetiles.graph.traverser.UnifiedPositionTraverser;
 import nl.tudelft.lifetiles.sequence.model.DefaultSequence;
 import nl.tudelft.lifetiles.sequence.model.SegmentString;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
@@ -51,6 +52,7 @@ public class KnownMutationMapperTest {
         v2 = new SequenceSegment(s1, 11, 21, new SegmentString("AAAAAAAAAA"));
         v3 = new SequenceSegment(s1, 21, 31, new SegmentString("AAAAAAAAAA"));
         gr = gf.getGraph();
+        UnifiedPositionTraverser.unifyGraph(gr);
     }
 
     @Test
@@ -60,6 +62,7 @@ public class KnownMutationMapperTest {
                 .mapAnnotations(gr, annotations, reference);
         assertEquals(1, mappedAnnotations.size());
         assertEquals(r1, mappedAnnotations.get(v1).get(0));
+        assertEquals(5, mappedAnnotations.get(v1).get(0).getUnifiedPosition());
     }
 
     @Test

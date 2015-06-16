@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -31,16 +33,13 @@ public final class GeneAnnotationParser {
      *             When there is an error reading the specified file.
      * @return map from gene name to gene.
      */
-    public static Map<String, GeneAnnotation> parseGeneAnnotations(
-            final File file) throws IOException {
-        Map<String, GeneAnnotation> genomeAnnotations = new HashMap<String, GeneAnnotation>();
+    public static Set<GeneAnnotation> parseGeneAnnotations(final File file)
+            throws IOException {
+        Set<GeneAnnotation> genomeAnnotations = new HashSet<>();
         Stream<String> annotationLines = Files.lines(file.toPath());
-        annotationLines
-                .map(GeneAnnotationParser::parseGeneAnnotation)
+        annotationLines.map(GeneAnnotationParser::parseGeneAnnotation)
                 .filter(genome -> genome != null)
-                .forEach(
-                        genome -> genomeAnnotations.put(genome.getName(),
-                                genome));
+                .forEach(genome -> genomeAnnotations.add(genome));
         annotationLines.close();
         return genomeAnnotations;
     }
