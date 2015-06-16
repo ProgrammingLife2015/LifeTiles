@@ -41,6 +41,11 @@ public class KnownMutation extends AbstractBookmark {
     private final String drugResistance;
 
     /**
+     * The segment to which this annotation maps to.
+     */
+    private SequenceSegment mappingSegment;
+
+    /**
      * Construct a known mutation.
      *
      * @param geneName
@@ -111,13 +116,13 @@ public class KnownMutation extends AbstractBookmark {
      *            The current reference used in the list of segments.
      * @return segment which annotation should be mapped to.
      */
-    @Override
     public final SequenceSegment mapOntoSequence(
             final Set<SequenceSegment> segments, final Sequence reference) {
         for (SequenceSegment segment : segments) {
             if (segment.getSources().contains(reference)
                     && segment.getStart() <= getGenomePosition()
                     && segment.getEnd() > getGenomePosition()) {
+                mappingSegment = segment;
                 return segment;
             }
         }
@@ -144,15 +149,20 @@ public class KnownMutation extends AbstractBookmark {
     }
 
     @Override
-    public String toCellString() {
+    public final String toCellString() {
         // TODO Auto-generated method stub
         return null;
     }
 
+    /**
+     * Method which return the unified position of the bookmark in the
+     * unified graph.
+     *
+     * @return unified position of the bookmark in the graph.
+     */
     @Override
-    public long getUnifiedPosition() {
-        // TODO Auto-generated method stub
-        return 0;
+    public final long getUnifiedPosition() {
+        return mappingSegment.getUnifiedStart() + getGenomePosition() - mappingSegment.getStart();
     }
 
 }

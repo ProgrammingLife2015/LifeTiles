@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -125,7 +126,7 @@ public class GraphController extends AbstractController {
     /**
      * The currently inserted annotations.
      */
-    private Map<String, GeneAnnotation> annotations;
+    private Set<GeneAnnotation> annotations;
 
     /**
      * The factor that each zoom in step that updates the current scale.
@@ -202,63 +203,24 @@ public class GraphController extends AbstractController {
      * Initialize the listeners.
      */
     private void initListeners() {
-
         NotificationFactory notFact = new NotificationFactory();
 
-        listen(Message.OPENED,
-                (controller, subject, args) -> {
-                    assert controller instanceof MenuController;
-                    switch (subject) {
-                    case "graph":
-                        assert args.length == 2;
-                        assert args[0] instanceof File
-                                && args[1] instanceof File;
-
-                        try {
-                            loadGraph((File) args[0], (File) args[1]);
-                        } catch (IOException exception) {
-                            shout(NotificationController.NOTIFY, "",
-                                    notFact.getNotification(exception));
-                        }
-                        break;
-                    case "known mutations":
-                        assert args[0] instanceof File;
-
-                        if (graph == null) {
-                            shout(NotificationController.NOTIFY,
-                                    "",
-                                    notFact.getNotification(new IllegalStateException(
-                                            "Graph not loaded while attempting to add known mutations.")));
-                        } else {
-                            try {
-                                insertKnownMutations((File) args[0]);
-                            } catch (IOException exception) {
-                                shout(NotificationController.NOTIFY, "",
-                                        notFact.getNotification(exception));
-                            }
-                        }
-                        break;
-                    case "annotations":
-                        assert args[0] instanceof File;
-
-                        if (graph == null) {
-                            shout(NotificationController.NOTIFY,
-                                    "",
-                                    notFact.getNotification(new IllegalStateException(
-                                            "Graph not loaded while attempting to add annotations.")));
-                        } else {
-                            try {
-                                insertAnnotations((File) args[0]);
-                            } catch (IOException exception) {
-                                shout(NotificationController.NOTIFY, "",
-                                        notFact.getNotification(exception));
-                            }
-                        }
-                        break;
-                    default:
-                        return;
-                    }
-                });
+        listen(Message.OPENED, (controller, subject, args) -> {
+            assert controller instanceof MenuController;
+            switch (subject) {
+            case "graph":
+                openGraph(args, notFact);
+                break;
+            case "known mutations":
+                openKnownMutations(args, notFact);
+                break;
+            case "annotations":
+                openAnnotations(args, notFact);
+                break;
+            default:
+                return;
+            }
+        });
 
         listen(Message.FILTERED, (controller, subject, args) -> {
             assert args.length == 1;
@@ -287,7 +249,84 @@ public class GraphController extends AbstractController {
     }
 
     /**
+     * Function called if a graph file is opened.
+     * Loads the graph into the graph controller.
      *
+     * @param args
+     *            The arguments passed by the opened listener.
+     * @param notFact
+     *            The notification factory used to produce the notification.
+     */
+    private void openGraph(final Object[] args,
+            final NotificationFactory notFact) {
+        assert args.length == 2;
+        assert args[0] instanceof File && args[1] instanceof File;
+
+        try {
+            loadGraph((File) args[0], (File) args[1]);
+        } catch (IOException exception) {
+            shout(NotificationController.NOTIFY, "",
+                    notFact.getNotification(exception));
+        }
+    }
+
+    /**
+     * Function called if a known mutations file is opened.
+     * Loads and inserts the known mutations into the graph controller.
+     *
+     * @param args
+     *            The arguments passed by the opened listener.
+     * @param notFact
+     *            The notification factory used to produce the notification.
+     */
+    private void openKnownMutations(final Object[] args,
+            final NotificationFactory notFact) {
+        assert args[0] instanceof File;
+
+        if (graph == null) {
+            shout(NotificationController.NOTIFY,
+                    "",
+                    notFact.getNotification(new IllegalStateException(
+                            "Graph not loaded while attempting to add known mutations.")));
+        } else {
+            try {
+                insertKnownMutations((File) args[0]);
+            } catch (IOException exception) {
+                shout(NotificationController.NOTIFY, "",
+                        notFact.getNotification(exception));
+            }
+        }
+    }
+
+    /**
+     * Function called if a annotations file is opened.
+     * Loads and inserts the annotations into the graph controller.
+     *
+     * @param args
+     *            The arguments passed by the opened listener.
+     * @param notFact
+     *            The notification factory used to produce the notification.
+     */
+    private void openAnnotations(final Object[] args,
+            final NotificationFactory notFact) {
+        assert args[0] instanceof File;
+
+        if (graph == null) {
+            shout(NotificationController.NOTIFY,
+                    "",
+                    notFact.getNotification(new IllegalStateException(
+                            "Graph not loaded while attempting to add annotations.")));
+        } else {
+            try {
+                insertAnnotations((File) args[0]);
+            } catch (IOException exception) {
+                shout(NotificationController.NOTIFY, "",
+                        notFact.getNotification(exception));
+            }
+        }
+    }
+
+    /**
      * @return the currently loaded graph.
      */
     public final Graph<SequenceSegment> getGraph() {
@@ -315,7 +354,7 @@ public class GraphController extends AbstractController {
         GraphParser parser = new DefaultGraphParser();
         graph = parser.parseGraph(vertexfile, edgefile, factory);
         knownMutations = new HashMap<>();
-        annotations = new HashMap<>();
+        annotations = new HashSet<>();
 
         model = new GraphContainer(graph, reference);
         diagram = new StackedMutationContainer(model.getBucketCache(),
@@ -339,7 +378,7 @@ public class GraphController extends AbstractController {
         knownMutations = KnownMutationMapper.mapAnnotations(graph,
                 KnownMutationParser.parseKnownMutations(file), reference);
 
-        timer.stopAndLog("Inserting annotations");
+        timer.stopAndLog("Inserting known mutations");
         repaintNow = true;
         repaintPosition(scrollPane.hvalueProperty().doubleValue());
     }
@@ -355,6 +394,7 @@ public class GraphController extends AbstractController {
     private void insertAnnotations(final File file) throws IOException {
         Timer timer = Timer.getAndStart();
         annotations = GeneAnnotationParser.parseGeneAnnotations(file);
+        shout(Message.LOADED, "annotations", annotations);
 
         timer.stopAndLog("Inserting annotations");
         repaintNow = true;
