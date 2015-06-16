@@ -126,7 +126,7 @@ public class BookmarkController extends AbstractController {
             if (searchBox.textProperty().get().isEmpty()) {
                 return true;
             }
-           return annotation.toString().contains(searchBox.getCharacters());
+           return annotation.toCellString().contains(searchBox.getCharacters());
         });
     }
 
