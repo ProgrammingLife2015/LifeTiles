@@ -139,7 +139,7 @@ public final class SequenceController extends AbstractController {
 
         listen(Message.OPENED,
                 (sender, subject, args) -> {
-                    if (!subject.equals("meta")) {
+                    if (!"meta".equals(subject)) {
                         return;
                     }
                     assert args[0] instanceof File;

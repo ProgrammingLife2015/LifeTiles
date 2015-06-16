@@ -126,6 +126,8 @@ public final class SequenceEntry {
      */
     public void setMetaData(final Map<String, String> metaData) {
         for (Entry<String, String> metaValue : metaData.entrySet()) {
+            // This method requires instantiation of a bunch of Properties.
+            @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
             Property<String> value = new SimpleStringProperty(
                     metaValue.getValue());
             this.metaData.put(metaValue.getKey(), value);
