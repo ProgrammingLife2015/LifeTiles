@@ -55,8 +55,8 @@ public class GeneAnnotation extends AbstractAnnotation {
      *            The current reference used in the list of segments.
      * @return segments which annotation should be mapped to.
      */
-    public Set<SequenceSegment> mapOntoSequence(Set<SequenceSegment> segments,
-            Sequence reference) {
+    public Set<SequenceSegment> mapOntoSequence(final Set<SequenceSegment> segments,
+            final Sequence reference) {
         mappingSegments = new HashSet<>();
         for (SequenceSegment segment : segments) {
             if (segment.getSources().contains(reference)
