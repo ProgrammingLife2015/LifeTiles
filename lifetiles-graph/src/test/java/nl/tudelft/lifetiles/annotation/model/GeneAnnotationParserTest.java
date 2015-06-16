@@ -29,7 +29,7 @@ public class GeneAnnotationParserTest {
     public void parseGenomeSingleTest() throws Exception {
         GeneAnnotation genome = genomes.get("test1");
         assertEquals("test1", genome.getName());
-        assertEquals(1, genome.getStart());
-        assertEquals(1000, genome.getEnd());
+        assertEquals(1, genome.getGenomePosition());
+        assertEquals(1000, genome.getGenomeEndPosition());
     }
 }
