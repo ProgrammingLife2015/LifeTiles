@@ -28,6 +28,8 @@ public final class PhylogeneticTreeParser {
      *            The string describing the tree
      * @return The parsed tree.
      */
+    // parser needs to instantiate objects.
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public static PhylogeneticTreeItem parse(final String tree) {
         PhylogeneticTreeItem root = new PhylogeneticTreeItem();
 
