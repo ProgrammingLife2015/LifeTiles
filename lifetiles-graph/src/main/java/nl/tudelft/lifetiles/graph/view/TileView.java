@@ -10,6 +10,7 @@ import java.util.Set;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
+import nl.tudelft.lifetiles.annotation.model.GeneAnnotation;
 import nl.tudelft.lifetiles.annotation.model.KnownMutation;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
 import nl.tudelft.lifetiles.graph.model.Graph;
@@ -81,6 +82,8 @@ public class TileView {
      *            Graph to base the edges on
      * @param knownMutations
      *            Map from segment to known mutations.
+     * @param mappedAnnotations
+     *            Map from segment to gene annotations.
      * @param scale
      *            the scale to resize all elements of the graph
      * @return the elements that must be displayed on the screen
@@ -88,6 +91,7 @@ public class TileView {
     public Group drawGraph(final Set<SequenceSegment> segments,
             final Graph<SequenceSegment> graph,
             final Map<SequenceSegment, List<KnownMutation>> knownMutations,
+            final Map<SequenceSegment, List<GeneAnnotation>> mappedAnnotations,
             final double scale) {
         Group root = new Group();
 
@@ -96,10 +100,15 @@ public class TileView {
 
         for (SequenceSegment segment : segments) {
             List<KnownMutation> segKnownMutations = null;
+            List<GeneAnnotation> segAnnotations = null;
             if (knownMutations != null && knownMutations.containsKey(segment)) {
                 segKnownMutations = knownMutations.get(segment);
             }
-            drawVertexLane(segment, segKnownMutations);
+            if (mappedAnnotations != null
+                    && mappedAnnotations.containsKey(segment)) {
+                segAnnotations = mappedAnnotations.get(segment);
+            }
+            drawVertexLane(segment, segKnownMutations, segAnnotations);
         }
 
         // TODO toggle edge drawing in the settings
@@ -138,18 +147,21 @@ public class TileView {
      *            segment to be drawn
      * @param knownMutations
      *            List of known mutations in this segment
+     * @param annotations
+     *            List of annotations in this segment.
      */
     private void drawVertexLane(final SequenceSegment segment,
-            final List<KnownMutation> knownMutations) {
+            final List<KnownMutation> knownMutations,
+            final List<GeneAnnotation> annotations) {
         for (int index = 0; index < lanes.size(); index++) {
             if (lanes.get(index) <= segment.getUnifiedStart()
                     && segmentFree(index, segment)) {
-                drawVertex(index, segment, knownMutations);
+                drawVertex(index, segment, knownMutations, annotations);
                 segmentInsert(index, segment);
                 return;
             }
         }
-        drawVertex(lanes.size(), segment, knownMutations);
+        drawVertex(lanes.size(), segment, knownMutations, annotations);
         segmentInsert(lanes.size(), segment);
     }
 
@@ -190,9 +202,12 @@ public class TileView {
      *            the segment to be drawn in the vertex
      * @param knownMutations
      *            the known mutations of the vertex
+     * @param annotations
+     *            the annotations of the vertex
      */
     private void drawVertex(final double index, final SequenceSegment segment,
-            final List<KnownMutation> knownMutations) {
+            final List<KnownMutation> knownMutations,
+            final List<GeneAnnotation> annotations) {
         String text = segment.getContent().toString();
         long start = segment.getUnifiedStart();
         long width = segment.getContent().getLength();
@@ -217,6 +232,9 @@ public class TileView {
                         segmentPosition, scale);
                 bookmarks.getChildren().add(bookmark);
             }
+        }
+        if (annotations != null) {
+            vertex.annotate(annotations.get(0));
         }
     }
 

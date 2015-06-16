@@ -1,5 +1,6 @@
 package nl.tudelft.lifetiles.annotation.model;
 
+import java.util.Formatter;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -55,8 +56,8 @@ public class GeneAnnotation extends AbstractAnnotation {
      *            The current reference used in the list of segments.
      * @return segments which annotation should be mapped to.
      */
-    public Set<SequenceSegment> mapOntoSequence(final Set<SequenceSegment> segments,
-            final Sequence reference) {
+    public Set<SequenceSegment> mapOntoSequence(
+            final Set<SequenceSegment> segments, final Sequence reference) {
         mappingSegments = new HashSet<>();
         for (SequenceSegment segment : segments) {
             if (segment.getSources().contains(reference)
@@ -72,6 +73,23 @@ public class GeneAnnotation extends AbstractAnnotation {
     public final String toCellString() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    /**
+     * Returns the String representation for the gene annotation to be displayed
+     * in the tooltip of it's bookmark.
+     *
+     * @return
+     *         Tooltip string representation.
+     */
+    public final String toString() {
+        Formatter formatter = new Formatter();
+        formatter
+                .format("Gene Name: %1$s%nGene Start Position: %2$s%nGene End Position: %3$s",
+                        name, getGenomePosition(), getGenomeEndPosition());
+        String geneAnnotation = formatter.toString();
+        formatter.close();
+        return geneAnnotation;
     }
 
     /**
