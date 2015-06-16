@@ -15,9 +15,15 @@ import nl.tudelft.lifetiles.core.util.Settings;
 public class Bookmark extends Circle {
 
     /**
+     * Final string for opacity settings property.
+     */
+    private static final String OPACITY_SETTING = "bookmark_opacity";
+
+    /**
      * The standard opacity of the bookmark overlay.
      */
-    private static final double OPACITY = Double.parseDouble(Settings.get("bookmark_opacity"));
+    private static final double OPACITY = Double.parseDouble(Settings
+            .get(OPACITY_SETTING));
 
     /**
      * The standard color of the bookmark overlay.
@@ -25,12 +31,19 @@ public class Bookmark extends Circle {
     private static final Color STANDARD_COLOR = Color.YELLOW;
 
     /**
-     * The radius of the bookmark circle.
+     * Final string for radius settings property.
      */
-    private static final double RADIUS = Double.parseDouble(Settings.get("bookmark_radius"));
+    private static final String RADIUS_SETTING = "bookmark_radius";
 
     /**
-     * Center of the segment so the origin of the circle is placed at the correct segment position.
+     * The radius of the bookmark circle.
+     */
+    private static final double RADIUS = Double.parseDouble(Settings
+            .get(RADIUS_SETTING));
+
+    /**
+     * Center of the segment so the origin of the circle is placed at the
+     * correct segment position.
      */
     private static final double SEGMENT_CENTER = 0.5;
 
@@ -46,9 +59,8 @@ public class Bookmark extends Circle {
      * @param scale
      *            the factor to resize this bookmark
      */
-    public Bookmark(final VertexView vertex,
-            final KnownMutation knownMutation, final long segmentPosition,
-            final double scale) {
+    public Bookmark(final VertexView vertex, final KnownMutation knownMutation,
+            final long segmentPosition, final double scale) {
         super(RADIUS);
         setLayoutX(vertex.getLayoutX() + (segmentPosition + SEGMENT_CENTER)
                 * vertex.HORIZONTALSCALE * scale);
