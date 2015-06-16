@@ -587,7 +587,7 @@ public class GraphController extends AbstractController {
     public Group drawGraph(final int startBucket, final int endBucket) {
         Group test = view.drawGraph(
                 model.getVisibleSegments(startBucket, endBucket), graph,
-                knownMutations, scale);
+                knownMutations, mappedAnnotations, scale);
 
         return test;
     }

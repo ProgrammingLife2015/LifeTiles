@@ -2,10 +2,13 @@ package nl.tudelft.lifetiles.graph.view;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import nl.tudelft.lifetiles.annotation.model.GeneAnnotation;
 import nl.tudelft.lifetiles.core.util.ColorUtils;
 
 /**
@@ -51,6 +54,16 @@ public class VertexView extends Group {
      * Name of the font used in the Vertex View.
      */
     private static final String FONTNAME = "Oxygen Mono";
+
+    /**
+     * Color of the stroke of the annotation on the vertex.
+     */
+    private static final Paint ANNOTATION_STROKE_COLOR = Color.PURPLE;
+
+    /**
+     * Width of the stroke of the annotation on the vertex.
+     */
+    private static final double ANNOTATION_STROKE_WIDTH = 5;
 
     /**
      * this is the DNA strain the display on the vertex.
@@ -174,6 +187,20 @@ public class VertexView extends Group {
         rectangle.setWidth(width);
         clip.setWidth(width);
         layoutChildren();
+    }
+
+    /**
+     * Annotates the vertex view with a gene annotations
+     *
+     * @param geneAnnotation
+     *            The annotation to annotate the vertex with.
+     */
+    public final void annotate(final GeneAnnotation geneAnnotation) {
+        rectangle.setStroke(ANNOTATION_STROKE_COLOR);
+        rectangle.setStrokeWidth(ANNOTATION_STROKE_WIDTH);
+
+        Tooltip tooltip = new Tooltip(geneAnnotation.toString());
+        Tooltip.install(this, tooltip);
     }
 
 }
