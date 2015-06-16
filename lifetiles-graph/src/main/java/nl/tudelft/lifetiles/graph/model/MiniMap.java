@@ -1,6 +1,8 @@
 package nl.tudelft.lifetiles.graph.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.stream.Collectors;
@@ -18,9 +20,15 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 public final class MiniMap {
 
     /**
-     * The max score.
+     * The max number of deviations a score is allowed to be removed from the
+     * average.
      */
-    private static final double MAX_SCORE = 16.0;
+    private static final double MAX_DEVIATION = 2.0;
+
+    /**
+     * The max number of scores.
+     */
+    private static final int MAX_SCORES = 1024;
 
     /**
      * The interestingness scores per bucket.
@@ -35,6 +43,7 @@ public final class MiniMap {
      */
     public MiniMap(final BucketCache bucketCache) {
         sumBuckets(bucketCache.getBuckets());
+        System.out.println(scores);
     }
 
     /**
@@ -43,8 +52,8 @@ public final class MiniMap {
      */
     private void sumBuckets(final List<SortedSet<SequenceSegment>> buckets) {
         scores = new ArrayList<>();
-        final int biggestBucket = buckets.stream().mapToInt(SortedSet::size)
-                .reduce(0, Integer::max);
+        final int biggestBucket = buckets.parallelStream()
+                .mapToInt(SortedSet::size).reduce(0, Integer::max);
         for (SortedSet<SequenceSegment> bucket : buckets) {
             double score = bucket.parallelStream()
                     .mapToDouble(SequenceSegment::interestingness).average()
@@ -54,6 +63,26 @@ public final class MiniMap {
             score *= bucket.size() / (double) biggestBucket;
             scores.add(score);
         }
+        reduceNumScores();
+    }
+
+    /**
+     * Keeps halfing the number of scores until small enough.
+     */
+    private void reduceNumScores() {
+        while (scores.size() > MAX_SCORES) {
+            // not an issue since this will only loop a few times
+            @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+            List<Double> newScores = new ArrayList<>(scores.size() / 2);
+
+            for (int index = 0; index < scores.size(); index += 2) {
+                double newScore = scores.get(index) + scores.get(index + 1);
+                newScores.add(newScore);
+            }
+
+            scores = newScores;
+        }
+
     }
 
     /**
@@ -69,12 +98,49 @@ public final class MiniMap {
     }
 
     /**
+     * @param collection
+     *            the collection to take the median of
+     * @return the median of the scores
+     */
+    private static double median(final Collection<Double> collection) {
+        List<Double> sorted = new ArrayList<>(collection);
+        Collections.sort(sorted);
+        return sorted.get(sorted.size() / 2);
+    }
+
+    /**
+     * @param collection
+     *            the collection to take the max of
+     * @return the biggest double in the collection
+     */
+    private static double max(final Collection<Double> collection) {
+        return collection.stream()
+                .reduce(Double.NEGATIVE_INFINITY, Double::max);
+    }
+
+    /**
+     * @return the median of absolute deviations (MAD) of the scores.
+     */
+    private double scoreMAD() {
+        double median = median(scores);
+        List<Double> deviations = scores.stream()
+                .map(score -> Math.abs(score - median))
+                .collect(Collectors.toList());
+        return median(deviations);
+    }
+
+    /**
      * Correct the scores that are bigger than the MAX_SCORE.
      *
      * @return the list of scores without outliers.
      */
     private List<Double> correctScoreOutliers() {
-        return scores.stream().map(score -> Math.min(score, MAX_SCORE))
+        double median = median(scores);
+        double delta = MAX_DEVIATION * scoreMAD();
+        double boundLeft = median - delta;
+        double boundRight = median + delta;
+        return scores.parallelStream()
+                .map(score -> Math.min(boundRight, Math.max(boundLeft, score)))
                 .collect(Collectors.toList());
     }
 
@@ -84,8 +150,10 @@ public final class MiniMap {
      * @return a list of colors.
      */
     private List<Color> getColors() {
-        return correctScoreOutliers().stream()
-                .map(score -> colorFromScore(score / MAX_SCORE))
+        List<Double> newScores = correctScoreOutliers();
+        double max = max(newScores);
+        return newScores.parallelStream()
+                .map(score -> colorFromScore(score / max))
                 .collect(Collectors.toList());
     }
 
@@ -103,7 +171,8 @@ public final class MiniMap {
             double correction = (double) index / (double) numColors;
             double offset = (double) (index + correction) / (double) numColors;
 
-            // There is no other way but to create objects in a loop in this case
+            // There is no other way but to create objects in a loop in this
+            // case
             @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
             Stop stop = new Stop(offset, colors.get(index));
             stops.add(stop);
