@@ -300,7 +300,7 @@ public class PhylogeneticTreeItem {
             if (!other.children.isEmpty()) {
                 return false;
             }
-        } else if (!(children.size() == other.getChildren().size())) {
+        } else if (children.size() != other.getChildren().size()) {
             return false;
         } else if (!children.containsAll(other.getChildren())) {
             return false;

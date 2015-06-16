@@ -19,6 +19,7 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeParser;
 import nl.tudelft.lifetiles.tree.view.SunburstView;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * The controller of the tree view.
@@ -54,12 +55,6 @@ public class TreeController extends AbstractController {
      */
 
     private Map<String, Sequence> sequences;
-
-    /**
-     * the visible sequences.
-     */
-
-    private Set<Sequence> visibleSequences;
 
     /**
      * {@inheritDoc}
@@ -123,11 +118,15 @@ public class TreeController extends AbstractController {
      * @throws FileNotFoundException
      *             when the file is not found
      */
+    // simple files, so default encoding is fine. Better to keep things
+    // flexible with respect to what files can be parsed.
+    @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     private void loadTree(final File file) throws FileNotFoundException {
         // convert the file to a single string
         String fileString = null;
         Scanner scanner = new Scanner(file);
         scanner.useDelimiter("\\Z");
+
         fileString = scanner.next();
         scanner.close();
 
@@ -179,9 +178,8 @@ public class TreeController extends AbstractController {
      *            A set containing all visible sequences
      */
     private void setVisible(final Set<Sequence> visible) {
-        visibleSequences = visible;
         Timer timer = Timer.getAndStart();
-        visibleTree = tree.subTree(visibleSequences);
+        visibleTree = tree.subTree(visible);
 
         linkSequence(sequences, visibleTree);
         visibleTree.populateChildSequences();
