@@ -6,12 +6,12 @@ import javafx.scene.control.ScrollPane;
 import com.sun.javafx.scene.control.skin.ScrollPaneSkin;
 
 /**
- * ScrollPane skin capable of customizing the scrollbar. Note that this is not
- * API but there is no other way to inject a {@link ScrollBar} into a
- * {@link ScrollPane}.
+ * ScrollPane skin capable of customizing the scrollbar.
  *
  * @author Joren Hammudoglu
  */
+// Note that this is not API but there is no other way to inject a ScrollBar
+// into a ScrollPane, hence the suppression of restriction warnings.
 @SuppressWarnings("restriction")
 public class MiniMapScrollPaneSkin extends ScrollPaneSkin {
 
