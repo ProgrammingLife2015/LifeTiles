@@ -84,7 +84,7 @@ public class GeneAnnotation extends AbstractAnnotation {
     public final long getUnifiedPosition() {
         long position = 1;
         for (SequenceSegment segment : mappingSegments) {
-            position = Math.max(position, segment.getUnifiedStart() + getGenomePosition() - segment.getStart());
+            position = Math.max(position, segmentPosition(segment));
         }
         return position;
     }

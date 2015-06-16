@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -150,6 +149,12 @@ public class GraphController extends AbstractController {
     private MiniMapController miniMapController;
 
     /**
+     * Notification factory used to produce notifications in the graph
+     * controller.
+     */
+    private NotificationFactory notificationFactory;
+
+    /**
      * The factor that each zoom out step that updates the current scale.
      */
     private static final double ZOOM_OUT_FACTOR = 1 / ZOOM_IN_FACTOR;
@@ -204,19 +209,19 @@ public class GraphController extends AbstractController {
      * Initialize the listeners.
      */
     private void initListeners() {
-        NotificationFactory notFact = new NotificationFactory();
+        notificationFactory = new NotificationFactory();
 
         listen(Message.OPENED, (controller, subject, args) -> {
             assert controller instanceof MenuController;
             switch (subject) {
             case "graph":
-                openGraph(args, notFact);
+                openGraph(args);
                 break;
             case "known mutations":
-                openKnownMutations(args, notFact);
+                openKnownMutations(args);
                 break;
             case "annotations":
-                openAnnotations(args, notFact);
+                openAnnotations(args);
                 break;
             default:
                 return;
@@ -255,11 +260,8 @@ public class GraphController extends AbstractController {
      *
      * @param args
      *            The arguments passed by the opened listener.
-     * @param notFact
-     *            The notification factory used to produce the notification.
      */
-    private void openGraph(final Object[] args,
-            final NotificationFactory notFact) {
+    private void openGraph(final Object[] args) {
         assert args.length == 2;
         assert args[0] instanceof File && args[1] instanceof File;
 
@@ -267,7 +269,7 @@ public class GraphController extends AbstractController {
             loadGraph((File) args[0], (File) args[1]);
         } catch (IOException exception) {
             shout(NotificationController.NOTIFY, "",
-                    notFact.getNotification(exception));
+                    notificationFactory.getNotification(exception));
         }
     }
 
@@ -277,24 +279,22 @@ public class GraphController extends AbstractController {
      *
      * @param args
      *            The arguments passed by the opened listener.
-     * @param notFact
-     *            The notification factory used to produce the notification.
      */
-    private void openKnownMutations(final Object[] args,
-            final NotificationFactory notFact) {
+    private void openKnownMutations(final Object[] args) {
         assert args[0] instanceof File;
 
         if (graph == null) {
             shout(NotificationController.NOTIFY,
                     "",
-                    notFact.getNotification(new IllegalStateException(
-                            "Graph not loaded while attempting to add known mutations.")));
+                    notificationFactory
+                            .getNotification(new IllegalStateException(
+                                    "Graph not loaded while attempting to add known mutations.")));
         } else {
             try {
                 insertKnownMutations((File) args[0]);
             } catch (IOException exception) {
                 shout(NotificationController.NOTIFY, "",
-                        notFact.getNotification(exception));
+                        notificationFactory.getNotification(exception));
             }
         }
     }
@@ -305,24 +305,22 @@ public class GraphController extends AbstractController {
      *
      * @param args
      *            The arguments passed by the opened listener.
-     * @param notFact
-     *            The notification factory used to produce the notification.
      */
-    private void openAnnotations(final Object[] args,
-            final NotificationFactory notFact) {
+    private void openAnnotations(final Object[] args) {
         assert args[0] instanceof File;
 
         if (graph == null) {
             shout(NotificationController.NOTIFY,
                     "",
-                    notFact.getNotification(new IllegalStateException(
-                            "Graph not loaded while attempting to add annotations.")));
+                    notificationFactory
+                            .getNotification(new IllegalStateException(
+                                    "Graph not loaded while attempting to add annotations.")));
         } else {
             try {
                 insertAnnotations((File) args[0]);
             } catch (IOException exception) {
                 shout(NotificationController.NOTIFY, "",
-                        notFact.getNotification(exception));
+                        notificationFactory.getNotification(exception));
             }
         }
     }
@@ -394,9 +392,11 @@ public class GraphController extends AbstractController {
      */
     private void insertAnnotations(final File file) throws IOException {
         Timer timer = Timer.getAndStart();
-        Set<GeneAnnotation> annotations = GeneAnnotationParser.parseGeneAnnotations(file);
+        Set<GeneAnnotation> annotations = GeneAnnotationParser
+                .parseGeneAnnotations(file);
         shout(Message.LOADED, "annotations", annotations);
-        mappedAnnotations = GeneAnnotationMapper.mapAnnotations(graph, annotations, reference);
+        mappedAnnotations = GeneAnnotationMapper.mapAnnotations(graph,
+                annotations, reference);
 
         timer.stopAndLog("Inserting annotations");
         repaintNow = true;
