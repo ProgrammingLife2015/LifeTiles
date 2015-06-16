@@ -1,5 +1,10 @@
 package nl.tudelft.lifetiles.annotation.model;
 
+import java.util.Set;
+
+import nl.tudelft.lifetiles.sequence.model.Sequence;
+import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
+
 /**
  * Annotation of a gene onto the graph.
  *
@@ -33,6 +38,25 @@ public class GeneAnnotation extends AbstractAnnotation {
      */
     public String getName() {
         return name;
+    }
+
+    @Override
+    public SequenceSegment mapOntoSequence(Set<SequenceSegment> segments,
+            Sequence reference) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String toCellString() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public long getUnifiedPosition() {
+        // TODO Auto-generated method stub
+        return 0;
     }
 
 }
