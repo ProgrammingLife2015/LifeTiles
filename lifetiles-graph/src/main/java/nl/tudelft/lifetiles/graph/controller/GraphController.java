@@ -136,6 +136,11 @@ public class GraphController extends AbstractController {
     private Sequence reference;
 
     /**
+     * The mini map controller.
+     */
+    private MiniMapController miniMapController;
+
+    /**
      * The factor that each zoom out step that updates the current scale.
      */
     private static final double ZOOM_OUT_FACTOR = 1 / ZOOM_IN_FACTOR;
@@ -174,6 +179,16 @@ public class GraphController extends AbstractController {
                 zoomGraph(Math.pow(ZOOM_IN_FACTOR, diffLevel));
             }
         });
+    }
+
+    /**
+     * @return the mini map controller
+     */
+    private MiniMapController getMiniMapController() {
+        if (miniMapController == null) {
+            miniMapController = new MiniMapController(scrollPane, model);
+        }
+        return miniMapController;
     }
 
     /**
@@ -329,6 +344,7 @@ public class GraphController extends AbstractController {
 
             repaintPosition(scrollPane.hvalueProperty().doubleValue());
         }
+        getMiniMapController().drawMiniMap();
     }
 
     /**
