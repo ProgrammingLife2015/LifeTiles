@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import nl.tudelft.lifetiles.core.util.SetUtils;
@@ -13,6 +14,10 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
  * A tree to store the relation between samples.
  *
  * @author Albert Smit
+ *
+ */
+/**
+ * @author Rutger van den Berg
  *
  */
 public class PhylogeneticTreeItem {
@@ -57,7 +62,7 @@ public class PhylogeneticTreeItem {
      * the children and assign a new and unique id to the node.
      */
     public PhylogeneticTreeItem() {
-        children = new HashSet<PhylogeneticTreeItem>();
+        children = new CopyOnWriteArraySet<PhylogeneticTreeItem>();
         this.ident = nextID.incrementAndGet();
     }
 
@@ -275,35 +280,27 @@ public class PhylogeneticTreeItem {
      */
     @Override
     public final boolean equals(final Object obj) {
-        System.out.println("PhylogeneticTreeItem.equals()");
-        // if (this == obj) {
-        // return true;
-        // }
-        // if (obj == null) {
-        // return false;
-        // }
-        // if (!(obj instanceof PhylogeneticTreeItem)) {
-        // return false;
-        // }
-        // PhylogeneticTreeItem other = (PhylogeneticTreeItem) obj;
-        // if (Double.compare(this.distance, other.distance) != 0) {
-        // return false;
-        // }
-        // if (name == null) {
-        // if (other.name != null) {
-        // return false;
-        // }
-        // } else if (!name.equals(other.name)) {
-        // return false;
-        // }
-        // System.out.println("checkin gchildren");
-        // return children.containsAll(other.children);
+        if (this == obj) {
+            return true;
+        }
         if (obj == null) {
-            if (this != null) {
+            return false;
+        }
+        if (!(obj instanceof PhylogeneticTreeItem)) {
+            return false;
+        }
+        PhylogeneticTreeItem other = (PhylogeneticTreeItem) obj;
+        if (!Double.valueOf(this.distance).equals(other.distance)) {
+            return false;
+        }
+        if (name == null) {
+            if (other.name != null) {
                 return false;
             }
+        } else if (!name.equals(other.name)) {
+            return false;
         }
-        return this.hashCode() == obj.hashCode();
+        return children.equals(other.children);
     }
 
     /**
@@ -362,16 +359,16 @@ public class PhylogeneticTreeItem {
         } else {
             suffix = ", parent: " + parent.getId();
         }
-        String result = "<Node: " + ident + ", Name: " + name + ", Distance: "
-                + distance + suffix + " hash: " + this.hashCode() + ">";
+        StringBuffer output = new StringBuffer("<Node: " + ident + ", Name: "
+                + name + ", Distance: " + distance + suffix + ">");
         for (PhylogeneticTreeItem child : children) {
-            result += "\n";
+            output.append('\n');
             for (int i = 0; i <= depth; i++) {
-                result += "\t";
+                output.append('\t');
             }
-            result += child.toStringWithDepth(depth + 1);
+            output.append(child.toStringWithDepth(depth + 1));
         }
-        return result;
+        return output.toString();
     }
 
     /**

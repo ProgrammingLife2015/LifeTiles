@@ -238,9 +238,10 @@ public class StackedMutationContainer {
     public final Long getMaxMutations() {
         long max = 0;
         for (List<Long> stack : stackedMutations) {
-            for (int i = 1; i <= Mutation.values().length; i++) {
-                max = Math.max(max, stack.get(i));
-            }
+            max = Math.max(
+                    max,
+                    stack.get(INSERTION_MAP) + stack.get(DELETION_MAP)
+                            + stack.get(POLYMORPHISM_MAP));
         }
         return max;
     }

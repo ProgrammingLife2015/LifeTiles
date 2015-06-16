@@ -139,8 +139,6 @@ public class TestPhylogeneticTreeParser {
         current2 = new PhylogeneticTreeItem();
         current2.setParent(current);
         current2.setDistance(0.4);
-        System.out.println(rootExpected.toString());
-        System.out.println(rootActual.toString());
         // compare the trees
         assertEquals("both trees do not match", rootExpected, rootActual);
 
