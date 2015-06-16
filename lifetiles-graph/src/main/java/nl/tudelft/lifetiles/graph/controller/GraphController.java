@@ -16,6 +16,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Rectangle;
 import nl.tudelft.lifetiles.annotation.model.GeneAnnotation;
+import nl.tudelft.lifetiles.annotation.model.GeneAnnotationMapper;
 import nl.tudelft.lifetiles.annotation.model.GeneAnnotationParser;
 import nl.tudelft.lifetiles.annotation.model.KnownMutation;
 import nl.tudelft.lifetiles.annotation.model.KnownMutationMapper;
@@ -142,7 +143,7 @@ public class GraphController extends AbstractController {
     /**
      * The currently inserted annotations.
      */
-    private Set<GeneAnnotation> annotations;
+    private Map<SequenceSegment, List<GeneAnnotation>> mappedAnnotations;
 
     /**
      * The factor that each zoom in step that updates the current scale.
@@ -370,7 +371,7 @@ public class GraphController extends AbstractController {
         GraphParser parser = new DefaultGraphParser();
         graph = parser.parseGraph(vertexfile, edgefile, factory);
         knownMutations = new HashMap<>();
-        annotations = new HashSet<>();
+        mappedAnnotations = new HashMap<>();
 
         model = new GraphContainer(graph, reference);
         diagram = new StackedMutationContainer(model.getBucketCache(),
@@ -409,8 +410,9 @@ public class GraphController extends AbstractController {
      */
     private void insertAnnotations(final File file) throws IOException {
         Timer timer = Timer.getAndStart();
-        annotations = GeneAnnotationParser.parseGeneAnnotations(file);
+        Set<GeneAnnotation> annotations = GeneAnnotationParser.parseGeneAnnotations(file);
         shout(Message.LOADED, "annotations", annotations);
+        mappedAnnotations = GeneAnnotationMapper.mapAnnotations(graph, annotations, reference);
 
         timer.stopAndLog("Inserting annotations");
         repaintNow = true;
