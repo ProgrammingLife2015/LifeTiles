@@ -15,6 +15,7 @@ import nl.tudelft.lifetiles.annotation.model.KnownMutation;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.sequence.Mutation;
+import nl.tudelft.lifetiles.sequence.model.SegmentStringCollapsed;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
@@ -213,7 +214,13 @@ public class TileView {
         long width = segment.getContent().getLength();
         long height = segment.getSources().size();
 
-        Color color = sequenceColor(segment.getMutation());
+        Color color;
+        if (segment.getContent() instanceof SegmentStringCollapsed) {
+            color = Color.DARKGRAY;
+        } else {
+            color = sequenceColor(segment.getMutation());
+        }
+
         Point2D topleft = new Point2D(start, index);
 
         VertexView vertex = new VertexView(text, topleft, width, height, scale,
