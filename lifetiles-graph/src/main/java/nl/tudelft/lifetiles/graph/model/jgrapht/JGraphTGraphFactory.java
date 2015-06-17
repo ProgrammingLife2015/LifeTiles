@@ -1,7 +1,7 @@
 package nl.tudelft.lifetiles.graph.model.jgrapht;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -20,8 +20,8 @@ import org.jgrapht.graph.DirectedSubgraph;
  * @param <V>
  *            The type of Vertex to use.
  */
-public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
-        implements GraphFactory<V> {
+public class JGraphTGraphFactory<V extends Comparable<V>> implements
+        GraphFactory<V> {
     /**
      * The edgefactory associated with this graph factory.
      */
@@ -52,8 +52,8 @@ public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
      *             if the base graph is not a JGraphT library
      */
     @Override
-    public Graph<V> getSubGraph(final Graph<V> base,
-            final Set<V> vertexSubSet) throws NotAJGraphTAdapterException {
+    public Graph<V> getSubGraph(final Graph<V> base, final Set<V> vertexSubSet)
+            throws NotAJGraphTAdapterException {
 
         if (base instanceof JGraphTGraphAdapter) {
             JGraphTGraphAdapter<V> baseGraph = (JGraphTGraphAdapter<V>) base;
@@ -80,15 +80,18 @@ public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
 
         for (V vertex : graph.getAllVertices()) {
             try {
-                Method method = vertex.getClass().getMethod("clone");
-                Object copy = method.invoke(vertex);
+                Constructor<?> method = vertex.getClass().getConstructor(
+                        vertex.getClass());
+
+                Object copy = method.newInstance(vertex);
+                // can't not be a V, so no need to explicitly check.
                 @SuppressWarnings("unchecked")
                 V newVertex = (V) copy;
                 copygraph.addVertex(newVertex);
                 convertVertices.put(vertex, copy);
             } catch (NoSuchMethodException | SecurityException
                     | IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException exception) {
+                    | InvocationTargetException | InstantiationException exception) {
 
                 Logging.exception(exception);
             }

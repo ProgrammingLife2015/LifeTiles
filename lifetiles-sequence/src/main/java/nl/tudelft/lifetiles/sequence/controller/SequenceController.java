@@ -26,6 +26,7 @@ import nl.tudelft.lifetiles.notification.model.NotificationFactory;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceEntry;
 import nl.tudelft.lifetiles.sequence.model.SequenceMetaParser;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * The controller of the data view.
@@ -239,6 +240,8 @@ public class SequenceController extends AbstractController {
      * @param sequences
      *            the sequences
      */
+    // suppress a false positive on SequenceEntry
+    @SuppressFBWarnings("DLS_DEAD_LOCAL_STORE")
     private void initializeEntries(final Map<String, Sequence> sequences) {
         sequenceEntries = FXCollections.observableHashMap();
 
