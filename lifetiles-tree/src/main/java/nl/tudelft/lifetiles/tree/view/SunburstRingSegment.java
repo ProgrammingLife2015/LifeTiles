@@ -45,22 +45,20 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      * @param layer
      *            the layer at which it is located in the tree, layer 0 is the
      *            first layer
-     * @param degreeStart
-     *            the start position in degrees
-     * @param degreeEnd
-     *            the end position in degrees
+     * @param angle
+     *            the start and end positions of this ringSegment
      * @param center
      *            the coordinates of the center of the circle
      * @param scale
      *            the scaling factor
      */
     public SunburstRingSegment(final PhylogeneticTreeItem value,
-            final int layer, final double degreeStart, final double degreeEnd,
+            final int layer, final DegreeRange angle,
             final Point2D center, final double scale) {
         // set the value, and create the text and semi-circle
         setValue(value);
         String name = getValue().getName();
-        setDisplay(createRing(layer, degreeStart, degreeEnd, center, scale));
+        setDisplay(createRing(layer, angle, center, scale));
         double distance = getValue().getDistance();
         StringBuffer tooltip = new StringBuffer();
         if (name != null) {
@@ -82,36 +80,32 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      * @param layer
      *            The layer to place this element at, the first child of root is
      *            layer 0.
-     * @param degreeStart
-     *            the start position in degrees
-     * @param degreeEnd
-     *            the end position in degrees
+     * @param angle
+     *            The start and end points of this ring
      * @param center
      *            the coordinates of the center of the circle
      * @param scale
      *            the scaling factor
      * @return a semi-circle with the specified dimensions
      */
-    private Shape createRing(final int layer, final double degreeStart,
-            final double degreeEnd, final Point2D center, final double scale) {
+    private Shape createRing(final int layer, final DegreeRange angle,
+            final Point2D center, final double scale) {
 
         Path result = new Path();
 
-        result.setFill(createColor(degreeStart, layer));
+        result.setFill(createColor(angle.getStartAngle(), layer));
         result.setFillRule(FillRule.EVEN_ODD);
 
         // check if this is a large arc
-        double arcSize = AbstractSunburstNode.calculateAngle(degreeStart,
-                degreeEnd);
-        boolean largeArc = arcSize > AbstractSunburstNode.CIRCLEDEGREES / 2;
+        boolean largeArc = angle.angle() > AbstractSunburstNode.CIRCLEDEGREES / 2;
 
         // calculate the radii of the two arcs
         double innerRadius = scale * (CENTER_RADIUS + (layer * RING_WIDTH));
         double outerRadius = innerRadius + scale * RING_WIDTH;
 
         // convert degrees to radians for Math.sin and Math.cos
-        double angleAlpha = Math.toRadians(degreeStart);
-        double angleAlphaNext = Math.toRadians(degreeEnd);
+        double angleAlpha = Math.toRadians(angle.getStartAngle());
+        double angleAlphaNext = Math.toRadians(angle.getEndAngle());
 
         // draw the semi-circle
         // first go to the start point
