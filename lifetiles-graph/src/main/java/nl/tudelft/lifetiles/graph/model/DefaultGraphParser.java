@@ -66,7 +66,7 @@ public class DefaultGraphParser implements GraphParser {
             if (!sequences.containsKey(sequencename)) {
                 // This is a parser. We do actually need to instantiate here.
                 @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-                DefaultSequence newSequence = new DefaultSequence(sequencename);
+                Sequence newSequence = new DefaultSequence(sequencename);
                 sequences.put(sequencename, newSequence);
             }
             currentSequences.add(sequences.get(sequencename));

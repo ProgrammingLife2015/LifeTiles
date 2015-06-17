@@ -74,7 +74,8 @@ public class BucketCache {
         for (int index = 0; index < numberBuckets; index++) {
             // We do actually need to instantiate here.
             @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-            buckets.add(index, new Bucket());
+            Bucket bucket = new Bucket();
+            buckets.add(index, bucket);
         }
         for (SequenceSegment vertex : graph.getAllVertices()) {
             cacheVertex(vertex);
