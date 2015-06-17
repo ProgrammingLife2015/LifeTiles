@@ -38,6 +38,7 @@ public class GeneAnnotation extends AbstractAnnotation {
     public GeneAnnotation(final long start, final long end, final String name) {
         super(start, end);
         this.name = name;
+        mappingSegments = new HashSet<>();
     }
 
     /**
@@ -67,12 +68,6 @@ public class GeneAnnotation extends AbstractAnnotation {
             }
         }
         return mappingSegments;
-    }
-
-    @Override
-    public final String toCellString() {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     /**
