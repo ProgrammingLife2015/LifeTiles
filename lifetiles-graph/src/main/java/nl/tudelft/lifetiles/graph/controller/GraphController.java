@@ -520,16 +520,4 @@ public class GraphController extends AbstractController {
     public void clicked(final SequenceSegment segment) {
         shout(Message.FILTERED, "", segment.getSources());
     }
-
-    /**
-     * Set that this segment is hovered over.
-     *
-     * @param segment
-     *            the hovered element
-     * @param hovering
-     *            set if mouse is entering this segment or leaving
-     */
-    public void hovered(final SequenceSegment segment, final Boolean hovering) {
-        // TODO: Message to say that a segment is hovered over
-    }
 }

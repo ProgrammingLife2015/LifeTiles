@@ -184,34 +184,6 @@ public class TileViewTest {
         Mockito.verify(controller).clicked(Mockito.any());
     }
 
-    @Test
-    public void hoveringEnterVertexText() {
-        creategraph();
-        buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
-                1);
-        Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
-                .getChildrenUnmodifiable().get(0), new MouseEvent(
-                MouseEvent.MOUSE_ENTERED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                true, true, true, true, true, true, true, true, true, true,
-                null));
-        Mockito.verify(controller).hovered(Mockito.any(), Mockito.eq(true));
-    }
-
-    @Test
-    public void hoveringExitVertexText() {
-        creategraph();
-        buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
-                1);
-        Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
-                .getChildrenUnmodifiable().get(0), new MouseEvent(
-                MouseEvent.MOUSE_EXITED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                true, true, true, true, true, true, true, true, true, true,
-                null));
-        Mockito.verify(controller).hovered(Mockito.any(), Mockito.eq(false));
-    }
-
     private void creategraph() {
         GraphFactory<SequenceSegment> gf = FactoryProducer
                 .getFactory("JGraphT");
