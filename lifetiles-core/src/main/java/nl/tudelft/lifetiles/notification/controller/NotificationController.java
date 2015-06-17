@@ -55,7 +55,7 @@ public class NotificationController extends AbstractController {
      * {@inheritDoc}
      */
     @Override
-    public final void initialize(final URL location,
+    public void initialize(final URL location,
             final ResourceBundle resources) {
         final int initialCapacity = 10;
         this.notifications = new PriorityQueue<>(initialCapacity, (

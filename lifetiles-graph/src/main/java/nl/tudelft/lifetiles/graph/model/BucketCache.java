@@ -122,7 +122,7 @@ public class BucketCache {
      *
      * @return number of buckets the graph is divided in.
      */
-    public final int getNumberBuckets() {
+    public int getNumberBuckets() {
         return numberBuckets;
     }
 
@@ -131,7 +131,7 @@ public class BucketCache {
      *
      * @return graph that has been inserted into the bucket cache.
      */
-    public final List<Bucket> getBuckets() {
+    public List<Bucket> getBuckets() {
         return buckets;
     }
 
@@ -146,7 +146,7 @@ public class BucketCache {
      *            the maximal Bucket to search on the domain
      * @return set of sequence segments on the domain.
      */
-    public final Set<SequenceSegment> getSegments(final int start, final int end) {
+    public Set<SequenceSegment> getSegments(final int start, final int end) {
         Set<SequenceSegment> set = new TreeSet<SequenceSegment>();
         int startBucket = Math.max(0, start);
         int endBucket = Math.min(numberBuckets, end);
@@ -165,7 +165,7 @@ public class BucketCache {
      *            Percentage position in the GraphController
      * @return position in the bucketCache.
      */
-    public final int bucketPercentageStartPosition(final double position) {
+    public int bucketPercentageStartPosition(final double position) {
         return (int) ((position * maxUnifiedEnd) / bucketWidth);
     }
 
@@ -177,7 +177,7 @@ public class BucketCache {
      *            relative position on the screen
      * @return position in the bucketCache.
      */
-    public final int bucketStartPosition(final double position) {
+    public int bucketStartPosition(final double position) {
         return (int) Math.min(numberBuckets,
                 Math.max(0, position / bucketWidth));
     }
@@ -190,7 +190,7 @@ public class BucketCache {
      *            relative position on the screen
      * @return position in the bucketCache.
      */
-    public final int bucketEndPosition(final double position) {
+    public int bucketEndPosition(final double position) {
         return (int) Math.min(numberBuckets,
                 Math.ceil(Math.max(0, position / bucketWidth)));
     }

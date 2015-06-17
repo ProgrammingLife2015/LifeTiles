@@ -81,7 +81,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      * {@inheritDoc}
      */
     @Override
-    public final void addEdge(final int source, final int destination) {
+    public void addEdge(final int source, final int destination) {
         addEdge(vertexIdentifiers.get(source),
                 vertexIdentifiers.get(destination));
 
@@ -99,7 +99,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      * @return <code>true</code> iff adding succeeded.
      */
     @Override
-    public final boolean addEdge(final V source, final V destination)
+    public boolean addEdge(final V source, final V destination)
             throws IllegalArgumentException {
         if (internalGraph.containsVertex(source)
                 && internalGraph.containsVertex(destination)) {
@@ -118,7 +118,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      *            The vertex to add.
      */
     @Override
-    public final void addVertex(final V vertex) {
+    public void addVertex(final V vertex) {
         internalGraph.addVertex(vertex);
         vertexIdentifiers.add(vertex);
         if (sources == null) {
@@ -150,7 +150,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      * @return All edges.
      */
     @Override
-    public final SortedSet<Edge<V>> getAllEdges() {
+    public SortedSet<Edge<V>> getAllEdges() {
         return convertEdges(internalGraph.edgeSet());
     }
 
@@ -158,7 +158,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      * @return All vertices.
      */
     @Override
-    public final SortedSet<V> getAllVertices() {
+    public SortedSet<V> getAllVertices() {
         return new TreeSet<V>(internalGraph.vertexSet());
     }
 
@@ -168,7 +168,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      * @return The destination <code>vertex</code> for <code>e</code>.
      */
     @Override
-    public final V getDestination(final Edge<V> edge) {
+    public V getDestination(final Edge<V> edge) {
         return internalGraph.getEdgeTarget(unpackEdge(edge));
     }
 
@@ -178,7 +178,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      * @return The edges incoming to <code>vertex</code>.
      */
     @Override
-    public final SortedSet<Edge<V>> getIncoming(final V vertex) {
+    public SortedSet<Edge<V>> getIncoming(final V vertex) {
         return convertEdges(internalGraph.incomingEdgesOf(vertex));
     }
 
@@ -188,7 +188,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      * @return The edges outgoing from <code>vertex</code>.
      */
     @Override
-    public final SortedSet<Edge<V>> getOutgoing(final V vertex) {
+    public SortedSet<Edge<V>> getOutgoing(final V vertex) {
         return convertEdges(internalGraph.outgoingEdgesOf(vertex));
     }
 
@@ -196,7 +196,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      * @return All vertices that have no incoming edges.
      */
     @Override
-    public final SortedSet<V> getSources() {
+    public SortedSet<V> getSources() {
         if (sources == null) {
             SortedSet<V> foundSources = new TreeSet<V>();
 
@@ -218,7 +218,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      * @return The source <code>Vertex</code> for <code>e</code>.
      */
     @Override
-    public final V getSource(final Edge<V> edge) {
+    public V getSource(final Edge<V> edge) {
 
         return internalGraph.getEdgeSource(unpackEdge(edge));
     }
@@ -242,7 +242,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      * @return All vertices that have no outgoing edges.
      */
     @Override
-    public final SortedSet<V> getSinks() {
+    public SortedSet<V> getSinks() {
         if (sinks == null) {
             SortedSet<V> foundSinks = new TreeSet<V>();
 
@@ -267,7 +267,7 @@ public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
      *            Vertex to be inserted.
      */
     @Override
-    public final void splitEdge(final Edge<V> edge, final V vertex) {
+    public void splitEdge(final Edge<V> edge, final V vertex) {
         removeEdge(edge);
         addVertex(vertex);
         addEdge(getSource(edge), vertex);

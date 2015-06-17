@@ -70,35 +70,35 @@ public class KnownMutation extends AbstractBookmark {
     /**
      * @return the drugResistance
      */
-    public final String getDrugResistance() {
+    public String getDrugResistance() {
         return drugResistance;
     }
 
     /**
      * @return the filter
      */
-    public final String getFilter() {
+    public String getFilter() {
         return filter;
     }
 
     /**
      * @return the change
      */
-    public final String getChange() {
+    public String getChange() {
         return change;
     }
 
     /**
      * @return the typeOfMutation
      */
-    public final String getTypeOfMutation() {
+    public String getTypeOfMutation() {
         return typeOfMutation;
     }
 
     /**
      * @return the geneName
      */
-    public final String getGeneName() {
+    public String getGeneName() {
         return geneName;
     }
 
@@ -112,7 +112,7 @@ public class KnownMutation extends AbstractBookmark {
      * @return segment which annotation should be mapped to.
      */
     @Override
-    public final SequenceSegment mapOntoSequence(
+    public SequenceSegment mapOntoSequence(
             final Set<SequenceSegment> segments, final Sequence reference) {
         for (SequenceSegment segment : segments) {
             if (segment.getSources().contains(reference)
@@ -132,7 +132,7 @@ public class KnownMutation extends AbstractBookmark {
      *         Tooltip string representation.
      */
     @Override
-    public final String toString() {
+    public String toString() {
         Formatter formatter = new Formatter();
         formatter.format("Gene Name: %1$s%nGene Position: %2$s%nMutation Type:"
                 + " %3$s%nChange: %4$s%nFilter: %5$s%nDrug Resistance: %6$s",

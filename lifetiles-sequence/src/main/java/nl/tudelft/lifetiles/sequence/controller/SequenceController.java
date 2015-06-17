@@ -33,7 +33,7 @@ import nl.tudelft.lifetiles.sequence.model.SequenceMetaParser;
  * @author Joren Hammudoglu
  *
  */
-public final class SequenceController extends AbstractController {
+public class SequenceController extends AbstractController {
 
     /**
      * Shout message indicating a sequence has been set as reference.
@@ -267,20 +267,20 @@ public final class SequenceController extends AbstractController {
      *            the sequence entry
      */
     private void addVisibilityListener(final SequenceEntry entry) {
-        final ChangeListener<? super Boolean> visibilityListener;
+        final ChangeListener<? super Boolean> listener;
         if (visibleListeners.containsKey(entry)) {
-            visibilityListener = visibleListeners.get(entry);
+            listener = visibleListeners.get(entry);
         } else {
-            visibilityListener = (value, previous, current) -> {
+            listener = (value, previous, current) -> {
                 if (previous != current) {
                     updateVisible(entry, current);
                     shout(Message.FILTERED, "", visibleSequences);
                 }
             };
-            visibleListeners.put(entry, visibilityListener);
+            visibleListeners.put(entry, listener);
         }
 
-        entry.visibleProperty().addListener(visibilityListener);
+        entry.visibleProperty().addListener(listener);
     }
 
     /**

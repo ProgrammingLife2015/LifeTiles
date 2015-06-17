@@ -91,7 +91,7 @@ public class BreadthFirstIterator<V> implements Iterator<V> {
      * {@inheritDoc}
      */
     @Override
-    public final boolean hasNext() {
+    public boolean hasNext() {
         return !queue.isEmpty();
     }
 
@@ -99,7 +99,7 @@ public class BreadthFirstIterator<V> implements Iterator<V> {
      * {@inheritDoc}
      */
     @Override
-    public final V next() {
+    public V next() {
         V vertex = queue.poll();
 
         if (vertex == null) {

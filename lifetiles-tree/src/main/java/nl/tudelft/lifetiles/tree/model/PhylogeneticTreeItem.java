@@ -71,7 +71,7 @@ public class PhylogeneticTreeItem {
      *
      * @return the amount of descendant nodes
      */
-    public final int numberDescendants() {
+    public int numberDescendants() {
         int result = 0;
         for (PhylogeneticTreeItem child : children) {
             result += child.numberDescendants() + 1;
@@ -85,7 +85,7 @@ public class PhylogeneticTreeItem {
      *
      * @return the amount of layers
      */
-    public final int maxDepth() {
+    public int maxDepth() {
         int result = 0;
         for (PhylogeneticTreeItem child : children) {
             result = Math.max(result, child.maxDepth() + 1);
@@ -100,7 +100,7 @@ public class PhylogeneticTreeItem {
      *
      * @return a set with all sequences that descend from this node.
      */
-    public final Set<Sequence> getSequences() {
+    public Set<Sequence> getSequences() {
         Set<Sequence> result = new HashSet<Sequence>();
         if (sequence != null) {
             result.add(sequence);
@@ -119,7 +119,7 @@ public class PhylogeneticTreeItem {
      * @param child
      *            the PhylogeneticTreeItem that needs to be added to the tree
      */
-    public final void addChild(final PhylogeneticTreeItem child) {
+    public void addChild(final PhylogeneticTreeItem child) {
         children.add(child);
     }
 
@@ -133,7 +133,7 @@ public class PhylogeneticTreeItem {
      *            the sequences that need to be in this tree.
      * @return the new root of a subtree.
      */
-    public final PhylogeneticTreeItem subTree(
+    public PhylogeneticTreeItem subTree(
             final Set<Sequence> visibleSequences) {
         // copy the node
         PhylogeneticTreeItem result = new PhylogeneticTreeItem();
@@ -168,7 +168,7 @@ public class PhylogeneticTreeItem {
      * Fills the set containing the sequences that descend from this node. the
      * sequences should already have been added to the tree.
      */
-    public final void populateChildSequences() {
+    public void populateChildSequences() {
         for (PhylogeneticTreeItem child : children) {
             child.populateChildSequences();
         }
@@ -180,7 +180,7 @@ public class PhylogeneticTreeItem {
      *
      * @return the ArrayList containing all children of this node
      */
-    public final List<PhylogeneticTreeItem> getChildren() {
+    public List<PhylogeneticTreeItem> getChildren() {
         return new ArrayList<PhylogeneticTreeItem>(children);
     }
 
@@ -190,7 +190,7 @@ public class PhylogeneticTreeItem {
      *
      * @return the distance of this node
      */
-    public final double getDistance() {
+    public double getDistance() {
         return distance;
     }
 
@@ -200,7 +200,7 @@ public class PhylogeneticTreeItem {
      *
      * @return the unique id of this PhylogeneticTreeItem
      */
-    public final int getId() {
+    public int getId() {
         return ident;
     }
 
@@ -210,7 +210,7 @@ public class PhylogeneticTreeItem {
      *
      * @return the name of this node
      */
-    public final String getName() {
+    public String getName() {
         return name;
     }
 
@@ -219,7 +219,7 @@ public class PhylogeneticTreeItem {
      *
      * @return the PhylogeneticTreeItem that is this nodes parent
      */
-    public final PhylogeneticTreeItem getParent() {
+    public PhylogeneticTreeItem getParent() {
         return parent;
     }
 
@@ -227,7 +227,7 @@ public class PhylogeneticTreeItem {
      * {@inheritDoc}
      */
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
 
@@ -248,7 +248,7 @@ public class PhylogeneticTreeItem {
      * @param distance
      *            the distance between the nodes
      */
-    public final void setDistance(final double distance) {
+    public void setDistance(final double distance) {
         this.distance = distance;
     }
 
@@ -258,7 +258,7 @@ public class PhylogeneticTreeItem {
      * @param name
      *            the name of this node
      */
-    public final void setName(final String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -279,7 +279,7 @@ public class PhylogeneticTreeItem {
      * @return true if both are the same, otherwise false
      */
     @Override
-    public final boolean equals(final Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -311,7 +311,7 @@ public class PhylogeneticTreeItem {
      * @param parentNode
      *            the node that will be this nodes parent
      */
-    public final void setParent(final PhylogeneticTreeItem parentNode) {
+    public void setParent(final PhylogeneticTreeItem parentNode) {
         this.parent = parentNode;
         this.parent.addChild(this);
     }
@@ -319,7 +319,7 @@ public class PhylogeneticTreeItem {
     /**
      * @return the sequence
      */
-    public final Sequence getSequence() {
+    public Sequence getSequence() {
         return sequence;
     }
 
@@ -327,7 +327,7 @@ public class PhylogeneticTreeItem {
      * @param seq
      *            the sequence to set
      */
-    public final void setSequence(final Sequence seq) {
+    public void setSequence(final Sequence seq) {
         this.sequence = seq;
     }
 
@@ -341,7 +341,7 @@ public class PhylogeneticTreeItem {
      * @return the String version of the object.
      */
     @Override
-    public final String toString() {
+    public String toString() {
 
         return toStringWithDepth(0);
     }
@@ -374,14 +374,14 @@ public class PhylogeneticTreeItem {
     /**
      * @return returns the list of child sequences stored in this node
      */
-    public final Set<Sequence> getChildSequences() {
+    public Set<Sequence> getChildSequences() {
         return childSequences;
     }
 
     /**
      * Sets this nodes childSequences field to the set returned by getSequences.
      */
-    public final void setChildSequences() {
+    public void setChildSequences() {
         this.childSequences = this.getSequences();
     }
 

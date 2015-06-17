@@ -170,8 +170,7 @@ public class GraphController extends AbstractController {
      * {@inheritDoc}
      */
     @Override
-    public final void initialize(final URL location,
-            final ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         initListeners();
         initZoomToolBar();
 
@@ -286,7 +285,7 @@ public class GraphController extends AbstractController {
      *
      * @return the currently loaded graph.
      */
-    public final Graph<SequenceSegment> getGraph() {
+    public Graph<SequenceSegment> getGraph() {
         if (graph == null) {
             throw new IllegalStateException("Graph not loaded.");
         }
@@ -504,7 +503,7 @@ public class GraphController extends AbstractController {
      *            the last bucket
      * @return Group object to be drawn on the screen
      */
-    public final Group drawGraph(final int startBucket, final int endBucket) {
+    public Group drawGraph(final int startBucket, final int endBucket) {
         Group test = view.drawGraph(
                 model.getVisibleSegments(startBucket, endBucket), graph,
                 knownMutations, scale);
