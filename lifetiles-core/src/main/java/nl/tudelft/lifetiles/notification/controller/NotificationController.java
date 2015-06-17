@@ -88,6 +88,7 @@ public class NotificationController extends AbstractController {
      */
     @FXML
     // PMD/findbugs do not work well with javafx. The method IS used.
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
     @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
     private void closeAction() {
         displayNext();

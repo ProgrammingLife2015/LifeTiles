@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -21,6 +22,7 @@ import nl.tudelft.lifetiles.annotation.model.KnownMutation;
 import nl.tudelft.lifetiles.annotation.model.KnownMutationMapper;
 import nl.tudelft.lifetiles.annotation.model.KnownMutationParser;
 import nl.tudelft.lifetiles.core.util.Settings;
+import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
 import nl.tudelft.lifetiles.graph.model.BucketCache;
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
@@ -33,6 +35,7 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -48,10 +51,14 @@ public class TileViewTest {
     Graph<SequenceSegment> gr;
     BucketCache buckets;
 
-    /**
+ /**
      * Final string for radius settings property.
      */
     private static final String RADIUS_SETTING = "bookmark_radius";
+    @BeforeClass
+    public static void before() {
+        Logging.setLevel(Level.SEVERE);
+    }
 
     @Before
     public void setUp() {

@@ -103,6 +103,8 @@ public class SequenceController extends AbstractController {
     /**
      * Register the shout listeners.
      */
+    // checkstyle bug causes false positives in our assert, so suppress.
+    @SuppressWarnings("checkstyle:genericwhitespace")
     private void registerShoutListeners() {
         listen(Message.LOADED, (sender, subject, args) -> {
             if (!"sequences".equals(subject)) {
@@ -110,7 +112,7 @@ public class SequenceController extends AbstractController {
             }
             // eclipse and PMD disagree on whether parentheses are
             // needed
-                assert (args[0] instanceof Map<?, ?>);
+                assert args[0] instanceof Map<?, ?>;
 
                 @SuppressWarnings("unchecked")
                 Map<String, Sequence> sequences = (Map<String, Sequence>) args[0];
@@ -120,7 +122,7 @@ public class SequenceController extends AbstractController {
 
         listen(Message.FILTERED, (sender, subject, args) -> {
             assert args.length == 1;
-            assert (args[0] instanceof Set<?>);
+            assert args[0] instanceof Set<?>;
             @SuppressWarnings("unchecked")
             Set<Sequence> sequences = (Set<Sequence>) args[0];
             updateVisible(sequences);

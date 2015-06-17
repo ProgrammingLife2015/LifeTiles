@@ -6,7 +6,9 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.logging.Level;
 
+import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.graph.traverser.UnifiedPositionTraverser;
 import nl.tudelft.lifetiles.sequence.model.DefaultSequence;
 import nl.tudelft.lifetiles.sequence.model.SegmentString;
@@ -14,6 +16,7 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class BreadthFirstIteratorTest {
@@ -21,6 +24,11 @@ public class BreadthFirstIteratorTest {
     Graph<SequenceSegment> graph;
     HashSet<Sequence> s1, s2, s3;
     List<SequenceSegment> vertices;
+
+    @BeforeClass
+    public static void before() {
+        Logging.setLevel(Level.SEVERE);
+    }
 
     @Before
     public void setUp() throws Exception {
