@@ -148,11 +148,11 @@ public class KnownMutation extends AbstractBookmark {
         return knownMutation;
     }
 
-    @Override
-    public final String toCellString() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+//    @Override
+//    public final String toCellString() {
+//        // TODO Auto-generated method stub
+//        return null;
+//    }
 
     /**
      * Method which return the unified position of the bookmark in the

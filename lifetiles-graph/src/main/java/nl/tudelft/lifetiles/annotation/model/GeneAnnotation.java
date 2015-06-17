@@ -69,11 +69,11 @@ public class GeneAnnotation extends AbstractAnnotation {
         return mappingSegments;
     }
 
-    @Override
-    public final String toCellString() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+//    @Override
+//    public final String toCellString() {
+//        // TODO Auto-generated method stub
+//        return null;
+//    }
 
     /**
      * Method which return the unified position of the bookmark in the

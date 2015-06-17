@@ -71,7 +71,7 @@ public final class GeneAnnotationParser {
      *            Fields of the gene.
      * @return Map of attributes in the gene.
      */
-    private static Map<String, String> extractGeneFields(final String[] fields) {
+    private static Map<String, String> extractGeneFields(final String... fields) {
         final Map<String, String> genomeFields = new HashMap<String, String>();
         for (String field : fields) {
             String[] attribute = field.split("=");
