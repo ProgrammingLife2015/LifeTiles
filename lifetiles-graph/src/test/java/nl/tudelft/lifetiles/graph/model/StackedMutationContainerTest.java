@@ -5,7 +5,9 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 
+import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.sequence.Mutation;
 import nl.tudelft.lifetiles.sequence.model.DefaultSequence;
 import nl.tudelft.lifetiles.sequence.model.SegmentEmpty;
@@ -13,12 +15,18 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class StackedMutationContainerTest {
     GraphFactory<SequenceSegment> gf;
     SequenceSegment v1, v2;
     Graph<SequenceSegment> gr;
+
+    @BeforeClass
+    public static void before() {
+        Logging.setLevel(Level.SEVERE);
+    }
 
     @Before
     public void setUp() {

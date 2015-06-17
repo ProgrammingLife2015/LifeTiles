@@ -60,6 +60,8 @@ public class TreeController extends AbstractController {
      * {@inheritDoc}
      */
     @Override
+    // checkstyle bug causes false positives, so we'll suppress them(for now).
+    @SuppressWarnings("checkstyle:genericwhitespace")
     public void initialize(final URL location, final ResourceBundle resources) {
         // load the tree when the files are opened
         listen(Message.OPENED, (controller, subject, args) -> {

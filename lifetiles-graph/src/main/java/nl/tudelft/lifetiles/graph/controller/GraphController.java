@@ -209,6 +209,7 @@ public class GraphController extends AbstractController {
     /**
      * Initialize the listeners.
      */
+    @SuppressWarnings("checkstyle:genericwhitespace")
     private void initListeners() {
 
         NotificationFactory notFact = new NotificationFactory();

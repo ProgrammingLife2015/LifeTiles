@@ -5,7 +5,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 
+import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
 import nl.tudelft.lifetiles.graph.model.Graph;
 import nl.tudelft.lifetiles.graph.model.GraphFactory;
@@ -29,6 +31,7 @@ public class MutationIndicationTraverserTest {
 
     @BeforeClass
     public static void runOnce() {
+        Logging.setLevel(Level.SEVERE);
         ss1 = new DefaultSequence("reference");
         Sequence ss2 = new DefaultSequence("mutation");
 

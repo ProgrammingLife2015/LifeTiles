@@ -4,8 +4,10 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 
 import javafx.scene.Group;
+import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.graph.model.BucketCache;
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
 import nl.tudelft.lifetiles.graph.model.Graph;
@@ -17,6 +19,7 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class DiagramViewTest {
@@ -24,6 +27,11 @@ public class DiagramViewTest {
     GraphFactory<SequenceSegment> gf;
     SequenceSegment v1, v2;
     Graph<SequenceSegment> gr;
+
+    @BeforeClass
+    public static void before() {
+        Logging.setLevel(Level.SEVERE);
+    }
 
     @Before
     public void setup() {
