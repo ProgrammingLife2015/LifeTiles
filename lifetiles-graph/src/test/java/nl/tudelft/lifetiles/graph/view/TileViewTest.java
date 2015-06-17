@@ -16,13 +16,12 @@ import javafx.event.Event;
 import javafx.scene.Group;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Circle;
 import nl.tudelft.lifetiles.annotation.model.KnownMutation;
 import nl.tudelft.lifetiles.annotation.model.KnownMutationMapper;
 import nl.tudelft.lifetiles.annotation.model.KnownMutationParser;
-import nl.tudelft.lifetiles.core.util.Settings;
 import nl.tudelft.lifetiles.core.util.Logging;
+import nl.tudelft.lifetiles.core.util.Settings;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
 import nl.tudelft.lifetiles.graph.model.BucketCache;
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
@@ -50,11 +49,16 @@ public class TileViewTest {
     TileView tileview;
     Graph<SequenceSegment> gr;
     BucketCache buckets;
+    private Circle bookmark;
+    // its used inside a lambda. does not seem to be recognized as such
+    @SuppressWarnings("unused")
+    private VertexView vertexView1;
 
- /**
+    /**
      * Final string for radius settings property.
      */
     private static final String RADIUS_SETTING = "bookmark_radius";
+
     @BeforeClass
     public static void before() {
         Logging.setLevel(Level.SEVERE);
@@ -120,9 +124,6 @@ public class TileViewTest {
         assertEquals(2 * 11 - 2, vView1.getBoundsInParent().getWidth(), 1e-10);
 
     }
-
-    private Circle bookmark;
-    private VertexView vertexView1;
 
     @Test
     public void drawAnnotationTest() throws IOException, InterruptedException {
