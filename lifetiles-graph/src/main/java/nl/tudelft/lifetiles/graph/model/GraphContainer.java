@@ -3,7 +3,6 @@ package nl.tudelft.lifetiles.graph.model;
 import java.util.Set;
 import java.util.TreeSet;
 
-import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.core.util.SetUtils;
 import nl.tudelft.lifetiles.core.util.Settings;
 import nl.tudelft.lifetiles.core.util.Timer;
@@ -164,11 +163,7 @@ public class GraphContainer {
             final int end) {
         Set<SequenceSegment> copy = new TreeSet<SequenceSegment>();
         for (SequenceSegment seg : segmentBuckets.getSegments(start, end)) {
-            try {
-                copy.add(seg.clone());
-            } catch (CloneNotSupportedException e) {
-                Logging.exception(e);
-            }
+            copy.add(new SequenceSegment(seg));
         }
         // Keep only the sequencesegments that are visible
         copy.retainAll(visibles);

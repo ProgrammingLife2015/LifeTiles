@@ -20,8 +20,7 @@ import org.jgrapht.graph.SimpleDirectedGraph;
  * @param <V>
  *            The type of vertex to use.
  */
-public class JGraphTGraphAdapter<V extends Comparable<V> & Cloneable>
-        implements Graph<V> {
+public class JGraphTGraphAdapter<V extends Comparable<V>> implements Graph<V> {
     /**
      * The edgefactory to use to create the edges for this graph.
      */
