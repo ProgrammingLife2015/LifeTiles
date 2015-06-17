@@ -10,12 +10,12 @@ public class DegreeRange {
     /**
      * The starting angle in degrees.
      */
-    private double startAngle;
+    private final double startAngle;
 
     /**
      * The ending angle in degrees.
      */
-    private double endAngle;
+    private final double endAngle;
 
     /**
      * Constructor for degree range, creates a new immutable DegreeRange.
