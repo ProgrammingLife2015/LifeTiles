@@ -206,9 +206,6 @@ public class TileView {
 
         nodemap.put(segment, vertex);
         vertex.setOnMouseClicked(event -> controller.clicked(segment));
-        // Hovering
-        vertex.setOnMouseEntered(event -> controller.hovered(segment, true));
-        vertex.setOnMouseExited(event -> controller.hovered(segment, false));
 
         if (knownMutations != null) {
             for (KnownMutation knownMutation : knownMutations) {
