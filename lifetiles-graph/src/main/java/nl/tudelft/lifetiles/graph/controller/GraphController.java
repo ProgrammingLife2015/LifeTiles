@@ -50,6 +50,7 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
  * @author Joren Hammudoglu
  * @author AC Langerak
  * @author Jos Winter
+ * @author Albert Smit
  *
  */
 public class GraphController extends AbstractController {
@@ -371,6 +372,14 @@ public class GraphController extends AbstractController {
                         .getNotification(exception));
             }
         }
+
+        listen(Message.GOTO , (controller, subject, args) -> {
+            assert args[0] instanceof Long;
+            long position = ((Long) args[0]).longValue();
+            System.out.println("GOTO: " + position);
+            //TODO go to correct position
+            //scrollPane.setHvalue(position);
+        });
     }
 
     /**

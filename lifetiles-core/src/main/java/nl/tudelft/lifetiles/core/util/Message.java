@@ -37,6 +37,10 @@ public final class Message {
      * A shout message indicating we want to move to a location in the genome.
      */
     public static final Message GOTO = create("goto");
+    /**
+     * A shout message indicating we want to create a new bookmark.
+     */
+    public static final Message CREATE_BOOKMARK = create("new bookmark");
 
     /**
      * The value.
