@@ -53,12 +53,6 @@ public class SequenceController extends AbstractController {
     private TableView<SequenceEntry> sequenceTable;
 
     /**
-     * The table column of sequence id's.
-     */
-    @FXML
-    private TableColumn<SequenceEntry, String> idColumn;
-
-    /**
      * The table column indiciating sequence visibility.
      */
     @FXML

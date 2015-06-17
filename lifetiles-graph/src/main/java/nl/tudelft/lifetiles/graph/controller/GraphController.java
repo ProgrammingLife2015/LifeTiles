@@ -233,7 +233,7 @@ public class GraphController extends AbstractController {
 
         listen(Message.FILTERED, (controller, subject, args) -> {
             assert args.length == 1;
-            assert (args[0] instanceof Set<?>);
+            assert args[0] instanceof Set<?>;
             // unfortunately java doesn't really let us typecheck generics :(
                 @SuppressWarnings("unchecked")
                 Set<Sequence> newSequences = (Set<Sequence>) args[0];

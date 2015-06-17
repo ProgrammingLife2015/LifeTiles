@@ -60,8 +60,7 @@ public class TreeController extends AbstractController {
      * {@inheritDoc}
      */
     @Override
-    public void initialize(final URL location,
-            final ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         // load the tree when the files are opened
         listen(Message.OPENED, (controller, subject, args) -> {
             assert controller instanceof MenuController;
@@ -82,7 +81,7 @@ public class TreeController extends AbstractController {
                     if (!"sequences".equals(subject)) {
                         return;
                     }
-                    assert (args[0] instanceof Map<?, ?>);
+                    assert args[0] instanceof Map<?, ?>;
                     @SuppressWarnings("unchecked")
                     Map<String, Sequence> newSequences = (Map<String, Sequence>) args[0];
                     sequences = newSequences;
@@ -92,7 +91,7 @@ public class TreeController extends AbstractController {
         listen(Message.FILTERED, (controller, subject, args) -> {
             // check the message is correct
                 assert args.length == 1;
-                assert (args[0] instanceof Set<?>);
+                assert args[0] instanceof Set<?>;
                 if (!(controller instanceof TreeController)) {
                     // create the new tree
                 @SuppressWarnings("unchecked")

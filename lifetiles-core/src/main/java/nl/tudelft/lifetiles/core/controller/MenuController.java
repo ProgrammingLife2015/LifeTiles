@@ -18,6 +18,7 @@ import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.notification.controller.NotificationController;
 import nl.tudelft.lifetiles.notification.model.AbstractNotification;
 import nl.tudelft.lifetiles.notification.model.NotificationFactory;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * The controller of the menu bar.
@@ -81,6 +82,8 @@ public class MenuController extends AbstractController {
      *            Event on "Open" menu item.
      */
     @FXML
+    // PMD/findbugs do not work well with javafx. The method IS used.
+    @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
     private void openAction(final ActionEvent event) {
         try {
             loadDataFiles();
@@ -97,6 +100,8 @@ public class MenuController extends AbstractController {
      *            Event on "Reset" menu item.
      */
     @FXML
+    // PMD/findbugs do not work well with javafx. The method IS used.
+    @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
     private void resetAction(final ActionEvent event) {
         shout(Message.RESET, "");
     }
@@ -212,6 +217,8 @@ public class MenuController extends AbstractController {
      *            Event on "Insert Known Mutations" item.
      */
     @FXML
+    // PMD/findbugs do not work well with javafx. The method IS used.
+    @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
     private void insertKnownMutationAction(final ActionEvent event) {
         try {
             loadKnownMutationsFile();
@@ -271,8 +278,7 @@ public class MenuController extends AbstractController {
     }
 
     @Override
-    public void initialize(final URL location,
-            final ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         addDraggableNode(menuBar);
         nf = new NotificationFactory();
     }

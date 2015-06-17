@@ -163,7 +163,9 @@ public class GraphContainer {
             final int end) {
         Set<SequenceSegment> copy = new TreeSet<SequenceSegment>();
         for (SequenceSegment seg : segmentBuckets.getSegments(start, end)) {
-            copy.add(new SequenceSegment(seg));
+            @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+            SequenceSegment newSegment = new SequenceSegment(seg);
+            copy.add(newSegment);
         }
         // Keep only the sequencesegments that are visible
         copy.retainAll(visibles);
