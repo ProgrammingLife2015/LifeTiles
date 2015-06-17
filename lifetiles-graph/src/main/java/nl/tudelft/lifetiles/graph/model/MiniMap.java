@@ -4,12 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.SortedSet;
 import java.util.stream.Collectors;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Stop;
-import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
  * The model for the minimap.
@@ -43,26 +41,15 @@ public final class MiniMap {
      */
     public MiniMap(final BucketCache bucketCache) {
         sumBuckets(bucketCache.getBuckets());
-        System.out.println(scores);
     }
 
     /**
      * @param buckets
      *            the buckets to sum
      */
-    private void sumBuckets(final List<SortedSet<SequenceSegment>> buckets) {
-        scores = new ArrayList<>();
-        final int biggestBucket = buckets.parallelStream()
-                .mapToInt(SortedSet::size).reduce(0, Integer::max);
-        for (SortedSet<SequenceSegment> bucket : buckets) {
-            double score = bucket.parallelStream()
-                    .mapToDouble(SequenceSegment::interestingness).average()
-                    .getAsDouble();
-            // bigger buckets have higher vertex "density" and consequently are
-            // more interesting.
-            score *= bucket.size() / (double) biggestBucket;
-            scores.add(score);
-        }
+    private void sumBuckets(final List<Bucket> buckets) {
+        scores = buckets.stream().map(bucket -> bucket.interestingness())
+                .collect(Collectors.toList());
         reduceNumScores();
     }
 
@@ -82,7 +69,6 @@ public final class MiniMap {
 
             scores = newScores;
         }
-
     }
 
     /**
