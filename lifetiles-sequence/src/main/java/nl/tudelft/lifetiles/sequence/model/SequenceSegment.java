@@ -25,7 +25,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
     /**
      * The content of this segment.
      */
-    private final SegmentContent content;
+    private SegmentContent content;
     /**
      * Contains the sources containing this segment.
      */
@@ -124,6 +124,16 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
         this.mutation = original.getMutation();
         this.referenceStart = original.getReferenceStart();
         this.referenceEnd = original.getReferenceEnd();
+    }
+
+    /**
+     * Change the content of the segment.
+     *
+     * @param content
+     *            new content.
+     */
+    public final void setContent(final SegmentContent content) {
+        this.content = content;
     }
 
     /**
@@ -353,8 +363,8 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      *
      * @return the interestingness score
      */
-    public double interestingness() {
-        if (content.isEmpty()) {
+    public final double interestingness() {
+        if (content.isEmpty() || content instanceof SegmentStringCollapsed) {
             return 0;
         }
 
