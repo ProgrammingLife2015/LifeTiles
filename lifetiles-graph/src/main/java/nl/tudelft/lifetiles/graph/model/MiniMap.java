@@ -95,16 +95,6 @@ public final class MiniMap {
     }
 
     /**
-     * @param collection
-     *            the collection to take the max of
-     * @return the biggest double in the collection
-     */
-    private static double max(final Collection<Double> collection) {
-        return collection.stream()
-                .reduce(Double.NEGATIVE_INFINITY, Double::max);
-    }
-
-    /**
      * @return the median of absolute deviations (MAD) of the scores.
      */
     private double scoreMAD() {
@@ -137,7 +127,7 @@ public final class MiniMap {
      */
     private List<Color> getColors() {
         List<Double> newScores = correctScoreOutliers();
-        double max = max(newScores);
+        double max = Collections.max(newScores);
         return newScores.parallelStream()
                 .map(score -> colorFromScore(score / max))
                 .collect(Collectors.toList());
