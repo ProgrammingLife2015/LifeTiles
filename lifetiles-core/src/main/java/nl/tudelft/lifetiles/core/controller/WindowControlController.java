@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import nl.tudelft.lifetiles.core.util.Message;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * The controller of the window controls.
@@ -49,6 +50,9 @@ public class WindowControlController extends AbstractController {
      * Close the window.
      */
     @FXML
+    // PMD does not work well with javafx. The method IS in fact used.
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
     private void closeWindowAction() {
         getStage(windowClose.getScene().getWindow()).close();
     }
@@ -57,15 +61,18 @@ public class WindowControlController extends AbstractController {
      * {@inheritDoc}
      */
     @Override
-    public void initialize(final URL location,
-            final ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         // noop
     }
 
     /**
      * Minimize the window.
      */
+
     @FXML
+    // PMD does not work well with javafx. The method IS in fact used.
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
     public void minimizeWindowAction() {
         getStage(windowMinimize.getScene().getWindow()).toBack();
         shout(MINIMIZE, "");
@@ -88,6 +95,9 @@ public class WindowControlController extends AbstractController {
      * Resize the window.
      */
     @FXML
+    // PMD/findbugs do not work well with javafx. The method IS in fact used.
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
     private void resizeWindowAction() {
         Stage stage = getStage(windowResize.getScene().getWindow());
         stage.setMaximized(!stage.isMaximized());
