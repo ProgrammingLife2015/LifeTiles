@@ -106,9 +106,8 @@ public class TreeController extends AbstractController {
         view.setController(this);
         view.setBounds(wrapper.layoutBoundsProperty().get());
         wrapper.layoutBoundsProperty().addListener(
-                (observableBounds, oldValue, newValue) -> {
-                    view.setBounds(newValue);
-                });
+                (observableBounds, oldValue, newValue) -> view
+                        .setBounds(newValue));
     }
 
     /**
