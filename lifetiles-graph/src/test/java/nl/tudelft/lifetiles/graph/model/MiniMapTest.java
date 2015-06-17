@@ -5,11 +5,14 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.logging.Level;
 
 import javafx.embed.swing.JFXPanel;
+import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class MiniMapTest {
@@ -18,6 +21,11 @@ public class MiniMapTest {
 
     private MiniMap miniMap;
     private BucketCache bucketCache;
+
+    @BeforeClass
+    public static void before() {
+        Logging.setLevel(Level.SEVERE);
+    }
 
     @Before
     public void setUp() throws URISyntaxException, IOException {
@@ -31,7 +39,8 @@ public class MiniMapTest {
         File vertexfile = new File(this.getClass()
                 .getResource(testGraphFilename + ".node.graph").toURI());
 
-        bucketCache = new BucketCache(16, parser.parseGraph(vertexfile, edgefile, factory));
+        bucketCache = new BucketCache(16, parser.parseGraph(vertexfile,
+                edgefile, factory));
         miniMap = new MiniMap(bucketCache);
     }
 
