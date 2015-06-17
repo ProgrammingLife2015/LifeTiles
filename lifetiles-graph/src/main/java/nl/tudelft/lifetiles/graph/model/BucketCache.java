@@ -31,7 +31,7 @@ public class BucketCache {
     /**
      * Buckets used to store the sequenceSegments.
      */
-    private List<SortedSet<SequenceSegment>> buckets;
+    private List<Bucket> buckets;
 
     /**
      * Width of a bucket based on the width of the graph and the number of
@@ -69,9 +69,9 @@ public class BucketCache {
      */
     private void cacheGraph() {
         Timer timer = Timer.getAndStart();
-        buckets = new ArrayList<SortedSet<SequenceSegment>>();
+        buckets = new ArrayList<Bucket>();
         for (int index = 0; index < numberBuckets; index++) {
-            buckets.add(index, new TreeSet<SequenceSegment>());
+            buckets.add(index, new Bucket());
         }
         for (SequenceSegment vertex : graph.getAllVertices()) {
             cacheVertex(vertex);
@@ -128,7 +128,7 @@ public class BucketCache {
      *
      * @return graph that has been inserted into the bucket cache.
      */
-    public final List<SortedSet<SequenceSegment>> getBuckets() {
+    public final List<Bucket> getBuckets() {
         return buckets;
     }
 
