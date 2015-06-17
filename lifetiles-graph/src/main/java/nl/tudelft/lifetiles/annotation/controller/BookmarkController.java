@@ -53,6 +53,7 @@ public class BookmarkController extends AbstractController {
     private ObservableList<AbstractBookmark> listItems;
     /**
      * The filtered list that will wrap the listItems.
+     * do not add items directly to this list, instead add them to listItems.
      */
     private FilteredList<AbstractBookmark> filteredItems;
 
@@ -60,19 +61,28 @@ public class BookmarkController extends AbstractController {
      * {@inheritDoc}
      */
     @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public final void initialize(final URL location,
+            final ResourceBundle resources) {
         hide();
 
+        // wrap the observable list in a filtered list so we can search it later
         listItems = FXCollections.observableArrayList();
         filteredItems = new FilteredList<AbstractBookmark>(listItems);
         bookmarkList.setItems(filteredItems);
 
+        /*
+         * create a new Cell factory so we can use a different method
+         * to create the text of each cell,
+         * and assign an event handler for mouse clicks.
+         */
         bookmarkList.setCellFactory(new Callback<ListView<AbstractBookmark>,
                 ListCell<AbstractBookmark>>() {
             @Override
-            public ListCell<AbstractBookmark> call(ListView<AbstractBookmark> param) {
+            public ListCell<AbstractBookmark> call(
+                    final ListView<AbstractBookmark> param) {
                 final ListCell<AbstractBookmark> cell = new ListCell<AbstractBookmark>() {
-                    public void updateItem(AbstractBookmark item, boolean empty) {
+                    public void updateItem(final AbstractBookmark item,
+                            final boolean empty) {
                         super.updateItem(item, empty);
                         if (item != null) {
                             setText(item.toCellString());
@@ -93,7 +103,7 @@ public class BookmarkController extends AbstractController {
         listen(Message.BOOKMARKS, (sender, subject, args) -> {
             show();
         });
-
+        
         listen(Message.LOADED, (sender, subject, args) -> {
             if (!"known mutations".equals(subject)) {
                 return;
@@ -103,6 +113,8 @@ public class BookmarkController extends AbstractController {
 
             listItems.addAll(knownMutations);
         });
+        //TODO listen for genes
+        //TODO load user bookmarks
 
 
     }
