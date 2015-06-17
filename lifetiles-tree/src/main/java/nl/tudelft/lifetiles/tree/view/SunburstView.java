@@ -55,7 +55,7 @@ public class SunburstView extends Control {
      * @param selected
      *            the new selected node.
      */
-    public final void selectNode(final PhylogeneticTreeItem selected) {
+    public void selectNode(final PhylogeneticTreeItem selected) {
         if (selected != null) {
             currentItem = selected;
             scale = calculateScale();
@@ -70,7 +70,7 @@ public class SunburstView extends Control {
      * @param root
      *            the new root
      */
-    public final void setRoot(final PhylogeneticTreeItem root) {
+    public void setRoot(final PhylogeneticTreeItem root) {
         rootItem = root;
         selectNode(rootItem);
     }
@@ -79,7 +79,7 @@ public class SunburstView extends Control {
      * @param controller
      *            the {@link TreeController} controlling this tree
      */
-    public final void setController(final TreeController controller) {
+    public void setController(final TreeController controller) {
         this.controller = controller;
     }
 
@@ -90,7 +90,7 @@ public class SunburstView extends Control {
      * @param bounds
      *            The bounds of the parent node
      */
-    public final void setBounds(final Bounds bounds) {
+    public void setBounds(final Bounds bounds) {
         layoutBounds = bounds;
         if (rootItem != null) {
             scale = calculateScale();

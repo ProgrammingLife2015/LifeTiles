@@ -85,7 +85,7 @@ public class TileView {
      *            the scale to resize all elements of the graph
      * @return the elements that must be displayed on the screen
      */
-    public final Group drawGraph(final Set<SequenceSegment> segments,
+    public Group drawGraph(final Set<SequenceSegment> segments,
             final Graph<SequenceSegment> graph,
             final Map<SequenceSegment, List<KnownMutation>> knownMutations,
             final double scale) {

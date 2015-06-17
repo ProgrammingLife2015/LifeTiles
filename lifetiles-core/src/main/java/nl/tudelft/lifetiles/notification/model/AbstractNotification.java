@@ -35,7 +35,7 @@ public abstract class AbstractNotification {
      *
      * @return the message
      */
-    public final String getMessage() {
+    public String getMessage() {
         return message;
     }
 
@@ -44,7 +44,7 @@ public abstract class AbstractNotification {
      *
      * @return the seconds
      */
-    public final int getDuration() {
+    public int getDuration() {
         return duration;
     }
 
@@ -54,7 +54,7 @@ public abstract class AbstractNotification {
      * @param seconds
      *            the duration time.
      */
-    public final void setDuration(final int seconds) {
+    public void setDuration(final int seconds) {
         this.duration = seconds;
     }
 
@@ -77,7 +77,7 @@ public abstract class AbstractNotification {
      * {@inheritDoc}
      */
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         final int prime = 31;
         int result = 1 + prime;
         if (message == null) {
@@ -92,7 +92,7 @@ public abstract class AbstractNotification {
      * {@inheritDoc}
      */
     @Override
-    public final boolean equals(final Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }

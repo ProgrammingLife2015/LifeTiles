@@ -59,7 +59,7 @@ public class Launcher extends Application {
      * {@inheritDoc}
      */
     @Override
-    public final void start(final Stage stage) {
+    public void start(final Stage stage) {
         loadFonts();
         stage.initStyle(StageStyle.UNDECORATED);
 

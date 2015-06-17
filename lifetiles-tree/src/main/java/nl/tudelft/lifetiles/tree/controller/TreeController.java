@@ -60,7 +60,7 @@ public class TreeController extends AbstractController {
      * {@inheritDoc}
      */
     @Override
-    public final void initialize(final URL location,
+    public void initialize(final URL location,
             final ResourceBundle resources) {
         // load the tree when the files are opened
         listen(Message.OPENED, (controller, subject, args) -> {
@@ -194,7 +194,7 @@ public class TreeController extends AbstractController {
      * @param visible
      *            the set that needs to be visible
      */
-    public final void shoutVisible(final Set<Sequence> visible) {
+    public void shoutVisible(final Set<Sequence> visible) {
         shout(Message.FILTERED, "", visible);
     }
 }

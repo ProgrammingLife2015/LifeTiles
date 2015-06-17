@@ -29,7 +29,7 @@ public class JGraphTEdgeAdapter<V> implements Edge<V> {
      * {@inheritDoc}
      */
     @Override
-    public final boolean equals(final Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -53,7 +53,7 @@ public class JGraphTEdgeAdapter<V> implements Edge<V> {
     /**
      * @return the internalEdge
      */
-    public final DefaultEdge getInternalEdge() {
+    public DefaultEdge getInternalEdge() {
         return internalEdge;
     }
 
@@ -61,7 +61,7 @@ public class JGraphTEdgeAdapter<V> implements Edge<V> {
      * {@inheritDoc}
      */
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result;

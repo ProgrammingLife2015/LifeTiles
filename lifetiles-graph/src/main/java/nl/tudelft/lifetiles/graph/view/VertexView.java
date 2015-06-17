@@ -107,7 +107,7 @@ public class VertexView extends Group {
      *
      * @return width
      */
-    public final double getHeight() {
+    public double getHeight() {
         return rectangle.getLayoutBounds().getHeight();
     }
 
@@ -116,7 +116,7 @@ public class VertexView extends Group {
      *
      * @return width
      */
-    public final double getWidth() {
+    public double getWidth() {
         return rectangle.getLayoutBounds().getWidth();
     }
 
@@ -148,7 +148,7 @@ public class VertexView extends Group {
      * @param color
      *            the new color
      */
-    public final void setColor(final Color color) {
+    public void setColor(final Color color) {
         this.rectangle.setFill(color);
     }
 
@@ -158,7 +158,7 @@ public class VertexView extends Group {
      * @param height
      *            new width of the vertex
      */
-    public final void setHeight(final double height) {
+    public void setHeight(final double height) {
         rectangle.setHeight(height);
         clip.setHeight(height);
         layoutChildren();
@@ -170,7 +170,7 @@ public class VertexView extends Group {
      * @param width
      *            new width of the vertex
      */
-    public final void setWidth(final double width) {
+    public void setWidth(final double width) {
         rectangle.setWidth(width);
         clip.setWidth(width);
         layoutChildren();

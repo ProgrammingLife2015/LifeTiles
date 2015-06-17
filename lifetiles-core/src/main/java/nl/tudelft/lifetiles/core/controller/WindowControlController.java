@@ -57,7 +57,7 @@ public class WindowControlController extends AbstractController {
      * {@inheritDoc}
      */
     @Override
-    public final void initialize(final URL location,
+    public void initialize(final URL location,
             final ResourceBundle resources) {
         // noop
     }
@@ -66,7 +66,7 @@ public class WindowControlController extends AbstractController {
      * Minimize the window.
      */
     @FXML
-    public final void minimizeWindowAction() {
+    public void minimizeWindowAction() {
         getStage(windowMinimize.getScene().getWindow()).toBack();
         shout(MINIMIZE, "");
     }
