@@ -82,17 +82,19 @@ public class VertexView extends Group {
      * @param width
      *            the width of the vertex
      * @param height
-     *            the height of the vertex
+     *            the amount of sequences going through this node
      * @param scale
      *            the resize factor of the vertex
+     * @param verticalScale
      * @param color
      *            the color of the vertex
      */
     public VertexView(final String string, final Point2D topLeftPoint,
             final double width, final double height, final double scale,
-            final Color color) {
+            final double verticalScale, final Color color) {
 
-        clip = new Rectangle(width * HORIZONTALSCALE * scale - SPACING, height);
+        clip = new Rectangle(width * HORIZONTALSCALE * scale - SPACING, height
+                * verticalScale - SPACING);
 
         text = new Text(string);
         text.setFont(Font.font("Oxygen Mono", HORIZONTALSCALE));
@@ -100,13 +102,13 @@ public class VertexView extends Group {
         text.setClip(clip);
 
         rectangle = new Rectangle(width * HORIZONTALSCALE * scale - SPACING,
-                height);
+                height * verticalScale - SPACING);
 
         rectangle.setStyle("-fx-fill:" + ColorUtils.webCode(color));
         rectangle.getStyleClass().add("vertexText");
 
         setLayoutX(topLeftPoint.getX() * HORIZONTALSCALE * scale);
-        setLayoutY(topLeftPoint.getY() * VERTICALSCALE);
+        setLayoutY(topLeftPoint.getY() * verticalScale);
 
         getChildren().addAll(rectangle, text);
 
@@ -191,7 +193,7 @@ public class VertexView extends Group {
     }
 
     /**
-     * 
+     *
      * Annotates the vertex view with a gene annotations.
      *
      * @param geneAnnotation
@@ -203,23 +205,6 @@ public class VertexView extends Group {
 
         Tooltip tooltip = new Tooltip(geneAnnotation.toString());
         Tooltip.install(this, tooltip);
-    }
-
-    /**
-     * Set a new Vertical scaling factor for the Vertex.
-     *
-     * @param scale
-     *            new sacling factor
-     */
-    public void setVerticalScale(double scale) {
-        VERTICALSCALE = scale;
-        Rectangle r = new Rectangle(rectangle.getWidth(), rectangle.getHeight()
-                * scale);
-        r.setStyle(rectangle.getStyle());
-
-        getChildren().clear();
-        getChildren().addAll(r, text);
-
     }
 
 }

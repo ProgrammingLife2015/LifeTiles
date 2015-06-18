@@ -40,11 +40,6 @@ public class TileView {
     private final Group edges;
 
     /**
-     * The nodes contains all Vertices to be displayed.
-     */
-    private final Map<SequenceSegment, VertexView> nodemap;
-
-    /**
      * The bookmarks group contains all bookmarks and annotations to be
      * displayed.
      */
@@ -71,6 +66,10 @@ public class TileView {
      */
     private final double screenHeight;
 
+    private Map<SequenceSegment, Integer> nodemap;
+    private Group nodes;
+    private double verticalScale;
+
     /**
      * Create the TileView by initializing the groups where the to be drawn
      * vertices and edges are stored.
@@ -83,7 +82,7 @@ public class TileView {
     public TileView(final GraphController control, final double height) {
         controller = control;
 
-        nodemap = new HashMap<SequenceSegment, VertexView>();
+        nodemap = new HashMap<>();
         edges = new Group();
         bookmarks = new Group();
         screenHeight = height;
@@ -115,6 +114,8 @@ public class TileView {
         lanes = new ArrayList<Long>();
         this.scale = scale;
 
+        nodes = new Group();
+
         for (SequenceSegment segment : segments) {
             List<KnownMutation> mutations = null;
             List<GeneAnnotation> annotations = null;
@@ -128,36 +129,14 @@ public class TileView {
             drawVertexLane(segment, mutations, annotations);
         }
 
-        // TODO toggle edge drawing in the settings
-        // drawEdges(graph);
-        Group nodes = new Group();
-
-        for (Entry<SequenceSegment, VertexView> entry : nodemap.entrySet()) {
-            VertexView v = entry.getValue();
-            v.setVerticalScale(screenHeight / lanes.size());
-            nodes.getChildren().add(v);
+        verticalScale = screenHeight / lanes.size();
+        for (Entry<SequenceSegment, Integer> entry : nodemap.entrySet()) {
+            drawVertex(entry.getValue(), entry.getKey(), null, null);
         }
 
         root.getChildren().addAll(nodes, edges, bookmarks);
         return root;
     }
-
-    // /**
-    // * @param graph
-    // * graph to draw the edges from
-    // */
-    // private void drawEdges(final Graph<SequenceSegment> graph) {
-    // for (Edge<SequenceSegment> edge : graph.getAllEdges()) {
-    // if (nodemap.containsKey(graph.getSource(edge))
-    // && nodemap.containsKey(graph.getDestination(edge))) {
-    //
-    // VertexView source = nodemap.get(graph.getSource(edge));
-    // VertexView destination = nodemap
-    // .get(graph.getDestination(edge));
-    // drawEdge(source, destination);
-    // }
-    // }
-    // }
 
     /**
      * Draws a given segment to an available position in the graph.
@@ -175,12 +154,17 @@ public class TileView {
         for (int index = 0; index < lanes.size(); index++) {
             if (lanes.get(index) <= segment.getUnifiedStart()
                     && segmentFree(index, segment)) {
-                drawVertex(index, segment, knownMutations, annotations);
+
+                // drawVertex(index, segment, knownMutations,annotations);
+                nodemap.put(segment, index);
+
                 segmentInsert(index, segment);
                 return;
             }
         }
-        drawVertex(lanes.size(), segment, knownMutations, annotations);
+
+        // drawVertex(lanes.size(), segment, knownMutations,annotations);
+        nodemap.put(segment, lanes.size());
         segmentInsert(lanes.size(), segment);
     }
 
@@ -198,19 +182,6 @@ public class TileView {
             return mutation.getColor();
         }
     }
-
-    // /**
-    // * Create an Edge that can be displayed on the screen.
-    // *
-    // * @param source
-    // * Node to draw from
-    // * @param destination
-    // * Node to draw to
-    // */
-    // private void drawEdge(final Node source, final Node destination) {
-    // EdgeLine edge = new EdgeLine(source, destination);
-    // edges.getChildren().add(edge);
-    // }
 
     /**
      * Create a Vertex that can be displayed on the screen.
@@ -242,10 +213,14 @@ public class TileView {
         Point2D topleft = new Point2D(start, index);
 
         VertexView vertex = new VertexView(text, topleft, width, height, scale,
-                color);
+                verticalScale, color);
 
-        nodemap.put(segment, vertex);
         vertex.setOnMouseClicked(event -> controller.clicked(segment));
+
+        // @TODO check for size of vertex, if too small don't draw it. this will
+        // reduce to load on javafx
+
+        nodes.getChildren().add(vertex);
 
         if (knownMutations != null) {
             for (KnownMutation knownMutation : knownMutations) {
