@@ -77,7 +77,7 @@ public class GeneAnnotation extends AbstractAnnotation {
      * @return
      *         Tooltip string representation.
      */
-    public final String toString() {
+    public String toString() {
         Formatter formatter = new Formatter();
         formatter
                 .format("Gene Name: %1$s%nGene Start Position: %2$s%nGene End Position: %3$s",
@@ -94,7 +94,7 @@ public class GeneAnnotation extends AbstractAnnotation {
      * @return unified position of the bookmark in the graph.
      */
     @Override
-    public final long getUnifiedPosition() {
+    public long getUnifiedPosition() {
         long position = 1;
         for (SequenceSegment segment : mappingSegments) {
             position = Math.max(position, segmentPosition(segment));
