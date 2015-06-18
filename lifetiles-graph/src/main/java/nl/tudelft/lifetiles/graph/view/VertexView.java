@@ -58,12 +58,12 @@ public class VertexView extends Group {
     /**
      * Color of the stroke of the annotation on the vertex.
      */
-    private static final Paint ANNOTATION_STROKE_COLOR = Color.PURPLE;
+    private static final Paint STROKE_COLOR = Color.PURPLE;
 
     /**
      * Width of the stroke of the annotation on the vertex.
      */
-    private static final double ANNOTATION_STROKE_WIDTH = 5;
+    private static final double STROKE_WIDTH = 5;
 
     /**
      * this is the DNA strain the display on the vertex.
@@ -190,14 +190,14 @@ public class VertexView extends Group {
     }
 
     /**
-     * Annotates the vertex view with a gene annotations
+     * Annotates the vertex view with a gene annotations.
      *
      * @param geneAnnotation
      *            The annotation to annotate the vertex with.
      */
-    public final void annotate(final GeneAnnotation geneAnnotation) {
-        rectangle.setStroke(ANNOTATION_STROKE_COLOR);
-        rectangle.setStrokeWidth(ANNOTATION_STROKE_WIDTH);
+    public void annotate(final GeneAnnotation geneAnnotation) {
+        rectangle.setStroke(STROKE_COLOR);
+        rectangle.setStrokeWidth((STROKE_WIDTH);
 
         Tooltip tooltip = new Tooltip(geneAnnotation.toString());
         Tooltip.install(this, tooltip);

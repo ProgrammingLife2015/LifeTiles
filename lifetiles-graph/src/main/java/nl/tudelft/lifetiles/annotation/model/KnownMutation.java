@@ -155,7 +155,7 @@ public class KnownMutation extends AbstractBookmark {
      * @return unified position of the bookmark in the graph.
      */
     @Override
-    public final long getUnifiedPosition() {
+    public long getUnifiedPosition() {
         return segmentPosition(mappingSegment);
     }
 
