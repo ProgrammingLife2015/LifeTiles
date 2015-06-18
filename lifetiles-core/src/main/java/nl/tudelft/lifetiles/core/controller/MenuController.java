@@ -276,6 +276,8 @@ public class MenuController extends AbstractController {
      *            Event on "Insert Annotations" item.
      */
     @FXML
+    // PMD/findbugs do not work well with javafx. The method IS used.
+    @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
     private void insertAnnotationsAction(final ActionEvent event) {
         try {
             loadAnnotationsFile();
