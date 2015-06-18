@@ -14,7 +14,7 @@ public class VertexViewTest {
     @Before
     public void setup() {
         Point2D topleft = new Point2D(0, 0);
-        vertex = new VertexView("ATCG", topleft, 10, 10, 1, Color.RED);
+        vertex = new VertexView("ATCG", topleft, 10, 10, 1, 40, Color.RED);
     }
 
     @Test
