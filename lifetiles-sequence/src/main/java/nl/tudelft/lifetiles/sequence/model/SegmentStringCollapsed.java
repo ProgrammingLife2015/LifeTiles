@@ -56,7 +56,7 @@ public class SegmentStringCollapsed implements SegmentContent {
      */
     private String formatString(final long length) {
         if (length > 1000) {
-            return Math.ceil(length / 1000) + "kb";
+            return (long) Math.ceil(length / 1000) + "kb";
         }
         return length + "b";
     }
