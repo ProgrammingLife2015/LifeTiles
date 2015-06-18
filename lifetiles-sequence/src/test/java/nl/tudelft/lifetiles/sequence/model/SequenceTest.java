@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.sequence.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.HashSet;
@@ -28,7 +29,6 @@ public class SequenceTest {
                 new SegmentEmpty(3));
         ss4 = new SequenceSegment(new HashSet<Sequence>(), 7, 10,
                 new SegmentEmpty(4));
-
     }
 
     @Test
@@ -56,6 +56,18 @@ public class SequenceTest {
         assertTrue(list.contains(ss2));
         assertTrue(list.contains(ss3));
         assertTrue(list.contains(ss4));
+    }
+
+    @Test
+    public void toStringTest() {
+        s1 = new DefaultSequence("s1");
+        assertEquals("[Sequence: s1]", s1.toString());
+    }
+
+    @Test
+    public void unequalTypeTest() {
+        s1 = new DefaultSequence("s1");
+        assertFalse(s1.equals(null));
     }
 
 }
