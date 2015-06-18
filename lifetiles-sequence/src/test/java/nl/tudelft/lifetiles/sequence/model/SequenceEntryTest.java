@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -61,5 +64,26 @@ public class SequenceEntryTest {
         se1.setReference(true);
         assertTrue(se1.isReference());
         se1.setReference(false);
+    }
+
+    @Test
+    public void getMetadataTest() {
+        HashMap<String, String> metaData = new HashMap<String, String>();
+        metaData.put("a", "1");
+        metaData.put("b", "2");
+        metaData.put("c", "3");
+        se1.setMetaData(metaData);
+        assertEquals("2", se1.getMeta("b"));
+    }
+
+    @Test
+    public void getMetaPropertyTest() {
+        Map<String, String> metaData = new HashMap<String, String>();
+        metaData.put("a", "1");
+        metaData.put("b", "2");
+        metaData.put("c", "3");
+        se1.setMetaData(metaData);
+        String value = se1.metaProperty("b").getValue();
+        assertEquals("2", value);
     }
 }
