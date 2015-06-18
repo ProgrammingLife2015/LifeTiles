@@ -66,7 +66,7 @@ public class SunburstRingSegment extends AbstractSunburstNode {
         }
         tooltip.append(DISTANCE_NAME).append(distance);
         setName(new Tooltip(tooltip.toString()));
-        setDisplay(createRing(layer, degreeStart, degreeEnd, center, scale));
+        setDisplay(createRing(layer, angle, center, scale));
 
         // add the text and semicircle to the group
         getChildren().add(getDisplay());
