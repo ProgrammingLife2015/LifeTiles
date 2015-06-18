@@ -74,4 +74,12 @@ public class SegmentStringCollapsed implements SegmentContent {
         return content.isEmpty();
     }
 
+    /**
+     * @return whether the segment has been collapsed.
+     */
+    @Override
+    public boolean isCollapsed() {
+        return true;
+    }
+
 }

@@ -402,6 +402,7 @@ public class GraphController extends AbstractController {
 
     /**
      * Collapses the total segments in the graph.
+     * Total segments contain all sequences in the graph.
      *
      * @param graph
      *            The graph to be collapsed.

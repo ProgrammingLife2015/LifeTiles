@@ -364,7 +364,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      * @return the interestingness score
      */
     public double interestingness() {
-        if (content.isEmpty() || content instanceof SegmentStringCollapsed) {
+        if (content.isEmpty()) {
             return 0;
         }
 
