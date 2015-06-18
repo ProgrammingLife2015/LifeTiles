@@ -10,6 +10,11 @@ package nl.tudelft.lifetiles.sequence.model;
 public class SegmentStringCollapsed implements SegmentContent {
 
     /**
+     * Thousand, used to indicate number of kilo bases.
+     */
+    private static final long THOUSAND = 1000;
+
+    /**
      * The actual content of the collapsed segment string.
      */
     private final SegmentContent content;
@@ -55,8 +60,8 @@ public class SegmentStringCollapsed implements SegmentContent {
      * @return formatted length of the content of the segment.
      */
     private String formatString(final long length) {
-        if (length > 1000) {
-            return (long) Math.ceil(length / 1000) + "kb";
+        if (length > THOUSAND) {
+            return (long) Math.ceil(length / THOUSAND) + "kb";
         }
         return length + "b";
     }
