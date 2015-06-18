@@ -206,16 +206,13 @@ public class GraphController extends AbstractController {
             }
         });
 
-        // Temporary until there is a way to start of totally out zoomed
-        zoomLevel = 5;
-
     }
 
     /**
      * Initialize the zoom toolbar.
      */
     private void initZoomToolBar() {
-        Zoombar toolbar = new Zoombar(zoomLevel, MAX_ZOOM);
+        toolbar = new Zoombar(zoomLevel, MAX_ZOOM);
 
         wrapper.setRight(toolbar.getToolBar());
 
@@ -525,9 +522,7 @@ public class GraphController extends AbstractController {
         double start = (relativePosition - scaledScreenWidth) / scaledVertex;
         double end = (relativePosition + scaledScreenWidth) / scaledVertex;
         int[] buckets = new int[] {
-                getStartBucketPosition(start),
-                Math.min(model.getBucketCache().getNumberBuckets(),
-                        getEndBucketPosition(end) + 1)
+                getStartBucketPosition(start), getEndBucketPosition(end) + 1
         };
 
         return buckets;
@@ -649,7 +644,6 @@ public class GraphController extends AbstractController {
     public Group drawGraph(final int startBucket, final int endBucket) {
 
         Group test = view.drawGraph(model.getVisibleSegments(startBucket,
-
                 endBucket), graph, knownMutations, mappedAnnotations, scale);
 
         return test;

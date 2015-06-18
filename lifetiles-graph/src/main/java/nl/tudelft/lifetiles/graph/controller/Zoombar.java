@@ -50,7 +50,7 @@ public class Zoombar {
         zoomLevel = new SimpleIntegerProperty();
 
         zoomLevel.set(currentZoom);
-        Slider slider = createSlider();
+        slider = createSlider();
 
         slider.getStyleClass().add("slider");
         slider.valueProperty().addListener(

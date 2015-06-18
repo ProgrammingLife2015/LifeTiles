@@ -153,14 +153,6 @@ public class GraphContainer {
     }
 
     /**
-     *
-     * @return the amount of visible sequences in this model.
-     */
-    public final int getAmountOfVisibleSequences() {
-        return visibleSequences.size();
-    }
-
-    /**
      * Get the visible segments that this model is holding.
      *
      * @param start
