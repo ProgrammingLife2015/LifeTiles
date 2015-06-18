@@ -126,8 +126,8 @@ public class SunburstView extends Control {
 
             double degreeEnd = degreeStart
                     + (AbstractSunburstNode.CIRCLEDEGREES * sectorSize);
-
-            drawRingRecursive(child, 0, degreeStart, degreeEnd);
+            DegreeRange angle = new DegreeRange(degreeStart, degreeEnd);
+            drawRingRecursive(child, 0, angle);
             degreeStart = degreeEnd;
         }
     }
@@ -140,16 +140,14 @@ public class SunburstView extends Control {
      *            SunburstRingSegment will represent.
      * @param layer
      *            the layer on which this SunburstRingSegment is located
-     * @param degreeStart
-     *            the start point in degrees
-     * @param degreeEnd
-     *            the end point in degrees
+     * @param angle
+     *            the start and end point of this ring, in degrees
      */
     private void drawRingRecursive(final PhylogeneticTreeItem node,
-            final int layer, final double degreeStart, final double degreeEnd) {
+            final int layer, final DegreeRange angle) {
         // generate ring
         SunburstRingSegment ringUnit = new SunburstRingSegment(node, layer,
-                degreeStart, degreeEnd, centerPoint, scale);
+                angle, centerPoint, scale);
         ringUnit.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 selectNode(node);
@@ -159,9 +157,8 @@ public class SunburstView extends Control {
         getChildren().add(ringUnit);
 
         double totalDescendants = node.numberDescendants();
-        double start = degreeStart;
-        double sectorAngle = AbstractSunburstNode.calculateAngle(degreeStart,
-                degreeEnd);
+        double start = angle.getStartAngle();
+        double sectorAngle = angle.angle();
 
         // generate rings for child nodes
         for (PhylogeneticTreeItem child : node.getChildren()) {
@@ -169,7 +166,8 @@ public class SunburstView extends Control {
                     / totalDescendants;
             double end = start + (sectorAngle * sectorSize);
 
-            drawRingRecursive(child, layer + 1, start, end);
+            DegreeRange childAngle = new DegreeRange(start, end);
+            drawRingRecursive(child, layer + 1, childAngle);
             start = end;
         }
 
