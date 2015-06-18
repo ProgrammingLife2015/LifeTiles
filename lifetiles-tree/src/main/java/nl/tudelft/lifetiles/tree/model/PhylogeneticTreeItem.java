@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import nl.tudelft.lifetiles.core.util.SetUtils;
 import nl.tudelft.lifetiles.sequence.model.Sequence;

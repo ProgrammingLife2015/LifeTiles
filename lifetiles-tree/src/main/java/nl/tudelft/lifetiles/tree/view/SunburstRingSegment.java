@@ -57,7 +57,7 @@ public class SunburstRingSegment extends AbstractSunburstNode {
             final Point2D center, final double scale) {
         // check input
         assert angle != null;
-        assert center!= null;
+        assert center != null;
         // set the value, and create the text and semi-circle
         setValue(value);
         String name = getValue().getName();
