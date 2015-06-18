@@ -66,8 +66,17 @@ public class TileView {
      */
     private final double screenHeight;
 
-    private Map<SequenceSegment, Integer> nodemap;
+    /**
+     * Map to hold the calculated lane index of a sequencesegment.
+     */
+    private Map<SequenceSegment, Container> nodemap;
+    /**
+     * The group that holds the vertices to be drawn.
+     */
     private Group nodes;
+    /**
+     * The vertical scale to be applied to all vertices.
+     */
     private double verticalScale;
 
     /**
@@ -82,7 +91,7 @@ public class TileView {
     public TileView(final GraphController control, final double height) {
         controller = control;
 
-        nodemap = new HashMap<>();
+        nodemap = new HashMap<SequenceSegment, Container>();
         edges = new Group();
         bookmarks = new Group();
         screenHeight = height;
@@ -122,16 +131,16 @@ public class TileView {
             if (knownMutations != null && knownMutations.containsKey(segment)) {
                 mutations = knownMutations.get(segment);
             }
-            if (mappedAnnotations != null
-                    && mappedAnnotations.containsKey(segment)) {
-                annotations = mappedAnnotations.get(segment);
-            }
-            drawVertexLane(segment, mutations, annotations);
+
+            int laneIndex = drawVertexLane(segment);
+            nodemap.put(segment, new Container(laneIndex, mutations));
         }
 
         verticalScale = screenHeight / lanes.size();
-        for (Entry<SequenceSegment, Integer> entry : nodemap.entrySet()) {
-            drawVertex(entry.getValue(), entry.getKey(), null, null);
+        for (Entry<SequenceSegment, Container> entry : nodemap.entrySet()) {
+            drawVertex(entry.getValue().getLocation(), entry.getKey(), entry
+                    .getValue().getMutations(), null);
+
         }
 
         root.getChildren().addAll(nodes, edges, bookmarks);
@@ -143,29 +152,20 @@ public class TileView {
      *
      * @param segment
      *            segment to be drawn
-     * @param knownMutations
-     *            List of known mutations in this segment
-     * @param annotations
-     *            List of annotations in this segment.
      */
-    private void drawVertexLane(final SequenceSegment segment,
-            final List<KnownMutation> knownMutations,
-            final List<GeneAnnotation> annotations) {
+    private int drawVertexLane(final SequenceSegment segment) {
         for (int index = 0; index < lanes.size(); index++) {
             if (lanes.get(index) <= segment.getUnifiedStart()
                     && segmentFree(index, segment)) {
 
-                // drawVertex(index, segment, knownMutations,annotations);
-                nodemap.put(segment, index);
-
                 segmentInsert(index, segment);
-                return;
+                return index;
             }
         }
 
-        // drawVertex(lanes.size(), segment, knownMutations,annotations);
-        nodemap.put(segment, lanes.size());
         segmentInsert(lanes.size(), segment);
+
+        return lanes.size();
     }
 
     /**
@@ -275,6 +275,27 @@ public class TileView {
                 lanes.add(position, segment.getUnifiedEnd());
             }
         }
+    }
+
+}
+
+class Container {
+
+    private Integer location;
+    private List<KnownMutation> mutations;
+
+    public Container(Integer location, List<KnownMutation> mutations) {
+        this.location = location;
+        this.mutations = mutations;
+
+    }
+
+    public Integer getLocation() {
+        return location;
+    }
+
+    public List<KnownMutation> getMutations() {
+        return mutations;
     }
 
 }
