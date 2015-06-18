@@ -22,7 +22,7 @@ public class PhylogeneticTreeItem {
      */
     private final Set<PhylogeneticTreeItem> children;
     /**
-     * The distance between samples. This is an optinal field.
+     * The distance between samples. This is an optional field.
      */
     private double distance;
     /**
@@ -138,7 +138,7 @@ public class PhylogeneticTreeItem {
                 }
             }
         }
-        // remove useless nodes(nodes with at single child can be removed from
+        // remove useless nodes(nodes with a single child can be removed from
         // the subtree)
         if (result.getChildren().isEmpty() && result.getName() == null) {
             return null;
