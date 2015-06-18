@@ -28,7 +28,7 @@ public class SequenceMetaParserTest {
         assertTrue(parser.isParsed());
     }
 
-    @Test(expected=IllegalStateException.class)
+    @Test(expected = IllegalStateException.class)
     public void parserIsNotParsedTest() {
         SequenceMetaParser unParser = new SequenceMetaParser();
         unParser.getData();
