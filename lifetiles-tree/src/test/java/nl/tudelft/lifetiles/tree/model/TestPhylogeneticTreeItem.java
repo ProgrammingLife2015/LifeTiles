@@ -238,6 +238,52 @@ public class TestPhylogeneticTreeItem {
         PhylogeneticTreeItem subtree3 = root.subTree(set3);
         assertEquals("Trees did not match",test3, subtree3);
     }
+    
+    /**
+     * Tests to string for a tree.
+     */
+    @Test
+    public void testToString() {
+        // create the test tree
+        // (A:0.1,B:0.2,(C:0.3,D:0.4)E:0.5)F;
+        PhylogeneticTreeItem root = new PhylogeneticTreeItem();
+        root.setName("F");
+        // add 3 child nodes
+        PhylogeneticTreeItem current = new PhylogeneticTreeItem();
+        current.setParent(root);
+        current.setDistance(0.1);
+        current.setName("A");
+        current = new PhylogeneticTreeItem();
+        current.setDistance(0.2);
+        current.setParent(root);
+        current.setName("B");
+        current = new PhylogeneticTreeItem();
+        current.setParent(root);
+        current.setName("E");
+        current.setDistance(0.5);
+        // add 2 child nodes to the third node
+        PhylogeneticTreeItem current2 = new PhylogeneticTreeItem();
+        current2.setParent(current);
+        current2.setDistance(0.4);
+        current2.setName("D");
+        current2 = new PhylogeneticTreeItem();
+        current2.setParent(current);
+        current2.setName("C");
+        current2.setDistance(0.3);
+        
+        String expectedA = "<Node: Name: A, Distance: 0.1>";
+        String expectedB = "<Node: Name: B, Distance: 0.2>";
+        String expectedC = "<Node: Name: C, Distance: 0.3>";
+        String expectedD = "<Node: Name: D, Distance: 0.4>";
+        String expectedE = "<Node: Name: E, Distance: 0.5>";
+        String expectedETest = expectedE + "\n\t" + expectedD + "\n\t" + expectedC;
+        String expectedF = "<Node: Name: F, Distance: 0.0>" + "\n\t" + expectedA + "\n\t" 
+        + expectedB + "\n\t" + expectedE + "\n\t\t" + expectedD + "\n\t\t" + expectedC;
+        
+        assertEquals("wrong string on childless node",expectedC,current2.toString());
+        assertEquals("wrong string on node with children", expectedETest ,current.toString());
+        assertEquals("wrong string on tree", expectedF ,root.toString());
+    }
 	
 	/**
 	 * Test for equals.

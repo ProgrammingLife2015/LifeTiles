@@ -46,15 +46,18 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      *            the layer at which it is located in the tree, layer 0 is the
      *            first layer
      * @param angle
-     *            the start and end positions of this ringSegment
+     *            the start and end positions of this ringSegment, non null
      * @param center
-     *            the coordinates of the center of the circle
+     *            the coordinates of the center of the circle, non null
      * @param scale
      *            the scaling factor
      */
     public SunburstRingSegment(final PhylogeneticTreeItem value,
             final int layer, final DegreeRange angle,
             final Point2D center, final double scale) {
+        // check input
+        assert angle != null;
+        assert center != null;
         // set the value, and create the text and semi-circle
         setValue(value);
         String name = getValue().getName();
