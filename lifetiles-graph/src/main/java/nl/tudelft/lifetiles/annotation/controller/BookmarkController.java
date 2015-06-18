@@ -103,7 +103,7 @@ public class BookmarkController extends AbstractController {
         listen(Message.BOOKMARKS, (sender, subject, args) -> {
             show();
         });
-        
+
         listen(Message.LOADED, (sender, subject, args) -> {
             if (!"known mutations".equals(subject)) {
                 return;
