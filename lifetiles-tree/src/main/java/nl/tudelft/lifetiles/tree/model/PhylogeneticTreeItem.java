@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import nl.tudelft.lifetiles.core.util.SetUtils;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
@@ -14,31 +13,18 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
  * A tree to store the relation between samples.
  *
  * @author Albert Smit
- *
- */
-/**
  * @author Rutger van den Berg
  *
  */
 public class PhylogeneticTreeItem {
     /**
-     * Used to give each node a unique id.
-     */
-    private static AtomicInteger nextID = new AtomicInteger();
-
-    /**
      * The list of children of this node.
      */
     private final Set<PhylogeneticTreeItem> children;
     /**
-     * The distance between samples. This is an optinal field.
+     * The distance between samples. This is an optional field.
      */
     private double distance;
-
-    /**
-     * A unique id for each node.
-     */
-    private final int ident;
     /**
      * The name of the sample. This is an optional field.
      */
@@ -63,7 +49,6 @@ public class PhylogeneticTreeItem {
      */
     public PhylogeneticTreeItem() {
         children = new CopyOnWriteArraySet<PhylogeneticTreeItem>();
-        this.ident = nextID.incrementAndGet();
     }
 
     /**
@@ -153,7 +138,7 @@ public class PhylogeneticTreeItem {
                 }
             }
         }
-        // remove useless nodes(nodes with at single child can be removed from
+        // remove useless nodes(nodes with a single child can be removed from
         // the subtree)
         if (result.getChildren().isEmpty() && result.getName() == null) {
             return null;
@@ -192,16 +177,6 @@ public class PhylogeneticTreeItem {
      */
     public double getDistance() {
         return distance;
-    }
-
-    /**
-     * Returns the Id of this node. because name and distance are optional this
-     * provides an easy way of identifying nodes
-     *
-     * @return the unique id of this PhylogeneticTreeItem
-     */
-    public int getId() {
-        return ident;
     }
 
     /**
@@ -353,14 +328,9 @@ public class PhylogeneticTreeItem {
      * @return Recursive string representation.
      */
     private String toStringWithDepth(final int depth) {
-        String suffix;
-        if (parent == null) {
-            suffix = ", ROOT ";
-        } else {
-            suffix = ", parent: " + parent.getId();
-        }
-        StringBuffer output = new StringBuffer("<Node: " + ident + ", Name: "
-                + name + ", Distance: " + distance + suffix + ">");
+
+        StringBuffer output = new StringBuffer("<Node: Name: "
+                + name + ", Distance: " + distance + ">");
         for (PhylogeneticTreeItem child : children) {
             output.append('\n');
             for (int i = 0; i <= depth; i++) {
