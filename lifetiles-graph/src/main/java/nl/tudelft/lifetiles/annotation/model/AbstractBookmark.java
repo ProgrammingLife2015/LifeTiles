@@ -1,8 +1,5 @@
 package nl.tudelft.lifetiles.annotation.model;
 
-import java.util.Set;
-
-import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
@@ -39,14 +36,22 @@ public abstract class AbstractBookmark {
     }
 
     /**
-     * Abstract method which maps this annotation to a sequence.
+     * Returns the position of the bookmark mapped to a sequence segment.
      *
-     * @param segments
-     *            Segments to map the annotation to.
-     * @param reference
-     *            The current reference used in the list of segments.
-     * @return segment which annotation should be mapped to.
+     * @param segment
+     *            Sequence segment which bookmark is mapped to.
+     * @return position of bookmark on segment.
      */
-    public abstract SequenceSegment mapOntoSequence(
-            final Set<SequenceSegment> segments, final Sequence reference);
+    protected long segmentPosition(final SequenceSegment segment) {
+        return segment.getUnifiedStart() + getGenomePosition()
+                - segment.getStart();
+    }
+
+    /**
+     * Abstract method which return the unified position of the bookmark in the
+     * unified graph.
+     *
+     * @return unified position of the bookmark in the graph.
+     */
+    public abstract long getUnifiedPosition();
 }
