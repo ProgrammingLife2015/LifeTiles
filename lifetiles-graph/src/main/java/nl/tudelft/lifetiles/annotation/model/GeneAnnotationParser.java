@@ -18,6 +18,27 @@ import java.util.stream.Stream;
 public final class GeneAnnotationParser {
 
     /**
+     * The index of the type field in a annotation line.
+     */
+    private static final int TYPE_FIELD = 2;
+    /**
+     * The index of the start field in a annotation line.
+     */
+    private static final int START_FIELD = 3;
+    /**
+     * The index of the end field in a annotation line.
+     */
+    private static final int END_FIELD = 4;
+    /**
+     * The index of the extra field in a annotation line.
+     */
+    private static final int EXTRA_FIELD = 8;
+    /**
+     * The index of the name field in the extra field in a annotation line.
+     */
+    private static final String NAME_FIELD = "Name";
+
+    /**
      * Static class can not have a public or default constructor.
      */
     private GeneAnnotationParser() {
@@ -53,12 +74,12 @@ public final class GeneAnnotationParser {
      */
     private static GeneAnnotation parseGeneAnnotation(final String line) {
         String[] columns = line.split("\t");
-        if (columns[2].equals("gene")) {
-            long start = Long.parseLong(columns[3]);
-            long end = Long.parseLong(columns[4]);
-            Map<String, String> fields = extractGeneFields(columns[8]
+        if (columns[TYPE_FIELD].equals("gene")) {
+            long start = Long.parseLong(columns[START_FIELD]);
+            long end = Long.parseLong(columns[END_FIELD]);
+            Map<String, String> fields = extractGeneFields(columns[EXTRA_FIELD]
                     .split(";"));
-            String name = fields.get("Name");
+            String name = fields.get(NAME_FIELD);
             return new GeneAnnotation(start, end, name);
         }
         return null;
