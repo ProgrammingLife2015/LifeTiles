@@ -35,7 +35,7 @@ public class SegmentStringCollapsed implements SegmentContent {
      * @return length of the content of the segment.
      */
     @Override
-    public final long getLength() {
+    public long getLength() {
         return length;
     }
 
@@ -43,7 +43,7 @@ public class SegmentStringCollapsed implements SegmentContent {
      * @return string representation of the collapsed segment.
      */
     @Override
-    public final String toString() {
+    public String toString() {
         return "<" + formatString(content.getLength()) + ">";
     }
 
@@ -65,7 +65,7 @@ public class SegmentStringCollapsed implements SegmentContent {
      * @return that the segment content is an empty node.
      */
     @Override
-    public final boolean isEmpty() {
+    public boolean isEmpty() {
         return content.isEmpty();
     }
 
