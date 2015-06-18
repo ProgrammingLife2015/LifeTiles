@@ -4,6 +4,7 @@
 package nl.tudelft.lifetiles.tree.view;
 
 import static org.junit.Assert.*;
+import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
@@ -22,25 +23,31 @@ import org.mockito.Mockito;
 public class TestSunburstRingSegment {
 
     private static final double DELTA = 1e-15;  
+    private Shape testColor;
 
     @Before
     public void setUp() {
         new JFXPanel(); // force to initialize Toolkit
     }
     @Test
-    public void testDefaultColor() {
+    public void testDefaultColor() throws InterruptedException {
         DegreeRange degreeRange = Mockito.mock(DegreeRange.class);
         Point2D center = Mockito.mock(Point2D.class);
         
-        SunburstRingSegment test = new SunburstRingSegment(new PhylogeneticTreeItem(),
-                0, degreeRange, center, 1d);
-        Shape testColor = (Shape)test.getChildren().get(0);
+        //dirty hack to get around javafx threading issues in tests
+        Platform.runLater(() -> {
+            SunburstRingSegment test = new SunburstRingSegment(new PhylogeneticTreeItem(),
+                    0, degreeRange, center, 1d);
+            testColor = (Shape)test.getChildren().get(0);
+        });
+        Thread.sleep(1000);
+        
         assertNotNull("color was null", testColor.getFill());
         assertTrue("color was not a Color", testColor.getFill() instanceof Color);
     }
     
     @Test
-    public void testSequenceColor() {
+    public void testSequenceColor() throws InterruptedException {
         PhylogeneticTreeItem node = new PhylogeneticTreeItem();
         Sequence sequence = Mockito.mock(Sequence.class);
         Mockito.when(sequence.getIdentifier()).thenReturn("A");
@@ -49,9 +56,14 @@ public class TestSunburstRingSegment {
         DegreeRange degreeRange = Mockito.mock(DegreeRange.class);
         Point2D center = Mockito.mock(Point2D.class);
         
-        SunburstRingSegment test = new SunburstRingSegment(new PhylogeneticTreeItem(),
-                0, degreeRange, center, 1d);
-        Shape testColor = (Shape)test.getChildren().get(0);
+      //dirty hack to get around javafx threading issues in tests
+        Platform.runLater(() -> {
+            SunburstRingSegment test = new SunburstRingSegment(new PhylogeneticTreeItem(),
+                    0, degreeRange, center, 1d);
+            testColor = (Shape)test.getChildren().get(0);
+        });
+
+        Thread.sleep(1000);
         assertNotNull("color was null", testColor.getFill());
         assertTrue("color was not a Color", testColor.getFill() instanceof Color);
     }
