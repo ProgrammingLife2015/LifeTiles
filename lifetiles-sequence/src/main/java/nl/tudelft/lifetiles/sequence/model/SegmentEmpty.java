@@ -47,4 +47,12 @@ public class SegmentEmpty implements SegmentContent {
         return true;
     }
 
+    /**
+     * @return whether the segment has been collapsed.
+     */
+    @Override
+    public boolean isCollapsed() {
+        return false;
+    }
+
 }

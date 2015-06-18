@@ -23,14 +23,22 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
  *
  */
 public class TileView {
+
     /**
      * Default color of a tile element.
      */
     private static Color defaultColor = Color.web("a1d3ff");
+
+    /**
+     * Color of a collapsed segment.
+     */
+    private static final Color COLLAPSE_COLOR = Color.DARKGRAY;
+
     /**
      * The edges contains all EdgeLines to be displayed.
      */
     private final Group edges;
+
     /**
      * The nodes contains all Vertices to be displayed.
      */
@@ -213,7 +221,13 @@ public class TileView {
         long width = segment.getContent().getLength();
         long height = segment.getSources().size();
 
-        Color color = sequenceColor(segment.getMutation());
+        Color color;
+        if (segment.getContent().isCollapsed()) {
+            color = COLLAPSE_COLOR;
+        } else {
+            color = sequenceColor(segment.getMutation());
+        }
+
         Point2D topleft = new Point2D(start, index);
 
         VertexView vertex = new VertexView(text, topleft, width, height, scale,
