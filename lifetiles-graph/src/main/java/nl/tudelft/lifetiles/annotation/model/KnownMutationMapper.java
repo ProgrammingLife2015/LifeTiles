@@ -51,7 +51,7 @@ public final class KnownMutationMapper {
                 if (!annotatedSegments.containsKey(segment)) {
                     // We do actually need to instantiate here.
                     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-                    ArrayList<KnownMutation> newMutations = new ArrayList<>();
+                    List<KnownMutation> newMutations = new ArrayList<>();
                     annotatedSegments.put(segment, newMutations);
                 }
                 annotatedSegments.get(segment).add(knownMutation);

@@ -51,7 +51,7 @@ public final class GeneAnnotationMapper {
                 if (!annotatedSegments.containsKey(segment)) {
                     // We do actually need to instantiate here.
                     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-                    ArrayList<GeneAnnotation> newAnnotations = new ArrayList<>();
+                    List<GeneAnnotation> newAnnotations = new ArrayList<>();
                     annotatedSegments.put(segment, newAnnotations);
                 }
                 annotatedSegments.get(segment).add(geneAnnotation);
