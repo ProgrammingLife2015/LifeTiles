@@ -7,6 +7,8 @@ package nl.tudelft.lifetiles.graph.model;
  * @param <V>
  *            The type of vertex to use for this Edge.
  */
+// The name is short, but still quite clear.
+@SuppressWarnings("PMD.ShortClassName")
 public interface Edge<V> {
 
 }

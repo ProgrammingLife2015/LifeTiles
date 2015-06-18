@@ -28,6 +28,7 @@ public final class PhylogeneticTreeParser {
      *            The string describing the tree
      * @return The parsed tree.
      */
+
     public static PhylogeneticTreeItem parse(final String tree) {
         PhylogeneticTreeItem root = new PhylogeneticTreeItem();
 
@@ -43,6 +44,8 @@ public final class PhylogeneticTreeParser {
             // this starts a list of child nodes, add a child node and make it
             // our current node
             if ("(".equals(currentToken)) {
+                // parser needs to instantiate objects.
+                @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
                 PhylogeneticTreeItem newChild = new PhylogeneticTreeItem();
                 newChild.setParent(currentNode);
                 currentNode = newChild;
@@ -55,6 +58,8 @@ public final class PhylogeneticTreeParser {
                 // next token is another child, add a new child to the list and
                 // make it the current node
                 currentNode = currentNode.getParent();
+                // parser needs to instantiate objects.
+                @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
                 PhylogeneticTreeItem newChild = new PhylogeneticTreeItem();
                 newChild.setParent(currentNode);
                 currentNode = newChild;

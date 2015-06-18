@@ -6,7 +6,9 @@ import static org.junit.Assert.assertNull;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
 
+import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.core.util.Settings;
 import nl.tudelft.lifetiles.sequence.model.DefaultSequence;
 import nl.tudelft.lifetiles.sequence.model.SegmentString;
@@ -27,6 +29,7 @@ public class GraphContainerTest {
 
     @BeforeClass
     public static void runOnce() {
+        Logging.setLevel(Level.SEVERE);
         ss1 = new DefaultSequence("reference");
         Sequence ss2 = new DefaultSequence("mutation");
 
@@ -63,15 +66,17 @@ public class GraphContainerTest {
 
     @Test
     public void emptySegmentsTest() {
-        SequenceSegment v5 = new SequenceSegment(s2, 31, 41, new SegmentString("AAAAAAAAAA"));
-        SequenceSegment v6 = new SequenceSegment(s1, 41, 51, new SegmentString("AAAAAAAAAA"));
+        SequenceSegment v5 = new SequenceSegment(s2, 31, 41, new SegmentString(
+                "AAAAAAAAAA"));
+        SequenceSegment v6 = new SequenceSegment(s1, 41, 51, new SegmentString(
+                "AAAAAAAAAA"));
 
         gr.addVertex(v5);
         gr.addVertex(v6);
         gr.addEdge(v4, v5);
         gr.addEdge(v4, v6);
         gr.addEdge(v5, v6);
-        
+
         Settings.set("empty_segments", "true");
         gc = new GraphContainer(gr, ss1);
         assertEquals(7, gc.getVisibleSegments(0, 1).size());
@@ -89,34 +94,34 @@ public class GraphContainerTest {
         gc = new GraphContainer(gr, null);
         assertNull(v3.getMutation());
     }
-    
+
     @Test
     public void numberOfBucketsTest() {
         gc = new GraphContainer(gr, ss1);
         assertEquals(1, gc.getBucketCache().getBuckets().size());
     }
-    
+
     @Test
     public void allVisibleSegmentsTest() {
         gc = new GraphContainer(gr, ss1);
         assertEquals(4, gc.getVisibleSegments(0, 1).size());
         assertNotNull(v3.getMutation());
     }
-    
+
     @Test
     public void nullAllVisibleSegmentsTest() {
         gc = new GraphContainer(gr, ss1);
         gc.setVisible(null);
         assertEquals(4, gc.getVisibleSegments(0, 1).size());
     }
-    
+
     @Test
     public void subselectionVisibleSegmentsTest() {
         gc = new GraphContainer(gr, ss1);
         gc.setVisible(s2);
         assertEquals(3, gc.getVisibleSegments(0, 1).size());
     }
-    
+
     @Test
     public void emptySubselectionVisibleSegmentsTest() {
         gc = new GraphContainer(gr, ss1);

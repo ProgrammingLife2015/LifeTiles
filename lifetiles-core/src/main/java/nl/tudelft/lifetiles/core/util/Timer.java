@@ -69,9 +69,12 @@ public final class Timer {
      * @param timee
      *            what got timed
      */
+    // We check for this in a wrapper method in Logging.
+    @SuppressWarnings("PMD.GuardLogStatementJavaUtil")
     public void stopAndLog(final String timee) {
         stop();
         long elapsed = getElapsed();
+
         Logging.info(timee + " took " + formatNanos(elapsed));
     }
 

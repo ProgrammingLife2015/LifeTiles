@@ -47,7 +47,17 @@ public final class Logging {
         }
 
         getLogger().addHandler(filehandler);
-        getLogger().setLevel(Level.INFO);
+        setLevel(Level.INFO);
+    }
+
+    /**
+     * Set the logging level.
+     *
+     * @param level
+     *            The new level.
+     */
+    public static void setLevel(final Level level) {
+        getLogger().setLevel(level);
     }
 
     /**
@@ -57,7 +67,10 @@ public final class Logging {
      *            the log message
      */
     public static void info(final String message) {
-        getLogger().info(message);
+        if (getLogger().isLoggable(Level.INFO)) {
+            getLogger().info(message);
+        }
+
     }
 
     /**
@@ -67,7 +80,9 @@ public final class Logging {
      *            the log message
      */
     public static void warning(final String message) {
-        getLogger().warning(message);
+        if (getLogger().isLoggable(Level.WARNING)) {
+            getLogger().warning(message);
+        }
     }
 
     /**
@@ -77,7 +92,9 @@ public final class Logging {
      *            the log message
      */
     public static void severe(final String message) {
-        getLogger().severe(message);
+        if (getLogger().isLoggable(Level.SEVERE)) {
+            getLogger().severe(message);
+        }
     }
 
     /**

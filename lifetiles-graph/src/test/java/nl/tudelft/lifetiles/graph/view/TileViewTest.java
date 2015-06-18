@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -15,11 +16,11 @@ import javafx.event.Event;
 import javafx.scene.Group;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Circle;
 import nl.tudelft.lifetiles.annotation.model.KnownMutation;
 import nl.tudelft.lifetiles.annotation.model.KnownMutationMapper;
 import nl.tudelft.lifetiles.annotation.model.KnownMutationParser;
+import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.core.util.Settings;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
 import nl.tudelft.lifetiles.graph.model.BucketCache;
@@ -33,6 +34,7 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -47,11 +49,20 @@ public class TileViewTest {
     TileView tileview;
     Graph<SequenceSegment> gr;
     BucketCache buckets;
+    private Circle bookmark;
+    // its used inside a lambda. does not seem to be recognized as such
+    @SuppressWarnings("unused")
+    private VertexView vertexView1;
 
     /**
      * Final string for radius settings property.
      */
     private static final String RADIUS_SETTING = "bookmark_radius";
+
+    @BeforeClass
+    public static void before() {
+        Logging.setLevel(Level.SEVERE);
+    }
 
     @Before
     public void setUp() {
@@ -114,9 +125,6 @@ public class TileViewTest {
 
     }
 
-    private Circle bookmark;
-    private VertexView vertexView1;
-
     @Test
     public void drawAnnotationTest() throws IOException, InterruptedException {
         GraphFactory<SequenceSegment> gf = FactoryProducer
@@ -150,6 +158,7 @@ public class TileViewTest {
         // Hack so you make a tooltip, javafx toolkit need to be initialised for
         // that
         JFXPanel panel = new JFXPanel();
+        panel.contains(0, 0);
         Platform.runLater(() -> {
 
             Group result = tileview.drawGraph(buckets.getSegments(0, 1), graph,
@@ -181,34 +190,6 @@ public class TileViewTest {
                 true, true, true, true, true, true, true, true, true, true,
                 null));
         Mockito.verify(controller).clicked(Mockito.any());
-    }
-
-    @Test
-    public void hoveringEnterVertexText() {
-        creategraph();
-        buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
-                1);
-        Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
-                .getChildrenUnmodifiable().get(0), new MouseEvent(
-                MouseEvent.MOUSE_ENTERED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                true, true, true, true, true, true, true, true, true, true,
-                null));
-        Mockito.verify(controller).hovered(Mockito.any(), Mockito.eq(true));
-    }
-
-    @Test
-    public void hoveringExitVertexText() {
-        creategraph();
-        buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
-                1);
-        Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
-                .getChildrenUnmodifiable().get(0), new MouseEvent(
-                MouseEvent.MOUSE_EXITED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                true, true, true, true, true, true, true, true, true, true,
-                null));
-        Mockito.verify(controller).hovered(Mockito.any(), Mockito.eq(false));
     }
 
     private void creategraph() {

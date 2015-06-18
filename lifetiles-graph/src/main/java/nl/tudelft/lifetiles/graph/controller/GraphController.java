@@ -48,6 +48,13 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 public class GraphController extends AbstractController {
 
     /**
+     * The message to display when operations are attempted without a graph
+     * being loaded.
+     */
+    private static final String NOT_LOADED_MSG = "Graph not loaded"
+            + " while attempting to add known mutations.";
+
+    /**
      * The pane that will be used to draw the scrollpane and toolbar on the
      * screen.
      */
@@ -101,19 +108,28 @@ public class GraphController extends AbstractController {
     private boolean repaintNow;
 
     /**
+     * The initial value for zoomlevel.
+     */
+    private static final int DEFAULTZOOMLEVEL = 45;
+
+    /**
      * The current zoom level.
      */
-    private int zoomLevel = 45;
+    private int zoomLevel = DEFAULTZOOMLEVEL;
 
     /**
      * The current zoom level, used to only redraw if the zoomlevel changes.
      */
-    private int currentZoomLevel = 0;
+    private int currentZoomLevel;
 
+    /**
+     * Offset for initial scale.
+     */
+    private static final double SCALE_OFFSET = 5;
     /**
      * The current scale to resize the graph.
      */
-    private double scale = Math.pow(ZOOM_OUT_FACTOR, zoomLevel - 5);
+    private double scale = Math.pow(ZOOM_OUT_FACTOR, zoomLevel - SCALE_OFFSET);
 
     /**
      * The currently inserted known mutations.
@@ -123,7 +139,7 @@ public class GraphController extends AbstractController {
     /**
      * The factor that each zoom in step that updates the current scale.
      */
-    private static final double ZOOM_IN_FACTOR = 21.0 / 16.0;
+    private static final double ZOOM_IN_FACTOR = 1.3125;
 
     /**
      * Visible sequences in the graph.
@@ -154,8 +170,7 @@ public class GraphController extends AbstractController {
      * {@inheritDoc}
      */
     @Override
-    public final void initialize(final URL location,
-            final ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         initListeners();
         initZoomToolBar();
 
@@ -194,6 +209,7 @@ public class GraphController extends AbstractController {
     /**
      * Initialize the listeners.
      */
+    @SuppressWarnings("checkstyle:genericwhitespace")
     private void initListeners() {
 
         NotificationFactory notFact = new NotificationFactory();
@@ -218,15 +234,17 @@ public class GraphController extends AbstractController {
 
         listen(Message.FILTERED, (controller, subject, args) -> {
             assert args.length == 1;
-            assert (args[0] instanceof Set<?>);
-
-            visibleSequences = (Set<Sequence>) args[0];
-            model.setVisible(visibleSequences);
-            diagram = new StackedMutationContainer(model.getBucketCache(),
-                    visibleSequences);
-            repaintNow = true;
-            repaint();
-        });
+            assert args[0] instanceof Set<?>;
+            // unfortunately java doesn't really let us typecheck generics :(
+                @SuppressWarnings("unchecked")
+                Set<Sequence> newSequences = (Set<Sequence>) args[0];
+                visibleSequences = newSequences;
+                model.setVisible(visibleSequences);
+                diagram = new StackedMutationContainer(model.getBucketCache(),
+                        visibleSequences);
+                repaintNow = true;
+                repaint();
+            });
 
         listen(SequenceController.REFERENCE_SET,
                 (controller, subject, args) -> {
@@ -244,16 +262,15 @@ public class GraphController extends AbstractController {
         listen(Message.OPENED,
                 (controller, subject, args) -> {
                     assert controller instanceof MenuController;
-                    if (!subject.equals("known mutations")) {
+                    if (!"known mutations".equals(subject)) {
                         return;
                     }
                     assert args[0] instanceof File;
 
                     if (graph == null) {
-                        shout(NotificationController.NOTIFY,
-                                "",
-                                notFact.getNotification(new IllegalStateException(
-                                        "Graph not loaded while attempting to add known mutations.")));
+                        shout(NotificationController.NOTIFY, "", notFact
+                                .getNotification(new IllegalStateException(
+                                        NOT_LOADED_MSG)));
                     } else {
                         try {
                             insertAnnotations((File) args[0]);
@@ -269,7 +286,7 @@ public class GraphController extends AbstractController {
      *
      * @return the currently loaded graph.
      */
-    public final Graph<SequenceSegment> getGraph() {
+    public Graph<SequenceSegment> getGraph() {
         if (graph == null) {
             throw new IllegalStateException("Graph not loaded.");
         }
@@ -487,7 +504,7 @@ public class GraphController extends AbstractController {
      *            the last bucket
      * @return Group object to be drawn on the screen
      */
-    public final Group drawGraph(final int startBucket, final int endBucket) {
+    public Group drawGraph(final int startBucket, final int endBucket) {
         Group test = view.drawGraph(
                 model.getVisibleSegments(startBucket, endBucket), graph,
                 knownMutations, scale);
@@ -501,23 +518,7 @@ public class GraphController extends AbstractController {
      * @param segment
      *            The selected segment
      */
-    // Removed final for testing, cannot use PowerMockito because of current bug
-    // with javafx 8
     public void clicked(final SequenceSegment segment) {
         shout(Message.FILTERED, "", segment.getSources());
-    }
-
-    /**
-     * Set that this segment is hovered over.
-     *
-     * @param segment
-     *            the hovered element
-     * @param hovering
-     *            set if mouse is entering this segment or leaving
-     */
-    // Removed final for testing, cannot use PowerMockito because of current bug
-    // with javafx 8
-    public void hovered(final SequenceSegment segment, final Boolean hovering) {
-        // TODO: Message to say that a segment is hovered over
     }
 }

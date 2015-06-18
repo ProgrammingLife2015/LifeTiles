@@ -85,7 +85,7 @@ public class TileView {
      *            the scale to resize all elements of the graph
      * @return the elements that must be displayed on the screen
      */
-    public final Group drawGraph(final Set<SequenceSegment> segments,
+    public Group drawGraph(final Set<SequenceSegment> segments,
             final Graph<SequenceSegment> graph,
             final Map<SequenceSegment, List<KnownMutation>> knownMutations,
             final double scale) {
@@ -206,14 +206,13 @@ public class TileView {
 
         nodemap.put(segment, vertex);
         vertex.setOnMouseClicked(event -> controller.clicked(segment));
-        // Hovering
-        vertex.setOnMouseEntered(event -> controller.hovered(segment, true));
-        vertex.setOnMouseExited(event -> controller.hovered(segment, false));
 
         if (knownMutations != null) {
             for (KnownMutation knownMutation : knownMutations) {
                 long segmentPosition = knownMutation.getGenomePosition()
                         - segment.getStart();
+                // Loop is intended to create these..
+                @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
                 Bookmark bookmark = new Bookmark(vertex, knownMutation,
                         segmentPosition, scale);
                 bookmarks.getChildren().add(bookmark);

@@ -14,7 +14,7 @@ import javafx.beans.property.SimpleStringProperty;
  * @author Joren Hammudoglu
  *
  */
-public final class SequenceEntry {
+public class SequenceEntry {
 
     /**
      * The sequence identifier property.
@@ -64,7 +64,7 @@ public final class SequenceEntry {
      *
      * @return true if visible, else false.
      */
-    public boolean getVisible() {
+    public boolean isVisible() {
         return visibleProperty().getValue();
     }
 
@@ -97,7 +97,7 @@ public final class SequenceEntry {
      *
      * @return true if reference, else false.
      */
-    public boolean getReference() {
+    public boolean isReference() {
         return referenceProperty().getValue();
     }
 
@@ -126,6 +126,8 @@ public final class SequenceEntry {
      */
     public void setMetaData(final Map<String, String> metaData) {
         for (Entry<String, String> metaValue : metaData.entrySet()) {
+            // This method requires instantiation of a bunch of Properties.
+            @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
             Property<String> value = new SimpleStringProperty(
                     metaValue.getValue());
             this.metaData.put(metaValue.getKey(), value);

@@ -31,7 +31,7 @@ public class SunburstCenter extends AbstractSunburstNode {
     public SunburstCenter(final PhylogeneticTreeItem value, final double scale) {
         assert value != null;
         setValue(value);
-        setDisplay(new Circle(scale * CENTER_RADIUS,  createColor()));
+        setDisplay(new Circle(scale * CENTER_RADIUS, createColor()));
         String name = getValue().getName();
         if (name != null) {
             setName(new Tooltip(name));

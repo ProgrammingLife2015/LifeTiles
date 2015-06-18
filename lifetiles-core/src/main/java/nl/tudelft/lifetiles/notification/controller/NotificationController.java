@@ -15,6 +15,7 @@ import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.util.ColorUtils;
 import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.notification.model.AbstractNotification;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * The controller for the notification view.
@@ -55,8 +56,7 @@ public class NotificationController extends AbstractController {
      * {@inheritDoc}
      */
     @Override
-    public final void initialize(final URL location,
-            final ResourceBundle resources) {
+    public void initialize(final URL location, final ResourceBundle resources) {
         final int initialCapacity = 10;
         this.notifications = new PriorityQueue<>(initialCapacity, (
                 notification1, notification2) -> {
@@ -87,6 +87,9 @@ public class NotificationController extends AbstractController {
      * Close the notification.
      */
     @FXML
+    // PMD/findbugs do not work well with javafx. The method IS used.
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
     private void closeAction() {
         displayNext();
     }
