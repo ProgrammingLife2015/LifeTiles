@@ -99,16 +99,16 @@ public class TileView {
         this.scale = scale;
 
         for (SequenceSegment segment : segments) {
-            List<KnownMutation> segKnownMutations = null;
-            List<GeneAnnotation> segAnnotations = null;
+            List<KnownMutation> segmentKnownMutations = null;
+            List<GeneAnnotation> segmentAnnotations = null;
             if (knownMutations != null && knownMutations.containsKey(segment)) {
-                segKnownMutations = knownMutations.get(segment);
+                segmentKnownMutations = knownMutations.get(segment);
             }
             if (mappedAnnotations != null
                     && mappedAnnotations.containsKey(segment)) {
-                segAnnotations = mappedAnnotations.get(segment);
+                segmentAnnotations = mappedAnnotations.get(segment);
             }
-            drawVertexLane(segment, segKnownMutations, segAnnotations);
+            drawVertexLane(segment, segmentKnownMutations, segmentAnnotations);
         }
 
         // TODO toggle edge drawing in the settings
