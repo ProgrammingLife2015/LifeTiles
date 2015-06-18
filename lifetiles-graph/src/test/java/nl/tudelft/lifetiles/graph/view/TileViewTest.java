@@ -79,7 +79,7 @@ public class TileViewTest {
         creategraph();
         buckets = new BucketCache(1, gr);
         Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
-                1);
+                null, 1);
         assertEquals(4, ((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().size());
     }
@@ -89,7 +89,7 @@ public class TileViewTest {
         creategraph();
         buckets = new BucketCache(1, gr);
         Group result = tileview.drawGraph(buckets.getSegments(0, 0), gr, null,
-                1);
+                null, 1);
         assertEquals(3, ((Group) result.getChildrenUnmodifiable().get(1))
                 .getChildrenUnmodifiable().size());
     }
@@ -113,7 +113,7 @@ public class TileViewTest {
 
         BucketCache buckets = new BucketCache(1, graph);
         Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
-                1);
+                null, 1);
         VertexView vView1 = (VertexView) ((Group) result
                 .getChildrenUnmodifiable().get(0)).getChildrenUnmodifiable()
                 .get(0);
@@ -145,7 +145,7 @@ public class TileViewTest {
         BucketCache buckets = new BucketCache(1, graph);
 
         File file = new File(
-                "./src/test/resources/data/test_annotations/simple_annotations.txt");
+                "./src/test/resources/data/test_annotations/simple_known_mutations.txt");
 
         List<KnownMutation> parse = KnownMutationParser
                 .parseKnownMutations(file);
@@ -162,7 +162,7 @@ public class TileViewTest {
         Platform.runLater(() -> {
 
             Group result = tileview.drawGraph(buckets.getSegments(0, 1), graph,
-                    annotations, 1);
+                    annotations, null, 1);
 
             bookmark = (Circle) ((Group) result.getChildrenUnmodifiable()
                     .get(2)).getChildrenUnmodifiable().get(0);
@@ -183,7 +183,7 @@ public class TileViewTest {
         creategraph();
         buckets = new BucketCache(1, gr);
         Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
-                1);
+                null, 1);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
                 MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,

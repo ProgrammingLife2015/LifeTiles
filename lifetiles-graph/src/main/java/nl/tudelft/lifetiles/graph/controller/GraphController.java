@@ -14,6 +14,9 @@ import javafx.scene.Group;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Rectangle;
+import nl.tudelft.lifetiles.annotation.model.GeneAnnotation;
+import nl.tudelft.lifetiles.annotation.model.GeneAnnotationMapper;
+import nl.tudelft.lifetiles.annotation.model.GeneAnnotationParser;
 import nl.tudelft.lifetiles.annotation.model.KnownMutation;
 import nl.tudelft.lifetiles.annotation.model.KnownMutationMapper;
 import nl.tudelft.lifetiles.annotation.model.KnownMutationParser;
@@ -137,6 +140,11 @@ public class GraphController extends AbstractController {
     private Map<SequenceSegment, List<KnownMutation>> knownMutations;
 
     /**
+     * The currently inserted annotations.
+     */
+    private Map<SequenceSegment, List<GeneAnnotation>> mappedAnnotations;
+
+    /**
      * The factor that each zoom in step that updates the current scale.
      */
     private static final double ZOOM_IN_FACTOR = 1.3125;
@@ -155,6 +163,12 @@ public class GraphController extends AbstractController {
      * The mini map controller.
      */
     private MiniMapController miniMapController;
+
+    /**
+     * Notification factory used to produce notifications in the graph
+     * controller.
+     */
+    private NotificationFactory notifyFactory;
 
     /**
      * The factor that each zoom out step that updates the current scale.
@@ -211,26 +225,23 @@ public class GraphController extends AbstractController {
      */
     @SuppressWarnings("checkstyle:genericwhitespace")
     private void initListeners() {
-
-        NotificationFactory notFact = new NotificationFactory();
-
-        listen(Message.OPENED,
-                (controller, subject, args) -> {
-
-                    assert controller instanceof MenuController;
-                    if (!"graph".equals(subject)) {
-                        return;
-                    }
-                    assert args.length == 2;
-                    assert args[0] instanceof File && args[1] instanceof File;
-
-                    try {
-                        loadGraph((File) args[0], (File) args[1]);
-                    } catch (IOException exception) {
-                        shout(NotificationController.NOTIFY, "",
-                                notFact.getNotification(exception));
-                    }
-                });
+        notifyFactory = new NotificationFactory();
+        listen(Message.OPENED, (controller, subject, args) -> {
+            assert controller instanceof MenuController;
+            switch (subject) {
+            case "graph":
+                openGraph(args);
+                break;
+            case "known mutations":
+                openKnownMutations(args);
+                break;
+            case "annotations":
+                openAnnotations(args);
+                break;
+            default:
+                return;
+            }
+        });
 
         listen(Message.FILTERED, (controller, subject, args) -> {
             assert args.length == 1;
@@ -258,32 +269,78 @@ public class GraphController extends AbstractController {
                     repaintNow = true;
                     repaint();
                 });
-
-        listen(Message.OPENED,
-                (controller, subject, args) -> {
-                    assert controller instanceof MenuController;
-                    if (!"known mutations".equals(subject)) {
-                        return;
-                    }
-                    assert args[0] instanceof File;
-
-                    if (graph == null) {
-                        shout(NotificationController.NOTIFY, "", notFact
-                                .getNotification(new IllegalStateException(
-                                        NOT_LOADED_MSG)));
-                    } else {
-                        try {
-                            insertAnnotations((File) args[0]);
-                        } catch (IOException exception) {
-                            shout(NotificationController.NOTIFY, "",
-                                    notFact.getNotification(exception));
-                        }
-                    }
-                });
     }
 
     /**
+     * Function called if a graph file is opened.
+     * Loads the graph into the graph controller.
      *
+     * @param args
+     *            The arguments passed by the opened listener.
+     */
+    private void openGraph(final Object... args) {
+        assert args.length == 2;
+        assert args[0] instanceof File && args[1] instanceof File;
+
+        try {
+            loadGraph((File) args[0], (File) args[1]);
+        } catch (IOException exception) {
+            shout(NotificationController.NOTIFY, "",
+                    notifyFactory.getNotification(exception));
+        }
+    }
+
+    /**
+     * Function called if a known mutations file is opened.
+     * Loads and inserts the known mutations into the graph controller.
+     *
+     * @param args
+     *            The arguments passed by the opened listener.
+     */
+    private void openKnownMutations(final Object... args) {
+        assert args[0] instanceof File;
+
+        if (graph == null) {
+            shout(NotificationController.NOTIFY, "",
+                    notifyFactory.getNotification(new IllegalStateException(
+                            NOT_LOADED_MSG)));
+        } else {
+            try {
+                insertKnownMutations((File) args[0]);
+            } catch (IOException exception) {
+                shout(NotificationController.NOTIFY, "",
+                        notifyFactory.getNotification(exception));
+            }
+        }
+    }
+
+    /**
+     * Function called if a annotations file is opened.
+     * Loads and inserts the annotations into the graph controller.
+     *
+     * @param args
+     *            The arguments passed by the opened listener.
+     */
+    private void openAnnotations(final Object... args) {
+        assert args[0] instanceof File;
+
+        if (graph == null) {
+            shout(NotificationController.NOTIFY,
+                    "",
+                    notifyFactory
+                            .getNotification(new IllegalStateException(
+                                    "Graph not loaded while attempting to add annotations.")));
+        } else {
+            try {
+                insertAnnotations((File) args[0]);
+            } catch (IOException exception) {
+                shout(NotificationController.NOTIFY, "",
+                        notifyFactory.getNotification(exception));
+            }
+        }
+    }
+
+    /**
      * @return the currently loaded graph.
      */
     public Graph<SequenceSegment> getGraph() {
@@ -311,6 +368,7 @@ public class GraphController extends AbstractController {
         GraphParser parser = new DefaultGraphParser();
         graph = parser.parseGraph(vertexfile, edgefile, factory);
         knownMutations = new HashMap<>();
+        mappedAnnotations = new HashMap<>();
 
         model = new GraphContainer(graph, reference);
         diagram = new StackedMutationContainer(model.getBucketCache(),
@@ -319,6 +377,24 @@ public class GraphController extends AbstractController {
         shout(Message.LOADED, "sequences", parser.getSequences());
         repaintNow = true;
         repaint();
+    }
+
+    /**
+     * Inserts a list of known mutations onto the graph from the specified file.
+     *
+     * @param file
+     *            The file to get known mutations from.
+     * @throws IOException
+     *             When an IO error occurs while reading one of the files.
+     */
+    private void insertKnownMutations(final File file) throws IOException {
+        Timer timer = Timer.getAndStart();
+        knownMutations = KnownMutationMapper.mapAnnotations(graph,
+                KnownMutationParser.parseKnownMutations(file), reference);
+
+        timer.stopAndLog("Inserting known mutations");
+        repaintNow = true;
+        repaintPosition(scrollPane.hvalueProperty().doubleValue());
     }
 
     /**
@@ -331,8 +407,11 @@ public class GraphController extends AbstractController {
      */
     private void insertAnnotations(final File file) throws IOException {
         Timer timer = Timer.getAndStart();
-        knownMutations = KnownMutationMapper.mapAnnotations(graph,
-                KnownMutationParser.parseKnownMutations(file), reference);
+        Set<GeneAnnotation> annotations = GeneAnnotationParser
+                .parseGeneAnnotations(file);
+        shout(Message.LOADED, "annotations", annotations);
+        mappedAnnotations = GeneAnnotationMapper.mapAnnotations(graph,
+                annotations, reference);
 
         timer.stopAndLog("Inserting annotations");
         repaintNow = true;
@@ -507,7 +586,7 @@ public class GraphController extends AbstractController {
     public Group drawGraph(final int startBucket, final int endBucket) {
         Group test = view.drawGraph(
                 model.getVisibleSegments(startBucket, endBucket), graph,
-                knownMutations, scale);
+                knownMutations, mappedAnnotations, scale);
 
         return test;
     }
