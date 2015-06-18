@@ -197,7 +197,7 @@ public class VertexView extends Group {
      */
     public void annotate(final GeneAnnotation geneAnnotation) {
         rectangle.setStroke(STROKE_COLOR);
-        rectangle.setStrokeWidth((STROKE_WIDTH);
+        rectangle.setStrokeWidth(STROKE_WIDTH);
 
         Tooltip tooltip = new Tooltip(geneAnnotation.toString());
         Tooltip.install(this, tooltip);
