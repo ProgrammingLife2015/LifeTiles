@@ -28,7 +28,7 @@ public class VertexView extends Group {
     /**
      * this is the region coloring the text.
      */
-    private final Rectangle rectangle;
+    private Rectangle rectangle;
 
     /**
      * Horizontal and vertical spacing between rectangles.
@@ -43,7 +43,7 @@ public class VertexView extends Group {
     /**
      * Vertical scale for each coordinate.
      */
-    public static double VERTICALSCALE = 0;
+    private static double VERTICALSCALE = 40;
 
     /**
      * The minimal size of the text before it is drawn.
@@ -92,14 +92,15 @@ public class VertexView extends Group {
             final double width, final double height, final double scale,
             final Color color) {
 
-        clip = new Rectangle(width * HORIZONTALSCALE * scale - SPACING, 0);
+        clip = new Rectangle(width * HORIZONTALSCALE * scale - SPACING, height);
 
         text = new Text(string);
         text.setFont(Font.font("Oxygen Mono", HORIZONTALSCALE));
         text.getStyleClass().add("vertexText");
         text.setClip(clip);
 
-        rectangle = new Rectangle(width * HORIZONTALSCALE * scale - SPACING, 0);
+        rectangle = new Rectangle(width * HORIZONTALSCALE * scale - SPACING,
+                height);
 
         rectangle.setStyle("-fx-fill:" + ColorUtils.webCode(color));
         rectangle.getStyleClass().add("vertexText");
@@ -190,6 +191,7 @@ public class VertexView extends Group {
     }
 
     /**
+     * 
      * Annotates the vertex view with a gene annotations.
      *
      * @param geneAnnotation
@@ -201,6 +203,23 @@ public class VertexView extends Group {
 
         Tooltip tooltip = new Tooltip(geneAnnotation.toString());
         Tooltip.install(this, tooltip);
+    }
+
+    /**
+     * Set a new Vertical scaling factor for the Vertex.
+     *
+     * @param scale
+     *            new sacling factor
+     */
+    public void setVerticalScale(double scale) {
+        VERTICALSCALE = scale;
+        Rectangle r = new Rectangle(rectangle.getWidth(), rectangle.getHeight()
+                * scale);
+        r.setStyle(rectangle.getStyle());
+
+        getChildren().clear();
+        getChildren().addAll(r, text);
+
     }
 
 }

@@ -102,7 +102,6 @@ public class TileView {
      *            Map from segment to gene annotations.
      * @param scale
      *            the scale to resize all elements of the graph
-     * @param amountOfSequences
      * @return the elements that must be displayed on the screen
      */
     public Group drawGraph(final Set<SequenceSegment> segments,
@@ -134,14 +133,12 @@ public class TileView {
         Group nodes = new Group();
 
         for (Entry<SequenceSegment, VertexView> entry : nodemap.entrySet()) {
-            nodes.getChildren().add(entry.getValue());
             VertexView v = entry.getValue();
-            v.setHeight(entry.getKey().getSources().size()
-                    * (screenHeight / lanes.size()));
+            v.setVerticalScale(screenHeight / lanes.size());
+            nodes.getChildren().add(v);
         }
 
         root.getChildren().addAll(nodes, edges, bookmarks);
-
         return root;
     }
 
