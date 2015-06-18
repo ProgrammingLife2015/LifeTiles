@@ -1,6 +1,7 @@
 package nl.tudelft.lifetiles.sequence.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,11 +22,11 @@ import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.notification.controller.NotificationController;
-import nl.tudelft.lifetiles.notification.model.AbstractNotification;
 import nl.tudelft.lifetiles.notification.model.NotificationFactory;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceEntry;
 import nl.tudelft.lifetiles.sequence.model.SequenceMetaParser;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * The controller of the data view.
@@ -33,7 +34,7 @@ import nl.tudelft.lifetiles.sequence.model.SequenceMetaParser;
  * @author Joren Hammudoglu
  *
  */
-public final class SequenceController extends AbstractController {
+public class SequenceController extends AbstractController {
 
     /**
      * Shout message indicating a sequence has been set as reference.
@@ -50,12 +51,6 @@ public final class SequenceController extends AbstractController {
      */
     @FXML
     private TableView<SequenceEntry> sequenceTable;
-
-    /**
-     * The table column of sequence id's.
-     */
-    @FXML
-    private TableColumn<SequenceEntry, String> idColumn;
 
     /**
      * The table column indiciating sequence visibility.
@@ -92,7 +87,7 @@ public final class SequenceController extends AbstractController {
     /**
      * The listeners for the visible properties.
      */
-    private Map<SequenceEntry, ChangeListener<? super Boolean>> visibilityListeners;
+    private Map<SequenceEntry, ChangeListener<? super Boolean>> visibleListeners;
 
     /**
      * {@inheritDoc}
@@ -102,30 +97,35 @@ public final class SequenceController extends AbstractController {
         registerShoutListeners();
         initializeTable();
 
-        visibilityListeners = new HashMap<>();
+        visibleListeners = new HashMap<>();
     }
 
     /**
      * Register the shout listeners.
      */
+    // checkstyle bug causes false positives in our assert, so suppress.
+    @SuppressWarnings("checkstyle:genericwhitespace")
     private void registerShoutListeners() {
-        listen(Message.LOADED,
-                (sender, subject, args) -> {
-                    if (!subject.equals("sequences")) {
-                        return;
-                    }
-                    assert (args[0] instanceof Map<?, ?>);
+        listen(Message.LOADED, (sender, subject, args) -> {
+            if (!"sequences".equals(subject)) {
+                return;
+            }
+            // eclipse and PMD disagree on whether parentheses are
+            // needed
+                assert args[0] instanceof Map<?, ?>;
 
-                    Map<String, Sequence> newSequences = (Map<String, Sequence>) args[0];
-                    load(newSequences);
+                @SuppressWarnings("unchecked")
+                Map<String, Sequence> sequences = (Map<String, Sequence>) args[0];
+                load(sequences);
 
-                });
+            });
 
         listen(Message.FILTERED, (sender, subject, args) -> {
             assert args.length == 1;
-            assert (args[0] instanceof Set<?>);
-
-            updateVisible((Set<Sequence>) args[0]);
+            assert args[0] instanceof Set<?>;
+            @SuppressWarnings("unchecked")
+            Set<Sequence> sequences = (Set<Sequence>) args[0];
+            updateVisible(sequences);
         });
 
         listen(Message.RESET, (sender, subject, args) -> {
@@ -136,7 +136,7 @@ public final class SequenceController extends AbstractController {
 
         listen(Message.OPENED,
                 (sender, subject, args) -> {
-                    if (!subject.equals("meta")) {
+                    if (!"meta".equals(subject)) {
                         return;
                     }
                     assert args[0] instanceof File;
@@ -145,11 +145,11 @@ public final class SequenceController extends AbstractController {
                     try {
                         parser.parse((File) args[0]);
                         addMetaData(parser.getColumns(), parser.getData());
-                    } catch (Exception exception) {
+                    } catch (IOException exception) {
                         Logging.exception(exception);
-                        AbstractNotification notification = new NotificationFactory()
-                                .getNotification(exception);
-                        shout(NotificationController.NOTIFY, "", notification);
+                        shout(NotificationController.NOTIFY, "",
+                                new NotificationFactory()
+                                        .getNotification(exception));
                     }
                 });
     }
@@ -220,6 +220,8 @@ public final class SequenceController extends AbstractController {
      */
     private void addMetaColumns(final List<String> columns) {
         for (String columnName : columns) {
+            // purpose of this method is to create these.
+            @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
             TableColumn<SequenceEntry, String> column = new TableColumn<>(
                     columnName);
             column.setCellValueFactory(entry -> entry.getValue().metaProperty(
@@ -234,6 +236,8 @@ public final class SequenceController extends AbstractController {
      * @param sequences
      *            the sequences
      */
+    // suppress a false positive on SequenceEntry
+    @SuppressFBWarnings("DLS_DEAD_LOCAL_STORE")
     private void initializeEntries(final Map<String, Sequence> sequences) {
         sequenceEntries = FXCollections.observableHashMap();
 
@@ -262,20 +266,20 @@ public final class SequenceController extends AbstractController {
      *            the sequence entry
      */
     private void addVisibilityListener(final SequenceEntry entry) {
-        final ChangeListener<? super Boolean> visibilityListener;
-        if (visibilityListeners.containsKey(entry)) {
-            visibilityListener = visibilityListeners.get(entry);
+        final ChangeListener<? super Boolean> listener;
+        if (visibleListeners.containsKey(entry)) {
+            listener = visibleListeners.get(entry);
         } else {
-            visibilityListener = (value, previous, current) -> {
+            listener = (value, previous, current) -> {
                 if (previous != current) {
                     updateVisible(entry, current);
                     shout(Message.FILTERED, "", visibleSequences);
                 }
             };
-            visibilityListeners.put(entry, visibilityListener);
+            visibleListeners.put(entry, listener);
         }
 
-        entry.visibleProperty().addListener(visibilityListener);
+        entry.visibleProperty().addListener(listener);
     }
 
     /**
@@ -285,11 +289,11 @@ public final class SequenceController extends AbstractController {
      *            the entry
      */
     private void removeVisibilityListener(final SequenceEntry entry) {
-        if (!visibilityListeners.containsKey(entry)) {
+        if (!visibleListeners.containsKey(entry)) {
             throw new IllegalArgumentException("Entry " + entry.getIdentifier()
                     + " has no listener");
         }
-        entry.visibleProperty().removeListener(visibilityListeners.get(entry));
+        entry.visibleProperty().removeListener(visibleListeners.get(entry));
     }
 
     /**

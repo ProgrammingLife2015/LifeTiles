@@ -16,5 +16,5 @@ public interface ShoutCallback {
      * @param args
      *            The optional arguments.
      */
-    void accept(AbstractController sender, String subject, Object[] args);
+    void accept(AbstractController sender, String subject, Object... args);
 }

@@ -2,11 +2,11 @@ package nl.tudelft.lifetiles.graph.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import nl.tudelft.lifetiles.core.util.SetUtils;
 import nl.tudelft.lifetiles.sequence.Mutation;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
@@ -205,17 +205,22 @@ public class StackedMutationContainer {
             list.add((long) 0);
         }
 
-        Map<Mutation, Integer> mutations = new HashMap<>(3);
+        Map<Mutation, Integer> mutations = new HashMap<>(
+                Mutation.values().length);
         mutations.put(Mutation.INSERTION, INSERTION_MAP);
         mutations.put(Mutation.DELETION, DELETION_MAP);
         mutations.put(Mutation.POLYMORPHISM, POLYMORPHISM_MAP);
 
         for (SequenceSegment segment : bucket) {
-            Set<Sequence> sources = new HashSet<>(segment.getSources());
-            if (visibleSequences != null) {
-                sources.retainAll(visibleSequences);
+            int sourceSize;
+            if (visibleSequences == null) {
+                sourceSize = segment.getSources().size();
+            } else {
+                sourceSize = SetUtils.intersectionSize(segment.getSources(),
+                        visibleSequences);
             }
-            long size = segment.getContent().getLength() * sources.size();
+
+            long size = segment.getContent().getLength() * sourceSize;
             if (mutations.containsKey(segment.getMutation())) {
                 int index = mutations.get(segment.getMutation());
                 list.set(index, list.get(index) + size);
@@ -233,7 +238,10 @@ public class StackedMutationContainer {
     public Long getMaxMutations() {
         long max = 0;
         for (List<Long> stack : stackedMutations) {
-            max = Math.max(max, stack.get(1) + stack.get(2) + stack.get(3));
+            max = Math.max(
+                    max,
+                    stack.get(INSERTION_MAP) + stack.get(DELETION_MAP)
+                            + stack.get(POLYMORPHISM_MAP));
         }
         return max;
     }

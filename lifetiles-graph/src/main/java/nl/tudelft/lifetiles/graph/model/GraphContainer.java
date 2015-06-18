@@ -1,10 +1,9 @@
 package nl.tudelft.lifetiles.graph.model;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-import nl.tudelft.lifetiles.core.util.Logging;
+import nl.tudelft.lifetiles.core.util.SetUtils;
 import nl.tudelft.lifetiles.core.util.Settings;
 import nl.tudelft.lifetiles.core.util.Timer;
 import nl.tudelft.lifetiles.graph.traverser.EmptySegmentTraverser;
@@ -59,7 +58,7 @@ public class GraphContainer {
     /**
      * The amount of vertices to be placed in one bucket.
      */
-    private static final int NUM_VERTICES_BUCKET = Integer.parseInt(Settings
+    private static final int VERTICES_BUCKET = Integer.parseInt(Settings
             .get("num_vertices_bucket"));
 
     /**
@@ -83,7 +82,7 @@ public class GraphContainer {
             findMutations(reference);
         }
         segmentBuckets = new BucketCache(Math.max(1, graph.getAllVertices()
-                .size() / NUM_VERTICES_BUCKET), this.graph);
+                .size() / VERTICES_BUCKET), this.graph);
         visibles = graph.getAllVertices();
     }
 
@@ -129,21 +128,20 @@ public class GraphContainer {
      * @param visibleSequences
      *            the sequences to display
      */
-    public final void setVisible(final Set<Sequence> visibleSequences) {
+    public void setVisible(final Set<Sequence> visibleSequences) {
         Timer timer = Timer.getAndStart();
         // Find out which vertices are visible now
         Set<SequenceSegment> vertices = new TreeSet<SequenceSegment>();
 
         for (SequenceSegment segment : graph.getAllVertices()) {
-            // copy the set of sequences because retainAll modifies the original
-            // set
-            Set<Sequence> intersect;
-            intersect = new HashSet<Sequence>(segment.getSources());
-            // check if any of the visible sequences are in this nodes sources
-            if (visibleSequences != null) {
-                intersect.retainAll(visibleSequences);
+            int intersectionSize;
+            if (visibleSequences == null) {
+                intersectionSize = segment.getSources().size();
+            } else {
+                intersectionSize = SetUtils.intersectionSize(
+                        segment.getSources(), visibleSequences);
             }
-            if (!intersect.isEmpty()) {
+            if (intersectionSize > 0) {
                 vertices.add(segment);
             }
         }
@@ -161,15 +159,13 @@ public class GraphContainer {
      *            the last bucket position
      * @return graph
      */
-    public final Set<SequenceSegment> getVisibleSegments(final int start,
+    public Set<SequenceSegment> getVisibleSegments(final int start,
             final int end) {
         Set<SequenceSegment> copy = new TreeSet<SequenceSegment>();
         for (SequenceSegment seg : segmentBuckets.getSegments(start, end)) {
-            try {
-                copy.add(seg.clone());
-            } catch (CloneNotSupportedException e) {
-                Logging.exception(e);
-            }
+            @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+            SequenceSegment newSegment = new SequenceSegment(seg);
+            copy.add(newSegment);
         }
         // Keep only the sequencesegments that are visible
         copy.retainAll(visibles);
@@ -187,7 +183,7 @@ public class GraphContainer {
      *
      * @return the bucketCache of the graph.
      */
-    public final BucketCache getBucketCache() {
+    public BucketCache getBucketCache() {
         return segmentBuckets;
     }
 

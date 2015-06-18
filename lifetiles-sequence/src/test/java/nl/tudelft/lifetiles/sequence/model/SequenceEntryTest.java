@@ -31,35 +31,35 @@ public class SequenceEntryTest {
 
     @Test
     public void getVisibleTest1() {
-        assertTrue(se1.getVisible());
+        assertTrue(se1.isVisible());
     }
 
     @Test
     public void getVisibleTest2() {
-        assertTrue(se2.getVisible());
+        assertTrue(se2.isVisible());
     }
 
     @Test
     public void getReferenceTest1() {
-        assertFalse(se1.getReference());
+        assertFalse(se1.isReference());
     }
 
     @Test
     public void getReferenceTest2() {
-        assertTrue(se2.getReference());
+        assertTrue(se2.isReference());
     }
 
     @Test
     public void setVisibleTest() {
         se1.setVisible(false);
-        assertFalse(se1.getVisible());
+        assertFalse(se1.isVisible());
         se1.setVisible(true);
     }
 
     @Test
     public void setReferenceTest() {
         se1.setReference(true);
-        assertTrue(se1.getReference());
+        assertTrue(se1.isReference());
         se1.setReference(false);
     }
 }

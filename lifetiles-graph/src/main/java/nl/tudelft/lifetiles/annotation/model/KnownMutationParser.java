@@ -17,6 +17,19 @@ import java.util.List;
 public final class KnownMutationParser {
 
     /**
+     * Index of the filter field in the file.
+     */
+    private static final int FILTER_FIELD = 2;
+    /**
+     * Index of the change field in the file.
+     */
+    private static final int CHANGE_FIELD = 1;
+    /**
+     * Index of the position field in the file.
+     */
+    private static final int POSITION_FIELD = 3;
+
+    /**
      * Static class can not have a public or default constructor.
      */
     private KnownMutationParser() {
@@ -60,9 +73,9 @@ public final class KnownMutationParser {
         String[] genomeResistance = line.split("\t");
         String drugResistance = genomeResistance[1];
         String[] genome = genomeResistance[0].split(",");
-        String change = genome[1];
-        String filter = genome[2];
-        Long genomePosition = Long.parseLong(genome[3]);
+        String change = genome[CHANGE_FIELD];
+        String filter = genome[FILTER_FIELD];
+        Long genomePosition = Long.parseLong(genome[POSITION_FIELD]);
         String[] mutation = genome[0].split(":");
         String geneName = mutation[0];
         String typeOfMutation = mutation[1];

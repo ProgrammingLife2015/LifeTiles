@@ -2,8 +2,8 @@ package nl.tudelft.lifetiles.graph.view;
 
 import java.util.Map;
 
-import nl.tudelft.lifetiles.graph.model.StackedMutationContainer;
 import javafx.scene.Group;
+import nl.tudelft.lifetiles.graph.model.StackedMutationContainer;
 
 /**
  * Diagram view which contains a view of the stacked mutation diagram, which is
@@ -33,8 +33,7 @@ public class DiagramView {
             final int zoomLevel, final double width) {
         Map<Integer, StackedMutationContainer> containers = container
                 .mapLevelStackedMutation();
-        int stackLevel = Math.max(1,
-                Math.min(zoomLevel, container.getLevel()));
+        int stackLevel = Math.max(1, Math.min(zoomLevel, container.getLevel()));
         StackedMutationContainer stack = containers.get(stackLevel);
         return drawStackContainer(stack, width);
     }
@@ -54,6 +53,9 @@ public class DiagramView {
         int stacks = stack.getStack().size();
         double stackWidth = width / stacks;
         for (int index = 0; index < stacks; index++) {
+            // The purpose of this loop is to create these, so suppress the
+            // warning.
+            @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
             StackView stackView = new StackView(stack.getStack().get(index),
                     stackWidth, stack.getMaxMutations());
             stackView.setLayoutX(index * stackWidth);
