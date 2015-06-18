@@ -132,7 +132,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      * @param content
      *            new content.
      */
-    public final void setContent(final SegmentContent content) {
+    public void setContent(final SegmentContent content) {
         this.content = content;
     }
 
@@ -363,7 +363,7 @@ public class SequenceSegment implements Comparable<SequenceSegment> {
      *
      * @return the interestingness score
      */
-    public final double interestingness() {
+    public double interestingness() {
         if (content.isEmpty() || content instanceof SegmentStringCollapsed) {
             return 0;
         }
