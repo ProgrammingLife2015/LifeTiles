@@ -173,4 +173,15 @@ public class SequenceSegmentTest {
         assertTrue(v3.interestingness() < v1.interestingness());
         assertTrue(v3.interestingness() > v2.interestingness());
     }
+    @Test
+    public void testSetContent() {
+        v1.setContent(new SegmentEmpty(42));
+        assertEquals(42, v1.getContent().getLength());
+    }
+
+    @Test
+    public void testCollapsedInterestingness() {
+        v1.setContent(new SegmentStringCollapsed(new SegmentEmpty(42)));
+        assertEquals(0, v1.interestingness(), 1E-05);
+    }
 }
