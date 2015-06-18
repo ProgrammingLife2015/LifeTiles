@@ -68,7 +68,7 @@ public class SequenceEntryTest {
 
     @Test
     public void getMetadataTest() {
-        HashMap<String, String> metaData = new HashMap<String, String>();
+        Map<String, String> metaData = new HashMap<String, String>();
         metaData.put("a", "1");
         metaData.put("b", "2");
         metaData.put("c", "3");
