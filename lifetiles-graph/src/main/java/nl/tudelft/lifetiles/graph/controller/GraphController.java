@@ -96,9 +96,13 @@ public class GraphController extends AbstractController {
     private DiagramView diagramView;
 
     /**
-     * The view controller.
+     * graph model.
      */
     private Graph<SequenceSegment> graph;
+    /**
+     * the highest unified coordinate in the graph.
+     */
+    private long unifiedEnd;
 
     /**
      * Current end position of a bucket.
@@ -260,7 +264,7 @@ public class GraphController extends AbstractController {
             default:
                 return;
             }
-
+            unifiedEnd = getMaxUnifiedEnd(graph);
         });
 
         listen(Message.LOADED, (sender, subject, args) -> {
@@ -373,13 +377,14 @@ public class GraphController extends AbstractController {
             }
         }
 
-        listen(Message.GOTO , (controller, subject, args) -> {
+        listen(Message.GOTO, (controller, subject, args) -> {
             assert args[0] instanceof Long;
-            long position = ((Long) args[0]).longValue();
+            Long position = ((Long) args[0]);
             System.out.println("GOTO: " + position);
-            //TODO go to correct position
-            //scrollPane.setHvalue(position);
-        });
+            // calculate position on a 0 to 1 scale
+            double hValue = position.doubleValue() / (double) unifiedEnd;
+            scrollPane.setHvalue(hValue);
+            });
     }
 
     /**
@@ -553,8 +558,7 @@ Q        mappedAnnotations = GeneAnnotationMapper.mapAnnotations(graph,
         if (zoomLevel > zoomSwitchLevel) {
             if (currentZoomLevel != zoomLevel || repaintNow) {
                 Group diagramDrawing = new Group();
-                double width = getMaxUnifiedEnd(graph) * scale
-                        * VertexView.HORIZONTALSCALE;
+                double width = unifiedEnd * scale * VertexView.HORIZONTALSCALE;
                 int diagramLevel = zoomLevel - zoomSwitchLevel;
                 diagramDrawing.getChildren().add(
                         diagramView.drawDiagram(diagram, diagramLevel, width));
