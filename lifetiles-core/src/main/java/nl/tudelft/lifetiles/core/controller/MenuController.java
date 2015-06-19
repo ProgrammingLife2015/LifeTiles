@@ -3,7 +3,10 @@ package nl.tudelft.lifetiles.core.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.Stack;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -76,6 +79,11 @@ public class MenuController extends AbstractController {
     private MenuBar menuBar;
 
     /**
+     * Keep track of filter actions for the purpose of undoing them.
+     */
+    private Stack<Set<?>> filterStack;
+
+    /**
      * The notification factory.
      */
     private NotificationFactory nf;
@@ -109,6 +117,20 @@ public class MenuController extends AbstractController {
     @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
     private void resetAction(final ActionEvent event) {
         shout(Message.RESET, "");
+    }
+
+    /**
+     * Handle clicks on the Undo item in the Filter menu.
+     *
+     */
+    @FXML
+    private void undoFilterAction() {
+        filterStack.pop();
+        if (filterStack.isEmpty()) {
+            shout(Message.RESET, "");
+        } else {
+            shout(Message.FILTERED, "", filterStack.peek());
+        }
     }
 
     /**
@@ -337,8 +359,21 @@ public class MenuController extends AbstractController {
     }
 
     @Override
+    // checkstyle bug causes false positives in our assert, so suppress.
+    @SuppressWarnings("checkstyle:genericwhitespace")
     public void initialize(final URL location, final ResourceBundle resources) {
         addDraggableNode(menuBar);
+
         nf = new NotificationFactory();
+        filterStack = new Stack<>();
+        listen(Message.FILTERED, (sender, subject, args) -> {
+            if (sender.equals(this)) {
+                return;
+            }
+            assert args.length == 1;
+            assert args[0] instanceof Set<?>;
+            Set<?> newFilter = (Set<?>) args[0];
+            filterStack.push(new HashSet<>(newFilter));
+        });
     }
 }
