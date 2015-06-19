@@ -37,6 +37,7 @@ import nl.tudelft.lifetiles.graph.view.VertexView;
 import nl.tudelft.lifetiles.notification.controller.NotificationController;
 import nl.tudelft.lifetiles.notification.model.NotificationFactory;
 import nl.tudelft.lifetiles.sequence.controller.SequenceController;
+import nl.tudelft.lifetiles.sequence.model.SegmentStringCollapsed;
 import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
@@ -367,6 +368,8 @@ public class GraphController extends AbstractController {
         GraphFactory<SequenceSegment> factory = FactoryProducer.getFactory();
         GraphParser parser = new DefaultGraphParser();
         graph = parser.parseGraph(vertexfile, edgefile, factory);
+
+        collapseGraph(graph, parser.getSequences().size());
         knownMutations = new HashMap<>();
         mappedAnnotations = new HashMap<>();
 
@@ -395,6 +398,25 @@ public class GraphController extends AbstractController {
         timer.stopAndLog("Inserting known mutations");
         repaintNow = true;
         repaintPosition(scrollPane.hvalueProperty().doubleValue());
+    }
+
+    /**
+     * Collapses the total segments in the graph.
+     * Total segments contain all sequences in the graph.
+     *
+     * @param graph
+     *            The graph to be collapsed.
+     * @param sequences
+     *            The amount of sequences in the graph.
+     */
+    private void collapseGraph(final Graph<SequenceSegment> graph,
+            final int sequences) {
+        for (SequenceSegment segment : graph.getAllVertices()) {
+            if (segment.getSources().size() == sequences) {
+                segment.setContent(new SegmentStringCollapsed(segment
+                        .getContent()));
+            }
+        }
     }
 
     /**
