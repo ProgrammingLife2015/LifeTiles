@@ -3,7 +3,7 @@ package nl.tudelft.lifetiles.annotation.model;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
-import java.util.Set;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,8 +11,8 @@ import org.junit.Test;
 public class GeneAnnotationParserTest {
     static final String testGenomesFilename = "/data/test_annotations/simple_annotations.gff";
     static final String testGenomeFilename = "/data/test_annotations/simple_annotation.gff";
-    private Set<GeneAnnotation> genomes;
-    private Set<GeneAnnotation> genome;
+    private List<GeneAnnotation> genomes;
+    private List<GeneAnnotation> genome;
 
     @Before
     public void setUp() throws Exception {
