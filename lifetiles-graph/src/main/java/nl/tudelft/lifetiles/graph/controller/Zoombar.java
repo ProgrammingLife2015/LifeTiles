@@ -88,6 +88,9 @@ public class Zoombar {
         return toolbar;
     }
 
+    /**
+     * Increment the zoom level by 1.
+     */
     public final void incrementZoom() {
         int zoom = zoomLevel.get();
         if (zoom > 0) {
@@ -96,6 +99,9 @@ public class Zoombar {
         }
     }
 
+    /**
+     * Decrease the zoom level by 1.
+     */
     public final void decrementZoom() {
         int zoom = zoomLevel.get();
         if (zoom < maxzoom) {
