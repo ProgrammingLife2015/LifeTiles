@@ -119,8 +119,8 @@ public class TileViewTest {
                 .get(0);
 
         assertEquals(0, vView1.getLayoutX(), 1e-10);
-        assertEquals(0, vView1.getLayoutY(), 1e-10);
-        assertEquals(2 * 40 - 2, vView1.getBoundsInParent().getHeight(), 1e-10);
+        assertEquals(200, vView1.getLayoutY(), 1e-10);
+        assertEquals(200 - 2, vView1.getBoundsInParent().getHeight(), 1e-10);
         assertEquals(2 * 11 - 2, vView1.getBoundsInParent().getWidth(), 1e-10);
 
     }
