@@ -136,15 +136,21 @@ public class TileView {
             if (knownMutations != null && knownMutations.containsKey(segment)) {
                 mutations = knownMutations.get(segment);
             }
+            if (mappedAnnotations != null
+                    && mappedAnnotations.containsKey(segment)) {
+                annotations = mappedAnnotations.get(segment);
+            }
 
             int laneIndex = drawVertexLane(segment);
-            nodemap.put(segment, new Container(laneIndex, mutations));
+            nodemap.put(segment, new Container(laneIndex, mutations,
+                    annotations));
         }
 
         verticalScale = screenHeight / lanes.size();
         for (Entry<SequenceSegment, Container> entry : nodemap.entrySet()) {
-            drawVertex(entry.getValue().getLocation(), entry.getKey(), entry
-                    .getValue().getMutations(), null);
+            Container container = entry.getValue();
+            drawVertex(container.getLocation(), entry.getKey(), container
+                    .getMutations(), container.getAnnotations());
 
         }
 
@@ -287,10 +293,13 @@ class Container {
 
     private Integer location;
     private List<KnownMutation> mutations;
+    private List<GeneAnnotation> annotations;
 
-    public Container(Integer location, List<KnownMutation> mutations) {
+    public Container(Integer location, List<KnownMutation> mutations,
+            List<GeneAnnotation> annotations) {
         this.location = location;
         this.mutations = mutations;
+        this.annotations = annotations;
 
     }
 
@@ -300,6 +309,10 @@ class Container {
 
     public List<KnownMutation> getMutations() {
         return mutations;
+    }
+
+    public List<GeneAnnotation> getAnnotations() {
+        return annotations;
     }
 
 }
