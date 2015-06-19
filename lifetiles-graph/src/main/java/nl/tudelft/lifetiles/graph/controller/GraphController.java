@@ -280,15 +280,15 @@ public class GraphController extends AbstractController {
             assert args.length == 1;
             assert args[0] instanceof Set<?>;
             // unfortunately java doesn't really let us typecheck generics :(
-                @SuppressWarnings("unchecked")
-                Set<Sequence> newSequences = (Set<Sequence>) args[0];
-                visibleSequences = newSequences;
-                model.setVisible(visibleSequences);
-                diagram = new StackedMutationContainer(model.getBucketCache(),
-                        visibleSequences);
-                repaintNow = true;
-                repaint();
-            });
+            @SuppressWarnings("unchecked")
+            Set<Sequence> newSequences = (Set<Sequence>) args[0];
+            visibleSequences = newSequences;
+            model.setVisible(visibleSequences);
+            diagram = new StackedMutationContainer(model.getBucketCache(),
+                    visibleSequences);
+            repaintNow = true;
+            repaint();
+        });
 
         listen(SequenceController.REFERENCE_SET,
                 (controller, subject, args) -> {
@@ -361,8 +361,8 @@ public class GraphController extends AbstractController {
             shout(NotificationController.NOTIFY,
                     "",
                     notifyFactory
-                    .getNotification(new IllegalStateException(
-                            "Graph not loaded while attempting to add annotations.")));
+                            .getNotification(new IllegalStateException(
+                                    "Graph not loaded while attempting to add annotations.")));
         } else {
             try {
                 insertAnnotations((File) args[0]);
@@ -517,10 +517,10 @@ public class GraphController extends AbstractController {
         double rightHalf = position + thumbSize;
 
         if (leftHalf < 0) {
-            leftHalf = position - thumbSize / 2;
+            leftHalf /= 2;
         }
         if (rightHalf > scrollPane.getHmax()) {
-            rightHalf = position + thumbSize / 2;
+            rightHalf /= 2;
         }
 
         int[] buckets = new int[] {
@@ -621,7 +621,7 @@ public class GraphController extends AbstractController {
      */
     private int getStartBucketPosition(final double position) {
         return Math.max(0, model.getBucketCache()
-                .bucketPercentageStartPosition(position));
+                .getBucketPosition(position));
     }
 
     /**
@@ -633,7 +633,7 @@ public class GraphController extends AbstractController {
      */
     private int getEndBucketPosition(final double position) {
         return Math.min(model.getBucketCache().getNumberBuckets(), model
-                .getBucketCache().bucketPercentageStartPosition(position));
+                .getBucketCache().getBucketPosition(position));
     }
 
     /**
