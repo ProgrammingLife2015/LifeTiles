@@ -3,8 +3,8 @@ package nl.tudelft.lifetiles.annotation.controller;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.Set;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -21,7 +21,7 @@ import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.util.Message;
 
 /**
- *
+ * Controller for the Bookmark sidebar.
  * @author Albert Smit
  *
  */
@@ -45,14 +45,6 @@ public class BookmarkController extends AbstractController {
     @FXML
     private TextField searchBox;
 
-    /**
-     * The list of known mutations.
-     */
-    private List<KnownMutation> knownMutations;
-    /**
-     * The list of Genes.
-     */
-    private List<GeneAnnotation> genes;
     /**
      * The list of all bookmarks.
      */
@@ -83,10 +75,16 @@ public class BookmarkController extends AbstractController {
          */
         bookmarkList.setCellFactory(new Callback<ListView<AbstractBookmark>,
                 ListCell<AbstractBookmark>>() {
+            /**
+             * {@InheritDoc}
+             */
             @Override
             public ListCell<AbstractBookmark> call(
                     final ListView<AbstractBookmark> param) {
                 final ListCell<AbstractBookmark> cell = new ListCell<AbstractBookmark>() {
+                    /**
+                     * the ListCell, creates the correct text and adds the right eventhandler.
+                     */
                     public void updateItem(final AbstractBookmark item,
                             final boolean empty) {
                         super.updateItem(item, empty);
@@ -96,7 +94,7 @@ public class BookmarkController extends AbstractController {
                             setOnMouseClicked(event -> {
                                 if (event.getClickCount() == 2) {
                                     shout(Message.GOTO, "" ,
-                                            new Long(item.getUnifiedPosition()));
+                                            Long.valueOf(item.getUnifiedPosition()));
                                 }
                             });
                         }
@@ -106,14 +104,15 @@ public class BookmarkController extends AbstractController {
             }
         });
         initListeners();
-        //TODO listen for genes
-        //TODO load user bookmarks
     }
 
 
     /**
      * Initialize the shout listeners.
      */
+    // java doesn't let us typecheck generics so the casts are unchecked
+    // checkstyle doesn't like assert without parentheses with generics
+    @SuppressWarnings({"checkstyle:genericwhitespace", "unchecked"})
     private void initListeners() {
         listen(Message.BOOKMARKS, (sender, subject, args) -> {
             show();
@@ -124,14 +123,12 @@ public class BookmarkController extends AbstractController {
             switch (subject) {
             case "known mutations":
                 assert args[0] instanceof List<?>;
-                knownMutations = (List<KnownMutation>) args[0];
+                List<KnownMutation> knownMutations = (List<KnownMutation>) args[0];
                 listItems.addAll(knownMutations);
                 return;
             case "annotations":
-                System.out.println("YOLO");
                 assert args[0] instanceof List<?>;
-                genes = (List<GeneAnnotation>) args[0];
-                System.out.println(genes);
+                List<GeneAnnotation> genes = (List<GeneAnnotation>) args[0];
                 listItems.addAll(genes);
                 return;
             default:
@@ -143,6 +140,9 @@ public class BookmarkController extends AbstractController {
      * closes the bookmark sidebar.
      */
     @FXML
+    // PMD/findbugs do not work well with javafx. The method IS used.
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
     private void closeAction() {
         hide();
     }
@@ -152,9 +152,10 @@ public class BookmarkController extends AbstractController {
      * uses a simple contains check on the text of the listItem.
      */
     @FXML
+    // PMD/findbugs do not work well with javafx. The method IS used.
+    @SuppressWarnings("PMD.UnusedPrivateMethod")
+    @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
     private void searchAction() {
-        System.out.println("Searching");
-        System.out.println(searchBox.textProperty().get());
         filteredItems.setPredicate(annotation -> {
             if (searchBox.textProperty().get().isEmpty()) {
                 return true;
