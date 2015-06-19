@@ -130,7 +130,6 @@ public class SequenceController extends AbstractController {
 
         listen(Message.RESET, (sender, subject, args) -> {
             Set<Sequence> visibleSet = new HashSet<>(sequences.values());
-            updateVisible(visibleSet);
             shout(Message.FILTERED, "", visibleSet);
         });
 
