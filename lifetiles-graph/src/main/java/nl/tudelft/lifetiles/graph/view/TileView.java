@@ -82,7 +82,7 @@ public class TileView {
     /**
      * The amount of pixels that the height and width at least must have.
      */
-    private static double MINIMALSIZE = 10;
+    private static final int MINIMALSIZE = 10;
 
     /**
      * Create the TileView by initializing the groups where the to be drawn
@@ -164,6 +164,7 @@ public class TileView {
      *
      * @param segment
      *            segment to be drawn
+     * @return the index of the lane
      */
     private int drawVertexLane(final SequenceSegment segment) {
         for (int index = 0; index < lanes.size(); index++) {
@@ -290,28 +291,61 @@ public class TileView {
 
 }
 
+/**
+ * This class holds additional information to be drawn on the screen and also
+ * the lane index for the vertex.
+ */
 class Container {
 
+    /**
+     * Lane index.
+     */
     private Integer location;
+    /**
+     * Mutations of this vertex.
+     */
     private List<KnownMutation> mutations;
+    /**
+     * Annotations of this vertex.
+     */
     private List<GeneAnnotation> annotations;
 
-    public Container(Integer location, List<KnownMutation> mutations,
-            List<GeneAnnotation> annotations) {
+    /**
+     * Constructs a new container.
+     *
+     * @param location
+     *            lane index
+     * @param mutations
+     *            List of mutations
+     * @param annotations
+     *            List of annotations
+     */
+    public Container(final Integer location,
+            final List<KnownMutation> mutations,
+            final List<GeneAnnotation> annotations) {
         this.location = location;
         this.mutations = mutations;
         this.annotations = annotations;
 
     }
 
+    /**
+     * @return the lane index
+     */
     public Integer getLocation() {
         return location;
     }
 
+    /**
+     * @return the mutations
+     */
     public List<KnownMutation> getMutations() {
         return mutations;
     }
 
+    /**
+     * @return the annotations
+     */
     public List<GeneAnnotation> getAnnotations() {
         return annotations;
     }

@@ -41,11 +41,6 @@ public class VertexView extends Group {
     public static final double HORIZONTALSCALE = 11;
 
     /**
-     * Vertical scale for each coordinate.
-     */
-    private static double VERTICALSCALE = 40;
-
-    /**
      * The minimal size of the text before it is drawn.
      */
     private static final double MINTEXTSIZE = 10;
@@ -83,31 +78,33 @@ public class VertexView extends Group {
      *            the width of the vertex
      * @param height
      *            the amount of sequences going through this node
-     * @param scale
+     * @param horizontalScale
      *            the resize factor of the vertex
      * @param verticalScale
+     *            the vertical scale factor for this vertex
      * @param color
      *            the color of the vertex
      */
     public VertexView(final String string, final Point2D topLeftPoint,
-            final double width, final double height, final double scale,
-            final double verticalScale, final Color color) {
+            final double width, final double height,
+            final double horizontalScale, final double verticalScale,
+            final Color color) {
 
-        clip = new Rectangle(width * HORIZONTALSCALE * scale - SPACING, height
-                * verticalScale - SPACING);
+        clip = new Rectangle(width * HORIZONTALSCALE * horizontalScale
+                - SPACING, height * verticalScale - SPACING);
 
         text = new Text(string);
         text.setFont(Font.font("Oxygen Mono", HORIZONTALSCALE));
         text.getStyleClass().add("vertexText");
         text.setClip(clip);
 
-        rectangle = new Rectangle(width * HORIZONTALSCALE * scale - SPACING,
-                height * verticalScale - SPACING);
+        rectangle = new Rectangle(width * HORIZONTALSCALE * horizontalScale
+                - SPACING, height * verticalScale - SPACING);
 
         rectangle.setStyle("-fx-fill:" + ColorUtils.webCode(color));
         rectangle.getStyleClass().add("vertexText");
 
-        setLayoutX(topLeftPoint.getX() * HORIZONTALSCALE * scale);
+        setLayoutX(topLeftPoint.getX() * HORIZONTALSCALE * horizontalScale);
         setLayoutY(topLeftPoint.getY() * verticalScale);
 
         getChildren().addAll(rectangle, text);
