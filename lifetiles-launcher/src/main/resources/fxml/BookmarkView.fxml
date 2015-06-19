@@ -22,7 +22,7 @@
 	<children>
 		<BorderPane>
 			<left>
-				<Label text="Bookmarks and annotations"></Label>
+				<Label text="Bookmarks and annotations"/>
 			</left>
 			<right>
 				<Button id="close" text="[X]" onMouseClicked="#closeAction" />
@@ -35,8 +35,8 @@
 				<Button text="Search" onMouseClicked="#searchAction" />
 			</children>
 		</HBox>		
-		<Separator ></Separator>
-		<ListView fx:id="bookmarkList" VBox.vgrow="ALWAYS"></ListView>
+		<Separator />
+		<ListView fx:id="bookmarkList" VBox.vgrow="ALWAYS"/>
 	</children>
 	
 

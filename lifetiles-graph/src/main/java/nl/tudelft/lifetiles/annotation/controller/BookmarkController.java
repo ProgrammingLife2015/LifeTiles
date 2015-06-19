@@ -13,10 +13,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 import nl.tudelft.lifetiles.annotation.model.AbstractBookmark;
-import nl.tudelft.lifetiles.annotation.model.GeneAnnotation;
-import nl.tudelft.lifetiles.annotation.model.KnownMutation;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.util.Message;
 
@@ -61,7 +58,7 @@ public class BookmarkController extends AbstractController {
     @Override
     public final void initialize(final URL location,
             final ResourceBundle resources) {
-        hide();
+        setVisibility(false);
 
         // wrap the observable list in a filtered list so we can search it later
         listItems = FXCollections.observableArrayList();
@@ -73,36 +70,29 @@ public class BookmarkController extends AbstractController {
          * to create the text of each cell,
          * and assign an event handler for mouse clicks.
          */
-        bookmarkList.setCellFactory(new Callback<ListView<AbstractBookmark>,
-                ListCell<AbstractBookmark>>() {
-            /**
-             * {@InheritDoc}
-             */
-            @Override
-            public ListCell<AbstractBookmark> call(
-                    final ListView<AbstractBookmark> param) {
-                final ListCell<AbstractBookmark> cell = new ListCell<AbstractBookmark>() {
-                    /**
-                     * the ListCell, creates the correct text and adds the right eventhandler.
-                     */
-                    public void updateItem(final AbstractBookmark item,
+        bookmarkList.setCellFactory(param -> {
+            // cell needs to be an inner class to use shout in its onMouseClick method
+            final ListCell<AbstractBookmark> cell = new ListCell<AbstractBookmark>() {
+                /**
+                 * the ListCell, creates the correct text and adds the right eventhandler.
+                 */
+                public void updateItem(final AbstractBookmark item,
                             final boolean empty) {
-                        super.updateItem(item, empty);
-                        if (item != null) {
-                            setText(item.toCellString());
-
-                            setOnMouseClicked(event -> {
-                                if (event.getClickCount() == 2) {
-                                    shout(Message.GOTO, "" ,
-                                            Long.valueOf(item.getUnifiedPosition()));
-                                }
-                            });
-                        }
+                    super.updateItem(item, empty);
+                    if (item != null) {
+                        setText(item.toCellString());
+                        setOnMouseClicked(event -> {
+                            if (event.getClickCount() == 2) {
+                                shout(Message.GOTO, "" ,
+                                        Long.valueOf(item.getUnifiedPosition()));
+                            }
+                        });
                     }
-                };
-                return cell;
-            }
+                }
+            };
+            return cell;
         });
+
         initListeners();
     }
 
@@ -114,25 +104,15 @@ public class BookmarkController extends AbstractController {
     // checkstyle doesn't like assert without parentheses with generics
     @SuppressWarnings({"checkstyle:genericwhitespace", "unchecked"})
     private void initListeners() {
-        listen(Message.BOOKMARKS, (sender, subject, args) -> {
-            show();
-        });
+        listen(Message.BOOKMARKS, (sender, subject, args) ->
+            setVisibility(true)
+        );
 
         listen(Message.LOADED, (sender, subject, args) -> {
-
-            switch (subject) {
-            case "known mutations":
+            if ("known mutations".equals(subject) || "annotations".equals(subject)) {
                 assert args[0] instanceof List<?>;
-                List<KnownMutation> knownMutations = (List<KnownMutation>) args[0];
-                listItems.addAll(knownMutations);
-                return;
-            case "annotations":
-                assert args[0] instanceof List<?>;
-                List<GeneAnnotation> genes = (List<GeneAnnotation>) args[0];
-                listItems.addAll(genes);
-                return;
-            default:
-                return;
+                List<AbstractBookmark> bookmarks = (List<AbstractBookmark>) args[0];
+                listItems.addAll(bookmarks);
             }
         });
     }
@@ -144,7 +124,7 @@ public class BookmarkController extends AbstractController {
     @SuppressWarnings("PMD.UnusedPrivateMethod")
     @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
     private void closeAction() {
-        hide();
+        setVisibility(false);
     }
 
     /**
@@ -165,17 +145,11 @@ public class BookmarkController extends AbstractController {
     }
 
     /**
-     * makes the sidebar invisible.
+     * makes the sidebar (in)visible.
+     * @param flag a boolean indicating intended visibility.
      */
-    private void hide() {
-        wrapper.visibleProperty().set(false);
-    }
-
-    /**
-     * makes the sidebar visible.
-     */
-    private void show() {
-        wrapper.visibleProperty().set(true);
+    private void setVisibility(final boolean flag) {
+        wrapper.visibleProperty().set(flag);
     }
 
 }
