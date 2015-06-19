@@ -67,7 +67,7 @@ public class TileViewTest {
     @Before
     public void setUp() {
         controller = Mockito.mock(GraphController.class);
-        tileview = new TileView(controller);
+        tileview = new TileView(controller, 200);
         s1 = new DefaultSequence("TKK-REF");
         s2 = new DefaultSequence("Not TKK-REF");
         s3 = new DefaultSequence("Imposter");
@@ -119,8 +119,8 @@ public class TileViewTest {
                 .get(0);
 
         assertEquals(0, vView1.getLayoutX(), 1e-10);
-        assertEquals(0, vView1.getLayoutY(), 1e-10);
-        assertEquals(2 * 40 - 2, vView1.getBoundsInParent().getHeight(), 1e-10);
+        assertEquals(200, vView1.getLayoutY(), 1e-10);
+        assertEquals(200 - 2, vView1.getBoundsInParent().getHeight(), 1e-10);
         assertEquals(2 * 11 - 2, vView1.getBoundsInParent().getWidth(), 1e-10);
 
     }
@@ -174,8 +174,8 @@ public class TileViewTest {
         });
 
         Thread.sleep(1000);
-        assertEquals(bookmark.getRadius(),
-                Double.parseDouble(Settings.get(RADIUS_SETTING)), 1e-10);
+        assertEquals(bookmark.getRadius(), Double.parseDouble(Settings
+                .get(RADIUS_SETTING)), 1e-10);
     }
 
     @Test
@@ -186,9 +186,9 @@ public class TileViewTest {
                 null, 1);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
-                MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                true, true, true, true, true, true, true, true, true, true,
-                null));
+                        MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
+                        true, true, true, true, true, true, true, true, true, true,
+                        null));
         Mockito.verify(controller).clicked(Mockito.any());
     }
 

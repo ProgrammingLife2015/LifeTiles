@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -11,7 +12,9 @@ import java.util.Set;
 
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Rectangle;
 import nl.tudelft.lifetiles.annotation.model.GeneAnnotation;
@@ -181,6 +184,8 @@ public class GraphController extends AbstractController {
      */
     private static final int MAX_ZOOM = 50;
 
+    private Zoombar toolbar;
+
     /**
      * {@inheritDoc}
      */
@@ -191,13 +196,24 @@ public class GraphController extends AbstractController {
 
         repaintNow = false;
         scrollPane = new ScrollPane();
+
+        scrollPane.setOnScroll(event -> {
+            event.consume();
+            if (event.getDeltaY() > 0) {
+                toolbar.incrementZoom();
+            } else {
+                toolbar.decrementZoom();
+            }
+        });
+
     }
 
     /**
      * Initialize the zoom toolbar.
      */
     private void initZoomToolBar() {
-        Zoombar toolbar = new Zoombar(zoomLevel, MAX_ZOOM);
+        toolbar = new Zoombar(zoomLevel, MAX_ZOOM);
+
         wrapper.setRight(toolbar.getToolBar());
 
         toolbar.getZoomlevel().addListener((observeVal, oldVal, newVal) -> {
@@ -226,6 +242,7 @@ public class GraphController extends AbstractController {
      */
     @SuppressWarnings("checkstyle:genericwhitespace")
     private void initListeners() {
+
         notifyFactory = new NotificationFactory();
         listen(Message.OPENED, (controller, subject, args) -> {
             assert controller instanceof MenuController;
@@ -242,21 +259,36 @@ public class GraphController extends AbstractController {
             default:
                 return;
             }
+
+        });
+
+        listen(Message.LOADED, (sender, subject, args) -> {
+            if (!subject.equals("sequences")) {
+                return;
+            }
+            assert (args[0] instanceof Map<?, ?>);
+
+            Map<String, Sequence> sequences = (Map<String, Sequence>) args[0];
+            if (model != null) {
+                model.setVisible(new HashSet<>(sequences.values()));
+            } else {
+                model = new GraphContainer(graph, null);
+            }
         });
 
         listen(Message.FILTERED, (controller, subject, args) -> {
             assert args.length == 1;
             assert args[0] instanceof Set<?>;
             // unfortunately java doesn't really let us typecheck generics :(
-                @SuppressWarnings("unchecked")
-                Set<Sequence> newSequences = (Set<Sequence>) args[0];
-                visibleSequences = newSequences;
-                model.setVisible(visibleSequences);
-                diagram = new StackedMutationContainer(model.getBucketCache(),
-                        visibleSequences);
-                repaintNow = true;
-                repaint();
-            });
+            @SuppressWarnings("unchecked")
+            Set<Sequence> newSequences = (Set<Sequence>) args[0];
+            visibleSequences = newSequences;
+            model.setVisible(visibleSequences);
+            diagram = new StackedMutationContainer(model.getBucketCache(),
+                    visibleSequences);
+            repaintNow = true;
+            repaint();
+        });
 
         listen(SequenceController.REFERENCE_SET,
                 (controller, subject, args) -> {
@@ -286,8 +318,8 @@ public class GraphController extends AbstractController {
         try {
             loadGraph((File) args[0], (File) args[1]);
         } catch (IOException exception) {
-            shout(NotificationController.NOTIFY, "",
-                    notifyFactory.getNotification(exception));
+            shout(NotificationController.NOTIFY, "", notifyFactory
+                    .getNotification(exception));
         }
     }
 
@@ -302,17 +334,17 @@ public class GraphController extends AbstractController {
         assert args[0] instanceof File;
 
         if (graph == null) {
-            shout(NotificationController.NOTIFY, "",
-                    notifyFactory.getNotification(new IllegalStateException(
-                            NOT_LOADED_MSG)));
+            shout(NotificationController.NOTIFY, "", notifyFactory
+                    .getNotification(new IllegalStateException(NOT_LOADED_MSG)));
         } else {
             try {
                 insertKnownMutations((File) args[0]);
             } catch (IOException exception) {
-                shout(NotificationController.NOTIFY, "",
-                        notifyFactory.getNotification(exception));
+                shout(NotificationController.NOTIFY, "", notifyFactory
+                        .getNotification(exception));
             }
         }
+
     }
 
     /**
@@ -335,8 +367,8 @@ public class GraphController extends AbstractController {
             try {
                 insertAnnotations((File) args[0]);
             } catch (IOException exception) {
-                shout(NotificationController.NOTIFY, "",
-                        notifyFactory.getNotification(exception));
+                shout(NotificationController.NOTIFY, "", notifyFactory
+                        .getNotification(exception));
             }
         }
     }
@@ -444,6 +476,8 @@ public class GraphController extends AbstractController {
      * Repaints the view.
      */
     private void repaint() {
+
+        wrapper.snapshot(new SnapshotParameters(), new WritableImage(5, 5));
         if (graph != null) {
             if (model == null) {
                 model = new GraphContainer(graph, reference);
@@ -452,7 +486,9 @@ public class GraphController extends AbstractController {
                 diagram = new StackedMutationContainer(model.getBucketCache(),
                         visibleSequences);
             }
-            view = new TileView(this);
+
+            view = new TileView(this,
+                    wrapper.getBoundsInParent().getHeight() * 0.9);
             diagramView = new DiagramView();
 
             scrollPane.hvalueProperty().addListener(
@@ -475,18 +511,22 @@ public class GraphController extends AbstractController {
      *         one is the end bucket
      */
     private int[] getStartandEndBucket(final double position) {
-        double scaledVertex = scale * VertexView.HORIZONTALSCALE;
-        double graphWidth = getMaxUnifiedEnd(graph) * scaledVertex;
-        double screenWidth = scrollPane.getViewportBounds().getWidth();
-        double scaledScreenWidth = 2d * screenWidth * scale;
+        double thumbSize = miniMapController.getMiniMap().getVisibleAmount();
 
-        double relativePosition = (position * screenWidth) / 2d + position
-                * graphWidth;
+        double leftHalf = position - thumbSize;
+        double rightHalf = position + thumbSize;
 
-        double start = (relativePosition - scaledScreenWidth) / scaledVertex;
-        double end = (relativePosition + scaledScreenWidth) / scaledVertex;
+        if (leftHalf < 0) {
+            leftHalf /= 2;
+        }
+        if (rightHalf > scrollPane.getHmax()) {
+            rightHalf /= 2;
+        }
+
         int[] buckets = new int[] {
-                getStartBucketPosition(start), getEndBucketPosition(end) + 1
+                getStartBucketPosition(leftHalf),
+                Math.min(model.getBucketCache().getNumberBuckets(),
+                        getEndBucketPosition(rightHalf) + 2)
         };
 
         return buckets;
@@ -580,7 +620,8 @@ public class GraphController extends AbstractController {
      * @return position in the bucket.
      */
     private int getStartBucketPosition(final double position) {
-        return model.getBucketCache().bucketStartPosition(position);
+        return Math.max(0, model.getBucketCache()
+                .getBucketPosition(position));
     }
 
     /**
@@ -591,7 +632,8 @@ public class GraphController extends AbstractController {
      * @return position in the bucket.
      */
     private int getEndBucketPosition(final double position) {
-        return model.getBucketCache().bucketEndPosition(position);
+        return Math.min(model.getBucketCache().getNumberBuckets(), model
+                .getBucketCache().getBucketPosition(position));
     }
 
     /**
@@ -606,9 +648,9 @@ public class GraphController extends AbstractController {
      * @return Group object to be drawn on the screen
      */
     public Group drawGraph(final int startBucket, final int endBucket) {
-        Group test = view.drawGraph(
-                model.getVisibleSegments(startBucket, endBucket), graph,
-                knownMutations, mappedAnnotations, scale);
+
+        Group test = view.drawGraph(model.getVisibleSegments(startBucket,
+                endBucket), graph, knownMutations, mappedAnnotations, scale);
 
         return test;
     }

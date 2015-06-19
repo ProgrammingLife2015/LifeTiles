@@ -83,6 +83,7 @@ public class GraphContainer {
         }
         segmentBuckets = new BucketCache(Math.max(1, graph.getAllVertices()
                 .size() / VERTICES_BUCKET), this.graph);
+
         visibles = graph.getAllVertices();
     }
 
@@ -138,8 +139,8 @@ public class GraphContainer {
             if (visibleSequences == null) {
                 intersectionSize = segment.getSources().size();
             } else {
-                intersectionSize = SetUtils.intersectionSize(
-                        segment.getSources(), visibleSequences);
+                intersectionSize = SetUtils.intersectionSize(segment
+                        .getSources(), visibleSequences);
             }
             if (intersectionSize > 0) {
                 vertices.add(segment);
