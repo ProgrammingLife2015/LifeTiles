@@ -47,4 +47,12 @@ public class SegmentString implements SegmentContent {
         return false;
     }
 
+    /**
+     * @return whether the segment has been collapsed.
+     */
+    @Override
+    public boolean isCollapsed() {
+        return false;
+    }
+
 }

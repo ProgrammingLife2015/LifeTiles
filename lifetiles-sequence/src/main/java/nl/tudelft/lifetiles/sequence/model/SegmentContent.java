@@ -23,4 +23,9 @@ public interface SegmentContent {
      */
     boolean isEmpty();
 
+    /**
+     * @return whether the segment has been collapsed.
+     */
+    boolean isCollapsed();
+
 }
