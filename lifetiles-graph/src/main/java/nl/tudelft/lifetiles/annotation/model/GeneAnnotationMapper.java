@@ -41,7 +41,7 @@ public final class GeneAnnotationMapper {
      */
     public static Map<SequenceSegment, List<GeneAnnotation>> mapAnnotations(
             final Graph<SequenceSegment> graph,
-            final Set<GeneAnnotation> genomes, final Sequence reference) {
+            final List<GeneAnnotation> genomes, final Sequence reference) {
         Set<SequenceSegment> segments = selectReference(graph, reference);
         Map<SequenceSegment, List<GeneAnnotation>> annotatedSegments = new HashMap<>();
         for (GeneAnnotation geneAnnotation : genomes) {

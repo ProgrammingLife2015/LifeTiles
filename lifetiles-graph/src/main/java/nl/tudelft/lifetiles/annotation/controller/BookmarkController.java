@@ -3,6 +3,7 @@ package nl.tudelft.lifetiles.annotation.controller;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import nl.tudelft.lifetiles.annotation.model.AbstractBookmark;
+import nl.tudelft.lifetiles.annotation.model.GeneAnnotation;
 import nl.tudelft.lifetiles.annotation.model.KnownMutation;
 import nl.tudelft.lifetiles.core.controller.AbstractController;
 import nl.tudelft.lifetiles.core.util.Message;
@@ -47,6 +49,10 @@ public class BookmarkController extends AbstractController {
      * The list of known mutations.
      */
     private List<KnownMutation> knownMutations;
+    /**
+     * The list of Genes.
+     */
+    private List<GeneAnnotation> genes;
     /**
      * The list of all bookmarks.
      */
@@ -90,7 +96,7 @@ public class BookmarkController extends AbstractController {
                             setOnMouseClicked(event -> {
                                 if (event.getClickCount() == 2) {
                                     shout(Message.GOTO, "" ,
-                                            new Long(item.getGenomePosition()));
+                                            new Long(item.getUnifiedPosition()));
                                 }
                             });
                         }
@@ -99,26 +105,40 @@ public class BookmarkController extends AbstractController {
                 return cell;
             }
         });
-        //Initialize shout listeners
+        initListeners();
+        //TODO listen for genes
+        //TODO load user bookmarks
+    }
+
+
+    /**
+     * Initialize the shout listeners.
+     */
+    private void initListeners() {
         listen(Message.BOOKMARKS, (sender, subject, args) -> {
             show();
         });
 
         listen(Message.LOADED, (sender, subject, args) -> {
-            if (!"known mutations".equals(subject)) {
+
+            switch (subject) {
+            case "known mutations":
+                assert args[0] instanceof List<?>;
+                knownMutations = (List<KnownMutation>) args[0];
+                listItems.addAll(knownMutations);
+                return;
+            case "annotations":
+                System.out.println("YOLO");
+                assert args[0] instanceof List<?>;
+                genes = (List<GeneAnnotation>) args[0];
+                System.out.println(genes);
+                listItems.addAll(genes);
+                return;
+            default:
                 return;
             }
-            assert (args[0] instanceof List<?>);
-            knownMutations = (List<KnownMutation>) args[0];
-
-            listItems.addAll(knownMutations);
         });
-        //TODO listen for genes
-        //TODO load user bookmarks
-
-
     }
-
     /**
      * closes the bookmark sidebar.
      */
@@ -129,6 +149,7 @@ public class BookmarkController extends AbstractController {
 
     /**
      * updates the filtering predicate.
+     * uses a simple contains check on the text of the listItem.
      */
     @FXML
     private void searchAction() {

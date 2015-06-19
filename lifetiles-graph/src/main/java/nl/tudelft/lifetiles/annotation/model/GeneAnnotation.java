@@ -102,4 +102,9 @@ public class GeneAnnotation extends AbstractAnnotation {
         return position;
     }
 
+    @Override
+    public String toCellString() {
+        return "Gene: " + name;
+    }
+
 }

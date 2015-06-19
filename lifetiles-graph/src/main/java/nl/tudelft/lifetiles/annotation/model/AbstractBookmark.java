@@ -54,4 +54,9 @@ public abstract class AbstractBookmark {
      * @return unified position of the bookmark in the graph.
      */
     public abstract long getUnifiedPosition();
+    /**
+     * Abstract method to return the text used for generating the bookmarks test.
+     * @return a string representing this object
+     */
+    public abstract String toCellString();
 }

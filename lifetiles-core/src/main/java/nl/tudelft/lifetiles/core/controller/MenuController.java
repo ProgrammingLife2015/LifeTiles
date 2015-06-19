@@ -118,7 +118,10 @@ public class MenuController extends AbstractController {
     private void resetAction(final ActionEvent event) {
         shout(Message.RESET, "");
     }
-    
+
+    /**
+     * indicate the bookmark menu needs to be shown.
+     */
     @FXML
     private void bookmarksAction() {
         shout(Message.BOOKMARKS, "");
