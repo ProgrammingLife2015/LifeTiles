@@ -28,22 +28,17 @@ public class VertexView extends Group {
     /**
      * this is the region coloring the text.
      */
-    private final Rectangle rectangle;
+    private Rectangle rectangle;
 
     /**
      * Horizontal and vertical spacing between rectangles.
      */
-    private static final double SPACING = 2;
+    public static final double SPACING = 2;
 
     /**
      * Horizontal scale for each coordinate.
      */
     public static final double HORIZONTALSCALE = 11;
-
-    /**
-     * Vertical scale for each coordinate.
-     */
-    private static final double VERTICALSCALE = 40;
 
     /**
      * The minimal size of the text before it is drawn.
@@ -82,34 +77,33 @@ public class VertexView extends Group {
      * @param width
      *            the width of the vertex
      * @param height
-     *            the height of the vertex
-     * @param scale
-     *            the resize factor of the vertex
+     *            the amount of sequences going through this node
+     * @param scaling
+     *          point where x is the horizontal scale, y is the vertical scale
      * @param color
      *            the color of the vertex
      */
     public VertexView(final String string, final Point2D topLeftPoint,
-            final double width, final double height, final double scale,
+            final double width, final double height,
+                  final Point2D scaling,
             final Color color) {
 
-        clip = new Rectangle(width * HORIZONTALSCALE * scale, height
-                * VERTICALSCALE * scale);
+        clip = new Rectangle(width * HORIZONTALSCALE * scaling.getX()
+                - SPACING, height * scaling.getY() - SPACING);
 
         text = new Text(string);
         text.setFont(Font.font("Oxygen Mono", HORIZONTALSCALE));
         text.getStyleClass().add("vertexText");
         text.setClip(clip);
 
-        rectangle = new Rectangle(width * HORIZONTALSCALE * scale, height
-                * VERTICALSCALE * scale);
+        rectangle = new Rectangle(width * HORIZONTALSCALE * scaling.getX()
+                - SPACING, height * scaling.getY() - SPACING);
+
         rectangle.setStyle("-fx-fill:" + ColorUtils.webCode(color));
         rectangle.getStyleClass().add("vertexText");
 
-        setLayoutX(topLeftPoint.getX() * HORIZONTALSCALE * scale);
-        setLayoutY(topLeftPoint.getY() * VERTICALSCALE * scale);
-
-        setHeight(height * VERTICALSCALE * scale - SPACING);
-        setWidth(width * HORIZONTALSCALE * scale - SPACING);
+        setLayoutX(topLeftPoint.getX() * HORIZONTALSCALE * scaling.getX());
+        setLayoutY(topLeftPoint.getY() * scaling.getY());
 
         getChildren().addAll(rectangle, text);
 
@@ -142,12 +136,16 @@ public class VertexView extends Group {
         double height = rectangle.getHeight();
 
         double fontWidth = text.getLayoutBounds().getWidth();
-        text.setFont(Font.font(FONTNAME, (HORIZONTALSCALE) * width / fontWidth));
+        double fontHeight = text.getLayoutBounds().getHeight();
 
+        text.setFont(Font.font(FONTNAME, (HORIZONTALSCALE * width) / fontWidth));
         text.setLayoutX(width / 2 - text.getLayoutBounds().getWidth() / 2);
         text.setLayoutY(height / 2);
 
-        text.setVisible(HORIZONTALSCALE * width / fontWidth >= MINTEXTSIZE);
+        // Don't draw text if either the Font size is too small or the text is
+        // partially drawn out of the rectangle.
+        text.setVisible(text.getFont().getSize() >= MINTEXTSIZE
+                && fontHeight <= height);
 
         clip.setWidth(width);
         clip.setHeight(height);
@@ -190,6 +188,7 @@ public class VertexView extends Group {
     }
 
     /**
+     *
      * Annotates the vertex view with a gene annotations.
      *
      * @param geneAnnotation

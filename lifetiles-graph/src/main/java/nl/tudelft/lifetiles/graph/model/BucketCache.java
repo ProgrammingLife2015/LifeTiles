@@ -159,14 +159,13 @@ public class BucketCache {
     }
 
     /**
-     * Returns the position in the bucketCache given the percentage position in
-     * the GraphController.
+     * Returns the position in the bucketCache given a location on the scrollbar.
      *
      * @param position
      *            Percentage position in the GraphController
      * @return position in the bucketCache.
      */
-    public int bucketPercentageStartPosition(final double position) {
+    public int getBucketPosition(final double position) {
         return (int) ((position * maxUnifiedEnd) / bucketWidth);
     }
 
