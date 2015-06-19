@@ -102,7 +102,7 @@ public class GraphController extends AbstractController {
     /**
      * the highest unified coordinate in the graph.
      */
-    private long unifiedEnd;
+    private long maxUnifiedEnd;
 
     /**
      * Current end position of a bucket.
@@ -254,7 +254,7 @@ public class GraphController extends AbstractController {
             switch (subject) {
             case "graph":
                 openGraph(args);
-                unifiedEnd = getMaxUnifiedEnd(graph);
+                maxUnifiedEnd = getMaxUnifiedEnd(graph);
                 break;
             case "known mutations":
                 openKnownMutations(args);
@@ -265,7 +265,7 @@ public class GraphController extends AbstractController {
             default:
                 return;
             }
-            unifiedEnd = getMaxUnifiedEnd(graph);
+            maxUnifiedEnd = getMaxUnifiedEnd(graph);
         });
 
         listen(Message.LOADED, (sender, subject, args) -> {
@@ -311,9 +311,9 @@ public class GraphController extends AbstractController {
 
         listen(Message.GOTO, (controller, subject, args) -> {
             assert args[0] instanceof Long;
-            Long position = ((Long) args[0]);
+            Long position = (Long) args[0];
             // calculate position on a 0 to 1 scale
-            double hValue = position.doubleValue() / (double) unifiedEnd;
+            double hValue = position.doubleValue() / (double) maxUnifiedEnd;
             scrollPane.setHvalue(hValue);
             });
     }
@@ -556,14 +556,15 @@ public class GraphController extends AbstractController {
      */
     private void repaintPosition(final double position) {
         int zoomSwitchLevel = MAX_ZOOM - diagram.getLevel();
+        double scaledVertex = scale * VertexView.HORIZONTALSCALE;
         if (zoomLevel > zoomSwitchLevel) {
             if (currentZoomLevel != zoomLevel || repaintNow) {
                 Group diagramDrawing = new Group();
-                double width = unifiedEnd * scale * VertexView.HORIZONTALSCALE;
+                double width = maxUnifiedEnd * scaledVertex;
                 int diagramLevel = zoomLevel - zoomSwitchLevel;
-                diagramDrawing.getChildren().add(
-                        diagramView.drawDiagram(diagram, diagramLevel, width));
-                diagramDrawing.getChildren().add(new Rectangle(width, 0));
+                diagramDrawing.getChildren().addAll(
+                        diagramView.drawDiagram(diagram, diagramLevel, width),
+                            new Rectangle(width, 0));
                 scrollPane.setContent(diagramDrawing);
                 wrapper.setCenter(scrollPane);
 
@@ -580,11 +581,9 @@ public class GraphController extends AbstractController {
                     && currStartPosition != startBucket || repaintNow) {
                 Group graphDrawing = new Group();
                 graphDrawing.setManaged(false);
-                graphDrawing.getChildren().add(
-                        drawGraph(startBucket, endBucket));
-                graphDrawing.getChildren().add(
-                        new Rectangle(unifiedEnd * scale
-                                * VertexView.HORIZONTALSCALE, 0));
+                graphDrawing.getChildren().addAll(
+                        drawGraph(startBucket, endBucket),
+                        new Rectangle(maxUnifiedEnd * scaledVertex, 0));
 
                 scrollPane.setContent(graphDrawing);
                 wrapper.setCenter(scrollPane);
