@@ -3,14 +3,20 @@ package nl.tudelft.lifetiles.core.util;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class FileUtilsTest {
 
     private File projectDir;
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Before
     public void setUp() {
@@ -29,4 +35,9 @@ public class FileUtilsTest {
         assertTrue(files.isEmpty());
     }
 
+    @Test
+    public void getSingleFileByExtensionTest() throws IOException {
+        thrown.expect(IOException.class);
+        FileUtils.getSingleFileByExtension(projectDir, ".txt");
+    }
 }
