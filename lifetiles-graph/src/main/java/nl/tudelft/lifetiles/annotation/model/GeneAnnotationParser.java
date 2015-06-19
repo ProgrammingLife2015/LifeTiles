@@ -36,7 +36,7 @@ public final class GeneAnnotationParser {
     /**
      * The standard null name for annotations without a name.
      */
-    private static final String NULL_NAME = "null";
+    private static final String NULL_NAME = "";
 
     /**
      * Static class can not have a public or default constructor.
