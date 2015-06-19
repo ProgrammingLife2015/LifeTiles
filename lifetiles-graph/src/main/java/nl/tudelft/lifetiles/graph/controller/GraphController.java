@@ -511,18 +511,21 @@ public class GraphController extends AbstractController {
      *         one is the end bucket
      */
     private int[] getStartandEndBucket(final double position) {
-        double scaledVertex = scale * VertexView.HORIZONTALSCALE;
-        double graphWidth = getMaxUnifiedEnd(graph) * scaledVertex;
-        double screenWidth = scrollPane.getViewportBounds().getWidth();
-        double scaledScreenWidth = 2d * screenWidth * scale;
+        double thumbSize = miniMapController.getMiniMap().getVisibleAmount();
 
-        double relativePosition = (position * screenWidth) / 2d + position
-                * graphWidth;
+        double leftHalf = position - thumbSize;
+        double rightHalf = position + thumbSize;
 
-        double start = (relativePosition - scaledScreenWidth) / scaledVertex;
-        double end = (relativePosition + scaledScreenWidth) / scaledVertex;
+        if (leftHalf < 0) {
+            leftHalf = position - thumbSize / 2;
+        }
+        if (rightHalf > scrollPane.getHmax()) {
+            rightHalf = position + thumbSize / 2;
+        }
+
         int[] buckets = new int[] {
-                getStartBucketPosition(start), getEndBucketPosition(end) + 1
+                getStartBucketPosition(leftHalf),
+                getEndBucketPosition(rightHalf)
         };
 
         return buckets;
@@ -616,7 +619,8 @@ public class GraphController extends AbstractController {
      * @return position in the bucket.
      */
     private int getStartBucketPosition(final double position) {
-        return model.getBucketCache().bucketStartPosition(position);
+        return Math.max(0, model.getBucketCache()
+                .bucketPercentageStartPosition(position));
     }
 
     /**
@@ -627,7 +631,8 @@ public class GraphController extends AbstractController {
      * @return position in the bucket.
      */
     private int getEndBucketPosition(final double position) {
-        return model.getBucketCache().bucketEndPosition(position);
+        return Math.min(model.getBucketCache().getNumberBuckets(), model
+                .getBucketCache().bucketPercentageStartPosition(position));
     }
 
     /**
