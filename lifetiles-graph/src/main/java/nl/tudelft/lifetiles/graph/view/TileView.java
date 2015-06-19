@@ -82,7 +82,7 @@ public class TileView {
     /**
      * The amount of pixels that the height and width at least must have.
      */
-    private static double MINIMALSIZE = 5;
+    private static double MINIMALSIZE = 10;
 
     /**
      * Create the TileView by initializing the groups where the to be drawn
@@ -146,7 +146,8 @@ public class TileView {
                     annotations));
         }
 
-        verticalScale = screenHeight / lanes.size();
+        verticalScale = screenHeight / (lanes.size());
+
         for (Entry<SequenceSegment, Container> entry : nodemap.entrySet()) {
             Container container = entry.getValue();
             drawVertex(container.getLocation(), entry.getKey(), container
