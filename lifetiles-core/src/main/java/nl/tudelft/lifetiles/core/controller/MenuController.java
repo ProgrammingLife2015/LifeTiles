@@ -123,6 +123,8 @@ public class MenuController extends AbstractController {
      * indicate the bookmark menu needs to be shown.
      */
     @FXML
+    // PMD/findbugs do not work well with javafx. The method IS used.
+    @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
     private void bookmarksAction() {
         shout(Message.BOOKMARKS, "");
     }

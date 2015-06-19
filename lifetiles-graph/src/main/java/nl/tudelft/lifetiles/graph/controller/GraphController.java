@@ -312,7 +312,6 @@ public class GraphController extends AbstractController {
         listen(Message.GOTO, (controller, subject, args) -> {
             assert args[0] instanceof Long;
             Long position = ((Long) args[0]);
-            System.out.println("GOTO: " + position);
             // calculate position on a 0 to 1 scale
             double hValue = position.doubleValue() / (double) unifiedEnd;
             scrollPane.setHvalue(hValue);
@@ -439,12 +438,12 @@ public class GraphController extends AbstractController {
      */
     private void insertKnownMutations(final File file) throws IOException {
         Timer timer = Timer.getAndStart();
-        List<KnownMutation> knownMutationsList = KnownMutationParser.parseKnownMutations(file);
+        List<KnownMutation> mutationsList = KnownMutationParser.parseKnownMutations(file);
         knownMutations = KnownMutationMapper.mapAnnotations(graph,
-                knownMutationsList, reference);
+                mutationsList, reference);
 
         timer.stopAndLog("Inserting known mutations");
-        shout(Message.LOADED, "known mutations", knownMutationsList);
+        shout(Message.LOADED, "known mutations", mutationsList);
         repaintNow = true;
         repaintPosition(scrollPane.hvalueProperty().doubleValue());
     }
