@@ -254,6 +254,7 @@ public class GraphController extends AbstractController {
             switch (subject) {
             case "graph":
                 openGraph(args);
+                unifiedEnd = getMaxUnifiedEnd(graph);
                 break;
             case "known mutations":
                 openKnownMutations(args);
@@ -307,6 +308,15 @@ public class GraphController extends AbstractController {
                     repaintNow = true;
                     repaint();
                 });
+
+        listen(Message.GOTO, (controller, subject, args) -> {
+            assert args[0] instanceof Long;
+            Long position = ((Long) args[0]);
+            System.out.println("GOTO: " + position);
+            // calculate position on a 0 to 1 scale
+            double hValue = position.doubleValue() / (double) unifiedEnd;
+            scrollPane.setHvalue(hValue);
+            });
     }
 
     /**
@@ -376,15 +386,6 @@ public class GraphController extends AbstractController {
                         .getNotification(exception));
             }
         }
-
-        listen(Message.GOTO, (controller, subject, args) -> {
-            assert args[0] instanceof Long;
-            Long position = ((Long) args[0]);
-            System.out.println("GOTO: " + position);
-            // calculate position on a 0 to 1 scale
-            double hValue = position.doubleValue() / (double) unifiedEnd;
-            scrollPane.setHvalue(hValue);
-            });
     }
 
     /**
@@ -438,10 +439,12 @@ public class GraphController extends AbstractController {
      */
     private void insertKnownMutations(final File file) throws IOException {
         Timer timer = Timer.getAndStart();
+        List<KnownMutation> knownMutationsList = KnownMutationParser.parseKnownMutations(file);
         knownMutations = KnownMutationMapper.mapAnnotations(graph,
-                KnownMutationParser.parseKnownMutations(file), reference);
+                knownMutationsList, reference);
 
         timer.stopAndLog("Inserting known mutations");
+        shout(Message.LOADED, "known mutations", knownMutationsList);
         repaintNow = true;
         repaintPosition(scrollPane.hvalueProperty().doubleValue());
     }
@@ -475,14 +478,13 @@ public class GraphController extends AbstractController {
      */
     private void insertAnnotations(final File file) throws IOException {
         Timer timer = Timer.getAndStart();
-        Set<GeneAnnotation> annotations = GeneAnnotationParser
+        List<GeneAnnotation> annotations = GeneAnnotationParser
                 .parseGeneAnnotations(file);
         shout(Message.LOADED, "annotations", annotations);
-Q        mappedAnnotations = GeneAnnotationMapper.mapAnnotations(graph,
+        mappedAnnotations = GeneAnnotationMapper.mapAnnotations(graph,
                 annotations, reference);
 
         timer.stopAndLog("Inserting annotations");
-        shout(Message.LOADED, "known mutations", knownMutationList);
         repaintNow = true;
         repaintPosition(scrollPane.hvalueProperty().doubleValue());
     }
@@ -582,7 +584,7 @@ Q        mappedAnnotations = GeneAnnotationMapper.mapAnnotations(graph,
                 graphDrawing.getChildren().add(
                         drawGraph(startBucket, endBucket));
                 graphDrawing.getChildren().add(
-                        new Rectangle(getMaxUnifiedEnd(graph) * scale
+                        new Rectangle(unifiedEnd * scale
                                 * VertexView.HORIZONTALSCALE, 0));
 
                 scrollPane.setContent(graphDrawing);
