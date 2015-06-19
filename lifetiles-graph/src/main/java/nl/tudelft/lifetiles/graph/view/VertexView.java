@@ -78,34 +78,32 @@ public class VertexView extends Group {
      *            the width of the vertex
      * @param height
      *            the amount of sequences going through this node
-     * @param horizontalScale
-     *            the resize factor of the vertex
-     * @param verticalScale
-     *            the vertical scale factor for this vertex
+     * @param scaling
+     *          point where x is the horizontal scale, y is the vertical scale
      * @param color
      *            the color of the vertex
      */
     public VertexView(final String string, final Point2D topLeftPoint,
             final double width, final double height,
-            final double horizontalScale, final double verticalScale,
+                  final Point2D scaling,
             final Color color) {
 
-        clip = new Rectangle(width * HORIZONTALSCALE * horizontalScale
-                - SPACING, height * verticalScale - SPACING);
+        clip = new Rectangle(width * HORIZONTALSCALE * scaling.getX()
+                - SPACING, height * scaling.getY() - SPACING);
 
         text = new Text(string);
         text.setFont(Font.font("Oxygen Mono", HORIZONTALSCALE));
         text.getStyleClass().add("vertexText");
         text.setClip(clip);
 
-        rectangle = new Rectangle(width * HORIZONTALSCALE * horizontalScale
-                - SPACING, height * verticalScale - SPACING);
+        rectangle = new Rectangle(width * HORIZONTALSCALE * scaling.getX()
+                - SPACING, height * scaling.getY() - SPACING);
 
         rectangle.setStyle("-fx-fill:" + ColorUtils.webCode(color));
         rectangle.getStyleClass().add("vertexText");
 
-        setLayoutX(topLeftPoint.getX() * HORIZONTALSCALE * horizontalScale);
-        setLayoutY(topLeftPoint.getY() * verticalScale);
+        setLayoutX(topLeftPoint.getX() * HORIZONTALSCALE * scaling.getX());
+        setLayoutY(topLeftPoint.getY() * scaling.getY());
 
         getChildren().addAll(rectangle, text);
 

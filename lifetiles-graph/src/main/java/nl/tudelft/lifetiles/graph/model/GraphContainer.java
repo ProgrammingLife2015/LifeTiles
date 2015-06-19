@@ -82,8 +82,7 @@ public class GraphContainer {
             findMutations(reference);
         }
         segmentBuckets = new BucketCache(Math.max(1, graph.getAllVertices()
-                .size()
-                / VERTICES_BUCKET), this.graph);
+                .size() / VERTICES_BUCKET), this.graph);
 
         visibles = graph.getAllVertices();
     }

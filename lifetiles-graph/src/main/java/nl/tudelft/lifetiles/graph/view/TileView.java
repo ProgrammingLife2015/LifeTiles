@@ -54,7 +54,7 @@ public class TileView {
     /**
      * The factor to apply on the vertices and bookmarks to resize them.
      */
-    private double scale;
+    private double horizontalScale;
 
     /**
      * Controller for the View.
@@ -69,7 +69,8 @@ public class TileView {
     /**
      * Map to hold the calculated lane index of a sequencesegment.
      */
-    private Map<SequenceSegment, Container> nodemap;
+    private Map<SequenceSegment, SegmentInfo> segmentInfoMap;
+
     /**
      * The group that holds the vertices to be drawn.
      */
@@ -96,7 +97,7 @@ public class TileView {
     public TileView(final GraphController control, final double height) {
         controller = control;
 
-        nodemap = new HashMap<SequenceSegment, Container>();
+        segmentInfoMap = new HashMap<SequenceSegment, SegmentInfo>();
         edges = new Group();
         bookmarks = new Group();
         screenHeight = height;
@@ -113,20 +114,20 @@ public class TileView {
      *            Map from segment to known mutations.
      * @param mappedAnnotations
      *            Map from segment to gene annotations.
-     * @param scale
-     *            the scale to resize all elements of the graph
+     * @param horizontalScale
+     *            the horizontal scale to resize all elements of the graph
      * @return the elements that must be displayed on the screen
      */
     public Group drawGraph(final Set<SequenceSegment> segments,
             final Graph<SequenceSegment> graph,
             final Map<SequenceSegment, List<KnownMutation>> knownMutations,
             final Map<SequenceSegment, List<GeneAnnotation>> mappedAnnotations,
-            final double scale) {
+            final double horizontalScale) {
 
         Group root = new Group();
 
         lanes = new ArrayList<Long>();
-        this.scale = scale;
+        this.horizontalScale = horizontalScale;
 
         nodes = new Group();
 
@@ -142,14 +143,14 @@ public class TileView {
             }
 
             int laneIndex = drawVertexLane(segment);
-            nodemap.put(segment, new Container(laneIndex, mutations,
+            segmentInfoMap.put(segment, new SegmentInfo(laneIndex, mutations,
                     annotations));
         }
 
-        verticalScale = screenHeight / (lanes.size());
+        verticalScale = screenHeight / lanes.size();
 
-        for (Entry<SequenceSegment, Container> entry : nodemap.entrySet()) {
-            Container container = entry.getValue();
+        for (Entry<SequenceSegment, SegmentInfo> entry : segmentInfoMap.entrySet()) {
+            SegmentInfo container = entry.getValue();
             drawVertex(container.getLocation(), entry.getKey(), container
                     .getMutations(), container.getAnnotations());
 
@@ -224,9 +225,10 @@ public class TileView {
         }
 
         Point2D topleft = new Point2D(start, index);
+        Point2D scaling = new Point2D(horizontalScale, verticalScale);
 
-        VertexView vertex = new VertexView(text, topleft, width, height, scale,
-                verticalScale, color);
+        VertexView vertex = new VertexView(text, topleft, width, height,
+                scaling, color);
 
         vertex.setOnMouseClicked(event -> controller.clicked(segment));
 
@@ -241,7 +243,7 @@ public class TileView {
                 // Loop is intended to create these..
                 @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
                 Bookmark bookmark = new Bookmark(vertex, knownMutation,
-                        segmentPosition, scale);
+                        segmentPosition, horizontalScale);
                 bookmarks.getChildren().add(bookmark);
             }
         }
@@ -295,7 +297,7 @@ public class TileView {
  * This class holds additional information to be drawn on the screen and also
  * the lane index for the vertex.
  */
-class Container {
+class SegmentInfo {
 
     /**
      * Lane index.
@@ -311,7 +313,7 @@ class Container {
     private List<GeneAnnotation> annotations;
 
     /**
-     * Constructs a new container.
+     * Constructs a new segment information class.
      *
      * @param location
      *            lane index
@@ -320,7 +322,7 @@ class Container {
      * @param annotations
      *            List of annotations
      */
-    public Container(final Integer location,
+    public SegmentInfo(final Integer location,
             final List<KnownMutation> mutations,
             final List<GeneAnnotation> annotations) {
         this.location = location;
