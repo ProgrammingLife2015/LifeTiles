@@ -80,6 +80,11 @@ public class TileView {
     private double verticalScale;
 
     /**
+     * The amount of pixels that the height and width at least must have.
+     */
+    private static double MINIMALSIZE = 5;
+
+    /**
      * Create the TileView by initializing the groups where the to be drawn
      * vertices and edges are stored.
      *
@@ -217,10 +222,9 @@ public class TileView {
 
         vertex.setOnMouseClicked(event -> controller.clicked(segment));
 
-        // @TODO check for size of vertex, if too small don't draw it. this will
-        // reduce to load on javafx
-
-        nodes.getChildren().add(vertex);
+        if (vertex.getHeight() > MINIMALSIZE || vertex.getWidth() > MINIMALSIZE) {
+            nodes.getChildren().add(vertex);
+        }
 
         if (knownMutations != null) {
             for (KnownMutation knownMutation : knownMutations) {
