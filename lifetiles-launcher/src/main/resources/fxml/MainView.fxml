@@ -48,6 +48,10 @@
 		</children>
 	</HBox>
 	
+	<fx:include fx:id="bookmarkList" source="BookmarkView.fxml"
+	 AnchorPane.topAnchor="39.0" AnchorPane.leftAnchor="0.0" 
+	 AnchorPane.bottomAnchor="0.0"/>
+	
     <fx:include fx:id="notificationContent" source="NotificationView.fxml"
         AnchorPane.topAnchor="39.0" AnchorPane.rightAnchor="0.0"
         AnchorPane.leftAnchor="0.0" />

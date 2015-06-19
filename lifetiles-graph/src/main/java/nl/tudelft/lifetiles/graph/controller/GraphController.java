@@ -50,6 +50,7 @@ import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
  * @author Joren Hammudoglu
  * @author AC Langerak
  * @author Jos Winter
+ * @author Albert Smit
  *
  */
 public class GraphController extends AbstractController {
@@ -95,9 +96,13 @@ public class GraphController extends AbstractController {
     private DiagramView diagramView;
 
     /**
-     * The view controller.
+     * graph model.
      */
     private Graph<SequenceSegment> graph;
+    /**
+     * the highest unified coordinate in the graph.
+     */
+    private long maxUnifiedEnd;
 
     /**
      * Current end position of a bucket.
@@ -249,6 +254,7 @@ public class GraphController extends AbstractController {
             switch (subject) {
             case "graph":
                 openGraph(args);
+                maxUnifiedEnd = getMaxUnifiedEnd(graph);
                 break;
             case "known mutations":
                 openKnownMutations(args);
@@ -259,7 +265,7 @@ public class GraphController extends AbstractController {
             default:
                 return;
             }
-
+            maxUnifiedEnd = getMaxUnifiedEnd(graph);
         });
 
         listen(Message.LOADED, (sender, subject, args) -> {
@@ -302,6 +308,14 @@ public class GraphController extends AbstractController {
                     repaintNow = true;
                     repaint();
                 });
+
+        listen(Message.GOTO, (controller, subject, args) -> {
+            assert args[0] instanceof Long;
+            Long position = (Long) args[0];
+            // calculate position on a 0 to 1 scale
+            double hValue = position.doubleValue() / (double) maxUnifiedEnd;
+            scrollPane.setHvalue(hValue);
+            });
     }
 
     /**
@@ -424,10 +438,12 @@ public class GraphController extends AbstractController {
      */
     private void insertKnownMutations(final File file) throws IOException {
         Timer timer = Timer.getAndStart();
+        List<KnownMutation> mutationsList = KnownMutationParser.parseKnownMutations(file);
         knownMutations = KnownMutationMapper.mapAnnotations(graph,
-                KnownMutationParser.parseKnownMutations(file), reference);
+                mutationsList, reference);
 
         timer.stopAndLog("Inserting known mutations");
+        shout(Message.LOADED, "known mutations", mutationsList);
         repaintNow = true;
         repaintPosition(scrollPane.hvalueProperty().doubleValue());
     }
@@ -461,7 +477,7 @@ public class GraphController extends AbstractController {
      */
     private void insertAnnotations(final File file) throws IOException {
         Timer timer = Timer.getAndStart();
-        Set<GeneAnnotation> annotations = GeneAnnotationParser
+        List<GeneAnnotation> annotations = GeneAnnotationParser
                 .parseGeneAnnotations(file);
         shout(Message.LOADED, "annotations", annotations);
         mappedAnnotations = GeneAnnotationMapper.mapAnnotations(graph,
@@ -540,15 +556,15 @@ public class GraphController extends AbstractController {
      */
     private void repaintPosition(final double position) {
         int zoomSwitchLevel = MAX_ZOOM - diagram.getLevel();
+        double scaledVertex = scale * VertexView.HORIZONTALSCALE;
         if (zoomLevel > zoomSwitchLevel) {
             if (currentZoomLevel != zoomLevel || repaintNow) {
                 Group diagramDrawing = new Group();
-                double width = getMaxUnifiedEnd(graph) * scale
-                        * VertexView.HORIZONTALSCALE;
+                double width = maxUnifiedEnd * scaledVertex;
                 int diagramLevel = zoomLevel - zoomSwitchLevel;
-                diagramDrawing.getChildren().add(
-                        diagramView.drawDiagram(diagram, diagramLevel, width));
-                diagramDrawing.getChildren().add(new Rectangle(width, 0));
+                diagramDrawing.getChildren().addAll(
+                        diagramView.drawDiagram(diagram, diagramLevel, width),
+                            new Rectangle(width, 0));
                 scrollPane.setContent(diagramDrawing);
                 wrapper.setCenter(scrollPane);
 
@@ -565,11 +581,9 @@ public class GraphController extends AbstractController {
                     && currStartPosition != startBucket || repaintNow) {
                 Group graphDrawing = new Group();
                 graphDrawing.setManaged(false);
-                graphDrawing.getChildren().add(
-                        drawGraph(startBucket, endBucket));
-                graphDrawing.getChildren().add(
-                        new Rectangle(getMaxUnifiedEnd(graph) * scale
-                                * VertexView.HORIZONTALSCALE, 0));
+                graphDrawing.getChildren().addAll(
+                        drawGraph(startBucket, endBucket),
+                        new Rectangle(maxUnifiedEnd * scaledVertex, 0));
 
                 scrollPane.setContent(graphDrawing);
                 wrapper.setCenter(scrollPane);
