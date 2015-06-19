@@ -27,7 +27,7 @@ public class GeneAnnotationParserTest {
 
     @Test
     public void parseGenomeTotalTest() throws Exception {
-        assertEquals(2, genomes.size());
+        assertEquals(6, genomes.size());
     }
 
     @Test
