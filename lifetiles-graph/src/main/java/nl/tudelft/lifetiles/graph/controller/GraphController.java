@@ -407,8 +407,7 @@ public class GraphController extends AbstractController {
      * @param graph
      *            The graph to be collapsed.
      * @param sequences
-     *            The total amount of sequences used in the graph, used to
-     *            determine whether a node is total.
+     *            The amount of sequences in the graph.
      */
     private void collapseGraph(final Graph<SequenceSegment> graph,
             final int sequences) {
