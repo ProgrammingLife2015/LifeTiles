@@ -26,7 +26,7 @@ import org.junit.Test;
 public class GeneAnnotationMapperTest {
     static final String testGenomesFilename = "/data/test_annotations/simple_annotations.gff";
     static final String testGenomeFilename = "/data/test_annotations/simple_annotation.gff";
-    private Set<GeneAnnotation> genomes;
+    private List<GeneAnnotation> genomes;
 
     GraphFactory<SequenceSegment> gf;
     static Set<Sequence> s1;
@@ -70,7 +70,7 @@ public class GeneAnnotationMapperTest {
         File genomeFile = new File(this.getClass()
                 .getResource(testGenomeFilename).toURI());
 
-        Set<GeneAnnotation> genome = GeneAnnotationParser.parseGeneAnnotations(genomeFile);
+        List<GeneAnnotation> genome = GeneAnnotationParser.parseGeneAnnotations(genomeFile);
         
         Map<SequenceSegment, List<GeneAnnotation>> mappedAnnotations = GeneAnnotationMapper
                 .mapAnnotations(gr, genome, reference);

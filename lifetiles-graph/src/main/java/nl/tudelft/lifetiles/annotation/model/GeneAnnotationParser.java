@@ -3,10 +3,10 @@ package nl.tudelft.lifetiles.annotation.model;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -54,9 +54,9 @@ public final class GeneAnnotationParser {
      *             When there is an error reading the specified file.
      * @return map from gene name to gene.
      */
-    public static Set<GeneAnnotation> parseGeneAnnotations(final File file)
+    public static List<GeneAnnotation> parseGeneAnnotations(final File file)
             throws IOException {
-        Set<GeneAnnotation> genomeAnnotations = new HashSet<>();
+        List<GeneAnnotation> genomeAnnotations = new ArrayList<>();
         Stream<String> annotationLines = Files.lines(file.toPath());
         annotationLines.map(GeneAnnotationParser::parseGeneAnnotation)
                 .filter(genome -> genome != null)

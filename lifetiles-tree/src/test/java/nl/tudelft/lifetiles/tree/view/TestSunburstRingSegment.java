@@ -22,7 +22,6 @@ import org.mockito.Mockito;
  */
 public class TestSunburstRingSegment {
 
-    private static final double DELTA = 1e-15;  
     private Shape testColor;
 
     @Before
