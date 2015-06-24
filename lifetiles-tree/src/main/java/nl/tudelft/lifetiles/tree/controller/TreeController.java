@@ -19,6 +19,7 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeParser;
 import nl.tudelft.lifetiles.tree.view.SunburstView;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * The controller of the tree view.
@@ -56,17 +57,12 @@ public class TreeController extends AbstractController {
     private Map<String, Sequence> sequences;
 
     /**
-     * the visible sequences.
-     */
-
-    private Set<Sequence> visibleSequences;
-
-    /**
      * {@inheritDoc}
      */
     @Override
-    public final void initialize(final URL location,
-            final ResourceBundle resources) {
+    // checkstyle bug causes false positives, so we'll suppress them(for now).
+    @SuppressWarnings("checkstyle:genericwhitespace")
+    public void initialize(final URL location, final ResourceBundle resources) {
         // load the tree when the files are opened
         listen(Message.OPENED, (controller, subject, args) -> {
             assert controller instanceof MenuController;
@@ -82,31 +78,36 @@ public class TreeController extends AbstractController {
             }
         });
 
-        listen(Message.LOADED, (controller, subject, args) -> {
-            if (!"sequences".equals(subject)) {
-                return;
-            }
-            assert (args[0] instanceof Map<?, ?>);
-            sequences = (Map<String, Sequence>) args[0];
-            repaint();
-        });
+        listen(Message.LOADED,
+                (controller, subject, args) -> {
+                    if (!"sequences".equals(subject)) {
+                        return;
+                    }
+                    assert args[0] instanceof Map<?, ?>;
+                    @SuppressWarnings("unchecked")
+                    Map<String, Sequence> newSequences = (Map<String, Sequence>) args[0];
+                    sequences = newSequences;
+                    repaint();
+                });
 
         listen(Message.FILTERED, (controller, subject, args) -> {
             // check the message is correct
                 assert args.length == 1;
-                assert (args[0] instanceof Set<?>);
+                assert args[0] instanceof Set<?>;
                 if (!(controller instanceof TreeController)) {
                     // create the new tree
-                setVisible((Set<Sequence>) args[0]);
+                @SuppressWarnings("unchecked")
+                Set<Sequence> newSequences = (Set<Sequence>) args[0];
+                setVisible(newSequences);
             }
         });
 
         // inform the sunburst of this controller so filters can be shouted
         view.setController(this);
         view.setBounds(wrapper.layoutBoundsProperty().get());
-        wrapper.layoutBoundsProperty().addListener((observableBounds, oldValue, newValue) -> {
-            view.setBounds(newValue);
-        });
+        wrapper.layoutBoundsProperty().addListener(
+                (observableBounds, oldValue, newValue) -> view
+                        .setBounds(newValue));
     }
 
     /**
@@ -117,18 +118,22 @@ public class TreeController extends AbstractController {
      * @throws FileNotFoundException
      *             when the file is not found
      */
+    // simple files, so default encoding is fine. Better to keep things
+    // flexible with respect to what files can be parsed.
+    @SuppressFBWarnings("DM_DEFAULT_ENCODING")
     private void loadTree(final File file) throws FileNotFoundException {
         // convert the file to a single string
         String fileString = null;
         Scanner scanner = new Scanner(file);
         scanner.useDelimiter("\\Z");
+
         fileString = scanner.next();
         scanner.close();
 
         // parse the string into a tree
         tree = PhylogeneticTreeParser.parse(fileString);
         linkSequence(sequences, tree);
-        populateChildSequences(tree);
+        tree.populateChildSequences();
         visibleTree = tree;
 
         repaint();
@@ -166,20 +171,6 @@ public class TreeController extends AbstractController {
     }
 
     /**
-     * Fills the set containing the sequences that descend from this node. the
-     * sequences should already have been added to the tree.
-     *
-     * @param node
-     *            the root of a phylogenetic tree
-     */
-    private void populateChildSequences(final PhylogeneticTreeItem node) {
-        for (PhylogeneticTreeItem child : node.getChildren()) {
-            populateChildSequences(child);
-        }
-        node.setChildSequences();
-    }
-
-    /**
      * Sets the sequences in the set to visible, and creates a tree that only
      * contains the visible sequences.
      *
@@ -187,9 +178,12 @@ public class TreeController extends AbstractController {
      *            A set containing all visible sequences
      */
     private void setVisible(final Set<Sequence> visible) {
-        visibleSequences = visible;
         Timer timer = Timer.getAndStart();
-        visibleTree = subTree(tree);
+        visibleTree = tree.subTree(visible);
+
+        linkSequence(sequences, visibleTree);
+        visibleTree.populateChildSequences();
+
         timer.stopAndLog("creating subtree");
         repaint();
     }
@@ -200,53 +194,7 @@ public class TreeController extends AbstractController {
      * @param visible
      *            the set that needs to be visible
      */
-    public final void shoutVisible(final Set<Sequence> visible) {
+    public void shoutVisible(final Set<Sequence> visible) {
         shout(Message.FILTERED, "", visible);
-    }
-
-    /**
-     * Creates a new tree that only contains the visible nodes. When a node has
-     * only one child, it is removed from the tree and its child is returned
-     * instead. When a node has no children, and is not visible, null is
-     * returned.
-     *
-     * @param node
-     *            the root of a tree that we want a subtree of
-     * @return the new root of a subtree.
-     */
-    private PhylogeneticTreeItem subTree(final PhylogeneticTreeItem node) {
-        // copy the node
-        PhylogeneticTreeItem result = new PhylogeneticTreeItem();
-        result.setDistance(node.getDistance());
-        if (visibleSequences.contains(node.getSequence())) {
-            result.setName(node.getName());
-        } else if (node.getChildren().isEmpty()) {
-            return null;
-        }
-        // copy the children when they are needed
-        for (PhylogeneticTreeItem child : node.getChildren()) {
-            // check if this child is needed
-            for (Sequence sequence : visibleSequences) {
-                if (node.getChildSequences().contains(sequence)) {
-                    PhylogeneticTreeItem subtree = subTree(child);
-                    if (subtree != null) {
-                        subtree.setParent(result);
-                    }
-                    break;
-                }
-            }
-        }
-        // remove useless nodes(nodes with at single child can be removed from
-        // the subtree)
-        if (result.getChildren().isEmpty() && result.getName() == null) {
-            return null;
-        }
-        if (result.getChildren().size() == 1) {
-            result = result.getChildren().get(0);
-        }
-        // fix sequences
-        linkSequence(sequences, result);
-        populateChildSequences(result);
-        return result;
     }
 }

@@ -48,31 +48,6 @@ public abstract class AbstractSunburstNode extends Group {
      */
     protected static final double CIRCLEDEGREES = 360.0d;
 
-
-    /*
-     * Helpers
-     */
-
-    /**
-     * A helper function to calculate the angle.
-     * @param degreeStart the start
-     * @param degreeEnd the end
-     * @return the angle between the start and end
-     */
-    protected static double calculateAngle(final double degreeStart,
-            final double degreeEnd) {
-        double result = 0;
-
-        if (degreeStart > degreeEnd) {
-            result = CIRCLEDEGREES - (degreeStart - degreeEnd);
-
-        } else if (degreeEnd  > degreeStart) {
-            result = degreeEnd - degreeStart;
-        }
-
-        return result;
-    }
-
     /*
      * Getters and setters.
      */

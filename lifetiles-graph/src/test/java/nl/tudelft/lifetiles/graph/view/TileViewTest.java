@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
@@ -15,10 +16,12 @@ import javafx.event.Event;
 import javafx.scene.Group;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.shape.Rectangle;
-import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotation;
-import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationMapper;
-import nl.tudelft.lifetiles.annotation.model.ResistanceAnnotationParser;
+import javafx.scene.shape.Circle;
+import nl.tudelft.lifetiles.annotation.model.KnownMutation;
+import nl.tudelft.lifetiles.annotation.model.KnownMutationMapper;
+import nl.tudelft.lifetiles.annotation.model.KnownMutationParser;
+import nl.tudelft.lifetiles.core.util.Logging;
+import nl.tudelft.lifetiles.core.util.Settings;
 import nl.tudelft.lifetiles.graph.controller.GraphController;
 import nl.tudelft.lifetiles.graph.model.BucketCache;
 import nl.tudelft.lifetiles.graph.model.FactoryProducer;
@@ -31,6 +34,7 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -45,11 +49,25 @@ public class TileViewTest {
     TileView tileview;
     Graph<SequenceSegment> gr;
     BucketCache buckets;
+    private Circle bookmark;
+    // its used inside a lambda. does not seem to be recognized as such
+    @SuppressWarnings("unused")
+    private VertexView vertexView1;
+
+    /**
+     * Final string for radius settings property.
+     */
+    private static final String RADIUS_SETTING = "bookmark_radius";
+
+    @BeforeClass
+    public static void before() {
+        Logging.setLevel(Level.SEVERE);
+    }
 
     @Before
     public void setUp() {
         controller = Mockito.mock(GraphController.class);
-        tileview = new TileView(controller);
+        tileview = new TileView(controller, 200);
         s1 = new DefaultSequence("TKK-REF");
         s2 = new DefaultSequence("Not TKK-REF");
         s3 = new DefaultSequence("Imposter");
@@ -61,7 +79,7 @@ public class TileViewTest {
         creategraph();
         buckets = new BucketCache(1, gr);
         Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
-                1);
+                null, 1);
         assertEquals(4, ((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().size());
     }
@@ -71,7 +89,7 @@ public class TileViewTest {
         creategraph();
         buckets = new BucketCache(1, gr);
         Group result = tileview.drawGraph(buckets.getSegments(0, 0), gr, null,
-                1);
+                null, 1);
         assertEquals(3, ((Group) result.getChildrenUnmodifiable().get(1))
                 .getChildrenUnmodifiable().size());
     }
@@ -95,20 +113,17 @@ public class TileViewTest {
 
         BucketCache buckets = new BucketCache(1, graph);
         Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
-                1);
+                null, 1);
         VertexView vView1 = (VertexView) ((Group) result
                 .getChildrenUnmodifiable().get(0)).getChildrenUnmodifiable()
                 .get(0);
 
         assertEquals(0, vView1.getLayoutX(), 1e-10);
-        assertEquals(0, vView1.getLayoutY(), 1e-10);
-        assertEquals(2 * 40 - 2, vView1.getBoundsInParent().getHeight(), 1e-10);
+        assertEquals(200, vView1.getLayoutY(), 1e-10);
+        assertEquals(200 - 2, vView1.getBoundsInParent().getHeight(), 1e-10);
         assertEquals(2 * 11 - 2, vView1.getBoundsInParent().getWidth(), 1e-10);
 
     }
-
-    private Rectangle rec;
-    private VertexView vView1;
 
     @Test
     public void drawAnnotationTest() throws IOException, InterruptedException {
@@ -130,34 +145,37 @@ public class TileViewTest {
         BucketCache buckets = new BucketCache(1, graph);
 
         File file = new File(
-                "./src/test/resources/data/test_annotations/simple_annotations.txt");
+                "./src/test/resources/data/test_annotations/simple_known_mutations.txt");
 
-        List<ResistanceAnnotation> parse = ResistanceAnnotationParser
-                .parseAnnotations(file);
+        List<KnownMutation> parse = KnownMutationParser
+                .parseKnownMutations(file);
         Sequence reference = graph.getSources().iterator().next().getSources()
                 .iterator().next();
 
-        Map<SequenceSegment, List<ResistanceAnnotation>> annotations = ResistanceAnnotationMapper
+        Map<SequenceSegment, List<KnownMutation>> annotations = KnownMutationMapper
                 .mapAnnotations(graph, parse, reference);
 
         // Hack so you make a tooltip, javafx toolkit need to be initialised for
         // that
         JFXPanel panel = new JFXPanel();
+        panel.contains(0, 0);
         Platform.runLater(() -> {
 
             Group result = tileview.drawGraph(buckets.getSegments(0, 1), graph,
-                    annotations, 1);
+                    annotations, null, 1);
 
-            rec = (Rectangle) ((Group) result.getChildrenUnmodifiable().get(2))
+            bookmark = (Circle) ((Group) result.getChildrenUnmodifiable()
+                    .get(2)).getChildrenUnmodifiable().get(0);
+
+            vertexView1 = (VertexView) ((Group) result
+                    .getChildrenUnmodifiable().get(0))
                     .getChildrenUnmodifiable().get(0);
-
-            vView1 = (VertexView) ((Group) result.getChildrenUnmodifiable()
-                    .get(0)).getChildrenUnmodifiable().get(0);
 
         });
 
         Thread.sleep(1000);
-        assertEquals(rec.getHeight(), vView1.getHeight(), 1e-10);
+        assertEquals(bookmark.getRadius(), Double.parseDouble(Settings
+                .get(RADIUS_SETTING)), 1e-10);
     }
 
     @Test
@@ -165,41 +183,13 @@ public class TileViewTest {
         creategraph();
         buckets = new BucketCache(1, gr);
         Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
-                1);
+                null, 1);
         Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
                 .getChildrenUnmodifiable().get(0), new MouseEvent(
                         MouseEvent.MOUSE_CLICKED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
                         true, true, true, true, true, true, true, true, true, true,
                         null));
         Mockito.verify(controller).clicked(Mockito.any());
-    }
-
-    @Test
-    public void hoveringEnterVertexText() {
-        creategraph();
-        buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
-                1);
-        Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
-                .getChildrenUnmodifiable().get(0), new MouseEvent(
-                        MouseEvent.MOUSE_ENTERED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                        true, true, true, true, true, true, true, true, true, true,
-                        null));
-        Mockito.verify(controller).hovered(Mockito.any(), Mockito.eq(true));
-    }
-
-    @Test
-    public void hoveringExitVertexText() {
-        creategraph();
-        buckets = new BucketCache(1, gr);
-        Group result = tileview.drawGraph(buckets.getSegments(0, 1), gr, null,
-                1);
-        Event.fireEvent(((Group) result.getChildrenUnmodifiable().get(0))
-                .getChildrenUnmodifiable().get(0), new MouseEvent(
-                        MouseEvent.MOUSE_EXITED, 0, 0, 0, 0, MouseButton.PRIMARY, 1,
-                        true, true, true, true, true, true, true, true, true, true,
-                        null));
-        Mockito.verify(controller).hovered(Mockito.any(), Mockito.eq(false));
     }
 
     private void creategraph() {

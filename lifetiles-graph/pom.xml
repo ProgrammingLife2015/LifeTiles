@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>nl.tudelft.lifetiles</groupId>
 		<artifactId>lifetiles-parent</artifactId>
-		<version>1.7-SNAPSHOT</version>
+		<version>1.8-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
 	<name>lifetiles-graph</name>
@@ -16,12 +16,12 @@
 		<dependency>
 			<groupId>nl.tudelft.lifetiles</groupId>
 			<artifactId>lifetiles-core</artifactId>
-			<version>1.7-SNAPSHOT</version>
+			<version>1.8-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>nl.tudelft.lifetiles</groupId>
 			<artifactId>lifetiles-sequence</artifactId>
-			<version>1.7-SNAPSHOT</version>
+			<version>1.8-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jgrapht</groupId>

@@ -7,13 +7,13 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
- * Resistance annotation which annotates a drug resistant mutation onto a
+ * Known mutation which annotates a drug resistant mutation onto a
  * sequence.
  *
  * @author Jos
  *
  */
-public class ResistanceAnnotation extends AbstractAnnotation {
+public class KnownMutation extends AbstractBookmark {
 
     /**
      * Name of the gene.
@@ -41,7 +41,12 @@ public class ResistanceAnnotation extends AbstractAnnotation {
     private final String drugResistance;
 
     /**
-     * Construct a resistance annotation.
+     * The segment to which this annotation maps to.
+     */
+    private SequenceSegment mappingSegment;
+
+    /**
+     * Construct a known mutation.
      *
      * @param geneName
      *            Name of the gene.
@@ -56,10 +61,9 @@ public class ResistanceAnnotation extends AbstractAnnotation {
      * @param drugResistance
      *            Drug resistance, which drug is mutation resistant to.
      */
-    public ResistanceAnnotation(final String geneName,
-            final String typeOfMutation, final String change,
-            final String filter, final long genomePosition,
-            final String drugResistance) {
+    public KnownMutation(final String geneName, final String typeOfMutation,
+            final String change, final String filter,
+            final long genomePosition, final String drugResistance) {
         super(genomePosition);
         this.geneName = geneName;
         this.typeOfMutation = typeOfMutation;
@@ -71,40 +75,40 @@ public class ResistanceAnnotation extends AbstractAnnotation {
     /**
      * @return the drugResistance
      */
-    public final String getDrugResistance() {
+    public String getDrugResistance() {
         return drugResistance;
     }
 
     /**
      * @return the filter
      */
-    public final String getFilter() {
+    public String getFilter() {
         return filter;
     }
 
     /**
      * @return the change
      */
-    public final String getChange() {
+    public String getChange() {
         return change;
     }
 
     /**
      * @return the typeOfMutation
      */
-    public final String getTypeOfMutation() {
+    public String getTypeOfMutation() {
         return typeOfMutation;
     }
 
     /**
      * @return the geneName
      */
-    public final String getGeneName() {
+    public String getGeneName() {
         return geneName;
     }
 
     /**
-     * Maps resistance annotations onto a set of segments.
+     * Maps known mutation onto a set of segments.
      *
      * @param segments
      *            Segments to map the annotation to.
@@ -112,13 +116,13 @@ public class ResistanceAnnotation extends AbstractAnnotation {
      *            The current reference used in the list of segments.
      * @return segment which annotation should be mapped to.
      */
-    @Override
-    public final SequenceSegment mapOntoSequence(
-            final Set<SequenceSegment> segments, final Sequence reference) {
+    public SequenceSegment mapOntoSequence(final Set<SequenceSegment> segments,
+            final Sequence reference) {
         for (SequenceSegment segment : segments) {
             if (segment.getSources().contains(reference)
                     && segment.getStart() <= getGenomePosition()
                     && segment.getEnd() > getGenomePosition()) {
+                mappingSegment = segment;
                 return segment;
             }
         }
@@ -126,22 +130,41 @@ public class ResistanceAnnotation extends AbstractAnnotation {
     }
 
     /**
-     * Returns the String representation for the annotation to be displayed in
-     * the tooltip of it's bookmark.
+     * Returns the String representation for the known mutation to be displayed
+     * in the tooltip of it's bookmark.
      *
      * @return
      *         Tooltip string representation.
      */
     @Override
-    public final String toString() {
+    public String toString() {
         Formatter formatter = new Formatter();
-        formatter
-                .format("Gene Name: %1$s%nGene Position: %2$s%nMutation Type: %3$s%nChange: %4$s%nFilter: %5$s%nDrug Resistance: %6$s",
-                        geneName, getGenomePosition(), typeOfMutation, change,
-                        filter, drugResistance);
-        String annotation = formatter.toString();
+        formatter.format("Gene Name: %1$s%nGene Position: %2$s%nMutation Type:"
+                + " %3$s%nChange: %4$s%nFilter: %5$s%nDrug Resistance: %6$s",
+                geneName, getGenomePosition(), typeOfMutation, change, filter,
+                drugResistance);
+        String knownMutation = formatter.toString();
         formatter.close();
-        return annotation;
+        return knownMutation;
+    }
+
+    /**
+     * Method which return the unified position of the bookmark in the
+     * unified graph.
+     *
+     * @return unified position of the bookmark in the graph.
+     */
+    @Override
+    public long getUnifiedPosition() {
+        return segmentPosition(mappingSegment);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toCellString() {
+        return typeOfMutation + " in " + geneName + " causing resistance for " + drugResistance;
     }
 
 }

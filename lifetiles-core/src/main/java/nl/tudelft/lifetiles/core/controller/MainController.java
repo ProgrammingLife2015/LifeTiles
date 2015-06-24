@@ -32,7 +32,7 @@ public class MainController extends AbstractController {
      * {@inheritDoc}
      */
     @Override
-    public final void initialize(final URL location,
+    public void initialize(final URL location,
             final ResourceBundle resources) {
         mainSplitPane.setVisible(false);
 

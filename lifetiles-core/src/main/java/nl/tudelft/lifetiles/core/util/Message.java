@@ -25,11 +25,22 @@ public final class Message {
      * A shout message indicating that the filters have been reset.
      */
     public static final Message RESET = create("reset");
-
     /**
-     * A shout message indicating there is a zoom action
+     * A shout message indicating there is a zoom action.
      */
     public static final Message ZOOM = create("zoom");
+    /**
+     * A shout message indicating the bookmark sidebar needs to appear.
+     */
+    public static final Message BOOKMARKS = create("bookmarks");
+    /**
+     * A shout message indicating we want to move to a location in the genome.
+     */
+    public static final Message GOTO = create("goto");
+    /**
+     * A shout message indicating we want to create a new bookmark.
+     */
+    public static final Message CREATE_BOOKMARK = create("new bookmark");
 
     /**
      * The value.

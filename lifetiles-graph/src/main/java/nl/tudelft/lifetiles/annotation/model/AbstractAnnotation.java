@@ -1,52 +1,36 @@
 package nl.tudelft.lifetiles.annotation.model;
 
-import java.util.Set;
-
-import nl.tudelft.lifetiles.sequence.model.Sequence;
-import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
-
 /**
- * Abstract class for Annotation. An annotation is a point on the genome with
- * some information attached to it.
+ * Abstract class for a domain annotation.
+ * Has a start and end coordinate to the reference sequence.
  *
  * @author Jos
  *
  */
-public abstract class AbstractAnnotation {
+public abstract class AbstractAnnotation extends AbstractBookmark {
 
     /**
-     * Position of the annotation on the genome.
+     * End coordinate of the annotation domain.
      */
-    private final long genomePosition;
+    private final long end;
 
     /**
-     * Constructs an annotation.
+     * Construct a domain annotation.
      *
-     * @param genomePosition
-     *            Position of the annotation on the genome.
+     * @param start
+     *            Start coordinate for the annotation domain.
+     * @param end
+     *            End coordinate for the annotation domain.
      */
-    protected AbstractAnnotation(final long genomePosition) {
-        this.genomePosition = genomePosition;
+    public AbstractAnnotation(final long start, final long end) {
+        super(start);
+        this.end = end;
     }
 
     /**
-     * Returns the position of the annotation on the genome.
-     *
-     * @return position of the annotation on the genome.
+     * @return the end
      */
-    public final long getGenomePosition() {
-        return genomePosition;
+    public long getGenomeEndPosition() {
+        return end;
     }
-
-    /**
-     * Abstract method which maps this annotation to a sequence.
-     *
-     * @param segments
-     *            Segments to map the annotation to.
-     * @param reference
-     *            The current reference used in the list of segments.
-     * @return segment which annotation should be mapped to.
-     */
-    public abstract SequenceSegment mapOntoSequence(
-            final Set<SequenceSegment> segments, final Sequence reference);
 }

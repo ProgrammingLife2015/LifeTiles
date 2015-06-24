@@ -56,6 +56,9 @@ public final class EmptySegmentTraverser {
         Set<Sequence> buffer = new HashSet<Sequence>(vertex.getSources());
         for (Edge<SequenceSegment> edge : graph.getOutgoing(vertex)) {
             SequenceSegment destination = graph.getDestination(edge);
+
+            // Need a new set on each iteration, so we do need this.
+            @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
             Set<Sequence> sources = new HashSet<Sequence>(
                     destination.getSources());
             sources.retainAll(buffer);

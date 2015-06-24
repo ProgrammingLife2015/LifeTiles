@@ -31,7 +31,7 @@ public class DefaultSequence implements Sequence {
      * {@inheritDoc}
      */
     @Override
-    public final void appendSegment(final SequenceSegment segment) {
+    public void appendSegment(final SequenceSegment segment) {
         sequenceList.add(segment);
     }
 
@@ -39,7 +39,7 @@ public class DefaultSequence implements Sequence {
      * {@inheritDoc}
      */
     @Override
-    public final String getIdentifier() {
+    public String getIdentifier() {
         return ident;
     }
 
@@ -47,7 +47,7 @@ public class DefaultSequence implements Sequence {
      * {@inheritDoc}
      */
     @Override
-    public final List<SequenceSegment> getSegments() {
+    public List<SequenceSegment> getSegments() {
         return sequenceList;
     }
 
@@ -55,7 +55,7 @@ public class DefaultSequence implements Sequence {
      * {@inheritDoc}
      */
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result;
@@ -69,7 +69,7 @@ public class DefaultSequence implements Sequence {
      * {@inheritDoc}
      */
     @Override
-    public final boolean equals(final Object other) {
+    public boolean equals(final Object other) {
         if (other instanceof Sequence) {
             return ident.equals(((Sequence) other).getIdentifier());
         }
@@ -80,7 +80,7 @@ public class DefaultSequence implements Sequence {
      * {@inheritDoc}
      */
     @Override
-    public final String toString() {
+    public String toString() {
         return "[Sequence: " + getIdentifier() + "]";
     }
 }

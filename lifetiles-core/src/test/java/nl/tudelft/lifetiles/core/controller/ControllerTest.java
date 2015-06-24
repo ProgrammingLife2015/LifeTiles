@@ -5,10 +5,13 @@ import static org.junit.Assert.assertEquals;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
 
+import nl.tudelft.lifetiles.core.util.Logging;
 import nl.tudelft.lifetiles.core.util.Message;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -21,6 +24,11 @@ public class ControllerTest {
     public ExpectedException thrown = ExpectedException.none();
 
     private AtomicReference<Object> inbox1, inbox2;
+
+    @BeforeClass
+    public static void before() {
+        Logging.setLevel(Level.SEVERE);
+    }
 
     @Before
     public void setUp() {

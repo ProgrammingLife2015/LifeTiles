@@ -16,6 +16,7 @@ public class CustomLabelSliderTest {
 
         // Hack because javafx toolkit need to be initialized
         JFXPanel panel = new JFXPanel();
+        panel.contains(0, 0);
         CustomLabelSlider slider = new CustomLabelSlider(function);
         assertEquals("6", slider.getLabelFormatter().toString(5d));
 

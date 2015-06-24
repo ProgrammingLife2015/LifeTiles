@@ -39,7 +39,7 @@ public class NotificationFactory {
      *            the notification type
      * @return the notification
      */
-    public final AbstractNotification getNotification(final String message,
+    public AbstractNotification getNotification(final String message,
             final String type) {
         AbstractNotification res;
 
@@ -68,7 +68,7 @@ public class NotificationFactory {
      *            the exception to create the notification from
      * @return the notification
      */
-    public final AbstractNotification getNotification(final Exception exception) {
+    public AbstractNotification getNotification(final Exception exception) {
         return getNotification(exception.getLocalizedMessage(), ERROR);
     }
 

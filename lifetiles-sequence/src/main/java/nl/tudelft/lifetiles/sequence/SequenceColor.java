@@ -1,5 +1,6 @@
 package nl.tudelft.lifetiles.sequence;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -51,8 +52,8 @@ public final class SequenceColor {
         MessageDigest digest;
         try {
             digest = MessageDigest.getInstance("MD5");
-            return digest.digest(sequence.getIdentifier().getBytes());
-        } catch (NoSuchAlgorithmException e) {
+            return digest.digest(sequence.getIdentifier().getBytes("UTF-8"));
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             Logging.exception(e);
             return new byte[] {};
         }

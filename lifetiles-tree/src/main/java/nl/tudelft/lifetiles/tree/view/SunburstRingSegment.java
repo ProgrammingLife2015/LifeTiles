@@ -23,10 +23,13 @@ import nl.tudelft.lifetiles.tree.model.PhylogeneticTreeItem;
 
 public class SunburstRingSegment extends AbstractSunburstNode {
     /**
-     * the default color for this segment.
+     * the max brightness for the color of a Node.
      */
-    private static final Color DEFAULT_COLOR = Color.RED;
-
+    private static final double MAX_BRIGHTNESS = 0.8;
+    /**
+     * The default saturation of the color of a Node.
+     */
+    private static final double SATURATION = 0.9;
     /**
      * The default name for distance.
      */
@@ -42,30 +45,31 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      * @param layer
      *            the layer at which it is located in the tree, layer 0 is the
      *            first layer
-     * @param degreeStart
-     *            the start position in degrees
-     * @param degreeEnd
-     *            the end position in degrees
+     * @param angle
+     *            the start and end positions of this ringSegment, non null
      * @param center
-     *            the coordinates of the center of the circle
+     *            the coordinates of the center of the circle, non null
      * @param scale
      *            the scaling factor
      */
     public SunburstRingSegment(final PhylogeneticTreeItem value,
-            final int layer, final double degreeStart,
-            final double degreeEnd, final Point2D center,
-            final double scale) {
+            final int layer, final DegreeRange angle,
+            final Point2D center, final double scale) {
+        // check input
+        assert angle != null;
+        assert center != null;
         // set the value, and create the text and semi-circle
         setValue(value);
         String name = getValue().getName();
+        setDisplay(createRing(layer, angle, center, scale));
         double distance = getValue().getDistance();
-        String tooltip = DISTANCE_NAME + distance;
+        StringBuffer tooltip = new StringBuffer();
         if (name != null) {
-            tooltip = name + System.lineSeparator() + tooltip;
+            tooltip.append(name).append(System.lineSeparator());
         }
-        setName(new Tooltip(tooltip));
-        setDisplay(createRing(layer, degreeStart, degreeEnd
-                   , center, scale));
+        tooltip.append(DISTANCE_NAME).append(distance);
+        setName(new Tooltip(tooltip.toString()));
+        setDisplay(createRing(layer, angle, center, scale));
 
         // add the text and semicircle to the group
         getChildren().add(getDisplay());
@@ -79,34 +83,32 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      * @param layer
      *            The layer to place this element at, the first child of root is
      *            layer 0.
-     * @param degreeStart
-     *            the start position in degrees
-     * @param degreeEnd
-     *            the end position in degrees
+     * @param angle
+     *            The start and end points of this ring
      * @param center
      *            the coordinates of the center of the circle
      * @param scale
      *            the scaling factor
      * @return a semi-circle with the specified dimensions
      */
-    private Shape createRing(final int layer, final double degreeStart,
-            final double degreeEnd, final Point2D center, final double scale) {
+    private Shape createRing(final int layer, final DegreeRange angle,
+            final Point2D center, final double scale) {
+
         Path result = new Path();
 
-        result.setFill(createColor());
+        result.setFill(createColor(angle.getStartAngle(), layer));
         result.setFillRule(FillRule.EVEN_ODD);
 
         // check if this is a large arc
-        double arcSize = AbstractSunburstNode.calculateAngle(degreeStart, degreeEnd);
-        boolean largeArc = arcSize > (AbstractSunburstNode.CIRCLEDEGREES / 2);
+        boolean largeArc = angle.angle() > AbstractSunburstNode.CIRCLEDEGREES / 2;
 
         // calculate the radii of the two arcs
         double innerRadius = scale * (CENTER_RADIUS + (layer * RING_WIDTH));
         double outerRadius = innerRadius + scale * RING_WIDTH;
 
         // convert degrees to radians for Math.sin and Math.cos
-        double angleAlpha = Math.toRadians(degreeStart);
-        double angleAlphaNext = Math.toRadians(degreeEnd);
+        double angleAlpha = Math.toRadians(angle.getStartAngle());
+        double angleAlphaNext = Math.toRadians(angle.getEndAngle());
 
         // draw the semi-circle
         // first go to the start point
@@ -198,12 +200,20 @@ public class SunburstRingSegment extends AbstractSunburstNode {
      * Creates a {@link Color} for this node. the color will be red by default,
      * and the color associated with the sequence when the node has a sequence.
      *
+     * @param degrees
+     *            the location where the ringSeqment is drawn, will become the
+     *            hue of the color.
+     * @param layer
+     *            the layer where the ringSegment is drawn, is used for the
+     *            brightness
      * @return a Color object that specifies what color this node will be.
      */
-    private Color createColor() {
+    private Color createColor(final double degrees, final int layer) {
         Sequence sequence = getValue().getSequence();
         if (sequence == null) {
-            return DEFAULT_COLOR;
+            double brightness = Math.min(MAX_BRIGHTNESS, 1d / layer);
+            brightness = Math.abs(brightness - 1);
+            return Color.hsb(degrees, SATURATION, brightness);
         } else {
             return SequenceColor.getColor(sequence);
         }
