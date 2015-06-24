@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>nl.tudelft.lifetiles</groupId>
 		<artifactId>lifetiles-parent</artifactId>
-		<version>1.7-SNAPSHOT</version>
+		<version>1.8-SNAPSHOT</version>
 		<relativePath>../</relativePath>
 	</parent>
 	<name>lifetiles-launcher</name>
@@ -57,22 +57,22 @@
 		<dependency>
 			<groupId>nl.tudelft.lifetiles</groupId>
 			<artifactId>lifetiles-core</artifactId>
-			<version>1.7-SNAPSHOT</version>
+			<version>1.8-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>nl.tudelft.lifetiles</groupId>
 			<artifactId>lifetiles-graph</artifactId>
-			<version>1.7-SNAPSHOT</version>
+			<version>1.8-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>nl.tudelft.lifetiles</groupId>
 			<artifactId>lifetiles-sequence</artifactId>
-			<version>1.7-SNAPSHOT</version>
+			<version>1.8-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>nl.tudelft.lifetiles</groupId>
 			<artifactId>lifetiles-tree</artifactId>
-			<version>1.7-SNAPSHOT</version>
+			<version>1.8-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

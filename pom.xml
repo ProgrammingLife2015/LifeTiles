@@ -4,7 +4,7 @@
 	<groupId>nl.tudelft.lifetiles</groupId>
 	<artifactId>lifetiles-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>1.7-SNAPSHOT</version>
+	<version>1.8-SNAPSHOT</version>
 	<name>lifetiles-parent</name>
 	<url>http://maven.apache.org</url>
 	<properties>
