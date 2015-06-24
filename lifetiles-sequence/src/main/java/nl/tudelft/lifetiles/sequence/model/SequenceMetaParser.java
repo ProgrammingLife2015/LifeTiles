@@ -19,7 +19,7 @@ import nl.tudelft.lifetiles.core.util.IteratorUtils;
  * @author Joren Hammudoglu
  *
  */
-public final class SequenceMetaParser {
+public class SequenceMetaParser {
 
     /**
      * The name of the sequence ID column.

@@ -13,7 +13,7 @@ import nl.tudelft.lifetiles.sequence.Mutation;
 /**
  * @author Rutger van den Berg Contains a partial sequence.
  */
-public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
+public class SequenceSegment implements Comparable<SequenceSegment> {
     /**
      * Keep track of already used ID's.
      */
@@ -25,7 +25,7 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
     /**
      * The content of this segment.
      */
-    private final SegmentContent content;
+    private SegmentContent content;
     /**
      * Contains the sources containing this segment.
      */
@@ -108,48 +108,52 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
     }
 
     /**
-     * Constructs a sequence segment with the given segment id.
-     * Private constructor to be used in the copy method.
+     * Copy constructor.
      *
-     * @param sources
-     *            The sources containing this segment.
-     * @param startPosition
-     *            The start position for this segment.
-     * @param endPosition
-     *            The end position for this segment.
-     * @param content
-     *            The content for this segment.
-     * @param identifier
-     *            Identifier of the sequence segment.
+     * @param original
+     *            The SequenceSegment to base the new one on.
      */
-    private SequenceSegment(final Set<Sequence> sources,
-            final long startPosition, final long endPosition,
-            final SegmentContent content, final int identifier) {
-        this.sources = sources;
-        this.start = startPosition;
-        this.end = endPosition;
+    public SequenceSegment(final SequenceSegment original) {
+        this.sources = new HashSet<Sequence>(original.getSources());
+        this.start = original.getStart();
+        this.end = original.getEnd();
+        this.content = original.getContent();
+        this.identifier = original.getIdentifier();
+        this.unifiedEnd = original.getUnifiedEnd();
+        this.unifiedStart = original.getUnifiedStart();
+        this.mutation = original.getMutation();
+        this.referenceStart = original.getReferenceStart();
+        this.referenceEnd = original.getReferenceEnd();
+    }
+
+    /**
+     * Change the content of the segment.
+     *
+     * @param content
+     *            new content.
+     */
+    public void setContent(final SegmentContent content) {
         this.content = content;
-        this.identifier = identifier;
     }
 
     /**
      * @return the content
      */
-    public final SegmentContent getContent() {
+    public SegmentContent getContent() {
         return content;
     }
 
     /**
      * @return the end position
      */
-    public final long getEnd() {
+    public long getEnd() {
         return end;
     }
 
     /**
      * @return the sources
      */
-    public final Set<Sequence> getSources() {
+    public Set<Sequence> getSources() {
         return sources;
     }
 
@@ -159,21 +163,21 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      * @param set
      *            new sources
      */
-    public final void setSources(final Set<Sequence> set) {
+    public void setSources(final Set<Sequence> set) {
         sources = set;
     }
 
     /**
      * @return the start position
      */
-    public final long getStart() {
+    public long getStart() {
         return start;
     }
 
     /**
      * @return the unified start position
      */
-    public final long getUnifiedStart() {
+    public long getUnifiedStart() {
         return unifiedStart;
     }
 
@@ -181,14 +185,14 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      * @param unifiedStart
      *            unified start position of this sequence segment.
      */
-    public final void setUnifiedStart(final long unifiedStart) {
+    public void setUnifiedStart(final long unifiedStart) {
         this.unifiedStart = unifiedStart;
     }
 
     /**
      * @return the unified end position
      */
-    public final long getUnifiedEnd() {
+    public long getUnifiedEnd() {
         return unifiedEnd;
     }
 
@@ -196,14 +200,14 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      * @param unifiedEnd
      *            unified end position of this sequence segment.
      */
-    public final void setUnifiedEnd(final long unifiedEnd) {
+    public void setUnifiedEnd(final long unifiedEnd) {
         this.unifiedEnd = unifiedEnd;
     }
 
     /**
      * @return mutation annotation of sequence segment.
      */
-    public final Mutation getMutation() {
+    public Mutation getMutation() {
         return mutation;
     }
 
@@ -211,7 +215,7 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      * @param mutation
      *            Mutation which is annotated onto the sequence segment.
      */
-    public final void setMutation(final Mutation mutation) {
+    public void setMutation(final Mutation mutation) {
         this.mutation = mutation;
     }
 
@@ -224,7 +228,7 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      * @return
      *         Distance between this sequence and other sequence.
      */
-    public final long distanceTo(final SequenceSegment other) {
+    public long distanceTo(final SequenceSegment other) {
         return other.getUnifiedStart() - getUnifiedEnd() - 1;
     }
 
@@ -237,7 +241,7 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      * @return the compare value of the start positions.
      */
     @Override
-    public final int compareTo(final SequenceSegment other) {
+    public int compareTo(final SequenceSegment other) {
         for (ToIntBiFunction<SequenceSegment, SequenceSegment> comp : COMPARATORS) {
             int result = comp.applyAsInt(this, other);
             if (result != 0) {
@@ -265,7 +269,7 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      *
      * @return reference start position.
      */
-    public final long getReferenceStart() {
+    public long getReferenceStart() {
         return referenceStart;
     }
 
@@ -274,7 +278,7 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      *
      * @return reference end position.
      */
-    public final long getReferenceEnd() {
+    public long getReferenceEnd() {
         return referenceEnd;
     }
 
@@ -284,7 +288,7 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      * @param referenceStart
      *            Reference start position.
      */
-    public final void setReferenceStart(final long referenceStart) {
+    public void setReferenceStart(final long referenceStart) {
         this.referenceStart = referenceStart;
     }
 
@@ -294,7 +298,7 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      * @param referenceEnd
      *            Reference end position.
      */
-    public final void setReferenceEnd(final long referenceEnd) {
+    public void setReferenceEnd(final long referenceEnd) {
         this.referenceEnd = referenceEnd;
     }
 
@@ -302,7 +306,7 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      * {@inheritDoc}
      */
     @Override
-    public final int hashCode() {
+    public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + identifier;
@@ -313,7 +317,7 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      * {@inheritDoc}
      */
     @Override
-    public final boolean equals(final Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -330,7 +334,7 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
     /**
      * @return the identifier
      */
-    public final int getIdentifier() {
+    public int getIdentifier() {
         return identifier;
     }
 
@@ -340,7 +344,7 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      *
      * @return calculated mutation type of this segment.
      */
-    public final Mutation determineMutation() {
+    public Mutation determineMutation() {
         Mutation mutation;
         if (content.isEmpty()) {
             mutation = Mutation.DELETION;
@@ -359,7 +363,7 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
      *
      * @return the interestingness score
      */
-    public final double interestingness() {
+    public double interestingness() {
         if (content.isEmpty()) {
             return 0;
         }
@@ -373,25 +377,4 @@ public class SequenceSegment implements Comparable<SequenceSegment>, Cloneable {
 
         return contentScore / sources.size();
     }
-
-    /**
-     * Create a new deep copy of this SequenceSegment.
-     *
-     * @return a copy
-     */
-    @Override
-    public final SequenceSegment clone() throws CloneNotSupportedException {
-        SequenceSegment seg = new SequenceSegment(new HashSet<Sequence>(
-                getSources()), this.getStart(), this.getEnd(),
-                this.getContent(), this.getIdentifier());
-
-        seg.setUnifiedStart(this.getUnifiedStart());
-        seg.setUnifiedEnd(this.getUnifiedEnd());
-        seg.setMutation(this.getMutation());
-        seg.setReferenceStart(this.getReferenceStart());
-        seg.setReferenceEnd(this.getReferenceEnd());
-
-        return seg;
-    }
-
 }

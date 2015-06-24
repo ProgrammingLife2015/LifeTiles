@@ -17,19 +17,20 @@
 		<Menu text="File">
 			<items>
 				<MenuItem text="Open" onAction="#openAction" />
+				<MenuItem text="Insert Known Mutations" onAction="#insertKnownMutationAction" />
 				<MenuItem text="Insert Annotations" onAction="#insertAnnotationsAction" />
 			</items>
 		</Menu>
-		<Menu text="View">
-		</Menu>
 		<Menu text="Filter">
 			<items>
-				<MenuItem text="Reset Filter" onAction="#resetAction"  />
+				<MenuItem text="Reset Filter" onAction="#resetAction" />
+				<MenuItem text="Undo Filter" onAction="#undoFilterAction"/>
 			</items>
 		</Menu>
-		<Menu text="Configuration">
-		</Menu>
-		<Menu text="Help">
+		<Menu text="Bookmarks">
+			<items>
+				<MenuItem text="Show Bookmarks" onAction="#bookmarksAction" />
+			</items>
 		</Menu>
 	</menus>
 

@@ -1,4 +1,4 @@
-# LifeTiles [![Build Status](https://travis-ci.org/ProgrammingLife5/LifeTiles.svg?branch=dev)](https://travis-ci.org/ProgrammingLife5/LifeTiles)
+# LifeTiles [![Build Status](https://travis-ci.org/ProgrammingLife5/LifeTiles.svg?branch=dev)](https://travis-ci.org/ProgrammingLife5/LifeTiles) [![Coverage Status](https://coveralls.io/repos/ProgrammingLife5/LifeTiles/badge.svg?branch=dev)](https://coveralls.io/r/ProgrammingLife5/LifeTiles?branch=master)
 
 LifeTiles is a tool for interactive visualization of DNA sequence graphs to represent the genome architecture of organisms of interest. The application mainly consists of a Graph Viewer and a Tree Viewer but also a Sequence Viewer used for additional overview. 
 

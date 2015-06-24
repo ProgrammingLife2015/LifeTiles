@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.*?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" minHeight="0.0"
+	minWidth="0.0" prefHeight="720" prefWidth="300.0" maxWidth="500.0"
+	fx:controller="nl.tudelft.lifetiles.annotation.controller.BookmarkController"
+	fx:id="wrapper">
+	<children>
+		<BorderPane>
+			<left>
+				<Label text="Bookmarks and annotations"/>
+			</left>
+			<right>
+				<Button id="close" text="[X]" onMouseClicked="#closeAction" />
+			</right>
+		</BorderPane>	
+		<HBox>
+			<children>
+				<TextField fx:id="searchBox" promptText="Search ..." 
+					onAction="#searchAction" HBox.hgrow="ALWAYS"/>
+				<Button text="Search" onMouseClicked="#searchAction" />
+			</children>
+		</HBox>		
+		<Separator />
+		<ListView fx:id="bookmarkList" VBox.vgrow="ALWAYS"/>
+	</children>
+	
+
+	<stylesheets>
+		<URL value="@../styles/BookmarkStyle.css" />
+	</stylesheets>
+</VBox>

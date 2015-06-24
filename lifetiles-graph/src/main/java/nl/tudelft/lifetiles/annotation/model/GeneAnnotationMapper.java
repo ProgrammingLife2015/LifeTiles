@@ -12,18 +12,18 @@ import nl.tudelft.lifetiles.sequence.model.Sequence;
 import nl.tudelft.lifetiles.sequence.model.SequenceSegment;
 
 /**
- * Static class which maps a list of resistance annotations to a graph and
- * returns a map which maps a segment to a list of resistance annotations.
+ * Static class which maps a list of gene annotations to a graph and
+ * returns a map which maps a segment to a list of gene annotations.
  *
  * @author Jos
  *
  */
-public final class ResistanceAnnotationMapper {
+public final class GeneAnnotationMapper {
 
     /**
      * A static class can't have a public or default constructor.
      */
-    private ResistanceAnnotationMapper() {
+    private GeneAnnotationMapper() {
         // noop
     }
 
@@ -32,28 +32,29 @@ public final class ResistanceAnnotationMapper {
      *
      * @param graph
      *            Graph to annotate the annotations onto.
-     * @param annotations
-     *            List of annotations to map.
+     * @param genomes
+     *            List of gene annotations to map.
      * @param reference
      *            Reference to map to, resistanceAnnotations only can map to the
      *            reference sequence.
-     * @return
-     *         Map which maps segments to a list of annotations.
+     * @return Map which maps segments to a list of resistance annotations.
      */
-    public static Map<SequenceSegment, List<ResistanceAnnotation>> mapAnnotations(
+    public static Map<SequenceSegment, List<GeneAnnotation>> mapAnnotations(
             final Graph<SequenceSegment> graph,
-            final List<ResistanceAnnotation> annotations,
-            final Sequence reference) {
+            final List<GeneAnnotation> genomes, final Sequence reference) {
         Set<SequenceSegment> segments = selectReference(graph, reference);
-        Map<SequenceSegment, List<ResistanceAnnotation>> annotatedSegments = new HashMap<>();
-        for (ResistanceAnnotation annotation : annotations) {
-             SequenceSegment segment = annotation.mapOntoSequence(segments,
-                    reference);
-            if (segment != null) {
+        Map<SequenceSegment, List<GeneAnnotation>> annotatedSegments = new HashMap<>();
+        for (GeneAnnotation geneAnnotation : genomes) {
+            Set<SequenceSegment> mappedSegments = geneAnnotation
+                    .mapOntoSequence(segments, reference);
+            for (SequenceSegment segment : mappedSegments) {
                 if (!annotatedSegments.containsKey(segment)) {
-                    annotatedSegments.put(segment, new ArrayList<>());
+                    // We do actually need to instantiate here.
+                    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+                    List<GeneAnnotation> newAnnotations = new ArrayList<>();
+                    annotatedSegments.put(segment, newAnnotations);
                 }
-                annotatedSegments.get(segment).add(annotation);
+                annotatedSegments.get(segment).add(geneAnnotation);
             }
         }
         return annotatedSegments;

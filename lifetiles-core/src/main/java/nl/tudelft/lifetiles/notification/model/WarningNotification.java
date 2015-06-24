@@ -35,7 +35,7 @@ public class WarningNotification extends AbstractNotification {
      * {@inheritDoc}
      */
     @Override
-    public final Color getColor() {
+    public Color getColor() {
         return Color.ORANGE;
     }
 
@@ -43,7 +43,7 @@ public class WarningNotification extends AbstractNotification {
      * {@inheritDoc}
      */
     @Override
-    public final int getPriority() {
+    public int getPriority() {
         return PRIORITY;
     }
 

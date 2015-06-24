@@ -29,7 +29,7 @@
 		AnchorPane.rightAnchor="0.0" AnchorPane.bottomAnchor="0.0"
 		AnchorPane.leftAnchor="0.0">
 		<items>
-			<fx:include fx:id="graphContent" source="GraphView.fxml" />
+			<fx:include fx:id="graphContent" source="GraphView.fxml" prefHeight="300.0"/>
 			<SplitPane id="innerSplitPane" prefWidth="1280"
 				focusTraversable="true" dividerPositions="0.5" orientation="HORIZONTAL">
 				<fx:include fx:id="sequenceContent" source="SequenceView.fxml"
@@ -47,6 +47,10 @@
 			<Label text="Graph not loaded yet. " />
 		</children>
 	</HBox>
+	
+	<fx:include fx:id="bookmarkList" source="BookmarkView.fxml"
+	 AnchorPane.topAnchor="39.0" AnchorPane.leftAnchor="0.0" 
+	 AnchorPane.bottomAnchor="0.0"/>
 	
     <fx:include fx:id="notificationContent" source="NotificationView.fxml"
         AnchorPane.topAnchor="39.0" AnchorPane.rightAnchor="0.0"

@@ -9,23 +9,11 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.Label?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="342"
-	prefWidth="200.0" fx:controller="nl.tudelft.lifetiles.graph.controller.GraphController"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"  fx:controller="nl.tudelft.lifetiles.graph.controller.GraphController"
 	id="graphPane" fx:id="wrapper">
 	<center>
 		<ScrollPane>
-			<content>
-				<AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="342"
-					prefWidth="2000" id="graphPaneInner">
-					<children>
-						<Label text="Graph Viewer">
-							<padding>
-								<Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-							</padding>
-						</Label>
-					</children>
-				</AnchorPane>
-			</content>
+			
 
 		</ScrollPane>
 	</center>

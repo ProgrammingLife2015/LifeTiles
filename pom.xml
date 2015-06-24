@@ -4,7 +4,7 @@
 	<groupId>nl.tudelft.lifetiles</groupId>
 	<artifactId>lifetiles-parent</artifactId>
 	<packaging>pom</packaging>
-	<version>1.7-SNAPSHOT</version>
+	<version>1.8-SNAPSHOT</version>
 	<name>lifetiles-parent</name>
 	<url>http://maven.apache.org</url>
 	<properties>
@@ -56,6 +56,12 @@
 			<version>${mockito.version}</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>2.0.1</version>
+        </dependency>
 	</dependencies>
 	<modules>
 		<module>lifetiles-sequence</module>

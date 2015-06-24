@@ -1,10 +1,9 @@
 package nl.tudelft.lifetiles.graph.model;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-import nl.tudelft.lifetiles.core.util.Logging;
+import nl.tudelft.lifetiles.core.util.SetUtils;
 import nl.tudelft.lifetiles.core.util.Settings;
 import nl.tudelft.lifetiles.core.util.Timer;
 import nl.tudelft.lifetiles.graph.traverser.EmptySegmentTraverser;
@@ -52,9 +51,14 @@ public class GraphContainer {
     private Set<Sequence> visibleSequences;
 
     /**
+     * The minimap model.
+     */
+    private MiniMap miniMap;
+
+    /**
      * The amount of vertices to be placed in one bucket.
      */
-    private static final int NUM_VERTICES_BUCKET = Integer.parseInt(Settings
+    private static final int VERTICES_BUCKET = Integer.parseInt(Settings
             .get("num_vertices_bucket"));
 
     /**
@@ -62,50 +66,61 @@ public class GraphContainer {
      *
      * @param graph
      *            The initial graph
+     * @param reference
+     *            Reference currently active in the graph controller.
      */
-    public GraphContainer(final Graph<SequenceSegment> graph) {
+    public GraphContainer(final Graph<SequenceSegment> graph,
+            final Sequence reference) {
         this.graph = graph;
-
-        // TODO: Temporary line until sequence selection is implemented.
-        Sequence reference = this.graph.getSources().iterator().next()
-                .getSources().iterator().next();
-
+        for (SequenceSegment segment : this.graph.getAllVertices()) {
+            segment.setReferenceStart(1);
+            segment.setReferenceEnd(Long.MAX_VALUE);
+            segment.setMutation(null);
+        }
         alignGraph();
-        findMutations(reference);
+        if (reference != null) {
+            findMutations(reference);
+        }
+        segmentBuckets = new BucketCache(Math.max(1, graph.getAllVertices()
+                .size() / VERTICES_BUCKET), this.graph);
 
-        segmentBuckets = new BucketCache(graph.getAllVertices().size()
-                / NUM_VERTICES_BUCKET, this.graph);
         visibles = graph.getAllVertices();
-
     }
 
     /**
-     * Align the graph.
+     * @return the {@link MiniMap} model
+     */
+    public final MiniMap getMiniMap() {
+        if (this.miniMap == null) {
+            miniMap = new MiniMap(segmentBuckets);
+        }
+        return miniMap;
+    }
+
+    /**
+     * Aligns the graph by calculating the unified positions of the segments
+     * and if set also generates the empty segments.
      */
     private void alignGraph() {
-
         UnifiedPositionTraverser.unifyGraph(graph);
-
         if (Settings.getBoolean(SETTING_EMPTY)) {
             EmptySegmentTraverser.addEmptySegmentsGraph(graph);
         }
-
     }
 
     /**
-     * Find the mutations on the graph.
+     * Find the mutations on the graph if set, by calculating the reference
+     * positions of the segments.
      *
      * @param reference
      *            Reference of the graph which is used to indicate mutations.
      */
     private void findMutations(final Sequence reference) {
-
         if (!Settings.getBoolean(SETTING_MUTATION)) {
             return;
         }
         ReferencePositionTraverser.referenceMapGraph(graph, reference);
         MutationIndicationTraverser.indicateGraphMutations(graph, reference);
-
     }
 
     /**
@@ -114,22 +129,23 @@ public class GraphContainer {
      * @param visibleSequences
      *            the sequences to display
      */
-    public final void setVisible(final Set<Sequence> visibleSequences) {
+    public void setVisible(final Set<Sequence> visibleSequences) {
         Timer timer = Timer.getAndStart();
         // Find out which vertices are visible now
         Set<SequenceSegment> vertices = new TreeSet<SequenceSegment>();
 
-        for (SequenceSegment segment: graph.getAllVertices()) {
-            //copy the set of sequences because retainAll modifies the original set
-            Set<Sequence> intersect;
-            intersect = new HashSet<Sequence>(segment.getSources());
-            //check if any of the visible sequences are in this nodes sources
-            intersect.retainAll(visibleSequences);
-            if (!intersect.isEmpty()) {
+        for (SequenceSegment segment : graph.getAllVertices()) {
+            int intersectionSize;
+            if (visibleSequences == null) {
+                intersectionSize = segment.getSources().size();
+            } else {
+                intersectionSize = SetUtils.intersectionSize(segment
+                        .getSources(), visibleSequences);
+            }
+            if (intersectionSize > 0) {
                 vertices.add(segment);
             }
         }
-
         visibles = vertices;
         this.visibleSequences = visibleSequences;
         timer.stopAndLog("Creating visible graph");
@@ -144,28 +160,22 @@ public class GraphContainer {
      *            the last bucket position
      * @return graph
      */
-    public final Set<SequenceSegment> getVisibleSegments(final int start,
+    public Set<SequenceSegment> getVisibleSegments(final int start,
             final int end) {
-
         Set<SequenceSegment> copy = new TreeSet<SequenceSegment>();
         for (SequenceSegment seg : segmentBuckets.getSegments(start, end)) {
-            try {
-                copy.add(seg.clone());
-            } catch (CloneNotSupportedException e) {
-                Logging.exception(e);
-            }
+            @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+            SequenceSegment newSegment = new SequenceSegment(seg);
+            copy.add(newSegment);
         }
-
         // Keep only the sequencesegments that are visible
         copy.retainAll(visibles);
-
         // Set the sources so they only contain the visible sequences
         if (visibleSequences != null) {
             for (SequenceSegment vertex : copy) {
                 vertex.getSources().retainAll(visibleSequences);
             }
         }
-
         return copy;
     }
 
@@ -174,7 +184,7 @@ public class GraphContainer {
      *
      * @return the bucketCache of the graph.
      */
-    public final BucketCache getBucketCache() {
+    public BucketCache getBucketCache() {
         return segmentBuckets;
     }
 

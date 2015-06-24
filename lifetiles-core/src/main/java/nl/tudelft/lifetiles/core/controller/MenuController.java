@@ -3,7 +3,10 @@ package nl.tudelft.lifetiles.core.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.Stack;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +21,7 @@ import nl.tudelft.lifetiles.core.util.Message;
 import nl.tudelft.lifetiles.notification.controller.NotificationController;
 import nl.tudelft.lifetiles.notification.model.AbstractNotification;
 import nl.tudelft.lifetiles.notification.model.NotificationFactory;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
 /**
  * The controller of the menu bar.
@@ -28,9 +32,19 @@ import nl.tudelft.lifetiles.notification.model.NotificationFactory;
 public class MenuController extends AbstractController {
 
     /**
-     * Constant annotation extension, currently as defined by client: '.txt'.
+     * Message to display when file is not found.
      */
-    private static final String ANNOTATION_EXTENSION = ".txt";
+    private static final String NOT_FOUND_MSG = " file could not be found or multiple files found ";
+    /**
+     * Constant known mutation extension, currently as defined by client:
+     * '.txt'.
+     */
+    private static final String KNOWN_MUTATION_EXTENSION = ".txt";
+    /**
+     * Constant annotations extension, currently as defined by client:
+     * '.gff'.
+     */
+    private static final String ANNOTATIONS_EXTENSION = ".gff";
     /**
      * Extension of the node file.
      */
@@ -65,6 +79,11 @@ public class MenuController extends AbstractController {
     private MenuBar menuBar;
 
     /**
+     * Keep track of filter actions for the purpose of undoing them.
+     */
+    private Stack<Set<?>> filterStack;
+
+    /**
      * The notification factory.
      */
     private NotificationFactory nf;
@@ -76,6 +95,8 @@ public class MenuController extends AbstractController {
      *            Event on "Open" menu item.
      */
     @FXML
+    // PMD/findbugs do not work well with javafx. The method IS used.
+    @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
     private void openAction(final ActionEvent event) {
         try {
             loadDataFiles();
@@ -92,8 +113,34 @@ public class MenuController extends AbstractController {
      *            Event on "Reset" menu item.
      */
     @FXML
+    // PMD/findbugs do not work well with javafx. The method IS used.
+    @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
     private void resetAction(final ActionEvent event) {
         shout(Message.RESET, "");
+    }
+
+    /**
+     * indicate the bookmark menu needs to be shown.
+     */
+    @FXML
+    // PMD/findbugs do not work well with javafx. The method IS used.
+    @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
+    private void bookmarksAction() {
+        shout(Message.BOOKMARKS, "");
+    }
+
+    /**
+     * Handle clicks on the Undo item in the Filter menu.
+     *
+     */
+    @FXML
+    private void undoFilterAction() {
+        filterStack.pop();
+        if (filterStack.isEmpty()) {
+            shout(Message.RESET, "");
+        } else {
+            shout(Message.FILTERED, "", filterStack.peek());
+        }
     }
 
     /**
@@ -115,6 +162,7 @@ public class MenuController extends AbstractController {
         }
         loadGraph(directory);
         loadTree(directory);
+        loadKnownMutations(directory);
         loadAnnotations(directory);
         loadMetaData(directory);
     }
@@ -153,13 +201,26 @@ public class MenuController extends AbstractController {
     }
 
     /**
+     * Loads the known mutations from a file in the specified directory.
+     *
+     * @param directory
+     *            The directory from which to load annotations.
+     */
+    private void loadKnownMutations(final File directory) {
+        File annotationFile = loadOrWarn(directory, KNOWN_MUTATION_EXTENSION);
+        if (annotationFile != null) {
+            shout(Message.OPENED, "known mutations", annotationFile);
+        }
+    }
+
+    /**
      * Loads the annotations from a file in the specified directory.
      *
      * @param directory
      *            The directory from which to load annotations.
      */
     private void loadAnnotations(final File directory) {
-        File annotationFile = loadOrWarn(directory, ANNOTATION_EXTENSION);
+        File annotationFile = loadOrWarn(directory, ANNOTATIONS_EXTENSION);
         if (annotationFile != null) {
             shout(Message.OPENED, "annotations", annotationFile);
         }
@@ -194,14 +255,50 @@ public class MenuController extends AbstractController {
                     .getSingleFileByExtension(directory, extension);
             return file;
         } catch (IOException e) {
-            shout(NotificationController.NOTIFY,
-                    "",
-                    nf.getNotification(
-                            extension
-                                    + " file could not be found or multiple files found ",
-                            NotificationFactory.WARNING));
+            shout(NotificationController.NOTIFY, "", nf.getNotification(
+                    extension + NOT_FOUND_MSG, NotificationFactory.WARNING));
         }
         return null;
+    }
+
+    /**
+     * Handle action to "Insert Known Mutations" menu item.
+     *
+     * @param event
+     *            Event on "Insert Known Mutations" item.
+     */
+    @FXML
+    // PMD/findbugs do not work well with javafx. The method IS used.
+    @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
+    private void insertKnownMutationAction(final ActionEvent event) {
+        try {
+            loadKnownMutationsFile();
+        } catch (IOException e) {
+            AbstractNotification notification = nf.getNotification(e);
+            shout(NotificationController.NOTIFY, "", notification);
+        }
+    }
+
+    /**
+     * Perform functionality associated with opening and inserting a known
+     * mutations file.
+     *
+     * @throws IOException
+     *             throws <code>IOException</code> if any of the files were not
+     *             found
+     */
+    private void loadKnownMutationsFile() throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open file containing known mutations");
+        Window window = menuBar.getScene().getWindow();
+        File file = fileChooser.showOpenDialog(window);
+
+        // user aborted
+        if (file == null) {
+            return;
+        }
+
+        shout(Message.OPENED, "known mutations", file);
     }
 
     /**
@@ -211,6 +308,8 @@ public class MenuController extends AbstractController {
      *            Event on "Insert Annotations" item.
      */
     @FXML
+    // PMD/findbugs do not work well with javafx. The method IS used.
+    @SuppressFBWarnings("UPM_UNCALLED_PRIVATE_METHOD")
     private void insertAnnotationsAction(final ActionEvent event) {
         try {
             loadAnnotationsFile();
@@ -221,8 +320,8 @@ public class MenuController extends AbstractController {
     }
 
     /**
-     * Perform functionality associated with opening and inserting a annotation
-     * file.
+     * Perform functionality associated with opening and inserting a known
+     * mutations file.
      *
      * @throws IOException
      *             throws <code>IOException</code> if any of the files were not
@@ -270,9 +369,21 @@ public class MenuController extends AbstractController {
     }
 
     @Override
-    public final void initialize(final URL location,
-            final ResourceBundle resources) {
+    // checkstyle bug causes false positives in our assert, so suppress.
+    @SuppressWarnings("checkstyle:genericwhitespace")
+    public void initialize(final URL location, final ResourceBundle resources) {
         addDraggableNode(menuBar);
+
         nf = new NotificationFactory();
+        filterStack = new Stack<>();
+        listen(Message.FILTERED, (sender, subject, args) -> {
+            if (sender.equals(this)) {
+                return;
+            }
+            assert args.length == 1;
+            assert args[0] instanceof Set<?>;
+            Set<?> newFilter = (Set<?>) args[0];
+            filterStack.push(new HashSet<>(newFilter));
+        });
     }
 }

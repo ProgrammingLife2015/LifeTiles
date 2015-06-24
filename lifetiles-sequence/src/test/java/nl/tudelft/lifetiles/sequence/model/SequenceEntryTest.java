@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,35 +34,56 @@ public class SequenceEntryTest {
 
     @Test
     public void getVisibleTest1() {
-        assertTrue(se1.getVisible());
+        assertTrue(se1.isVisible());
     }
 
     @Test
     public void getVisibleTest2() {
-        assertTrue(se2.getVisible());
+        assertTrue(se2.isVisible());
     }
 
     @Test
     public void getReferenceTest1() {
-        assertFalse(se1.getReference());
+        assertFalse(se1.isReference());
     }
 
     @Test
     public void getReferenceTest2() {
-        assertTrue(se2.getReference());
+        assertTrue(se2.isReference());
     }
 
     @Test
     public void setVisibleTest() {
         se1.setVisible(false);
-        assertFalse(se1.getVisible());
+        assertFalse(se1.isVisible());
         se1.setVisible(true);
     }
 
     @Test
     public void setReferenceTest() {
         se1.setReference(true);
-        assertTrue(se1.getReference());
+        assertTrue(se1.isReference());
         se1.setReference(false);
+    }
+
+    @Test
+    public void getMetadataTest() {
+        Map<String, String> metaData = new HashMap<String, String>();
+        metaData.put("a", "1");
+        metaData.put("b", "2");
+        metaData.put("c", "3");
+        se1.setMetaData(metaData);
+        assertEquals("2", se1.getMeta("b"));
+    }
+
+    @Test
+    public void getMetaPropertyTest() {
+        Map<String, String> metaData = new HashMap<String, String>();
+        metaData.put("a", "1");
+        metaData.put("b", "2");
+        metaData.put("c", "3");
+        se1.setMetaData(metaData);
+        String value = se1.metaProperty("b").getValue();
+        assertEquals("2", value);
     }
 }

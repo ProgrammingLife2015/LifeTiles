@@ -1,7 +1,7 @@
 package nl.tudelft.lifetiles.graph.model.jgrapht;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -20,8 +20,8 @@ import org.jgrapht.graph.DirectedSubgraph;
  * @param <V>
  *            The type of Vertex to use.
  */
-public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
-        implements GraphFactory<V> {
+public class JGraphTGraphFactory<V extends Comparable<V>> implements
+        GraphFactory<V> {
     /**
      * The edgefactory associated with this graph factory.
      */
@@ -38,7 +38,7 @@ public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
      * @return a new empty Graph.
      */
     @Override
-    public final Graph<V> getGraph() {
+    public Graph<V> getGraph() {
         return new JGraphTGraphAdapter<V>(edgeFact);
     }
 
@@ -52,16 +52,16 @@ public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
      *             if the base graph is not a JGraphT library
      */
     @Override
-    public final Graph<V> getSubGraph(final Graph<V> base,
-            final Set<V> vertexSubSet) throws NotAJGraphTAdapterException {
+    public Graph<V> getSubGraph(final Graph<V> base, final Set<V> vertexSubSet)
+            throws NotAJGraphTAdapterException {
 
         if (base instanceof JGraphTGraphAdapter) {
             JGraphTGraphAdapter<V> baseGraph = (JGraphTGraphAdapter<V>) base;
 
             return new JGraphTGraphAdapter<V>(
-                    new DirectedSubgraph<V, DefaultEdge>(baseGraph
-                            .getInternalGraph(), vertexSubSet, null), edgeFact,
-                    baseGraph.getVertexIdentifiers());
+                    new DirectedSubgraph<V, DefaultEdge>(
+                            baseGraph.getInternalGraph(), vertexSubSet, null),
+                    edgeFact, baseGraph.getVertexIdentifiers());
 
         } else {
             throw new NotAJGraphTAdapterException();
@@ -73,20 +73,25 @@ public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
      * {@inheritDoc}
      */
     @Override
-    public final Graph<V> deepcopy(final Graph<V> graph) {
+    public Graph<V> deepcopy(final Graph<V> graph) {
         Graph<V> copygraph = new JGraphTGraphAdapter<V>(edgeFact);
 
         Map<Object, Object> convertVertices = new HashMap<Object, Object>();
 
         for (V vertex : graph.getAllVertices()) {
             try {
-                Method method = vertex.getClass().getMethod("clone");
-                Object copy = method.invoke(vertex);
-                copygraph.addVertex((V) copy);
+                Constructor<?> method = vertex.getClass().getConstructor(
+                        vertex.getClass());
+
+                Object copy = method.newInstance(vertex);
+                // can't not be a V, so no need to explicitly check.
+                @SuppressWarnings("unchecked")
+                V newVertex = (V) copy;
+                copygraph.addVertex(newVertex);
                 convertVertices.put(vertex, copy);
             } catch (NoSuchMethodException | SecurityException
                     | IllegalAccessException | IllegalArgumentException
-                    | InvocationTargetException exception) {
+                    | InvocationTargetException | InstantiationException exception) {
 
                 Logging.exception(exception);
             }
@@ -96,8 +101,11 @@ public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
             Object from = convertVertices.get(graph.getSource(edge));
             Object destination = convertVertices
                     .get(graph.getDestination(edge));
-
-            copygraph.addEdge((V) from, (V) destination);
+            @SuppressWarnings("unchecked")
+            V fromVertex = (V) from;
+            @SuppressWarnings("unchecked")
+            V destinationVertex = (V) destination;
+            copygraph.addEdge(fromVertex, destinationVertex);
         }
 
         return copygraph;
@@ -107,14 +115,14 @@ public class JGraphTGraphFactory<V extends Comparable<V> & Cloneable>
      * {@inheritDoc}
      */
     @Override
-    public final Graph<V> copy(final Graph<V> graph) {
+    public Graph<V> copy(final Graph<V> graph) {
         Graph<V> copyGraph = new JGraphTGraphAdapter<V>(edgeFact);
         for (V vertex : graph.getAllVertices()) {
             copyGraph.addVertex(vertex);
         }
         for (Edge<V> edge : graph.getAllEdges()) {
             copyGraph
-            .addEdge(graph.getSource(edge), graph.getDestination(edge));
+                    .addEdge(graph.getSource(edge), graph.getDestination(edge));
         }
         return copyGraph;
     }

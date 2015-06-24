@@ -33,17 +33,25 @@ public class Zoombar {
     private final int maxzoom;
 
     /**
+     * The slider on the zoombar.
+     */
+    private Slider slider;
+
+    /**
      * Create a new Toolbar.
      *
-     * @param zoom
-     *            the maximal value of the zoom
+     * @param currentZoom
+     *            the current starting zoom level.
+     * @param maxZoom
+     *            the maximal value of the zoom.
      */
-    public Zoombar(final int zoom) {
-        maxzoom = zoom;
+    public Zoombar(final int currentZoom, final int maxZoom) {
+        maxzoom = maxZoom;
         zoomLevel = new SimpleIntegerProperty();
-        // 5 is temporary, until graph can start at the highest zoom level
-        zoomLevel.set(5);
-        Slider slider = createSlider();
+
+        zoomLevel.set(currentZoom);
+        slider = createSlider();
+
         slider.getStyleClass().add("slider");
         slider.valueProperty().addListener(
                 (obserVal, oldVal, newVal) -> {
@@ -76,14 +84,36 @@ public class Zoombar {
      *
      * @return javafx toolbar that is constructed
      */
-    public final ToolBar getToolBar() {
+    public ToolBar getToolBar() {
         return toolbar;
+    }
+
+    /**
+     * Increment the zoom level by 1.
+     */
+    public final void incrementZoom() {
+        int zoom = zoomLevel.get();
+        if (zoom > 0) {
+            zoomLevel.set(zoom + 1);
+            slider.setValue(slider.getValue() - slider.getMajorTickUnit());
+        }
+    }
+
+    /**
+     * Decrease the zoom level by 1.
+     */
+    public final void decrementZoom() {
+        int zoom = zoomLevel.get();
+        if (zoom < maxzoom) {
+            zoomLevel.set(zoom - 1);
+            slider.setValue(slider.getValue() + slider.getMajorTickUnit());
+        }
     }
 
     /**
      * @return the zoomlevel property
      */
-    public final IntegerProperty getZoomlevel() {
+    public IntegerProperty getZoomlevel() {
         return zoomLevel;
     }
 
